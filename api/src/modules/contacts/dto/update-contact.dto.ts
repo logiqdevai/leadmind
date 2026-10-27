@@ -2,12 +2,16 @@ import { ApiPropertyOptional, PartialType, PickType } from '@nestjs/swagger';
 import {
     ArrayUnique,
     IsArray,
+    IsObject,
     IsOptional,
     IsString,
     IsUUID,
     MaxLength,
+    ValidateIf,
 } from 'class-validator';
 import { CreateContactDto } from './create-contact.dto';
+import { OPENING_HOURS_API_SCHEMA } from './opening-hours.schema';
+import type { OpeningHours } from '../utils/opening-hours.utils';
 
 export class UpdateContactDto extends PartialType(
     PickType(CreateContactDto, [
@@ -40,4 +44,10 @@ export class UpdateContactDto extends PartialType(
     @IsString()
     @MaxLength(5000)
     notes?: string;
+
+    @ApiPropertyOptional(OPENING_HOURS_API_SCHEMA as Record<string, unknown>)
+    @IsOptional()
+    @ValidateIf((_, value) => value !== null)
+    @IsObject()
+    opening_hours?: OpeningHours | null;
 }

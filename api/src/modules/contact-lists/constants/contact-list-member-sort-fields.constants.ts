@@ -4,6 +4,8 @@ export const ContactListMemberSortField = {
     ...ContactSortField,
     ADDED_AT: 'added_at',
     LIST_STATUS: 'list_status',
+    CALLED: 'called',
+    REMINDER: 'reminder',
 } as const;
 
 export type ContactListMemberSortField =

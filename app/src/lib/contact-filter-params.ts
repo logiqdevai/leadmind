@@ -1,8 +1,10 @@
+import type { Weekday } from "@/features/contacts/constants/opening-hours.constants";
 import type { ContactFilters } from "@/interfaces/contact-filters.interface";
 import type { ListContactsQuery } from "@/features/contacts/interfaces/contact.interface";
 import { isLeadStatus } from "@/features/contacts/constants/contacts.constants";
 import { isContactProfileField } from "@/features/contacts/constants/contact-profile-fields.constants";
 import { SourceType, type SourceType as SourceTypeValue } from "@/features/leads/interfaces/lead.interface";
+import { isWeekday } from "@/features/contacts/constants/opening-hours.constants";
 import { parseScoreRulesParam, serializeScoreRulesParam } from "@/lib/contact-score-rules";
 
 const isSourceType = (value: string | null): value is SourceTypeValue =>
@@ -62,6 +64,9 @@ export function parseContactFiltersFromSearchParams(
         include_unsubscribed: parseBooleanParam(searchParams.get("include_unsubscribed")),
         has_email: parseBooleanParam(searchParams.get("has_email")),
         has_phone: parseBooleanParam(searchParams.get("has_phone")),
+        open_day: isWeekday(searchParams.get("open_day")) ? (searchParams.get("open_day") as Weekday) : undefined,
+        open_from: searchParams.get("open_from") || undefined,
+        open_to: searchParams.get("open_to") || undefined,
     };
 }
 
@@ -93,6 +98,9 @@ export function serializeContactFiltersToSearchParams(
                 : undefined,
         has_email: filters.has_email !== undefined ? String(filters.has_email) : undefined,
         has_phone: filters.has_phone !== undefined ? String(filters.has_phone) : undefined,
+        open_day: filters.open_day,
+        open_from: filters.open_from,
+        open_to: filters.open_to,
     };
 }
 
@@ -129,6 +137,10 @@ export function describeContactFilters(filters: ContactFilters): string[] {
     }
     if (filters.has_email !== undefined) parts.push(filters.has_email ? "has email" : "no email");
     if (filters.has_phone !== undefined) parts.push(filters.has_phone ? "has phone" : "no phone");
+    if (filters.open_day || filters.open_from || filters.open_to) {
+        const range = [filters.open_from, filters.open_to].filter(Boolean).join("–");
+        parts.push(`open ${[filters.open_day, range].filter(Boolean).join(" ")}`);
+    }
     if (filters.never_contacted) parts.push("never contacted");
     if (filters.include_unsubscribed) parts.push("including unsubscribed");
     if (filters.last_interaction_after) {
@@ -162,6 +174,9 @@ export const CONTACT_FILTER_KEYS: (keyof ContactFilters)[] = [
     "include_unsubscribed",
     "has_email",
     "has_phone",
+    "open_day",
+    "open_from",
+    "open_to",
 ];
 
 export function toFullContactFiltersPatch(
@@ -202,6 +217,9 @@ export function buildContactListApiParams(
     if (query.profile_field) params.profile_field = query.profile_field;
     if (query.last_interaction_after) params.last_interaction_after = query.last_interaction_after;
     if (query.last_interaction_before) params.last_interaction_before = query.last_interaction_before;
+    if (query.open_day) params.open_day = query.open_day;
+    if (query.open_from) params.open_from = query.open_from;
+    if (query.open_to) params.open_to = query.open_to;
 
     if (query.tags?.length) params.tags = query.tags.join(",");
     if (query.score_rules?.length) params.score_rules = JSON.stringify(query.score_rules);

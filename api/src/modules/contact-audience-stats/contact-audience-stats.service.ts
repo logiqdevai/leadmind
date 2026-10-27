@@ -115,6 +115,9 @@ export class ContactAudienceStatsService {
             score_rules: query.score_rules,
             profile_field: query.profile_field,
             has_profile_field: query.has_profile_field,
+            open_day: query.open_day,
+            open_from: query.open_from,
+            open_to: query.open_to,
         });
 
         const scopeAnd: Prisma.ContactWhereInput[] = [];

@@ -77,4 +77,27 @@ describe('GoogleMapsAdapter', () => {
             locationQuery: 'Heraklion, Greece',
         });
     });
+
+    it('extracts opening hours when the place lists them', () => {
+        const leads = adapter.normalize([
+            {
+                title: 'Heraklion Cafe',
+                phone: '+30 281 0123456',
+                openingHours: [
+                    { day: 'Monday', hours: '9 AM to 5 PM' },
+                    { day: 'Saturday', hours: '10 AM to 2 PM' },
+                    { day: 'Sunday', hours: 'Closed' },
+                ],
+            },
+        ]);
+
+        expect(leads[0].opening_hours?.monday).toEqual([{ open: '09:00', close: '17:00' }]);
+        expect(leads[0].opening_hours?.saturday).toEqual([{ open: '10:00', close: '14:00' }]);
+        expect(leads[0].opening_hours?.sunday).toEqual([]);
+    });
+
+    it('leaves opening hours unset when the place has none', () => {
+        const leads = adapter.normalize([{ title: 'No Hours Cafe', phone: '+30 281 0123456' }]);
+        expect(leads[0].opening_hours).toBeUndefined();
+    });
 });

@@ -1,3 +1,7 @@
+import {
+    fillContactOpeningHoursIfEmpty,
+    openingHoursFromJson,
+} from '@/modules/contacts/utils/opening-hours.utils';
 import { Processor, WorkerHost, InjectQueue } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bullmq';
@@ -392,6 +396,7 @@ export class FilterScrapeWorker extends WorkerHost {
 
             if (existing_contact) {
                 resolved_contact_uuid = existing_contact.uuid;
+                await fillContactOpeningHoursIfEmpty(this.prisma, existing_contact.uuid, openingHoursFromJson(lead.opening_hours));
                 await linkContactToFilter(this.prisma, existing_contact, filter.uuid);
                 const profilePatch = fillEmptyContactProfileFromLead(existing_contact, lead);
                 const emailValidationPatch =
@@ -460,6 +465,7 @@ export class FilterScrapeWorker extends WorkerHost {
                     });
                     await ensureContactFilterLink(this.prisma, contact.uuid, filter.uuid);
                     await this.elasticsearchService.indexContact({ ...contact, lead, tags: [] });
+                    await fillContactOpeningHoursIfEmpty(this.prisma, contact.uuid, openingHoursFromJson(lead.opening_hours));
                     new_contact_uuids.push(contact.uuid);
                     resolved_contact_uuid = contact.uuid;
                 } catch (error) {
@@ -533,6 +539,9 @@ export class FilterScrapeWorker extends WorkerHost {
             location: normalized.location ?? null,
             industry: normalized.industry ?? null,
             description: normalized.description ?? null,
+            ...(normalized.opening_hours
+                ? { opening_hours: normalized.opening_hours as unknown as Prisma.InputJsonValue }
+                : {}),
             raw_data: normalized.raw_data as Prisma.InputJsonValue,
             ...(emailFields ?? {}),
             ...(websiteFields ?? {}),

@@ -104,6 +104,7 @@ export function subjectAsLeadLike(subject: EnrichmentSubject): Lead {
         description: subject.description,
         source_type: subject.source_type,
         raw_data: subject.raw_data,
+        opening_hours: null,
         enrichment_summary: null,
         enrichment_metadata: null,
         email_validation_status: EmailValidationStatus.UNKNOWN,

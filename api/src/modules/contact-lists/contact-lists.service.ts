@@ -3,7 +3,7 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { InteractionType, LeadStatus, OrgTagEntityType, Prisma } from '@/generated/prisma';
+import { InteractionType, LeadStatus, OrgTagEntityType, Prisma, ReminderStatus } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { ContactsService } from '@/modules/contacts/contacts.service';
 import {
@@ -213,11 +213,51 @@ export class ContactListsService {
         const order = sortOrder ?? 'asc';
         if (sortBy === 'added_at') return { created_at: order };
         if (sortBy === 'list_status') return { status: order };
+        // "called"/"reminder" sort on aggregates Prisma can't order by; findMembers handles them in SQL.
+        if (sortBy === 'called' || sortBy === 'reminder') return { created_at: 'desc' };
         return { contact: { [sortBy]: order } as Prisma.ContactOrderByWithRelationInput };
     }
 
-    /** `callerUuid` scopes the `call_count`/`last_called_at` fields to calls that member logged; without it any logged call counts. */
-    async findMembers(organisation_uuid: string, listUuid: string, query: ListContactListMembersDto, callerUuid?: string) {
+    /** Member ids of the list matching `where`, ordered by an activity aggregate (logged calls or pending reminders). */
+    private async findMemberIdsOrderedByActivity(
+        organisation_uuid: string,
+        where: Prisma.ContactListMemberWhereInput,
+        sortBy: 'called' | 'reminder',
+        order: SortOrder,
+        skip: number,
+        take: number,
+    ): Promise<number[]> {
+        const matching = await this.prisma.contactListMember.findMany({ where, select: { id: true } });
+        if (matching.length === 0) return [];
+        const direction = Prisma.raw(order === 'desc' ? 'DESC' : 'ASC');
+        // Calls order by their latest time; reminders by the next one due.
+        const aggregate =
+            sortBy === 'called'
+                ? Prisma.sql`
+                    SELECT contact_uuid, COUNT(*) AS cnt, MAX(created_at) AS at
+                    FROM "Interaction"
+                    WHERE organisation_uuid = ${organisation_uuid}
+                      AND type = ${InteractionType.CALL}::"InteractionType"
+                    GROUP BY contact_uuid`
+                : Prisma.sql`
+                    SELECT contact_uuid, COUNT(*) AS cnt, MIN(remind_at) AS at
+                    FROM reminders
+                    WHERE organisation_uuid = ${organisation_uuid}
+                      AND status = ${ReminderStatus.PENDING}::"ReminderStatus"
+                    GROUP BY contact_uuid`;
+        const rows = await this.prisma.$queryRaw<{ id: number }[]>`
+            SELECT m.id
+            FROM contact_list_members m
+            LEFT JOIN (${aggregate}) c ON c.contact_uuid = m.contact_uuid
+            WHERE m.id IN (${Prisma.join(matching.map((m) => m.id))})
+            ORDER BY COALESCE(c.cnt, 0) ${direction}, c.at ${direction} NULLS LAST, m.id ASC
+            LIMIT ${take} OFFSET ${skip}
+        `;
+        return rows.map((r) => r.id);
+    }
+
+    /** `call_count`/`last_called_at` count every call logged on the contact in the organisation, whoever logged it. */
+    async findMembers(organisation_uuid: string, listUuid: string, query: ListContactListMembersDto) {
         await this.ensureListOwned(organisation_uuid, listUuid);
 
         const page = query.page ?? 1;
@@ -232,9 +272,21 @@ export class ContactListsService {
             contact: contactWhere,
         };
 
-        const [members, total] = await Promise.all([
+        const activitySort = query.sort_by === 'called' || query.sort_by === 'reminder' ? query.sort_by : null;
+        const calledIds = activitySort
+            ? await this.findMemberIdsOrderedByActivity(
+                  organisation_uuid,
+                  where,
+                  activitySort,
+                  query.sort_order ?? 'asc',
+                  skip,
+                  limit,
+              )
+            : null;
+
+        const [unorderedMembers, total] = await Promise.all([
             this.prisma.contactListMember.findMany({
-                where,
+                where: calledIds ? { id: { in: calledIds } } : where,
                 include: {
                     contact: {
                         include: {
@@ -252,12 +304,20 @@ export class ContactListsService {
                         },
                     },
                 },
-                orderBy: this.buildMemberOrderBy(query.sort_by, query.sort_order),
-                skip,
-                take: limit,
+                ...(calledIds
+                    ? {}
+                    : {
+                          orderBy: this.buildMemberOrderBy(query.sort_by, query.sort_order),
+                          skip,
+                          take: limit,
+                      }),
             }),
             this.prisma.contactListMember.count({ where }),
         ]);
+
+        const members = calledIds
+            ? calledIds.flatMap((id) => unorderedMembers.filter((m) => m.id === id))
+            : unorderedMembers;
 
         const calls = await this.prisma.interaction.groupBy({
             by: ['contact_uuid'],
@@ -265,17 +325,29 @@ export class ContactListsService {
                 organisation_uuid,
                 type: InteractionType.CALL,
                 contact_uuid: { in: members.map((m) => m.contact_uuid) },
-                ...(callerUuid ? { created_by_user_uuid: callerUuid } : {}),
             },
             _count: { _all: true },
             _max: { created_at: true },
         });
         const callsByContact = new Map(calls.map((c) => [c.contact_uuid, c]));
 
+        const reminders = await this.prisma.reminder.groupBy({
+            by: ['contact_uuid'],
+            where: {
+                organisation_uuid,
+                status: ReminderStatus.PENDING,
+                contact_uuid: { in: members.map((m) => m.contact_uuid) },
+            },
+            _count: { _all: true },
+            _min: { remind_at: true },
+        });
+        const remindersByContact = new Map(reminders.map((r) => [r.contact_uuid, r]));
+
         return {
             data: members.map((m) => {
                 const { contact_filters, filter, tags, ...rest } = m.contact;
                 const call = callsByContact.get(m.contact_uuid);
+                const reminder = remindersByContact.get(m.contact_uuid);
                 const shaped = shapeContactFilterFields({
                     ...m.contact,
                     filter,
@@ -292,6 +364,8 @@ export class ContactListsService {
                     list_status: m.status,
                     call_count: call?._count._all ?? 0,
                     last_called_at: call?._max.created_at ?? null,
+                    reminder_count: reminder?._count._all ?? 0,
+                    next_reminder_at: reminder?._min.remind_at ?? null,
                 };
             }),
             total,

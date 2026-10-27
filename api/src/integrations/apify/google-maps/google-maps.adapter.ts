@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ApifyAdapter, ApifyRunInput, NormalizedLead } from '../interfaces/apify.interfaces';
+import { parseGoogleMapsOpeningHours } from '@/modules/contacts/utils/opening-hours.utils';
 import { websiteFromBusinessEmail } from '@/modules/leads/utils/lead-website.utils';
 import { GoogleMapsQueryConfig, GoogleMapsRawItem } from './google-maps.interfaces';
 
@@ -60,6 +61,7 @@ export class GoogleMapsAdapter
             location: location || undefined,
             industry,
             description: item.description || undefined,
+            opening_hours: parseGoogleMapsOpeningHours(item.openingHours) ?? undefined,
             raw_data: item,
         };
     }

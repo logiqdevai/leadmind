@@ -8,6 +8,8 @@ export const CONTACT_TABLE_COLUMN_CLASS: Record<string, string> = {
     website: `min-w-0 hidden ${WIDE} overflow-hidden`,
     status: "hidden sm:table-cell w-40 overflow-hidden",
     list_status: "hidden xl:table-cell w-40 overflow-hidden",
+    called: "hidden sm:table-cell w-28 overflow-hidden",
+    reminder: "hidden sm:table-cell w-28 overflow-hidden",
     score: "hidden sm:table-cell w-20 overflow-hidden",
     filters: `hidden ${WIDE} min-w-0 overflow-hidden`,
     tags: `hidden ${WIDE} min-w-0 overflow-hidden`,

@@ -9,6 +9,11 @@ import {
 } from "@/features/contacts/interfaces/contact.interface";
 import { useLogCall, useUpdateInteraction } from "@/features/contacts/hooks/use-contacts";
 import { cn } from "@/lib/utils";
+import {
+  CALL_NOTE_STATUS_OPTIONS,
+  isCallNoteStatus,
+  type CallNoteStatus,
+} from "@/features/contacts/constants/call-note-status.constants";
 import type { Interaction } from "@/features/contacts/interfaces/contact.interface";
 
 interface LogCallModalProps {
@@ -26,15 +31,8 @@ const OUTCOMES: { id: CallOutcome; label: string }[] = [
   { id: CallOutcome.BUSY, label: "Busy" },
 ];
 
-/** Ready-made call notes; picking one fills the Notes field, which stays editable. */
-const QUICK_NOTES: { id: string; label: string }[] = [
-  { id: "not_available", label: "Not available" },
-  { id: "not_interested", label: "Not interested" },
-  { id: "call_later", label: "Call later" },
-  { id: "send_info", label: "Asked to send more info" },
-  { id: "wrong_number", label: "Wrong number" },
-  { id: "do_not_call", label: "Don't call me again" },
-];
+/** Ready-made call notes; picking one stores its status and fills the Notes field, which stays editable. */
+const QUICK_NOTES = CALL_NOTE_STATUS_OPTIONS;
 
 const DIRECTIONS: { id: CallDirection; label: string }[] = [
   { id: CallDirection.OUTBOUND, label: "Outbound" },
@@ -56,13 +54,13 @@ export function LogCallModal({ contactUuid, interaction, isOpen, onOpenChange }:
   const [duration, setDuration] = useState<string>("");
   const [occurredAt, setOccurredAt] = useState<string>(() => toLocalDatetimeValue(new Date()));
   const [notes, setNotes] = useState<string>("");
-  const [quickNote, setQuickNote] = useState<string | null>(null);
+  const [quickNote, setQuickNote] = useState<CallNoteStatus | null>(null);
 
   const handleQuickNote = (id: string) => {
     const preset = QUICK_NOTES.find((n) => n.id === id);
     if (!preset) return;
     const previous = QUICK_NOTES.find((n) => n.id === quickNote);
-    setQuickNote(preset.id);
+    setQuickNote(preset.id as CallNoteStatus);
     // Replace an untouched preset; otherwise keep what the user typed and add below it.
     setNotes((current) =>
       !current.trim() || current.trim() === previous?.label
@@ -73,7 +71,7 @@ export function LogCallModal({ contactUuid, interaction, isOpen, onOpenChange }:
 
   useEffect(() => {
     if (isOpen) {
-      setQuickNote(null);
+      setQuickNote(isCallNoteStatus(interaction?.call_note_status) ? interaction.call_note_status : null);
       setOutcome((meta.outcome as CallOutcome) ?? CallOutcome.CONNECTED);
       setDirection((meta.direction as CallDirection) ?? CallDirection.OUTBOUND);
       setDuration(typeof meta.duration_minutes === "number" ? String(meta.duration_minutes) : "");
@@ -87,6 +85,7 @@ export function LogCallModal({ contactUuid, interaction, isOpen, onOpenChange }:
     const payload: LogCallPayload = {
       outcome,
       direction,
+      ...(quickNote ? { note_status: quickNote } : {}),
     };
     const durNum = duration === "" ? undefined : Number(duration);
     if (durNum !== undefined && Number.isFinite(durNum) && durNum >= 0) {

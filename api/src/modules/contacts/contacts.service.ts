@@ -59,6 +59,14 @@ import type { ContactSortField, SortOrder } from './constants/contact-sort-field
 import { buildContactProfileFieldWhere } from './utils/contact-profile-field-filter.utils';
 import { belowScoreContactFilter } from './utils/contact-score-filter.utils';
 import { mergeContactWhereClauses } from './utils/contact-where-merge.utils';
+import {
+    buildOpeningHoursWhere,
+    fillContactOpeningHoursIfEmpty,
+    normalizeOpeningHours,
+    openingHoursFromJson,
+    openingHoursFromRows,
+    replaceContactOpeningHours,
+} from './utils/opening-hours.utils';
 
 export type ContactListFilterParams = Pick<
     ListContactsDto,
@@ -71,6 +79,9 @@ export type ContactListFilterParams = Pick<
     | 'source_type'
     | 'profile_field'
     | 'has_profile_field'
+    | 'open_day'
+    | 'open_from'
+    | 'open_to'
 >;
 import { CallOutcome, LogCallDto } from './dto/log-call.dto';
 import { UpdateInteractionDto } from './dto/update-interaction.dto';
@@ -253,6 +264,9 @@ export class ContactsService {
                 buildContactProfileFieldWhere(query.profile_field, query.has_profile_field),
             );
         }
+
+        const openingHoursWhere = buildOpeningHoursWhere(query);
+        if (openingHoursWhere) andClauses.push(openingHoursWhere);
 
         if (query.tags && query.tags.length > 0) {
             andClauses.push(
@@ -521,6 +535,7 @@ export class ContactsService {
                     orderBy: [{ type: 'asc' }, { created_at: 'asc' }],
                 },
                 lead: true,
+                opening_hours_rows: true,
                 contact_scores: {
                     include: { scoring_instruction: { select: { uuid: true, name: true } } },
                 },
@@ -569,7 +584,7 @@ export class ContactsService {
         if (!contact) {
             throw new NotFoundException(`Contact ${uuid} not found`);
         }
-        const { filter: rawFilter, contact_filters, list_memberships, ...rest } = contact;
+        const { filter: rawFilter, contact_filters, list_memberships, opening_hours_rows, ...rest } = contact;
         const filter = rawFilter
             ? (() => {
                   const { filter_scoring_instructions, ...frest } = rawFilter;
@@ -588,6 +603,7 @@ export class ContactsService {
         });
         return {
             ...rest,
+            opening_hours: openingHoursFromRows(opening_hours_rows),
             filter,
             also_found_by: shaped.also_found_by,
             filters: shaped.filters,
@@ -601,6 +617,8 @@ export class ContactsService {
 
     async update(organisation_uuid: string, uuid: string, dto: UpdateContactDto) {
         await this.requireOwnedContact(organisation_uuid, uuid);
+        // Validate up front so a bad value can't leave the rest of the update half applied.
+        const openingHours = dto.opening_hours !== undefined ? normalizeOpeningHours(dto.opening_hours) : undefined;
 
         let emailPatch: Prisma.ContactUpdateInput | undefined;
         if (dto.email !== undefined) {
@@ -673,11 +691,17 @@ export class ContactsService {
                         dto.list_uuids,
                     );
                 }
+                if (openingHours !== undefined) {
+                    await replaceContactOpeningHours(this.prisma, existingByEmail.uuid, openingHours);
+                }
                 await this.reindexContact(existingByEmail.uuid);
                 return this.findOne(organisation_uuid, existingByEmail.uuid);
             }
         }
 
+        if (openingHours !== undefined) {
+            await replaceContactOpeningHours(this.prisma, uuid, openingHours);
+        }
         return this.applyUpdateToContact(organisation_uuid, uuid, dto, emailPatch, websitePatch);
     }
 
@@ -1125,6 +1149,7 @@ export class ContactsService {
                 type: InteractionType.CALL,
                 content: dto.content?.trim() || null,
                 metadata,
+                call_note_status: dto.note_status ?? null,
                 created_by_user_uuid: user_uuid ?? null,
             },
         });
@@ -1233,7 +1258,7 @@ export class ContactsService {
         const type = interaction.type;
 
         const allowed: Record<string, (keyof UpdateInteractionDto)[]> = {
-            [InteractionType.CALL]: ['outcome', 'direction', 'duration_minutes', 'occurred_at', 'content'],
+            [InteractionType.CALL]: ['outcome', 'direction', 'duration_minutes', 'occurred_at', 'content', 'note_status'],
             [InteractionType.MEETING]: ['outcome', 'duration_minutes', 'occurred_at', 'location', 'content'],
             [InteractionType.EMAIL]: ['direction', 'subject', 'occurred_at', 'content'],
             [InteractionType.SMS]: ['direction', 'occurred_at', 'content'],
@@ -1268,6 +1293,7 @@ export class ContactsService {
         const data: Prisma.InteractionUpdateInput = {};
         if (type !== InteractionType.NOTE) data.metadata = metadata as Prisma.InputJsonValue;
         if (dto.content !== undefined) data.content = dto.content.trim() || null;
+        if (dto.note_status !== undefined) data.call_note_status = dto.note_status;
         return this.prisma.interaction.update({ where: { uuid: interaction_uuid }, data });
     }
 
@@ -1439,6 +1465,7 @@ export class ContactsService {
                     ...contactProfileFromLead(lead),
                 },
             });
+            await fillContactOpeningHoursIfEmpty(this.prisma, contact.uuid, openingHoursFromJson(lead.opening_hours));
             await this.reindexContact(contact.uuid);
             return this.findOne(organisation_uuid, contact.uuid);
         } catch (error) {

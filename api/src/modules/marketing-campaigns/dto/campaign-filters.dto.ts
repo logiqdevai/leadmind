@@ -22,7 +22,9 @@ import {
 } from '@/modules/scoring-instructions/dto/contact-score-rule.dto';
 import { QueryBooleanTransform } from '@/shared/transforms/query-boolean.transform';
 
-export class CampaignFiltersDto {
+import { OpeningHoursFilterDto } from '@/modules/contacts/dto/opening-hours-filter.dto';
+
+export class CampaignFiltersDto extends OpeningHoursFilterDto {
     @ApiPropertyOptional({ enum: LeadStatus })
     @IsOptional()
     @IsEnum(LeadStatus)

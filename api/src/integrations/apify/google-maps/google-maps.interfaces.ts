@@ -25,6 +25,8 @@ export interface GoogleMapsRawItem {
     categoryName?: string;
     categories?: string[];
     placeId?: string;
+    /** e.g. [{ day: 'Monday', hours: '9 AM to 5 PM' }, { day: 'Sunday', hours: 'Closed' }] */
+    openingHours?: { day?: string; hours?: string }[];
     location?: { lat?: number; lng?: number };
     [key: string]: any;
 }

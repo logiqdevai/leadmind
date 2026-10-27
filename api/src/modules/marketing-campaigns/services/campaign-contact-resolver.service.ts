@@ -39,6 +39,9 @@ export class CampaignContactResolverService {
             score_rules: filters.score_rules,
             profile_field: filters.profile_field,
             has_profile_field: filters.has_profile_field,
+            open_day: filters.open_day,
+            open_from: filters.open_from,
+            open_to: filters.open_to,
         });
 
         const and: Prisma.ContactWhereInput[] = [];

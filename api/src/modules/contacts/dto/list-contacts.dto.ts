@@ -31,7 +31,9 @@ import {
     SortOrder,
 } from '../constants/contact-sort-fields.constants';
 
-export class ListContactsDto {
+import { OpeningHoursFilterDto } from './opening-hours-filter.dto';
+
+export class ListContactsDto extends OpeningHoursFilterDto {
     @ApiPropertyOptional({ enum: LeadStatus })
     @IsOptional()
     @IsEnum(LeadStatus)

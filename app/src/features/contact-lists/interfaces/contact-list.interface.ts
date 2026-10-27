@@ -69,6 +69,9 @@ export interface ListMember extends Contact {
     /** Calls you logged for this contact. */
     call_count: number;
     last_called_at: string | null;
+    /** Pending reminders on this contact. */
+    reminder_count: number;
+    next_reminder_at: string | null;
 }
 
 export interface PaginatedListMembers {

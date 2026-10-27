@@ -37,6 +37,7 @@ import { profileDraftFromContact, profileFieldPatch, sameUuidSet } from "../util
 import { BounceNotice } from "./bounce-notice";
 import { ContactInfosSection } from "./contact-infos-section";
 import { MarketingPreferenceNotice } from "./marketing-opt-out-notice";
+import { OpeningHoursSection } from "./opening-hours-section";
 
 interface OverviewTabProps {
     contact: Contact;
@@ -250,6 +251,8 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
                     />
                 </Row>
             </SectionCard>
+
+            <OpeningHoursSection contactUuid={contact.uuid} hours={contact.opening_hours} />
 
             <SectionCard title="Professional" icon={Briefcase}>
                 <Row label="Title">

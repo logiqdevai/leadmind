@@ -309,6 +309,8 @@ model Lead {
   description               String?
   source_type               SourceType
   raw_data                  Json?
+  /// Scraped opening hours: { monday: [{ open: "09:00", close: "17:00" }], ... }; copied to a contact's hours when the contact is created.
+  opening_hours             Json?
   enrichment_summary        String?                @db.Text
   enrichment_metadata       Json?
   email_validation_status   EmailValidationStatus  @default(UNKNOWN)
@@ -402,6 +404,7 @@ model Contact {
   sequence_enrollments SequenceEnrollment[]
   bookings             Booking[]
   booking_links        BookingLink[]
+  opening_hours_rows   ContactOpeningHour[]
 
   @@unique([organisation_uuid, lead_uuid])
   @@index([organisation_uuid])
@@ -411,6 +414,25 @@ model Contact {
   @@index([unsubscribed_at])
   @@index([bounced_at])
   @@index([last_interaction_at])
+}
+
+/// One opening interval of a contact's business on one weekday; several rows per day = split shifts.
+/// Stored as rows (not JSON) so contacts can be filtered by the hours they are open.
+model ContactOpeningHour {
+  id            Int    @id @default(autoincrement())
+  contact_uuid  String
+  /// 0 = Monday ... 6 = Sunday
+  day_of_week   Int
+  /// Minutes after midnight
+  opens_minute  Int
+  /// Minutes after midnight; above 1440 when the interval runs past midnight into the next day.
+  closes_minute Int
+
+  contact Contact @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([contact_uuid])
+  @@index([day_of_week, opens_minute, closes_minute])
+  @@map("contact_opening_hours")
 }
 
 model ContactInfo {
@@ -548,6 +570,8 @@ model Interaction {
   outreach_message_uuid String?
   // Who logged it; lets logged calls count toward a user's call goal.
   created_by_user_uuid  String?
+  /// Only set on CALL interactions: the status picked from the Quick note list when the call was logged.
+  call_note_status      CallNoteStatus?
   created_at            DateTime        @default(now())
   updated_at            DateTime        @updatedAt
 
@@ -560,6 +584,7 @@ model Interaction {
   @@index([organisation_uuid])
   @@index([campaign_uuid])
   @@index([type])
+  @@index([type, call_note_status])
   @@index([created_at])
   @@index([outreach_message_uuid])
   @@index([created_by_user_uuid, type, created_at])
@@ -1198,6 +1223,23 @@ enum InteractionType {
   UNSUBSCRIBED
   BOOKING_SCHEDULED
   BOOKING_CANCELLED
+}
+
+/// What the caller noted about a logged call; one value per call so outcomes can be counted.
+enum CallNoteStatus {
+  NOT_AVAILABLE
+  NOT_INTERESTED
+  CALL_LATER
+  SEND_INFO
+  WRONG_NUMBER
+  DO_NOT_CALL
+  INTERESTED
+  MEETING_BOOKED
+  ALREADY_CUSTOMER
+  USING_COMPETITOR
+  NO_BUDGET
+  NOT_DECISION_MAKER
+  GATEKEEPER
 }
 
 enum CampaignType {

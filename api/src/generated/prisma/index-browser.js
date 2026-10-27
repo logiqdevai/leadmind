@@ -266,6 +266,7 @@ exports.Prisma.LeadScalarFieldEnum = {
   description: 'description',
   source_type: 'source_type',
   raw_data: 'raw_data',
+  opening_hours: 'opening_hours',
   enrichment_summary: 'enrichment_summary',
   enrichment_metadata: 'enrichment_metadata',
   email_validation_status: 'email_validation_status',
@@ -327,6 +328,14 @@ exports.Prisma.ContactScalarFieldEnum = {
   last_interaction_at: 'last_interaction_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.ContactOpeningHourScalarFieldEnum = {
+  id: 'id',
+  contact_uuid: 'contact_uuid',
+  day_of_week: 'day_of_week',
+  opens_minute: 'opens_minute',
+  closes_minute: 'closes_minute'
 };
 
 exports.Prisma.ContactInfoScalarFieldEnum = {
@@ -408,6 +417,7 @@ exports.Prisma.InteractionScalarFieldEnum = {
   status_change: 'status_change',
   outreach_message_uuid: 'outreach_message_uuid',
   created_by_user_uuid: 'created_by_user_uuid',
+  call_note_status: 'call_note_status',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1492,6 +1502,22 @@ exports.InteractionType = exports.$Enums.InteractionType = {
   BOOKING_CANCELLED: 'BOOKING_CANCELLED'
 };
 
+exports.CallNoteStatus = exports.$Enums.CallNoteStatus = {
+  NOT_AVAILABLE: 'NOT_AVAILABLE',
+  NOT_INTERESTED: 'NOT_INTERESTED',
+  CALL_LATER: 'CALL_LATER',
+  SEND_INFO: 'SEND_INFO',
+  WRONG_NUMBER: 'WRONG_NUMBER',
+  DO_NOT_CALL: 'DO_NOT_CALL',
+  INTERESTED: 'INTERESTED',
+  MEETING_BOOKED: 'MEETING_BOOKED',
+  ALREADY_CUSTOMER: 'ALREADY_CUSTOMER',
+  USING_COMPETITOR: 'USING_COMPETITOR',
+  NO_BUDGET: 'NO_BUDGET',
+  NOT_DECISION_MAKER: 'NOT_DECISION_MAKER',
+  GATEKEEPER: 'GATEKEEPER'
+};
+
 exports.MsgDirection = exports.$Enums.MsgDirection = {
   OUTBOUND: 'OUTBOUND',
   INBOUND: 'INBOUND'
@@ -1934,6 +1960,7 @@ exports.Prisma.ModelName = {
   Lead: 'Lead',
   LeadEnrichment: 'LeadEnrichment',
   Contact: 'Contact',
+  ContactOpeningHour: 'ContactOpeningHour',
   ContactInfo: 'ContactInfo',
   ContactFilter: 'ContactFilter',
   ContactEnrichment: 'ContactEnrichment',

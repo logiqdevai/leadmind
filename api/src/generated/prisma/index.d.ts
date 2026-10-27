@@ -84,6 +84,12 @@ export type LeadEnrichment = $Result.DefaultSelection<Prisma.$LeadEnrichmentPayl
  */
 export type Contact = $Result.DefaultSelection<Prisma.$ContactPayload>
 /**
+ * Model ContactOpeningHour
+ * One opening interval of a contact's business on one weekday; several rows per day = split shifts.
+ * Stored as rows (not JSON) so contacts can be filtered by the hours they are open.
+ */
+export type ContactOpeningHour = $Result.DefaultSelection<Prisma.$ContactOpeningHourPayload>
+/**
  * Model ContactInfo
  * 
  */
@@ -674,6 +680,25 @@ export const InteractionType: {
 export type InteractionType = (typeof InteractionType)[keyof typeof InteractionType]
 
 
+export const CallNoteStatus: {
+  NOT_AVAILABLE: 'NOT_AVAILABLE',
+  NOT_INTERESTED: 'NOT_INTERESTED',
+  CALL_LATER: 'CALL_LATER',
+  SEND_INFO: 'SEND_INFO',
+  WRONG_NUMBER: 'WRONG_NUMBER',
+  DO_NOT_CALL: 'DO_NOT_CALL',
+  INTERESTED: 'INTERESTED',
+  MEETING_BOOKED: 'MEETING_BOOKED',
+  ALREADY_CUSTOMER: 'ALREADY_CUSTOMER',
+  USING_COMPETITOR: 'USING_COMPETITOR',
+  NO_BUDGET: 'NO_BUDGET',
+  NOT_DECISION_MAKER: 'NOT_DECISION_MAKER',
+  GATEKEEPER: 'GATEKEEPER'
+};
+
+export type CallNoteStatus = (typeof CallNoteStatus)[keyof typeof CallNoteStatus]
+
+
 export const CampaignType: {
   STANDARD: 'STANDARD',
   PERSONALIZED: 'PERSONALIZED',
@@ -1246,6 +1271,10 @@ export type InteractionType = $Enums.InteractionType
 
 export const InteractionType: typeof $Enums.InteractionType
 
+export type CallNoteStatus = $Enums.CallNoteStatus
+
+export const CallNoteStatus: typeof $Enums.CallNoteStatus
+
 export type CampaignType = $Enums.CampaignType
 
 export const CampaignType: typeof $Enums.CampaignType
@@ -1682,6 +1711,16 @@ export class PrismaClient<
     * ```
     */
   get contact(): Prisma.ContactDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contactOpeningHour`: Exposes CRUD operations for the **ContactOpeningHour** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContactOpeningHours
+    * const contactOpeningHours = await prisma.contactOpeningHour.findMany()
+    * ```
+    */
+  get contactOpeningHour(): Prisma.ContactOpeningHourDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.contactInfo`: Exposes CRUD operations for the **ContactInfo** model.
@@ -2750,6 +2789,7 @@ export namespace Prisma {
     Lead: 'Lead',
     LeadEnrichment: 'LeadEnrichment',
     Contact: 'Contact',
+    ContactOpeningHour: 'ContactOpeningHour',
     ContactInfo: 'ContactInfo',
     ContactFilter: 'ContactFilter',
     ContactEnrichment: 'ContactEnrichment',
@@ -2827,7 +2867,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "booking" | "bookingEvent" | "bookingNotification" | "calendarConnection" | "notification"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "booking" | "bookingEvent" | "bookingNotification" | "calendarConnection" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3864,6 +3904,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ContactCountArgs<ExtArgs>
             result: $Utils.Optional<ContactCountAggregateOutputType> | number
+          }
+        }
+      }
+      ContactOpeningHour: {
+        payload: Prisma.$ContactOpeningHourPayload<ExtArgs>
+        fields: Prisma.ContactOpeningHourFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContactOpeningHourFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContactOpeningHourFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>
+          }
+          findFirst: {
+            args: Prisma.ContactOpeningHourFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContactOpeningHourFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>
+          }
+          findMany: {
+            args: Prisma.ContactOpeningHourFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>[]
+          }
+          create: {
+            args: Prisma.ContactOpeningHourCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>
+          }
+          createMany: {
+            args: Prisma.ContactOpeningHourCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContactOpeningHourCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>[]
+          }
+          delete: {
+            args: Prisma.ContactOpeningHourDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>
+          }
+          update: {
+            args: Prisma.ContactOpeningHourUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>
+          }
+          deleteMany: {
+            args: Prisma.ContactOpeningHourDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContactOpeningHourUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContactOpeningHourUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>[]
+          }
+          upsert: {
+            args: Prisma.ContactOpeningHourUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactOpeningHourPayload>
+          }
+          aggregate: {
+            args: Prisma.ContactOpeningHourAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContactOpeningHour>
+          }
+          groupBy: {
+            args: Prisma.ContactOpeningHourGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContactOpeningHourGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContactOpeningHourCountArgs<ExtArgs>
+            result: $Utils.Optional<ContactOpeningHourCountAggregateOutputType> | number
           }
         }
       }
@@ -8577,6 +8691,7 @@ export namespace Prisma {
     lead?: LeadOmit
     leadEnrichment?: LeadEnrichmentOmit
     contact?: ContactOmit
+    contactOpeningHour?: ContactOpeningHourOmit
     contactInfo?: ContactInfoOmit
     contactFilter?: ContactFilterOmit
     contactEnrichment?: ContactEnrichmentOmit
@@ -9555,6 +9670,7 @@ export namespace Prisma {
     sequence_enrollments: number
     bookings: number
     booking_links: number
+    opening_hours_rows: number
   }
 
   export type ContactCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9573,6 +9689,7 @@ export namespace Prisma {
     sequence_enrollments?: boolean | ContactCountOutputTypeCountSequence_enrollmentsArgs
     bookings?: boolean | ContactCountOutputTypeCountBookingsArgs
     booking_links?: boolean | ContactCountOutputTypeCountBooking_linksArgs
+    opening_hours_rows?: boolean | ContactCountOutputTypeCountOpening_hours_rowsArgs
   }
 
   // Custom InputTypes
@@ -9689,6 +9806,13 @@ export namespace Prisma {
    */
   export type ContactCountOutputTypeCountBooking_linksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingLinkWhereInput
+  }
+
+  /**
+   * ContactCountOutputType without action
+   */
+  export type ContactCountOutputTypeCountOpening_hours_rowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactOpeningHourWhereInput
   }
 
 
@@ -25519,6 +25643,7 @@ export namespace Prisma {
     description: number
     source_type: number
     raw_data: number
+    opening_hours: number
     enrichment_summary: number
     enrichment_metadata: number
     email_validation_status: number
@@ -25612,6 +25737,7 @@ export namespace Prisma {
     description?: true
     source_type?: true
     raw_data?: true
+    opening_hours?: true
     enrichment_summary?: true
     enrichment_metadata?: true
     email_validation_status?: true
@@ -25728,6 +25854,7 @@ export namespace Prisma {
     description: string | null
     source_type: $Enums.SourceType
     raw_data: JsonValue | null
+    opening_hours: JsonValue | null
     enrichment_summary: string | null
     enrichment_metadata: JsonValue | null
     email_validation_status: $Enums.EmailValidationStatus
@@ -25776,6 +25903,7 @@ export namespace Prisma {
     description?: boolean
     source_type?: boolean
     raw_data?: boolean
+    opening_hours?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
     email_validation_status?: boolean
@@ -25809,6 +25937,7 @@ export namespace Prisma {
     description?: boolean
     source_type?: boolean
     raw_data?: boolean
+    opening_hours?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
     email_validation_status?: boolean
@@ -25839,6 +25968,7 @@ export namespace Prisma {
     description?: boolean
     source_type?: boolean
     raw_data?: boolean
+    opening_hours?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
     email_validation_status?: boolean
@@ -25869,6 +25999,7 @@ export namespace Prisma {
     description?: boolean
     source_type?: boolean
     raw_data?: boolean
+    opening_hours?: boolean
     enrichment_summary?: boolean
     enrichment_metadata?: boolean
     email_validation_status?: boolean
@@ -25881,7 +26012,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "raw_lead_uuid" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "source_type" | "raw_data" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "website_validation_status" | "website_validation_reason" | "website_validated_at" | "created_at" | "updated_at", ExtArgs["result"]["lead"]>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "raw_lead_uuid" | "name" | "email" | "phone" | "company" | "website" | "google_maps_url" | "linkedin_url" | "title" | "location" | "industry" | "description" | "source_type" | "raw_data" | "opening_hours" | "enrichment_summary" | "enrichment_metadata" | "email_validation_status" | "email_validation_reason" | "email_validated_at" | "website_validation_status" | "website_validation_reason" | "website_validated_at" | "created_at" | "updated_at", ExtArgs["result"]["lead"]>
   export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     raw_lead?: boolean | Lead$raw_leadArgs<ExtArgs>
     contacts?: boolean | Lead$contactsArgs<ExtArgs>
@@ -25919,6 +26050,10 @@ export namespace Prisma {
       description: string | null
       source_type: $Enums.SourceType
       raw_data: Prisma.JsonValue | null
+      /**
+       * Scraped opening hours: { monday: [{ open: "09:00", close: "17:00" }], ... }; copied to a contact's hours when the contact is created.
+       */
+      opening_hours: Prisma.JsonValue | null
       enrichment_summary: string | null
       enrichment_metadata: Prisma.JsonValue | null
       email_validation_status: $Enums.EmailValidationStatus
@@ -26371,6 +26506,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Lead", 'String'>
     readonly source_type: FieldRef<"Lead", 'SourceType'>
     readonly raw_data: FieldRef<"Lead", 'Json'>
+    readonly opening_hours: FieldRef<"Lead", 'Json'>
     readonly enrichment_summary: FieldRef<"Lead", 'String'>
     readonly enrichment_metadata: FieldRef<"Lead", 'Json'>
     readonly email_validation_status: FieldRef<"Lead", 'EmailValidationStatus'>
@@ -28485,6 +28621,7 @@ export namespace Prisma {
     sequence_enrollments?: boolean | Contact$sequence_enrollmentsArgs<ExtArgs>
     bookings?: boolean | Contact$bookingsArgs<ExtArgs>
     booking_links?: boolean | Contact$booking_linksArgs<ExtArgs>
+    opening_hours_rows?: boolean | Contact$opening_hours_rowsArgs<ExtArgs>
     _count?: boolean | ContactCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contact"]>
 
@@ -28622,6 +28759,7 @@ export namespace Prisma {
     sequence_enrollments?: boolean | Contact$sequence_enrollmentsArgs<ExtArgs>
     bookings?: boolean | Contact$bookingsArgs<ExtArgs>
     booking_links?: boolean | Contact$booking_linksArgs<ExtArgs>
+    opening_hours_rows?: boolean | Contact$opening_hours_rowsArgs<ExtArgs>
     _count?: boolean | ContactCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -28656,6 +28794,7 @@ export namespace Prisma {
       sequence_enrollments: Prisma.$SequenceEnrollmentPayload<ExtArgs>[]
       bookings: Prisma.$BookingPayload<ExtArgs>[]
       booking_links: Prisma.$BookingLinkPayload<ExtArgs>[]
+      opening_hours_rows: Prisma.$ContactOpeningHourPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -29103,6 +29242,7 @@ export namespace Prisma {
     sequence_enrollments<T extends Contact$sequence_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$sequence_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookings<T extends Contact$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_links<T extends Contact$booking_linksArgs<ExtArgs> = {}>(args?: Subset<T, Contact$booking_linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    opening_hours_rows<T extends Contact$opening_hours_rowsArgs<ExtArgs> = {}>(args?: Subset<T, Contact$opening_hours_rowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -29940,6 +30080,30 @@ export namespace Prisma {
   }
 
   /**
+   * Contact.opening_hours_rows
+   */
+  export type Contact$opening_hours_rowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    where?: ContactOpeningHourWhereInput
+    orderBy?: ContactOpeningHourOrderByWithRelationInput | ContactOpeningHourOrderByWithRelationInput[]
+    cursor?: ContactOpeningHourWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContactOpeningHourScalarFieldEnum | ContactOpeningHourScalarFieldEnum[]
+  }
+
+  /**
    * Contact without action
    */
   export type ContactDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -29955,6 +30119,1119 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ContactInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ContactOpeningHour
+   */
+
+  export type AggregateContactOpeningHour = {
+    _count: ContactOpeningHourCountAggregateOutputType | null
+    _avg: ContactOpeningHourAvgAggregateOutputType | null
+    _sum: ContactOpeningHourSumAggregateOutputType | null
+    _min: ContactOpeningHourMinAggregateOutputType | null
+    _max: ContactOpeningHourMaxAggregateOutputType | null
+  }
+
+  export type ContactOpeningHourAvgAggregateOutputType = {
+    id: number | null
+    day_of_week: number | null
+    opens_minute: number | null
+    closes_minute: number | null
+  }
+
+  export type ContactOpeningHourSumAggregateOutputType = {
+    id: number | null
+    day_of_week: number | null
+    opens_minute: number | null
+    closes_minute: number | null
+  }
+
+  export type ContactOpeningHourMinAggregateOutputType = {
+    id: number | null
+    contact_uuid: string | null
+    day_of_week: number | null
+    opens_minute: number | null
+    closes_minute: number | null
+  }
+
+  export type ContactOpeningHourMaxAggregateOutputType = {
+    id: number | null
+    contact_uuid: string | null
+    day_of_week: number | null
+    opens_minute: number | null
+    closes_minute: number | null
+  }
+
+  export type ContactOpeningHourCountAggregateOutputType = {
+    id: number
+    contact_uuid: number
+    day_of_week: number
+    opens_minute: number
+    closes_minute: number
+    _all: number
+  }
+
+
+  export type ContactOpeningHourAvgAggregateInputType = {
+    id?: true
+    day_of_week?: true
+    opens_minute?: true
+    closes_minute?: true
+  }
+
+  export type ContactOpeningHourSumAggregateInputType = {
+    id?: true
+    day_of_week?: true
+    opens_minute?: true
+    closes_minute?: true
+  }
+
+  export type ContactOpeningHourMinAggregateInputType = {
+    id?: true
+    contact_uuid?: true
+    day_of_week?: true
+    opens_minute?: true
+    closes_minute?: true
+  }
+
+  export type ContactOpeningHourMaxAggregateInputType = {
+    id?: true
+    contact_uuid?: true
+    day_of_week?: true
+    opens_minute?: true
+    closes_minute?: true
+  }
+
+  export type ContactOpeningHourCountAggregateInputType = {
+    id?: true
+    contact_uuid?: true
+    day_of_week?: true
+    opens_minute?: true
+    closes_minute?: true
+    _all?: true
+  }
+
+  export type ContactOpeningHourAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContactOpeningHour to aggregate.
+     */
+    where?: ContactOpeningHourWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactOpeningHours to fetch.
+     */
+    orderBy?: ContactOpeningHourOrderByWithRelationInput | ContactOpeningHourOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ContactOpeningHourWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactOpeningHours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactOpeningHours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ContactOpeningHours
+    **/
+    _count?: true | ContactOpeningHourCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ContactOpeningHourAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ContactOpeningHourSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ContactOpeningHourMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ContactOpeningHourMaxAggregateInputType
+  }
+
+  export type GetContactOpeningHourAggregateType<T extends ContactOpeningHourAggregateArgs> = {
+        [P in keyof T & keyof AggregateContactOpeningHour]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateContactOpeningHour[P]>
+      : GetScalarType<T[P], AggregateContactOpeningHour[P]>
+  }
+
+
+
+
+  export type ContactOpeningHourGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactOpeningHourWhereInput
+    orderBy?: ContactOpeningHourOrderByWithAggregationInput | ContactOpeningHourOrderByWithAggregationInput[]
+    by: ContactOpeningHourScalarFieldEnum[] | ContactOpeningHourScalarFieldEnum
+    having?: ContactOpeningHourScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ContactOpeningHourCountAggregateInputType | true
+    _avg?: ContactOpeningHourAvgAggregateInputType
+    _sum?: ContactOpeningHourSumAggregateInputType
+    _min?: ContactOpeningHourMinAggregateInputType
+    _max?: ContactOpeningHourMaxAggregateInputType
+  }
+
+  export type ContactOpeningHourGroupByOutputType = {
+    id: number
+    contact_uuid: string
+    day_of_week: number
+    opens_minute: number
+    closes_minute: number
+    _count: ContactOpeningHourCountAggregateOutputType | null
+    _avg: ContactOpeningHourAvgAggregateOutputType | null
+    _sum: ContactOpeningHourSumAggregateOutputType | null
+    _min: ContactOpeningHourMinAggregateOutputType | null
+    _max: ContactOpeningHourMaxAggregateOutputType | null
+  }
+
+  type GetContactOpeningHourGroupByPayload<T extends ContactOpeningHourGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ContactOpeningHourGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ContactOpeningHourGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ContactOpeningHourGroupByOutputType[P]>
+            : GetScalarType<T[P], ContactOpeningHourGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ContactOpeningHourSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contact_uuid?: boolean
+    day_of_week?: boolean
+    opens_minute?: boolean
+    closes_minute?: boolean
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactOpeningHour"]>
+
+  export type ContactOpeningHourSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contact_uuid?: boolean
+    day_of_week?: boolean
+    opens_minute?: boolean
+    closes_minute?: boolean
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactOpeningHour"]>
+
+  export type ContactOpeningHourSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    contact_uuid?: boolean
+    day_of_week?: boolean
+    opens_minute?: boolean
+    closes_minute?: boolean
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactOpeningHour"]>
+
+  export type ContactOpeningHourSelectScalar = {
+    id?: boolean
+    contact_uuid?: boolean
+    day_of_week?: boolean
+    opens_minute?: boolean
+    closes_minute?: boolean
+  }
+
+  export type ContactOpeningHourOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contact_uuid" | "day_of_week" | "opens_minute" | "closes_minute", ExtArgs["result"]["contactOpeningHour"]>
+  export type ContactOpeningHourInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }
+  export type ContactOpeningHourIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }
+  export type ContactOpeningHourIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contact?: boolean | ContactDefaultArgs<ExtArgs>
+  }
+
+  export type $ContactOpeningHourPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ContactOpeningHour"
+    objects: {
+      contact: Prisma.$ContactPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      contact_uuid: string
+      /**
+       * 0 = Monday ... 6 = Sunday
+       */
+      day_of_week: number
+      /**
+       * Minutes after midnight
+       */
+      opens_minute: number
+      /**
+       * Minutes after midnight; above 1440 when the interval runs past midnight into the next day.
+       */
+      closes_minute: number
+    }, ExtArgs["result"]["contactOpeningHour"]>
+    composites: {}
+  }
+
+  type ContactOpeningHourGetPayload<S extends boolean | null | undefined | ContactOpeningHourDefaultArgs> = $Result.GetResult<Prisma.$ContactOpeningHourPayload, S>
+
+  type ContactOpeningHourCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContactOpeningHourFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ContactOpeningHourCountAggregateInputType | true
+    }
+
+  export interface ContactOpeningHourDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContactOpeningHour'], meta: { name: 'ContactOpeningHour' } }
+    /**
+     * Find zero or one ContactOpeningHour that matches the filter.
+     * @param {ContactOpeningHourFindUniqueArgs} args - Arguments to find a ContactOpeningHour
+     * @example
+     * // Get one ContactOpeningHour
+     * const contactOpeningHour = await prisma.contactOpeningHour.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ContactOpeningHourFindUniqueArgs>(args: SelectSubset<T, ContactOpeningHourFindUniqueArgs<ExtArgs>>): Prisma__ContactOpeningHourClient<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ContactOpeningHour that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ContactOpeningHourFindUniqueOrThrowArgs} args - Arguments to find a ContactOpeningHour
+     * @example
+     * // Get one ContactOpeningHour
+     * const contactOpeningHour = await prisma.contactOpeningHour.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ContactOpeningHourFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactOpeningHourFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactOpeningHourClient<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContactOpeningHour that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactOpeningHourFindFirstArgs} args - Arguments to find a ContactOpeningHour
+     * @example
+     * // Get one ContactOpeningHour
+     * const contactOpeningHour = await prisma.contactOpeningHour.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ContactOpeningHourFindFirstArgs>(args?: SelectSubset<T, ContactOpeningHourFindFirstArgs<ExtArgs>>): Prisma__ContactOpeningHourClient<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContactOpeningHour that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactOpeningHourFindFirstOrThrowArgs} args - Arguments to find a ContactOpeningHour
+     * @example
+     * // Get one ContactOpeningHour
+     * const contactOpeningHour = await prisma.contactOpeningHour.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ContactOpeningHourFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactOpeningHourFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactOpeningHourClient<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ContactOpeningHours that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactOpeningHourFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ContactOpeningHours
+     * const contactOpeningHours = await prisma.contactOpeningHour.findMany()
+     * 
+     * // Get first 10 ContactOpeningHours
+     * const contactOpeningHours = await prisma.contactOpeningHour.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const contactOpeningHourWithIdOnly = await prisma.contactOpeningHour.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ContactOpeningHourFindManyArgs>(args?: SelectSubset<T, ContactOpeningHourFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ContactOpeningHour.
+     * @param {ContactOpeningHourCreateArgs} args - Arguments to create a ContactOpeningHour.
+     * @example
+     * // Create one ContactOpeningHour
+     * const ContactOpeningHour = await prisma.contactOpeningHour.create({
+     *   data: {
+     *     // ... data to create a ContactOpeningHour
+     *   }
+     * })
+     * 
+     */
+    create<T extends ContactOpeningHourCreateArgs>(args: SelectSubset<T, ContactOpeningHourCreateArgs<ExtArgs>>): Prisma__ContactOpeningHourClient<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ContactOpeningHours.
+     * @param {ContactOpeningHourCreateManyArgs} args - Arguments to create many ContactOpeningHours.
+     * @example
+     * // Create many ContactOpeningHours
+     * const contactOpeningHour = await prisma.contactOpeningHour.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ContactOpeningHourCreateManyArgs>(args?: SelectSubset<T, ContactOpeningHourCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ContactOpeningHours and returns the data saved in the database.
+     * @param {ContactOpeningHourCreateManyAndReturnArgs} args - Arguments to create many ContactOpeningHours.
+     * @example
+     * // Create many ContactOpeningHours
+     * const contactOpeningHour = await prisma.contactOpeningHour.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ContactOpeningHours and only return the `id`
+     * const contactOpeningHourWithIdOnly = await prisma.contactOpeningHour.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ContactOpeningHourCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactOpeningHourCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ContactOpeningHour.
+     * @param {ContactOpeningHourDeleteArgs} args - Arguments to delete one ContactOpeningHour.
+     * @example
+     * // Delete one ContactOpeningHour
+     * const ContactOpeningHour = await prisma.contactOpeningHour.delete({
+     *   where: {
+     *     // ... filter to delete one ContactOpeningHour
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ContactOpeningHourDeleteArgs>(args: SelectSubset<T, ContactOpeningHourDeleteArgs<ExtArgs>>): Prisma__ContactOpeningHourClient<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ContactOpeningHour.
+     * @param {ContactOpeningHourUpdateArgs} args - Arguments to update one ContactOpeningHour.
+     * @example
+     * // Update one ContactOpeningHour
+     * const contactOpeningHour = await prisma.contactOpeningHour.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ContactOpeningHourUpdateArgs>(args: SelectSubset<T, ContactOpeningHourUpdateArgs<ExtArgs>>): Prisma__ContactOpeningHourClient<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ContactOpeningHours.
+     * @param {ContactOpeningHourDeleteManyArgs} args - Arguments to filter ContactOpeningHours to delete.
+     * @example
+     * // Delete a few ContactOpeningHours
+     * const { count } = await prisma.contactOpeningHour.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ContactOpeningHourDeleteManyArgs>(args?: SelectSubset<T, ContactOpeningHourDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContactOpeningHours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactOpeningHourUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ContactOpeningHours
+     * const contactOpeningHour = await prisma.contactOpeningHour.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ContactOpeningHourUpdateManyArgs>(args: SelectSubset<T, ContactOpeningHourUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContactOpeningHours and returns the data updated in the database.
+     * @param {ContactOpeningHourUpdateManyAndReturnArgs} args - Arguments to update many ContactOpeningHours.
+     * @example
+     * // Update many ContactOpeningHours
+     * const contactOpeningHour = await prisma.contactOpeningHour.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContactOpeningHours and only return the `id`
+     * const contactOpeningHourWithIdOnly = await prisma.contactOpeningHour.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContactOpeningHourUpdateManyAndReturnArgs>(args: SelectSubset<T, ContactOpeningHourUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ContactOpeningHour.
+     * @param {ContactOpeningHourUpsertArgs} args - Arguments to update or create a ContactOpeningHour.
+     * @example
+     * // Update or create a ContactOpeningHour
+     * const contactOpeningHour = await prisma.contactOpeningHour.upsert({
+     *   create: {
+     *     // ... data to create a ContactOpeningHour
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ContactOpeningHour we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ContactOpeningHourUpsertArgs>(args: SelectSubset<T, ContactOpeningHourUpsertArgs<ExtArgs>>): Prisma__ContactOpeningHourClient<$Result.GetResult<Prisma.$ContactOpeningHourPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ContactOpeningHours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactOpeningHourCountArgs} args - Arguments to filter ContactOpeningHours to count.
+     * @example
+     * // Count the number of ContactOpeningHours
+     * const count = await prisma.contactOpeningHour.count({
+     *   where: {
+     *     // ... the filter for the ContactOpeningHours we want to count
+     *   }
+     * })
+    **/
+    count<T extends ContactOpeningHourCountArgs>(
+      args?: Subset<T, ContactOpeningHourCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ContactOpeningHourCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ContactOpeningHour.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactOpeningHourAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ContactOpeningHourAggregateArgs>(args: Subset<T, ContactOpeningHourAggregateArgs>): Prisma.PrismaPromise<GetContactOpeningHourAggregateType<T>>
+
+    /**
+     * Group by ContactOpeningHour.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactOpeningHourGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ContactOpeningHourGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ContactOpeningHourGroupByArgs['orderBy'] }
+        : { orderBy?: ContactOpeningHourGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ContactOpeningHourGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContactOpeningHourGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ContactOpeningHour model
+   */
+  readonly fields: ContactOpeningHourFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ContactOpeningHour.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ContactOpeningHourClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ContactOpeningHour model
+   */
+  interface ContactOpeningHourFieldRefs {
+    readonly id: FieldRef<"ContactOpeningHour", 'Int'>
+    readonly contact_uuid: FieldRef<"ContactOpeningHour", 'String'>
+    readonly day_of_week: FieldRef<"ContactOpeningHour", 'Int'>
+    readonly opens_minute: FieldRef<"ContactOpeningHour", 'Int'>
+    readonly closes_minute: FieldRef<"ContactOpeningHour", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ContactOpeningHour findUnique
+   */
+  export type ContactOpeningHourFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactOpeningHour to fetch.
+     */
+    where: ContactOpeningHourWhereUniqueInput
+  }
+
+  /**
+   * ContactOpeningHour findUniqueOrThrow
+   */
+  export type ContactOpeningHourFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactOpeningHour to fetch.
+     */
+    where: ContactOpeningHourWhereUniqueInput
+  }
+
+  /**
+   * ContactOpeningHour findFirst
+   */
+  export type ContactOpeningHourFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactOpeningHour to fetch.
+     */
+    where?: ContactOpeningHourWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactOpeningHours to fetch.
+     */
+    orderBy?: ContactOpeningHourOrderByWithRelationInput | ContactOpeningHourOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContactOpeningHours.
+     */
+    cursor?: ContactOpeningHourWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactOpeningHours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactOpeningHours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactOpeningHours.
+     */
+    distinct?: ContactOpeningHourScalarFieldEnum | ContactOpeningHourScalarFieldEnum[]
+  }
+
+  /**
+   * ContactOpeningHour findFirstOrThrow
+   */
+  export type ContactOpeningHourFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactOpeningHour to fetch.
+     */
+    where?: ContactOpeningHourWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactOpeningHours to fetch.
+     */
+    orderBy?: ContactOpeningHourOrderByWithRelationInput | ContactOpeningHourOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContactOpeningHours.
+     */
+    cursor?: ContactOpeningHourWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactOpeningHours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactOpeningHours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactOpeningHours.
+     */
+    distinct?: ContactOpeningHourScalarFieldEnum | ContactOpeningHourScalarFieldEnum[]
+  }
+
+  /**
+   * ContactOpeningHour findMany
+   */
+  export type ContactOpeningHourFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactOpeningHours to fetch.
+     */
+    where?: ContactOpeningHourWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactOpeningHours to fetch.
+     */
+    orderBy?: ContactOpeningHourOrderByWithRelationInput | ContactOpeningHourOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ContactOpeningHours.
+     */
+    cursor?: ContactOpeningHourWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactOpeningHours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactOpeningHours.
+     */
+    skip?: number
+    distinct?: ContactOpeningHourScalarFieldEnum | ContactOpeningHourScalarFieldEnum[]
+  }
+
+  /**
+   * ContactOpeningHour create
+   */
+  export type ContactOpeningHourCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ContactOpeningHour.
+     */
+    data: XOR<ContactOpeningHourCreateInput, ContactOpeningHourUncheckedCreateInput>
+  }
+
+  /**
+   * ContactOpeningHour createMany
+   */
+  export type ContactOpeningHourCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ContactOpeningHours.
+     */
+    data: ContactOpeningHourCreateManyInput | ContactOpeningHourCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ContactOpeningHour createManyAndReturn
+   */
+  export type ContactOpeningHourCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * The data used to create many ContactOpeningHours.
+     */
+    data: ContactOpeningHourCreateManyInput | ContactOpeningHourCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContactOpeningHour update
+   */
+  export type ContactOpeningHourUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ContactOpeningHour.
+     */
+    data: XOR<ContactOpeningHourUpdateInput, ContactOpeningHourUncheckedUpdateInput>
+    /**
+     * Choose, which ContactOpeningHour to update.
+     */
+    where: ContactOpeningHourWhereUniqueInput
+  }
+
+  /**
+   * ContactOpeningHour updateMany
+   */
+  export type ContactOpeningHourUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ContactOpeningHours.
+     */
+    data: XOR<ContactOpeningHourUpdateManyMutationInput, ContactOpeningHourUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactOpeningHours to update
+     */
+    where?: ContactOpeningHourWhereInput
+    /**
+     * Limit how many ContactOpeningHours to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactOpeningHour updateManyAndReturn
+   */
+  export type ContactOpeningHourUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * The data used to update ContactOpeningHours.
+     */
+    data: XOR<ContactOpeningHourUpdateManyMutationInput, ContactOpeningHourUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactOpeningHours to update
+     */
+    where?: ContactOpeningHourWhereInput
+    /**
+     * Limit how many ContactOpeningHours to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ContactOpeningHour upsert
+   */
+  export type ContactOpeningHourUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ContactOpeningHour to update in case it exists.
+     */
+    where: ContactOpeningHourWhereUniqueInput
+    /**
+     * In case the ContactOpeningHour found by the `where` argument doesn't exist, create a new ContactOpeningHour with this data.
+     */
+    create: XOR<ContactOpeningHourCreateInput, ContactOpeningHourUncheckedCreateInput>
+    /**
+     * In case the ContactOpeningHour was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ContactOpeningHourUpdateInput, ContactOpeningHourUncheckedUpdateInput>
+  }
+
+  /**
+   * ContactOpeningHour delete
+   */
+  export type ContactOpeningHourDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
+    /**
+     * Filter which ContactOpeningHour to delete.
+     */
+    where: ContactOpeningHourWhereUniqueInput
+  }
+
+  /**
+   * ContactOpeningHour deleteMany
+   */
+  export type ContactOpeningHourDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContactOpeningHours to delete
+     */
+    where?: ContactOpeningHourWhereInput
+    /**
+     * Limit how many ContactOpeningHours to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactOpeningHour without action
+   */
+  export type ContactOpeningHourDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactOpeningHour
+     */
+    select?: ContactOpeningHourSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactOpeningHour
+     */
+    omit?: ContactOpeningHourOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactOpeningHourInclude<ExtArgs> | null
   }
 
 
@@ -37972,6 +39249,7 @@ export namespace Prisma {
     content: string | null
     outreach_message_uuid: string | null
     created_by_user_uuid: string | null
+    call_note_status: $Enums.CallNoteStatus | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -37986,6 +39264,7 @@ export namespace Prisma {
     content: string | null
     outreach_message_uuid: string | null
     created_by_user_uuid: string | null
+    call_note_status: $Enums.CallNoteStatus | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -38002,6 +39281,7 @@ export namespace Prisma {
     status_change: number
     outreach_message_uuid: number
     created_by_user_uuid: number
+    call_note_status: number
     created_at: number
     updated_at: number
     _all: number
@@ -38026,6 +39306,7 @@ export namespace Prisma {
     content?: true
     outreach_message_uuid?: true
     created_by_user_uuid?: true
+    call_note_status?: true
     created_at?: true
     updated_at?: true
   }
@@ -38040,6 +39321,7 @@ export namespace Prisma {
     content?: true
     outreach_message_uuid?: true
     created_by_user_uuid?: true
+    call_note_status?: true
     created_at?: true
     updated_at?: true
   }
@@ -38056,6 +39338,7 @@ export namespace Prisma {
     status_change?: true
     outreach_message_uuid?: true
     created_by_user_uuid?: true
+    call_note_status?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -38159,6 +39442,7 @@ export namespace Prisma {
     status_change: JsonValue | null
     outreach_message_uuid: string | null
     created_by_user_uuid: string | null
+    call_note_status: $Enums.CallNoteStatus | null
     created_at: Date
     updated_at: Date
     _count: InteractionCountAggregateOutputType | null
@@ -38194,6 +39478,7 @@ export namespace Prisma {
     status_change?: boolean
     outreach_message_uuid?: boolean
     created_by_user_uuid?: boolean
+    call_note_status?: boolean
     created_at?: boolean
     updated_at?: boolean
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -38214,6 +39499,7 @@ export namespace Prisma {
     status_change?: boolean
     outreach_message_uuid?: boolean
     created_by_user_uuid?: boolean
+    call_note_status?: boolean
     created_at?: boolean
     updated_at?: boolean
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -38234,6 +39520,7 @@ export namespace Prisma {
     status_change?: boolean
     outreach_message_uuid?: boolean
     created_by_user_uuid?: boolean
+    call_note_status?: boolean
     created_at?: boolean
     updated_at?: boolean
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -38254,11 +39541,12 @@ export namespace Prisma {
     status_change?: boolean
     outreach_message_uuid?: boolean
     created_by_user_uuid?: boolean
+    call_note_status?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type InteractionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "contact_uuid" | "organisation_uuid" | "campaign_uuid" | "type" | "content" | "metadata" | "status_change" | "outreach_message_uuid" | "created_by_user_uuid" | "created_at" | "updated_at", ExtArgs["result"]["interaction"]>
+  export type InteractionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "contact_uuid" | "organisation_uuid" | "campaign_uuid" | "type" | "content" | "metadata" | "status_change" | "outreach_message_uuid" | "created_by_user_uuid" | "call_note_status" | "created_at" | "updated_at", ExtArgs["result"]["interaction"]>
   export type InteractionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -38298,6 +39586,10 @@ export namespace Prisma {
       status_change: Prisma.JsonValue | null
       outreach_message_uuid: string | null
       created_by_user_uuid: string | null
+      /**
+       * Only set on CALL interactions: the status picked from the Quick note list when the call was logged.
+       */
+      call_note_status: $Enums.CallNoteStatus | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["interaction"]>
@@ -38738,6 +40030,7 @@ export namespace Prisma {
     readonly status_change: FieldRef<"Interaction", 'Json'>
     readonly outreach_message_uuid: FieldRef<"Interaction", 'String'>
     readonly created_by_user_uuid: FieldRef<"Interaction", 'String'>
+    readonly call_note_status: FieldRef<"Interaction", 'CallNoteStatus'>
     readonly created_at: FieldRef<"Interaction", 'DateTime'>
     readonly updated_at: FieldRef<"Interaction", 'DateTime'>
   }
@@ -107680,6 +108973,7 @@ export namespace Prisma {
     description: 'description',
     source_type: 'source_type',
     raw_data: 'raw_data',
+    opening_hours: 'opening_hours',
     enrichment_summary: 'enrichment_summary',
     enrichment_metadata: 'enrichment_metadata',
     email_validation_status: 'email_validation_status',
@@ -107750,6 +109044,17 @@ export namespace Prisma {
   };
 
   export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeof ContactScalarFieldEnum]
+
+
+  export const ContactOpeningHourScalarFieldEnum: {
+    id: 'id',
+    contact_uuid: 'contact_uuid',
+    day_of_week: 'day_of_week',
+    opens_minute: 'opens_minute',
+    closes_minute: 'closes_minute'
+  };
+
+  export type ContactOpeningHourScalarFieldEnum = (typeof ContactOpeningHourScalarFieldEnum)[keyof typeof ContactOpeningHourScalarFieldEnum]
 
 
   export const ContactInfoScalarFieldEnum: {
@@ -107852,6 +109157,7 @@ export namespace Prisma {
     status_change: 'status_change',
     outreach_message_uuid: 'outreach_message_uuid',
     created_by_user_uuid: 'created_by_user_uuid',
+    call_note_status: 'call_note_status',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -109253,6 +110559,20 @@ export namespace Prisma {
    * Reference to a field of type 'InteractionType[]'
    */
   export type ListEnumInteractionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InteractionType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CallNoteStatus'
+   */
+  export type EnumCallNoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CallNoteStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CallNoteStatus[]'
+   */
+  export type ListEnumCallNoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CallNoteStatus[]'>
     
 
 
@@ -111153,6 +112473,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Lead"> | string | null
     source_type?: EnumSourceTypeFilter<"Lead"> | $Enums.SourceType
     raw_data?: JsonNullableFilter<"Lead">
+    opening_hours?: JsonNullableFilter<"Lead">
     enrichment_summary?: StringNullableFilter<"Lead"> | string | null
     enrichment_metadata?: JsonNullableFilter<"Lead">
     email_validation_status?: EnumEmailValidationStatusFilter<"Lead"> | $Enums.EmailValidationStatus
@@ -111185,6 +112506,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     source_type?: SortOrder
     raw_data?: SortOrderInput | SortOrder
+    opening_hours?: SortOrderInput | SortOrder
     enrichment_summary?: SortOrderInput | SortOrder
     enrichment_metadata?: SortOrderInput | SortOrder
     email_validation_status?: SortOrder
@@ -111220,6 +112542,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Lead"> | string | null
     source_type?: EnumSourceTypeFilter<"Lead"> | $Enums.SourceType
     raw_data?: JsonNullableFilter<"Lead">
+    opening_hours?: JsonNullableFilter<"Lead">
     enrichment_summary?: StringNullableFilter<"Lead"> | string | null
     enrichment_metadata?: JsonNullableFilter<"Lead">
     email_validation_status?: EnumEmailValidationStatusFilter<"Lead"> | $Enums.EmailValidationStatus
@@ -111252,6 +112575,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     source_type?: SortOrder
     raw_data?: SortOrderInput | SortOrder
+    opening_hours?: SortOrderInput | SortOrder
     enrichment_summary?: SortOrderInput | SortOrder
     enrichment_metadata?: SortOrderInput | SortOrder
     email_validation_status?: SortOrder
@@ -111289,6 +112613,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     source_type?: EnumSourceTypeWithAggregatesFilter<"Lead"> | $Enums.SourceType
     raw_data?: JsonNullableWithAggregatesFilter<"Lead">
+    opening_hours?: JsonNullableWithAggregatesFilter<"Lead">
     enrichment_summary?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     enrichment_metadata?: JsonNullableWithAggregatesFilter<"Lead">
     email_validation_status?: EnumEmailValidationStatusWithAggregatesFilter<"Lead"> | $Enums.EmailValidationStatus
@@ -111448,6 +112773,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentListRelationFilter
     bookings?: BookingListRelationFilter
     booking_links?: BookingLinkListRelationFilter
+    opening_hours_rows?: ContactOpeningHourListRelationFilter
   }
 
   export type ContactOrderByWithRelationInput = {
@@ -111502,6 +112828,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentOrderByRelationAggregateInput
     bookings?: BookingOrderByRelationAggregateInput
     booking_links?: BookingLinkOrderByRelationAggregateInput
+    opening_hours_rows?: ContactOpeningHourOrderByRelationAggregateInput
   }
 
   export type ContactWhereUniqueInput = Prisma.AtLeast<{
@@ -111560,6 +112887,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentListRelationFilter
     bookings?: BookingListRelationFilter
     booking_links?: BookingLinkListRelationFilter
+    opening_hours_rows?: ContactOpeningHourListRelationFilter
   }, "id" | "uuid" | "unsubscribe_token" | "organisation_uuid_lead_uuid">
 
   export type ContactOrderByWithAggregationInput = {
@@ -111640,6 +112968,63 @@ export namespace Prisma {
     last_interaction_at?: DateTimeNullableWithAggregatesFilter<"Contact"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Contact"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Contact"> | Date | string
+  }
+
+  export type ContactOpeningHourWhereInput = {
+    AND?: ContactOpeningHourWhereInput | ContactOpeningHourWhereInput[]
+    OR?: ContactOpeningHourWhereInput[]
+    NOT?: ContactOpeningHourWhereInput | ContactOpeningHourWhereInput[]
+    id?: IntFilter<"ContactOpeningHour"> | number
+    contact_uuid?: StringFilter<"ContactOpeningHour"> | string
+    day_of_week?: IntFilter<"ContactOpeningHour"> | number
+    opens_minute?: IntFilter<"ContactOpeningHour"> | number
+    closes_minute?: IntFilter<"ContactOpeningHour"> | number
+    contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
+  }
+
+  export type ContactOpeningHourOrderByWithRelationInput = {
+    id?: SortOrder
+    contact_uuid?: SortOrder
+    day_of_week?: SortOrder
+    opens_minute?: SortOrder
+    closes_minute?: SortOrder
+    contact?: ContactOrderByWithRelationInput
+  }
+
+  export type ContactOpeningHourWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ContactOpeningHourWhereInput | ContactOpeningHourWhereInput[]
+    OR?: ContactOpeningHourWhereInput[]
+    NOT?: ContactOpeningHourWhereInput | ContactOpeningHourWhereInput[]
+    contact_uuid?: StringFilter<"ContactOpeningHour"> | string
+    day_of_week?: IntFilter<"ContactOpeningHour"> | number
+    opens_minute?: IntFilter<"ContactOpeningHour"> | number
+    closes_minute?: IntFilter<"ContactOpeningHour"> | number
+    contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
+  }, "id">
+
+  export type ContactOpeningHourOrderByWithAggregationInput = {
+    id?: SortOrder
+    contact_uuid?: SortOrder
+    day_of_week?: SortOrder
+    opens_minute?: SortOrder
+    closes_minute?: SortOrder
+    _count?: ContactOpeningHourCountOrderByAggregateInput
+    _avg?: ContactOpeningHourAvgOrderByAggregateInput
+    _max?: ContactOpeningHourMaxOrderByAggregateInput
+    _min?: ContactOpeningHourMinOrderByAggregateInput
+    _sum?: ContactOpeningHourSumOrderByAggregateInput
+  }
+
+  export type ContactOpeningHourScalarWhereWithAggregatesInput = {
+    AND?: ContactOpeningHourScalarWhereWithAggregatesInput | ContactOpeningHourScalarWhereWithAggregatesInput[]
+    OR?: ContactOpeningHourScalarWhereWithAggregatesInput[]
+    NOT?: ContactOpeningHourScalarWhereWithAggregatesInput | ContactOpeningHourScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ContactOpeningHour"> | number
+    contact_uuid?: StringWithAggregatesFilter<"ContactOpeningHour"> | string
+    day_of_week?: IntWithAggregatesFilter<"ContactOpeningHour"> | number
+    opens_minute?: IntWithAggregatesFilter<"ContactOpeningHour"> | number
+    closes_minute?: IntWithAggregatesFilter<"ContactOpeningHour"> | number
   }
 
   export type ContactInfoWhereInput = {
@@ -112143,6 +113528,7 @@ export namespace Prisma {
     status_change?: JsonNullableFilter<"Interaction">
     outreach_message_uuid?: StringNullableFilter<"Interaction"> | string | null
     created_by_user_uuid?: StringNullableFilter<"Interaction"> | string | null
+    call_note_status?: EnumCallNoteStatusNullableFilter<"Interaction"> | $Enums.CallNoteStatus | null
     created_at?: DateTimeFilter<"Interaction"> | Date | string
     updated_at?: DateTimeFilter<"Interaction"> | Date | string
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
@@ -112163,6 +113549,7 @@ export namespace Prisma {
     status_change?: SortOrderInput | SortOrder
     outreach_message_uuid?: SortOrderInput | SortOrder
     created_by_user_uuid?: SortOrderInput | SortOrder
+    call_note_status?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     contact?: ContactOrderByWithRelationInput
@@ -112186,6 +113573,7 @@ export namespace Prisma {
     status_change?: JsonNullableFilter<"Interaction">
     outreach_message_uuid?: StringNullableFilter<"Interaction"> | string | null
     created_by_user_uuid?: StringNullableFilter<"Interaction"> | string | null
+    call_note_status?: EnumCallNoteStatusNullableFilter<"Interaction"> | $Enums.CallNoteStatus | null
     created_at?: DateTimeFilter<"Interaction"> | Date | string
     updated_at?: DateTimeFilter<"Interaction"> | Date | string
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
@@ -112206,6 +113594,7 @@ export namespace Prisma {
     status_change?: SortOrderInput | SortOrder
     outreach_message_uuid?: SortOrderInput | SortOrder
     created_by_user_uuid?: SortOrderInput | SortOrder
+    call_note_status?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: InteractionCountOrderByAggregateInput
@@ -112230,6 +113619,7 @@ export namespace Prisma {
     status_change?: JsonNullableWithAggregatesFilter<"Interaction">
     outreach_message_uuid?: StringNullableWithAggregatesFilter<"Interaction"> | string | null
     created_by_user_uuid?: StringNullableWithAggregatesFilter<"Interaction"> | string | null
+    call_note_status?: EnumCallNoteStatusNullableWithAggregatesFilter<"Interaction"> | $Enums.CallNoteStatus | null
     created_at?: DateTimeWithAggregatesFilter<"Interaction"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Interaction"> | Date | string
   }
@@ -119374,6 +120764,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -119406,6 +120797,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -119435,6 +120827,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -119467,6 +120860,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -119498,6 +120892,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -119525,6 +120920,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -119554,6 +120950,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -119715,6 +121112,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateInput = {
@@ -119766,6 +121164,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactUpdateInput = {
@@ -119816,6 +121215,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateInput = {
@@ -119867,6 +121267,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateManyInput = {
@@ -119971,6 +121372,58 @@ export namespace Prisma {
     last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContactOpeningHourCreateInput = {
+    day_of_week: number
+    opens_minute: number
+    closes_minute: number
+    contact: ContactCreateNestedOneWithoutOpening_hours_rowsInput
+  }
+
+  export type ContactOpeningHourUncheckedCreateInput = {
+    id?: number
+    contact_uuid: string
+    day_of_week: number
+    opens_minute: number
+    closes_minute: number
+  }
+
+  export type ContactOpeningHourUpdateInput = {
+    day_of_week?: IntFieldUpdateOperationsInput | number
+    opens_minute?: IntFieldUpdateOperationsInput | number
+    closes_minute?: IntFieldUpdateOperationsInput | number
+    contact?: ContactUpdateOneRequiredWithoutOpening_hours_rowsNestedInput
+  }
+
+  export type ContactOpeningHourUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    day_of_week?: IntFieldUpdateOperationsInput | number
+    opens_minute?: IntFieldUpdateOperationsInput | number
+    closes_minute?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactOpeningHourCreateManyInput = {
+    id?: number
+    contact_uuid: string
+    day_of_week: number
+    opens_minute: number
+    closes_minute: number
+  }
+
+  export type ContactOpeningHourUpdateManyMutationInput = {
+    day_of_week?: IntFieldUpdateOperationsInput | number
+    opens_minute?: IntFieldUpdateOperationsInput | number
+    closes_minute?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactOpeningHourUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    day_of_week?: IntFieldUpdateOperationsInput | number
+    opens_minute?: IntFieldUpdateOperationsInput | number
+    closes_minute?: IntFieldUpdateOperationsInput | number
   }
 
   export type ContactInfoCreateInput = {
@@ -120439,6 +121892,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
@@ -120459,6 +121913,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -120470,6 +121925,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
@@ -120490,6 +121946,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -120506,6 +121963,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -120517,6 +121975,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -120533,6 +121992,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -128438,6 +129898,7 @@ export namespace Prisma {
     description?: SortOrder
     source_type?: SortOrder
     raw_data?: SortOrder
+    opening_hours?: SortOrder
     enrichment_summary?: SortOrder
     enrichment_metadata?: SortOrder
     email_validation_status?: SortOrder
@@ -128737,6 +130198,12 @@ export namespace Prisma {
     none?: SequenceEnrollmentWhereInput
   }
 
+  export type ContactOpeningHourListRelationFilter = {
+    every?: ContactOpeningHourWhereInput
+    some?: ContactOpeningHourWhereInput
+    none?: ContactOpeningHourWhereInput
+  }
+
   export type ContactTagOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -128758,6 +130225,10 @@ export namespace Prisma {
   }
 
   export type SequenceEnrollmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ContactOpeningHourOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -128890,16 +130361,54 @@ export namespace Prisma {
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
+  export type ContactScalarRelationFilter = {
+    is?: ContactWhereInput
+    isNot?: ContactWhereInput
+  }
+
+  export type ContactOpeningHourCountOrderByAggregateInput = {
+    id?: SortOrder
+    contact_uuid?: SortOrder
+    day_of_week?: SortOrder
+    opens_minute?: SortOrder
+    closes_minute?: SortOrder
+  }
+
+  export type ContactOpeningHourAvgOrderByAggregateInput = {
+    id?: SortOrder
+    day_of_week?: SortOrder
+    opens_minute?: SortOrder
+    closes_minute?: SortOrder
+  }
+
+  export type ContactOpeningHourMaxOrderByAggregateInput = {
+    id?: SortOrder
+    contact_uuid?: SortOrder
+    day_of_week?: SortOrder
+    opens_minute?: SortOrder
+    closes_minute?: SortOrder
+  }
+
+  export type ContactOpeningHourMinOrderByAggregateInput = {
+    id?: SortOrder
+    contact_uuid?: SortOrder
+    day_of_week?: SortOrder
+    opens_minute?: SortOrder
+    closes_minute?: SortOrder
+  }
+
+  export type ContactOpeningHourSumOrderByAggregateInput = {
+    id?: SortOrder
+    day_of_week?: SortOrder
+    opens_minute?: SortOrder
+    closes_minute?: SortOrder
+  }
+
   export type EnumContactInfoTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.ContactInfoType | EnumContactInfoTypeFieldRefInput<$PrismaModel>
     in?: $Enums.ContactInfoType[] | ListEnumContactInfoTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.ContactInfoType[] | ListEnumContactInfoTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumContactInfoTypeFilter<$PrismaModel> | $Enums.ContactInfoType
-  }
-
-  export type ContactScalarRelationFilter = {
-    is?: ContactWhereInput
-    isNot?: ContactWhereInput
   }
 
   export type ContactInfoCountOrderByAggregateInput = {
@@ -129202,6 +130711,13 @@ export namespace Prisma {
     not?: NestedEnumInteractionTypeFilter<$PrismaModel> | $Enums.InteractionType
   }
 
+  export type EnumCallNoteStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CallNoteStatus | EnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CallNoteStatus[] | ListEnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CallNoteStatus[] | ListEnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCallNoteStatusNullableFilter<$PrismaModel> | $Enums.CallNoteStatus | null
+  }
+
   export type OutreachMessageNullableScalarRelationFilter = {
     is?: OutreachMessageWhereInput | null
     isNot?: OutreachMessageWhereInput | null
@@ -129224,6 +130740,7 @@ export namespace Prisma {
     status_change?: SortOrder
     outreach_message_uuid?: SortOrder
     created_by_user_uuid?: SortOrder
+    call_note_status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -129242,6 +130759,7 @@ export namespace Prisma {
     content?: SortOrder
     outreach_message_uuid?: SortOrder
     created_by_user_uuid?: SortOrder
+    call_note_status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -129256,6 +130774,7 @@ export namespace Prisma {
     content?: SortOrder
     outreach_message_uuid?: SortOrder
     created_by_user_uuid?: SortOrder
+    call_note_status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -129272,6 +130791,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumInteractionTypeFilter<$PrismaModel>
     _max?: NestedEnumInteractionTypeFilter<$PrismaModel>
+  }
+
+  export type EnumCallNoteStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CallNoteStatus | EnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CallNoteStatus[] | ListEnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CallNoteStatus[] | ListEnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCallNoteStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.CallNoteStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCallNoteStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumCallNoteStatusNullableFilter<$PrismaModel>
   }
 
   export type EnumChannelFilter<$PrismaModel = never> = {
@@ -137831,6 +139360,13 @@ export namespace Prisma {
     connect?: BookingLinkWhereUniqueInput | BookingLinkWhereUniqueInput[]
   }
 
+  export type ContactOpeningHourCreateNestedManyWithoutContactInput = {
+    create?: XOR<ContactOpeningHourCreateWithoutContactInput, ContactOpeningHourUncheckedCreateWithoutContactInput> | ContactOpeningHourCreateWithoutContactInput[] | ContactOpeningHourUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: ContactOpeningHourCreateOrConnectWithoutContactInput | ContactOpeningHourCreateOrConnectWithoutContactInput[]
+    createMany?: ContactOpeningHourCreateManyContactInputEnvelope
+    connect?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+  }
+
   export type ContactFilterUncheckedCreateNestedManyWithoutContactInput = {
     create?: XOR<ContactFilterCreateWithoutContactInput, ContactFilterUncheckedCreateWithoutContactInput> | ContactFilterCreateWithoutContactInput[] | ContactFilterUncheckedCreateWithoutContactInput[]
     connectOrCreate?: ContactFilterCreateOrConnectWithoutContactInput | ContactFilterCreateOrConnectWithoutContactInput[]
@@ -137934,6 +139470,13 @@ export namespace Prisma {
     connectOrCreate?: BookingLinkCreateOrConnectWithoutContactInput | BookingLinkCreateOrConnectWithoutContactInput[]
     createMany?: BookingLinkCreateManyContactInputEnvelope
     connect?: BookingLinkWhereUniqueInput | BookingLinkWhereUniqueInput[]
+  }
+
+  export type ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput = {
+    create?: XOR<ContactOpeningHourCreateWithoutContactInput, ContactOpeningHourUncheckedCreateWithoutContactInput> | ContactOpeningHourCreateWithoutContactInput[] | ContactOpeningHourUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: ContactOpeningHourCreateOrConnectWithoutContactInput | ContactOpeningHourCreateOrConnectWithoutContactInput[]
+    createMany?: ContactOpeningHourCreateManyContactInputEnvelope
+    connect?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
   }
 
   export type EnumLeadStatusFieldUpdateOperationsInput = {
@@ -138176,6 +139719,20 @@ export namespace Prisma {
     deleteMany?: BookingLinkScalarWhereInput | BookingLinkScalarWhereInput[]
   }
 
+  export type ContactOpeningHourUpdateManyWithoutContactNestedInput = {
+    create?: XOR<ContactOpeningHourCreateWithoutContactInput, ContactOpeningHourUncheckedCreateWithoutContactInput> | ContactOpeningHourCreateWithoutContactInput[] | ContactOpeningHourUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: ContactOpeningHourCreateOrConnectWithoutContactInput | ContactOpeningHourCreateOrConnectWithoutContactInput[]
+    upsert?: ContactOpeningHourUpsertWithWhereUniqueWithoutContactInput | ContactOpeningHourUpsertWithWhereUniqueWithoutContactInput[]
+    createMany?: ContactOpeningHourCreateManyContactInputEnvelope
+    set?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+    disconnect?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+    delete?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+    connect?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+    update?: ContactOpeningHourUpdateWithWhereUniqueWithoutContactInput | ContactOpeningHourUpdateWithWhereUniqueWithoutContactInput[]
+    updateMany?: ContactOpeningHourUpdateManyWithWhereWithoutContactInput | ContactOpeningHourUpdateManyWithWhereWithoutContactInput[]
+    deleteMany?: ContactOpeningHourScalarWhereInput | ContactOpeningHourScalarWhereInput[]
+  }
+
   export type ContactFilterUncheckedUpdateManyWithoutContactNestedInput = {
     create?: XOR<ContactFilterCreateWithoutContactInput, ContactFilterUncheckedCreateWithoutContactInput> | ContactFilterCreateWithoutContactInput[] | ContactFilterUncheckedCreateWithoutContactInput[]
     connectOrCreate?: ContactFilterCreateOrConnectWithoutContactInput | ContactFilterCreateOrConnectWithoutContactInput[]
@@ -138384,6 +139941,34 @@ export namespace Prisma {
     update?: BookingLinkUpdateWithWhereUniqueWithoutContactInput | BookingLinkUpdateWithWhereUniqueWithoutContactInput[]
     updateMany?: BookingLinkUpdateManyWithWhereWithoutContactInput | BookingLinkUpdateManyWithWhereWithoutContactInput[]
     deleteMany?: BookingLinkScalarWhereInput | BookingLinkScalarWhereInput[]
+  }
+
+  export type ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput = {
+    create?: XOR<ContactOpeningHourCreateWithoutContactInput, ContactOpeningHourUncheckedCreateWithoutContactInput> | ContactOpeningHourCreateWithoutContactInput[] | ContactOpeningHourUncheckedCreateWithoutContactInput[]
+    connectOrCreate?: ContactOpeningHourCreateOrConnectWithoutContactInput | ContactOpeningHourCreateOrConnectWithoutContactInput[]
+    upsert?: ContactOpeningHourUpsertWithWhereUniqueWithoutContactInput | ContactOpeningHourUpsertWithWhereUniqueWithoutContactInput[]
+    createMany?: ContactOpeningHourCreateManyContactInputEnvelope
+    set?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+    disconnect?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+    delete?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+    connect?: ContactOpeningHourWhereUniqueInput | ContactOpeningHourWhereUniqueInput[]
+    update?: ContactOpeningHourUpdateWithWhereUniqueWithoutContactInput | ContactOpeningHourUpdateWithWhereUniqueWithoutContactInput[]
+    updateMany?: ContactOpeningHourUpdateManyWithWhereWithoutContactInput | ContactOpeningHourUpdateManyWithWhereWithoutContactInput[]
+    deleteMany?: ContactOpeningHourScalarWhereInput | ContactOpeningHourScalarWhereInput[]
+  }
+
+  export type ContactCreateNestedOneWithoutOpening_hours_rowsInput = {
+    create?: XOR<ContactCreateWithoutOpening_hours_rowsInput, ContactUncheckedCreateWithoutOpening_hours_rowsInput>
+    connectOrCreate?: ContactCreateOrConnectWithoutOpening_hours_rowsInput
+    connect?: ContactWhereUniqueInput
+  }
+
+  export type ContactUpdateOneRequiredWithoutOpening_hours_rowsNestedInput = {
+    create?: XOR<ContactCreateWithoutOpening_hours_rowsInput, ContactUncheckedCreateWithoutOpening_hours_rowsInput>
+    connectOrCreate?: ContactCreateOrConnectWithoutOpening_hours_rowsInput
+    upsert?: ContactUpsertWithoutOpening_hours_rowsInput
+    connect?: ContactWhereUniqueInput
+    update?: XOR<XOR<ContactUpdateToOneWithWhereWithoutOpening_hours_rowsInput, ContactUpdateWithoutOpening_hours_rowsInput>, ContactUncheckedUpdateWithoutOpening_hours_rowsInput>
   }
 
   export type ContactCreateNestedOneWithoutContact_infosInput = {
@@ -138798,6 +140383,10 @@ export namespace Prisma {
 
   export type EnumInteractionTypeFieldUpdateOperationsInput = {
     set?: $Enums.InteractionType
+  }
+
+  export type NullableEnumCallNoteStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CallNoteStatus | null
   }
 
   export type ContactUpdateOneRequiredWithoutInteractionsNestedInput = {
@@ -143379,6 +144968,13 @@ export namespace Prisma {
     not?: NestedEnumInteractionTypeFilter<$PrismaModel> | $Enums.InteractionType
   }
 
+  export type NestedEnumCallNoteStatusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.CallNoteStatus | EnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CallNoteStatus[] | ListEnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CallNoteStatus[] | ListEnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCallNoteStatusNullableFilter<$PrismaModel> | $Enums.CallNoteStatus | null
+  }
+
   export type NestedEnumInteractionTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.InteractionType | EnumInteractionTypeFieldRefInput<$PrismaModel>
     in?: $Enums.InteractionType[] | ListEnumInteractionTypeFieldRefInput<$PrismaModel>
@@ -143387,6 +144983,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumInteractionTypeFilter<$PrismaModel>
     _max?: NestedEnumInteractionTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCallNoteStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CallNoteStatus | EnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.CallNoteStatus[] | ListEnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.CallNoteStatus[] | ListEnumCallNoteStatusFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumCallNoteStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.CallNoteStatus | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumCallNoteStatusNullableFilter<$PrismaModel>
+    _max?: NestedEnumCallNoteStatusNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumChannelFilter<$PrismaModel = never> = {
@@ -146736,6 +148342,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutOrganisationInput = {
@@ -146786,6 +148393,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutOrganisationInput = {
@@ -146998,6 +148606,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
@@ -147016,6 +148625,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -148917,6 +150527,7 @@ export namespace Prisma {
     status_change?: JsonNullableFilter<"Interaction">
     outreach_message_uuid?: StringNullableFilter<"Interaction"> | string | null
     created_by_user_uuid?: StringNullableFilter<"Interaction"> | string | null
+    call_note_status?: EnumCallNoteStatusNullableFilter<"Interaction"> | $Enums.CallNoteStatus | null
     created_at?: DateTimeFilter<"Interaction"> | Date | string
     updated_at?: DateTimeFilter<"Interaction"> | Date | string
   }
@@ -151254,6 +152865,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutFilterInput = {
@@ -151304,6 +152916,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutFilterInput = {
@@ -152681,6 +154294,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -152711,6 +154325,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -152810,6 +154425,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -152840,6 +154456,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -152927,6 +154544,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutLeadInput = {
@@ -152977,6 +154595,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutLeadInput = {
@@ -153123,6 +154742,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -153154,6 +154774,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -153198,6 +154819,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -153229,6 +154851,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -153369,6 +154992,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -153400,6 +155024,7 @@ export namespace Prisma {
     description?: string | null
     source_type: $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: $Enums.EmailValidationStatus
@@ -153541,6 +155166,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutInteractionsInput
@@ -153559,6 +155185,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -154108,6 +155735,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ContactOpeningHourCreateWithoutContactInput = {
+    day_of_week: number
+    opens_minute: number
+    closes_minute: number
+  }
+
+  export type ContactOpeningHourUncheckedCreateWithoutContactInput = {
+    id?: number
+    day_of_week: number
+    opens_minute: number
+    closes_minute: number
+  }
+
+  export type ContactOpeningHourCreateOrConnectWithoutContactInput = {
+    where: ContactOpeningHourWhereUniqueInput
+    create: XOR<ContactOpeningHourCreateWithoutContactInput, ContactOpeningHourUncheckedCreateWithoutContactInput>
+  }
+
+  export type ContactOpeningHourCreateManyContactInputEnvelope = {
+    data: ContactOpeningHourCreateManyContactInput | ContactOpeningHourCreateManyContactInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationUpsertWithoutContactsInput = {
     update: XOR<OrganisationUpdateWithoutContactsInput, OrganisationUncheckedUpdateWithoutContactsInput>
     create: XOR<OrganisationCreateWithoutContactsInput, OrganisationUncheckedCreateWithoutContactsInput>
@@ -154252,6 +155902,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -154283,6 +155934,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     source_type?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
     raw_data?: NullableJsonNullValueInput | InputJsonValue
+    opening_hours?: NullableJsonNullValueInput | InputJsonValue
     enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
     enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
     email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
@@ -154683,6 +156335,251 @@ export namespace Prisma {
     data: XOR<BookingLinkUpdateManyMutationInput, BookingLinkUncheckedUpdateManyWithoutContactInput>
   }
 
+  export type ContactOpeningHourUpsertWithWhereUniqueWithoutContactInput = {
+    where: ContactOpeningHourWhereUniqueInput
+    update: XOR<ContactOpeningHourUpdateWithoutContactInput, ContactOpeningHourUncheckedUpdateWithoutContactInput>
+    create: XOR<ContactOpeningHourCreateWithoutContactInput, ContactOpeningHourUncheckedCreateWithoutContactInput>
+  }
+
+  export type ContactOpeningHourUpdateWithWhereUniqueWithoutContactInput = {
+    where: ContactOpeningHourWhereUniqueInput
+    data: XOR<ContactOpeningHourUpdateWithoutContactInput, ContactOpeningHourUncheckedUpdateWithoutContactInput>
+  }
+
+  export type ContactOpeningHourUpdateManyWithWhereWithoutContactInput = {
+    where: ContactOpeningHourScalarWhereInput
+    data: XOR<ContactOpeningHourUpdateManyMutationInput, ContactOpeningHourUncheckedUpdateManyWithoutContactInput>
+  }
+
+  export type ContactOpeningHourScalarWhereInput = {
+    AND?: ContactOpeningHourScalarWhereInput | ContactOpeningHourScalarWhereInput[]
+    OR?: ContactOpeningHourScalarWhereInput[]
+    NOT?: ContactOpeningHourScalarWhereInput | ContactOpeningHourScalarWhereInput[]
+    id?: IntFilter<"ContactOpeningHour"> | number
+    contact_uuid?: StringFilter<"ContactOpeningHour"> | string
+    day_of_week?: IntFilter<"ContactOpeningHour"> | number
+    opens_minute?: IntFilter<"ContactOpeningHour"> | number
+    closes_minute?: IntFilter<"ContactOpeningHour"> | number
+  }
+
+  export type ContactCreateWithoutOpening_hours_rowsInput = {
+    uuid?: string
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    name?: string | null
+    email?: string | null
+    phone?: string | null
+    company?: string | null
+    website?: string | null
+    google_maps_url?: string | null
+    linkedin_url?: string | null
+    title?: string | null
+    location?: string | null
+    industry?: string | null
+    description?: string | null
+    enrichment_summary?: string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
+    unsubscribed_at?: Date | string | null
+    unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
+    last_interaction_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutContactsInput
+    lead: LeadCreateNestedOneWithoutContactsInput
+    filter?: FilterCreateNestedOneWithoutContactsInput
+    contact_filters?: ContactFilterCreateNestedManyWithoutContactInput
+    tags?: ContactTagCreateNestedManyWithoutContactInput
+    contact_infos?: ContactInfoCreateNestedManyWithoutContactInput
+    interactions?: InteractionCreateNestedManyWithoutContactInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadCreateNestedManyWithoutContactInput
+    campaign_contacts?: MarketingCampaignContactCreateNestedManyWithoutContactInput
+    contact_scores?: ContactScoreCreateNestedManyWithoutContactInput
+    reminders?: ReminderCreateNestedManyWithoutContactInput
+    form_completions?: FormCompletionCreateNestedManyWithoutContactInput
+    list_memberships?: ContactListMemberCreateNestedManyWithoutContactInput
+    enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
+    bookings?: BookingCreateNestedManyWithoutContactInput
+    booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+  }
+
+  export type ContactUncheckedCreateWithoutOpening_hours_rowsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    lead_uuid: string
+    filter_uuid?: string | null
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    name?: string | null
+    email?: string | null
+    phone?: string | null
+    company?: string | null
+    website?: string | null
+    google_maps_url?: string | null
+    linkedin_url?: string | null
+    title?: string | null
+    location?: string | null
+    industry?: string | null
+    description?: string | null
+    enrichment_summary?: string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: $Enums.EmailValidationStatus
+    email_validation_reason?: string | null
+    email_validated_at?: Date | string | null
+    website_validation_status?: $Enums.DomainValidationStatus
+    website_validation_reason?: string | null
+    website_validated_at?: Date | string | null
+    unsubscribed_at?: Date | string | null
+    unsubscribe_token?: string | null
+    bounced_at?: Date | string | null
+    bounce_reason?: string | null
+    last_interaction_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    contact_filters?: ContactFilterUncheckedCreateNestedManyWithoutContactInput
+    tags?: ContactTagUncheckedCreateNestedManyWithoutContactInput
+    contact_infos?: ContactInfoUncheckedCreateNestedManyWithoutContactInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutContactInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutContactInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutContactInput
+    campaign_contacts?: MarketingCampaignContactUncheckedCreateNestedManyWithoutContactInput
+    contact_scores?: ContactScoreUncheckedCreateNestedManyWithoutContactInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutContactInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutContactInput
+    list_memberships?: ContactListMemberUncheckedCreateNestedManyWithoutContactInput
+    enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
+    booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+  }
+
+  export type ContactCreateOrConnectWithoutOpening_hours_rowsInput = {
+    where: ContactWhereUniqueInput
+    create: XOR<ContactCreateWithoutOpening_hours_rowsInput, ContactUncheckedCreateWithoutOpening_hours_rowsInput>
+  }
+
+  export type ContactUpsertWithoutOpening_hours_rowsInput = {
+    update: XOR<ContactUpdateWithoutOpening_hours_rowsInput, ContactUncheckedUpdateWithoutOpening_hours_rowsInput>
+    create: XOR<ContactCreateWithoutOpening_hours_rowsInput, ContactUncheckedCreateWithoutOpening_hours_rowsInput>
+    where?: ContactWhereInput
+  }
+
+  export type ContactUpdateToOneWithWhereWithoutOpening_hours_rowsInput = {
+    where?: ContactWhereInput
+    data: XOR<ContactUpdateWithoutOpening_hours_rowsInput, ContactUncheckedUpdateWithoutOpening_hours_rowsInput>
+  }
+
+  export type ContactUpdateWithoutOpening_hours_rowsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    google_maps_url?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_url?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutContactsNestedInput
+    lead?: LeadUpdateOneRequiredWithoutContactsNestedInput
+    filter?: FilterUpdateOneWithoutContactsNestedInput
+    contact_filters?: ContactFilterUpdateManyWithoutContactNestedInput
+    tags?: ContactTagUpdateManyWithoutContactNestedInput
+    contact_infos?: ContactInfoUpdateManyWithoutContactNestedInput
+    interactions?: InteractionUpdateManyWithoutContactNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutContactNestedInput
+    campaign_contacts?: MarketingCampaignContactUpdateManyWithoutContactNestedInput
+    contact_scores?: ContactScoreUpdateManyWithoutContactNestedInput
+    reminders?: ReminderUpdateManyWithoutContactNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutContactNestedInput
+    list_memberships?: ContactListMemberUpdateManyWithoutContactNestedInput
+    enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
+    bookings?: BookingUpdateManyWithoutContactNestedInput
+    booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+  }
+
+  export type ContactUncheckedUpdateWithoutOpening_hours_rowsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    lead_uuid?: StringFieldUpdateOperationsInput | string
+    filter_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    google_maps_url?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin_url?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_summary?: NullableStringFieldUpdateOperationsInput | string | null
+    enrichment_metadata?: NullableJsonNullValueInput | InputJsonValue
+    email_validation_status?: EnumEmailValidationStatusFieldUpdateOperationsInput | $Enums.EmailValidationStatus
+    email_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    email_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    website_validation_status?: EnumDomainValidationStatusFieldUpdateOperationsInput | $Enums.DomainValidationStatus
+    website_validation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    website_validated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    unsubscribe_token?: NullableStringFieldUpdateOperationsInput | string | null
+    bounced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bounce_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    last_interaction_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    contact_filters?: ContactFilterUncheckedUpdateManyWithoutContactNestedInput
+    tags?: ContactTagUncheckedUpdateManyWithoutContactNestedInput
+    contact_infos?: ContactInfoUncheckedUpdateManyWithoutContactNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutContactNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutContactNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutContactNestedInput
+    campaign_contacts?: MarketingCampaignContactUncheckedUpdateManyWithoutContactNestedInput
+    contact_scores?: ContactScoreUncheckedUpdateManyWithoutContactNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutContactNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutContactNestedInput
+    list_memberships?: ContactListMemberUncheckedUpdateManyWithoutContactNestedInput
+    enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
+    booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+  }
+
   export type ContactCreateWithoutContact_infosInput = {
     uuid?: string
     status?: $Enums.LeadStatus
@@ -154730,6 +156627,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutContact_infosInput = {
@@ -154780,6 +156678,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutContact_infosInput = {
@@ -154845,6 +156744,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutContact_infosInput = {
@@ -154895,6 +156795,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateWithoutContact_filtersInput = {
@@ -154944,6 +156845,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutContact_filtersInput = {
@@ -154994,6 +156896,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutContact_filtersInput = {
@@ -155107,6 +157010,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutContact_filtersInput = {
@@ -155157,6 +157061,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type FilterUpsertWithoutContact_filtersInput = {
@@ -155260,6 +157165,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutEnrichmentsInput = {
@@ -155310,6 +157216,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutEnrichmentsInput = {
@@ -155375,6 +157282,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutEnrichmentsInput = {
@@ -155425,6 +157333,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateWithoutContact_scoresInput = {
@@ -155474,6 +157383,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutContact_scoresInput = {
@@ -155524,6 +157434,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutContact_scoresInput = {
@@ -155615,6 +157526,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutContact_scoresInput = {
@@ -155665,6 +157577,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ScoringInstructionUpsertWithoutContact_scoresInput = {
@@ -156551,6 +158464,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutList_membershipsInput = {
@@ -156601,6 +158515,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutList_membershipsInput = {
@@ -156708,6 +158623,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutList_membershipsInput = {
@@ -156758,6 +158674,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateWithoutTagsInput = {
@@ -156807,6 +158724,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutTagsInput = {
@@ -156857,6 +158775,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutTagsInput = {
@@ -156922,6 +158841,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutTagsInput = {
@@ -156972,6 +158892,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactCreateWithoutInteractionsInput = {
@@ -157021,6 +158942,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutInteractionsInput = {
@@ -157071,6 +158993,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutInteractionsInput = {
@@ -157440,6 +159363,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutInteractionsInput = {
@@ -157490,6 +159414,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type OrganisationUpsertWithoutInteractionsInput = {
@@ -157973,6 +159898,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutOutreach_messagesInput = {
@@ -158023,6 +159949,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutOutreach_messagesInput = {
@@ -158213,6 +160140,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
@@ -158231,6 +160159,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -158636,6 +160565,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutOutreach_messagesInput = {
@@ -158686,6 +160616,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type MarketingCampaignUpsertWithoutOutreach_messagesInput = {
@@ -159259,6 +161190,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutMessage_threadsInput = {
@@ -159309,6 +161241,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutMessage_threadsInput = {
@@ -159591,6 +161524,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutMessage_threadsInput = {
@@ -159641,6 +161575,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type OutreachMessageUpsertWithWhereUniqueWithoutThreadInput = {
@@ -160962,6 +162897,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutSequence_enrollmentsInput = {
@@ -161012,6 +162948,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutSequence_enrollmentsInput = {
@@ -161352,6 +163289,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutSequence_enrollmentsInput = {
@@ -161402,6 +163340,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type MarketingCampaignUpsertWithoutSequence_enrollmentsInput = {
@@ -164485,6 +166424,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutInteractionsInput
@@ -164503,6 +166443,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -165136,6 +167077,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutCampaign_contactsInput = {
@@ -165186,6 +167128,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutCampaign_contactsInput = {
@@ -165355,6 +167298,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutCampaign_contactsInput = {
@@ -165405,6 +167349,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type OrganisationCreateWithoutOpenai_batch_jobsInput = {
@@ -167129,6 +169074,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutRemindersInput = {
@@ -167179,6 +169125,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutRemindersInput = {
@@ -167566,6 +169513,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutRemindersInput = {
@@ -167616,6 +169564,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type OutreachMessageUpsertWithoutRemindersInput = {
@@ -168623,6 +170572,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutForm_completionsInput = {
@@ -168673,6 +170623,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutForm_completionsInput = {
@@ -168875,6 +170826,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutForm_completionsInput = {
@@ -168925,6 +170877,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type UserUpsertWithoutForm_completionsInput = {
@@ -177324,6 +179277,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     bookings?: BookingCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutBooking_linksInput = {
@@ -177374,6 +179328,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     bookings?: BookingUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutBooking_linksInput = {
@@ -177878,6 +179833,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutBooking_linksInput = {
@@ -177928,6 +179884,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type UserUpsertWithoutBooking_links_createdInput = {
@@ -178369,6 +180326,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentCreateNestedManyWithoutContactInput
     sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourCreateNestedManyWithoutContactInput
   }
 
   export type ContactUncheckedCreateWithoutBookingsInput = {
@@ -178419,6 +180377,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUncheckedCreateNestedManyWithoutContactInput
     sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutContactInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutContactInput
+    opening_hours_rows?: ContactOpeningHourUncheckedCreateNestedManyWithoutContactInput
   }
 
   export type ContactCreateOrConnectWithoutBookingsInput = {
@@ -179100,6 +181059,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUpdateManyWithoutContactNestedInput
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutBookingsInput = {
@@ -179150,6 +181110,7 @@ export namespace Prisma {
     enrichments?: ContactEnrichmentUncheckedUpdateManyWithoutContactNestedInput
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type UserUpsertWithoutBookings_assignedInput = {
@@ -183183,6 +185144,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -183980,6 +185942,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutOrganisationInput = {
@@ -184030,6 +185993,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateManyWithoutOrganisationInput = {
@@ -184314,6 +186278,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
@@ -184332,6 +186297,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -184347,6 +186313,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -186432,6 +188399,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutFilterInput = {
@@ -186482,6 +188450,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateManyWithoutFilterInput = {
@@ -186795,6 +188764,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutContactNestedInput
     bookings?: BookingUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateWithoutLeadInput = {
@@ -186845,6 +188815,7 @@ export namespace Prisma {
     sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutContactNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutContactNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutContactNestedInput
+    opening_hours_rows?: ContactOpeningHourUncheckedUpdateManyWithoutContactNestedInput
   }
 
   export type ContactUncheckedUpdateManyWithoutLeadInput = {
@@ -186954,6 +188925,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -187166,6 +189138,13 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type ContactOpeningHourCreateManyContactInput = {
+    id?: number
+    day_of_week: number
+    opens_minute: number
+    closes_minute: number
+  }
+
   export type ContactFilterUpdateWithoutContactInput = {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     filter?: FilterUpdateOneRequiredWithoutContact_filtersNestedInput
@@ -187231,6 +189210,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutInteractionsNestedInput
@@ -187249,6 +189229,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -187264,6 +189245,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -187901,6 +189883,26 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ContactOpeningHourUpdateWithoutContactInput = {
+    day_of_week?: IntFieldUpdateOperationsInput | number
+    opens_minute?: IntFieldUpdateOperationsInput | number
+    closes_minute?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactOpeningHourUncheckedUpdateWithoutContactInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    day_of_week?: IntFieldUpdateOperationsInput | number
+    opens_minute?: IntFieldUpdateOperationsInput | number
+    closes_minute?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ContactOpeningHourUncheckedUpdateManyWithoutContactInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    day_of_week?: IntFieldUpdateOperationsInput | number
+    opens_minute?: IntFieldUpdateOperationsInput | number
+    closes_minute?: IntFieldUpdateOperationsInput | number
+  }
+
   export type ContactListCreateManyParentInput = {
     id?: number
     uuid?: string
@@ -188231,6 +190233,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -188259,6 +190262,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
@@ -188277,6 +190281,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -188292,6 +190297,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -190725,6 +192731,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: string | null
     created_by_user_uuid?: string | null
+    call_note_status?: $Enums.CallNoteStatus | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -190957,6 +192964,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status_change?: NullableJsonNullValueInput | InputJsonValue
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutInteractionsNestedInput
@@ -190975,6 +192983,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -190990,6 +192999,7 @@ export namespace Prisma {
     status_change?: NullableJsonNullValueInput | InputJsonValue
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    call_note_status?: NullableEnumCallNoteStatusFieldUpdateOperationsInput | $Enums.CallNoteStatus | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

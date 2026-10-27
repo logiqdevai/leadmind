@@ -35,6 +35,11 @@ import {
     type MessageMetadata,
 } from "@/features/contacts/interfaces/contact.interface";
 import { isLeadStatus } from "@/features/contacts/constants/contacts.constants";
+import {
+    CALL_NOTE_STATUS_COLORS,
+    CALL_NOTE_STATUS_LABELS,
+    isCallNoteStatus,
+} from "@/features/contacts/constants/call-note-status.constants";
 import { useContactInteractions, useDeleteInteraction } from "@/features/contacts/hooks/use-contacts";
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -427,6 +432,11 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                                         </Chip>
                                         {callMeta.duration_minutes !== undefined ? (
                                             <span>· {callMeta.duration_minutes} min</span>
+                                        ) : null}
+                                        {isCallNoteStatus(interaction.call_note_status) ? (
+                                            <Chip size="sm" variant="soft" color={CALL_NOTE_STATUS_COLORS[interaction.call_note_status]}>
+                                                <Chip.Label>{CALL_NOTE_STATUS_LABELS[interaction.call_note_status]}</Chip.Label>
+                                            </Chip>
                                         ) : null}
                                     </div>
                                     {interaction.content?.trim() ? (

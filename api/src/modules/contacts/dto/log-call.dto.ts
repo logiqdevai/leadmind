@@ -1,3 +1,4 @@
+import { CallNoteStatus } from '@/generated/prisma';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
     IsEnum,
@@ -23,6 +24,14 @@ export enum CallDirection {
 }
 
 export class LogCallDto {
+    @ApiPropertyOptional({
+        enum: CallNoteStatus,
+        description: 'What the call came to (the Quick note choice); stored so calls can be counted by outcome',
+    })
+    @IsOptional()
+    @IsEnum(CallNoteStatus)
+    note_status?: CallNoteStatus;
+
     @ApiProperty({ enum: CallOutcome })
     @IsEnum(CallOutcome)
     outcome: CallOutcome;

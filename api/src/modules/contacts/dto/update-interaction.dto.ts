@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsISO8601, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
+import { IsEnum, IsISO8601, IsInt, IsOptional, IsString, Max, MaxLength, Min, ValidateIf } from 'class-validator';
+import { CallNoteStatus } from '@/generated/prisma';
 import { CallDirection, CallOutcome } from './log-call.dto';
 import { MeetingOutcome } from './log-meeting.dto';
 
@@ -47,4 +48,10 @@ export class UpdateInteractionDto {
     @IsString()
     @MaxLength(5000)
     content?: string;
+
+    @ApiPropertyOptional({ enum: CallNoteStatus, nullable: true, description: 'Calls only; null clears the status' })
+    @IsOptional()
+    @ValidateIf((_, value) => value !== null)
+    @IsEnum(CallNoteStatus)
+    note_status?: CallNoteStatus | null;
 }

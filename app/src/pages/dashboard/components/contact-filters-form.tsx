@@ -20,6 +20,7 @@ import type { SourceType } from "@/features/leads/interfaces/lead.interface";
 import { hasActiveContactFilters, toFullContactFiltersPatch } from "@/lib/contact-filter-params";
 import { cn } from "@/lib/utils";
 import { SearchSelect } from "@/components/ui/search-select";
+import { WEEKDAYS, WEEKDAY_LABELS, type Weekday } from "@/features/contacts/constants/opening-hours.constants";
 
 interface ContactFiltersFormProps {
     value: ContactFilters;
@@ -277,6 +278,65 @@ export function ContactFiltersForm({
                     onHasProfileFieldChange={(has) => onChange({ has_profile_field: has })}
                     disabled={disabled}
                 />
+            </FilterSection>
+
+            <FilterSection
+                title="Opening hours"
+                description="Only contacts whose business is open for the whole time range you pick. Contacts without opening hours are left out."
+            >
+                <div>
+                    <Label>Open on</Label>
+                    <Select
+                        aria-label="Open on"
+                        value={value.open_day ?? ""}
+                        onChange={(v) => {
+                            if (typeof v !== "string") return;
+                            onChange({ open_day: v === "" ? undefined : (v as Weekday) });
+                        }}
+                        isDisabled={disabled}
+                    >
+                        <Select.Trigger>
+                            <Select.Value />
+                            <Select.Indicator />
+                        </Select.Trigger>
+                        <Select.Popover>
+                            <ListBox>
+                                <ListBox.Item id="" textValue="Any day">
+                                    Any day
+                                    <ListBox.ItemIndicator />
+                                </ListBox.Item>
+                                {WEEKDAYS.map((day) => (
+                                    <ListBox.Item key={day} id={day} textValue={WEEKDAY_LABELS[day]}>
+                                        {WEEKDAY_LABELS[day]}
+                                        <ListBox.ItemIndicator />
+                                    </ListBox.Item>
+                                ))}
+                            </ListBox>
+                        </Select.Popover>
+                    </Select>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                    <div>
+                        <Label htmlFor="open-from">Open from</Label>
+                        <Input
+                            id="open-from"
+                            type="time"
+                            value={value.open_from ?? ""}
+                            onChange={(e) => onChange({ open_from: e.target.value || undefined })}
+                            disabled={disabled}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="open-to">Open until</Label>
+                        <Input
+                            id="open-to"
+                            type="time"
+                            value={value.open_to ?? ""}
+                            onChange={(e) => onChange({ open_to: e.target.value || undefined })}
+                            disabled={disabled}
+                        />
+                    </div>
+                </div>
             </FilterSection>
 
             {sections.engagement ? (

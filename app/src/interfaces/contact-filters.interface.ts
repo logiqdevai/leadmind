@@ -1,3 +1,4 @@
+import type { Weekday } from "@/features/contacts/constants/opening-hours.constants";
 import type { ContactScoreRule, LeadStatus } from "@/features/contacts/interfaces/contact.interface";
 import type { ContactProfileField } from "@/features/contacts/constants/contact-profile-fields.constants";
 import type { SourceType } from "@/features/leads/interfaces/lead.interface";
@@ -18,6 +19,9 @@ export interface ContactFilters {
     include_unsubscribed?: boolean;
     has_email?: boolean;
     has_phone?: boolean;
+    open_day?: Weekday;
+    open_from?: string;
+    open_to?: string;
 }
 
 export interface ContactFiltersFormSections {

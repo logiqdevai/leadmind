@@ -1,3 +1,5 @@
+import type { CallNoteStatus } from "@/features/contacts/constants/call-note-status.constants";
+import type { OpeningHours, Weekday } from "@/features/contacts/constants/opening-hours.constants";
 import type { ContactProfileField } from "../constants/contact-profile-fields.constants";
 import type { ContactInfoType } from "../constants/contact-info-types.constants";
 import type { Lead, SourceType } from "@/features/leads/interfaces/lead.interface";
@@ -126,6 +128,8 @@ export interface MeetingMetadata {
 export interface LogCallPayload {
     outcome: CallOutcome;
     direction: CallDirection;
+    /** The Quick note choice, stored so calls can be counted by outcome. */
+    note_status?: CallNoteStatus;
     duration_minutes?: number;
     occurred_at?: string;
     content?: string;
@@ -140,6 +144,8 @@ export interface UpdateInteractionPayload {
     location?: string;
     subject?: string;
     content?: string;
+    /** Calls only; null clears the status. */
+    note_status?: CallNoteStatus | null;
 }
 
 export interface LogMeetingPayload {
@@ -289,6 +295,8 @@ export interface Interaction {
     status_change: InteractionStatusChange | null;
     outreach_message_uuid: string | null;
     outreach_message: InteractionOutreachRef | null;
+    /** Calls only. */
+    call_note_status?: CallNoteStatus | null;
     created_at: string;
     updated_at: string;
 }
@@ -337,6 +345,8 @@ export interface Contact {
     location: string | null;
     industry: string | null;
     description: string | null;
+    /** Business opening hours; only on the single-contact response. */
+    opening_hours?: OpeningHours | null;
     enrichment_summary: string | null;
     enrichment_metadata: Record<string, unknown> | null;
     created_at: string;
@@ -397,7 +407,9 @@ export type ContactSortField =
     | "last_interaction_at"
     | "created_at"
     | "added_at"
-    | "list_status";
+    | "list_status"
+    | "called"
+    | "reminder";
 
 export type SortOrder = "asc" | "desc";
 
@@ -422,6 +434,10 @@ export interface ListContactsQuery {
     last_interaction_before?: string;
     never_contacted?: boolean;
     include_unsubscribed?: boolean;
+    /** Open on this weekday; with open_from/open_to, open for the whole time range. */
+    open_day?: Weekday;
+    open_from?: string;
+    open_to?: string;
     sort_by?: ContactSortField;
     sort_order?: SortOrder;
 }
@@ -525,6 +541,8 @@ export interface UpdateContactPayload {
     industry?: string | null;
     description?: string | null;
     notes?: string;
+    /** null clears the hours. */
+    opening_hours?: OpeningHours | null;
 }
 
 export interface BulkTriggerContactScorePayload {

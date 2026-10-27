@@ -404,7 +404,7 @@ export class OrganisationDataCopyService {
     ): Promise<void> {
         const contacts = await this.prisma.contact.findMany({
             where: { organisation_uuid: sourceOrgUuid },
-            include: { tags: true, contact_infos: true },
+            include: { tags: true, contact_infos: true, opening_hours_rows: true },
         });
         if (!contacts.length) return;
 
@@ -463,6 +463,18 @@ export class OrganisationDataCopyService {
             );
             if (infoData.length) {
                 await this.prisma.contactInfo.createMany({ data: infoData });
+            }
+
+            const hoursData = chunk.flatMap((c) =>
+                c.opening_hours_rows.map((row) => ({
+                    contact_uuid: idMaps.contacts.get(c.uuid)!,
+                    day_of_week: row.day_of_week,
+                    opens_minute: row.opens_minute,
+                    closes_minute: row.closes_minute,
+                })),
+            );
+            if (hoursData.length) {
+                await this.prisma.contactOpeningHour.createMany({ data: hoursData });
             }
         }
     }
