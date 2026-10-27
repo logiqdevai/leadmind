@@ -276,6 +276,8 @@ export class ContactsService {
                     { company: { contains: query.search, mode: 'insensitive' } },
                     { phone: { contains: query.search, mode: 'insensitive' } },
                     { website: { contains: query.search, mode: 'insensitive' } },
+                    // Extra emails / phones saved as additional contact infos.
+                    { contact_infos: { some: { value: { contains: query.search, mode: 'insensitive' } } } },
                 ],
             }),
         };

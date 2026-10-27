@@ -18,6 +18,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { SendHistoryTable } from "./components/send-history-table";
 import { SendHistoryTableSkeleton } from "./components/send-history-table-skeleton";
 import { SendHistoryFiltersBar } from "./components/send-history-filters-bar";
+import type { SendHistorySortDir } from "./components/follow-up-marker";
 import { SendHistoryInboxView } from "./components/inbox/send-history-inbox-view";
 import { dateToEndIso, dateToStartIso, sortSendHistoryByDateDesc } from "./utils/send-history.utils";
 import {
@@ -63,6 +64,9 @@ export default function SendHistoryPage() {
     const dateFrom = searchParams.get("date_from") ?? "";
     const dateTo = searchParams.get("date_to") ?? "";
     const needsFollowUp = searchParams.get("needs_follow_up") === "true";
+    const needsReply = searchParams.get("needs_reply") === "true";
+    const sortParam =searchParams.get("sort_dir");
+    const sortDir: SendHistorySortDir = sortParam === "asc" || sortParam === "desc" ? sortParam : "";
 
     const debouncedSearch = useDebouncedValue(search, 300);
 
@@ -100,7 +104,8 @@ export default function SendHistoryPage() {
             sentByUserUuid ||
             dateFrom ||
             dateTo ||
-            needsFollowUp,
+            needsFollowUp ||
+            needsReply,
     );
 
     const query = useMemo(
@@ -121,6 +126,8 @@ export default function SendHistoryPage() {
             date_from: dateFrom ? dateToStartIso(dateFrom) : undefined,
             date_to: dateTo ? dateToEndIso(dateTo) : undefined,
             needs_follow_up: needsFollowUp || undefined,
+            needs_reply: needsReply || undefined,
+            sort_dir: sortDir || undefined,
         }),
         [
             page,
@@ -136,14 +143,17 @@ export default function SendHistoryPage() {
             dateFrom,
             dateTo,
             needsFollowUp,
+            needsReply,
+            sortDir,
         ],
     );
 
     const { data, isLoading, isFetching } = useSendHistory(query);
 
+    // An explicit direction is applied by the server across all pages; keep its order.
     const rows = useMemo(
-        () => sortSendHistoryByDateDesc(data?.data ?? []),
-        [data?.data],
+        () => (sortDir ? (data?.data ?? []) : sortSendHistoryByDateDesc(data?.data ?? [])),
+        [data?.data, sortDir],
     );
     const total = data?.total ?? 0;
     const totalPages = data?.totalPages ?? 1;
@@ -262,6 +272,12 @@ export default function SendHistoryPage() {
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 needsFollowUp={needsFollowUp}
+                needsReply={needsReply}
+                onNeedsReplyChange={(value) =>
+                    updateParams({ needs_reply: value ? "true" : null, page: "1" })
+                }
+                sortDir={sortDir}
+                onSortDirChange={(value) => updateParams({ sort_dir: value || null, page: "1" })}
                 onNeedsFollowUpChange={(value) =>
                     updateParams({ needs_follow_up: value ? "true" : null, page: "1" })
                 }

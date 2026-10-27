@@ -15,6 +15,7 @@ import {
     MsgStatus,
     OutreachMessage,
     Prisma,
+    ThreadReplyState,
 } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { OUTREACH_SEND_QUEUE } from '@/core/queues/queues.constants';
@@ -383,13 +384,33 @@ export class OutreachService {
             organisation_uuid,
             // Narrowed to the latest send per thread below - a thread that needs a follow-up
             // should surface once, not once per message it has ever carried.
-            ...(filters.needs_follow_up && {
+            ...((filters.needs_follow_up || filters.needs_reply) && {
                 AND: [
-                    {
-                        direction: MsgDirection.OUTBOUND,
-                        status: { in: SENT_EMAIL_STATUSES },
-                        thread: { is: needsFollowUpThreadWhere(cutoff) },
-                    },
+                    ...(filters.needs_follow_up
+                        ? [
+                              {
+                                  direction: MsgDirection.OUTBOUND,
+                                  status: { in: SENT_EMAIL_STATUSES },
+                                  thread: { is: needsFollowUpThreadWhere(cutoff) },
+                              },
+                          ]
+                        : []),
+                    // The message a contact replied to, in a thread we still owe an answer on.
+                    ...(filters.needs_reply
+                        ? [
+                              {
+                                  replied_at: { not: null },
+                                  thread: {
+                                      is: {
+                                          OR: [
+                                              { reply_state: ThreadReplyState.AWAITING_US },
+                                              { has_unread_reply: true },
+                                          ],
+                                      },
+                                  },
+                              },
+                          ]
+                        : []),
                 ],
             }),
             ...(filters.contact_uuid && { contact_uuid: filters.contact_uuid }),
@@ -522,12 +543,25 @@ export class OutreachService {
         // `sent_at` and the thread's `last_outbound_at` are stamped with the same instant when a
         // message is sent (see MessageSendService.threadOutboundSentOperations), so equality
         // identifies a thread's most recent send.
-        const orderedCandidates = filters.needs_follow_up
-            ? candidates.filter((candidate) =>
-                  isLatestSendOfThread(candidate.sent_at, candidate.thread?.last_outbound_at),
-              )
-            : candidates;
-        const total = filters.needs_follow_up ? orderedCandidates.length : dbTotal;
+        const orderedCandidates = candidates.filter((candidate) => {
+            if (
+                filters.needs_follow_up &&
+                !isLatestSendOfThread(candidate.sent_at, candidate.thread?.last_outbound_at)
+            ) {
+                return false;
+            }
+            if (filters.needs_reply) {
+                const flags = messageThreadFlags(
+                    candidate,
+                    candidate.thread,
+                    candidate.contact.unsubscribed_at,
+                    cutoff,
+                );
+                if (!flags.needs_reply && !flags.has_unread_reply) return false;
+            }
+            return true;
+        });
+        const total = filters.needs_follow_up || filters.needs_reply ? orderedCandidates.length : dbTotal;
 
         // Replies and pending follow-ups pin to the top (unread reply, then a reply we owe an
         // answer to, then a due follow-up); everything else - and each tier internally - is newest first.
@@ -541,12 +575,14 @@ export class OutreachService {
                     cutoff,
                 ).priority,
             }))
-            .sort(
-                (a, b) =>
-                    a.priority - b.priority ||
+            .sort((a, b) => {
+                const dateDiff =
                     (b.candidate.sent_at ?? b.candidate.created_at).getTime() -
-                        (a.candidate.sent_at ?? a.candidate.created_at).getTime(),
-            )
+                    (a.candidate.sent_at ?? a.candidate.created_at).getTime();
+                // An explicit direction orders strictly by date, without the priority pinning.
+                if (filters.sort_dir) return filters.sort_dir === 'asc' ? -dateDiff : dateDiff;
+                return a.priority - b.priority || dateDiff;
+            })
             .slice(skip, skip + limit)
             .map(({ candidate }) => candidate.uuid);
 

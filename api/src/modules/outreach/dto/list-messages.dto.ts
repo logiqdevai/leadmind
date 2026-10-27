@@ -104,6 +104,24 @@ export class ListMessagesDto {
     @IsBoolean()
     needs_follow_up?: boolean;
 
+    @ApiPropertyOptional({
+        default: false,
+        description: 'Only messages a contact replied to that we still owe an answer on',
+    })
+    @IsOptional()
+    @Transform(({ value }) => value === 'true' || value === true)
+    @IsBoolean()
+    needs_reply?: boolean;
+
+    @ApiPropertyOptional({
+        enum: ['asc', 'desc'],
+        description:
+            'Order strictly by sent date. When omitted, replies and pending follow-ups are pinned first, then newest first.',
+    })
+    @IsOptional()
+    @IsIn(['asc', 'desc'])
+    sort_dir?: 'asc' | 'desc';
+
     @ApiPropertyOptional({ default: 1, minimum: 1 })
     @IsOptional()
     @Type(() => Number)

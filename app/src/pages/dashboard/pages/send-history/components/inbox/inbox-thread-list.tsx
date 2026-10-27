@@ -124,7 +124,20 @@ export function InboxThreadList({
                                     <span className="flex items-center gap-1.5">
                                         <OriginIcon origin={thread.origin} />
                                         {thread.has_unread_reply || thread.needs_reply ? (
-                                            <ReplyBadge isUnread={thread.has_unread_reply} />
+                                            <ReplyBadge
+                                                isUnread={thread.has_unread_reply}
+                                                needsFollowUp={thread.needs_follow_up}
+                                                onToggleFollowUp={
+                                                    thread.channel === Channel.EMAIL
+                                                        ? () => {
+                                                              if (flagFollowUp.isPending || dismissFollowUp.isPending) return;
+                                                              const vars = { threadUuid: thread.uuid, contactUuid };
+                                                              if (thread.needs_follow_up) dismissFollowUp.mutate(vars);
+                                                              else flagFollowUp.mutate(vars);
+                                                          }
+                                                        : undefined
+                                                }
+                                            />
                                         ) : null}
                                         {thread.needs_follow_up ? (
                                             <FollowUpBadge since={thread.last_outbound_at} manual={!!thread.manual_follow_up_at} />

@@ -202,7 +202,23 @@ export function SendHistoryTable({ rows, selected, onToggleSelect, onToggleAll }
                                 </Chip>
                                 {row.has_unread_reply || row.needs_reply ? (
                                     <div className="mt-1.5">
-                                        <ReplyBadge isUnread={row.has_unread_reply} />
+                                        <ReplyBadge
+                                            isUnread={row.has_unread_reply}
+                                            needsFollowUp={row.needs_follow_up}
+                                            onToggleFollowUp={
+                                                row.thread_uuid
+                                                    ? () => {
+                                                          if (flagFollowUp.isPending || dismissFollowUp.isPending) return;
+                                                          const vars = {
+                                                              threadUuid: row.thread_uuid!,
+                                                              contactUuid: row.contact.uuid,
+                                                          };
+                                                          if (row.needs_follow_up) dismissFollowUp.mutate(vars);
+                                                          else flagFollowUp.mutate(vars);
+                                                      }
+                                                    : undefined
+                                            }
+                                        />
                                     </div>
                                 ) : null}
                                 {row.needs_follow_up ? (

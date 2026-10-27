@@ -1,7 +1,7 @@
 import { Input, TextField } from "@heroui/react";
 import { Search } from "lucide-react";
 import { MobileListFilters } from "@/components/ui/mobile-list-filters";
-import { FollowUpFilterToggle } from "./follow-up-marker";
+import { FollowUpFilterToggle, NeedsReplyFilterToggle, SortDirToggle, type SendHistorySortDir } from "./follow-up-marker";
 import { SendHistoryFiltersForm, type SendHistoryFiltersFormProps } from "./send-history-filters-form";
 
 export type { SendHistoryFilterOption } from "./send-history-filters-form";
@@ -11,6 +11,10 @@ interface SendHistoryFiltersBarProps extends SendHistoryFiltersFormProps {
     onSearchChange: (value: string) => void;
     needsFollowUp: boolean;
     onNeedsFollowUpChange: (value: boolean) => void;
+    needsReply: boolean;
+    onNeedsReplyChange: (value: boolean) => void;
+    sortDir: SendHistorySortDir;
+    onSortDirChange: (value: SendHistorySortDir) => void;
 }
 
 export function SendHistoryFiltersBar({
@@ -18,6 +22,10 @@ export function SendHistoryFiltersBar({
     onSearchChange,
     needsFollowUp,
     onNeedsFollowUpChange,
+    needsReply,
+    onNeedsReplyChange,
+    sortDir,
+    onSortDirChange,
     ...form
 }: SendHistoryFiltersBarProps) {
     return (
@@ -36,6 +44,11 @@ export function SendHistoryFiltersBar({
                             />
                         </TextField>
                     </div>
+                    <SortDirToggle value={sortDir} onChange={onSortDirChange} />
+                    <NeedsReplyFilterToggle
+                        isActive={needsReply}
+                        onToggle={() => onNeedsReplyChange(!needsReply)}
+                    />
                     <FollowUpFilterToggle
                         isActive={needsFollowUp}
                         onToggle={() => onNeedsFollowUpChange(!needsFollowUp)}

@@ -113,6 +113,8 @@ export interface ListSendHistoryQuery {
     date_to?: string;
     history_only?: boolean;
     needs_follow_up?: boolean;
+    needs_reply?: boolean;
+    sort_dir?: "asc" | "desc";
 }
 
 export interface SendHistoryListResponse {
