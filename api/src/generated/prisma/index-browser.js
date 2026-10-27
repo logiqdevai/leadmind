@@ -373,6 +373,7 @@ exports.Prisma.ContactListScalarFieldEnum = {
   uuid: 'uuid',
   organisation_uuid: 'organisation_uuid',
   parent_list_uuid: 'parent_list_uuid',
+  assigned_user_uuid: 'assigned_user_uuid',
   title: 'title',
   description: 'description',
   created_at: 'created_at',

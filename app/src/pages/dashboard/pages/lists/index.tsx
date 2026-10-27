@@ -6,6 +6,9 @@ import { TagFilterBar } from "@/components/tags/tag-filter-bar";
 import { useTagFilterParams } from "@/components/tags/use-tag-filter-params";
 import { useContactLists } from "@/features/contact-lists/hooks/use-contact-lists";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
+import { SearchSelect } from "@/components/ui/search-select";
+import { useOrganisationMembers } from "@/features/organisations/hooks/use-organisations";
+import { useAuthStore } from "@/stores/auth";
 import { ContactListsTable } from "./components/contact-lists-table";
 import { ContactListFormModal } from "./components/contact-list-form-modal";
 
@@ -17,6 +20,9 @@ export default function ListsPage() {
 
     const page = Math.max(1, Number(searchParams.get("page") ?? 1));
     const search = searchParams.get("search") ?? "";
+    const assignedParam = searchParams.get("assigned") ?? "";
+    const organisationUuid = useAuthStore((s) => s.organisation_uuid) ?? "";
+    const { data: members = [] } = useOrganisationMembers(organisationUuid);
 
     const updateParams = (next: Record<string, string | undefined | null>) => {
         const params = new URLSearchParams(searchParams);
@@ -35,6 +41,7 @@ export default function ListsPage() {
         page,
         limit: PAGE_SIZE,
         search: debouncedSearch || undefined,
+        assigned_user_uuid: assignedParam || undefined,
         // Tag filters search the whole tree: a tagged sublist should be findable without opening its parent.
         root_only: tagFilterActive ? undefined : true,
         ...tagQuery,
@@ -68,6 +75,16 @@ export default function ListsPage() {
                         fullWidth
                     />
                 </div>
+                <SearchSelect
+                    aria-label="Filter by assignee"
+                    options={members.map((m) => ({ id: m.user_uuid, label: m.full_name?.trim() || m.email }))}
+                    value={assignedParam}
+                    onChange={(v) => updateParams({ assigned: v, page: "1" })}
+                    emptyLabel="Anyone"
+                    placeholder="Anyone"
+                    searchPlaceholder="Search members…"
+                    className="w-44"
+                />
                 <TagFilterBar entityType="CONTACT_LIST" value={tagFilter} onChange={setTagFilter} />
             </div>
 

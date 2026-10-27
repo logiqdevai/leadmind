@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Button, Calendar, DateField, DatePicker, Input, Label, Modal, TextArea, TimeField, type TimeValue } from "@heroui/react";
+import { Button, Calendar, DateField, DatePicker, Input, Label, Modal, TextArea } from "@heroui/react";
 import {
     fromDate,
     getLocalTimeZone,
     now,
+    Time,
     type DateValue,
     type ZonedDateTime,
 } from "@internationalized/date";
@@ -32,6 +33,18 @@ interface ReminderFormModalProps {
 function defaultRemindAt(): ZonedDateTime {
     return now(getLocalTimeZone());
 }
+
+/** One-tap ways to set the reminder relative to now. */
+const QUICK_ACTIONS: { label: string; resolve: (from: ZonedDateTime) => ZonedDateTime }[] = [
+    { label: "In 30 minutes", resolve: (t) => t.add({ minutes: 30 }) },
+    { label: "In 1 hour", resolve: (t) => t.add({ hours: 1 }) },
+    { label: "In 3 hours", resolve: (t) => t.add({ hours: 3 }) },
+    { label: "Tomorrow 9:00", resolve: (t) => t.add({ days: 1 }).set({ hour: 9, minute: 0 }) },
+    { label: "Next week", resolve: (t) => t.add({ weeks: 1 }) },
+    { label: "Next month", resolve: (t) => t.add({ months: 1 }) },
+];
+
+const pad2 = (n: number) => String(n).padStart(2, "0");
 
 function toDateValue(d: Date): ZonedDateTime {
     return fromDate(d, getLocalTimeZone());
@@ -315,26 +328,43 @@ export function ReminderFormModal({
                                             </Calendar.YearPickerGrid>
                                         </Calendar>
                                         <div className="flex items-center justify-between gap-3">
-                                            <Label>Time</Label>
-                                            <TimeField
+                                            <Label htmlFor="reminder-time">Time</Label>
+                                            <Input
+                                                id="reminder-time"
+                                                type="time"
                                                 aria-label="Time"
-                                                granularity="minute"
-                                                hourCycle={24}
-                                                hideTimeZone
-                                                value={state.timeValue}
-                                                onChange={(v) => state.setTimeValue(v as TimeValue)}
-                                            >
-                                                <TimeField.Group variant="secondary">
-                                                    <TimeField.Input>
-                                                        {(segment) => <TimeField.Segment segment={segment} />}
-                                                    </TimeField.Input>
-                                                </TimeField.Group>
-                                            </TimeField>
+                                                className="w-32"
+                                                value={
+                                                    state.timeValue
+                                                        ? `${pad2(state.timeValue.hour)}:${pad2(state.timeValue.minute)}`
+                                                        : ""
+                                                }
+                                                onChange={(e) => {
+                                                    const [hour, minute] = e.target.value.split(":").map(Number);
+                                                    if (Number.isFinite(hour) && Number.isFinite(minute)) {
+                                                        state.setTimeValue(new Time(hour, minute));
+                                                    }
+                                                }}
+                                            />
                                         </div>
                                     </DatePicker.Popover>
                                 </>
                             )}
                         </DatePicker>
+
+                        <div className="flex flex-wrap gap-1.5" role="group" aria-label="Quick reminder times">
+                            {QUICK_ACTIONS.map((action) => (
+                                <Button
+                                    key={action.label}
+                                    size="sm"
+                                    variant="secondary"
+                                    className="h-7 px-2.5 text-xs"
+                                    onPress={() => setRemindAt(action.resolve(now(getLocalTimeZone())).set({ second: 0, millisecond: 0 }))}
+                                >
+                                    {action.label}
+                                </Button>
+                            ))}
+                        </div>
 
                         <div className="flex flex-col gap-1.5">
                             <Label htmlFor="reminder-assignees">Assigned to</Label>

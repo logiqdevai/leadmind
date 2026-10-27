@@ -1272,8 +1272,17 @@ export class ContactsService {
     }
 
     async removeInteraction(organisation_uuid: string, contact_uuid: string, interaction_uuid: string) {
-        await this.requireManualInteraction(organisation_uuid, contact_uuid, interaction_uuid);
+        const interaction = await this.requireManualInteraction(organisation_uuid, contact_uuid, interaction_uuid);
         await this.prisma.interaction.delete({ where: { uuid: interaction_uuid } });
+        // Goal progress is counted from logged calls, so recounting (and pushing the new numbers) is all it takes.
+        if (interaction.type === InteractionType.CALL && interaction.created_by_user_uuid) {
+            void this.messagingGoalsService.onActivity({
+                metric: GoalMetric.CALL,
+                organisation_uuid,
+                user_uuid: interaction.created_by_user_uuid,
+                occurred_at: interaction.created_at,
+            });
+        }
         return { uuid: interaction_uuid };
     }
 

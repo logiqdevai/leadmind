@@ -25,6 +25,8 @@ export const OrganisationPermissions = {
   org_manage_goals: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
   // Booking pages (incl. notification settings), reassigning bookings, other members' availability/calendars.
   org_manage_bookings: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
+  // Deleting logged calls, meetings, emails and SMS from a contact's activity.
+  contact_activity_delete: [OrganisationRoles.OWNER, OrganisationRoles.ADMIN],
   org_delete: [OrganisationRoles.OWNER],
 } as const satisfies Record<string, OrganisationRole[]>;
 

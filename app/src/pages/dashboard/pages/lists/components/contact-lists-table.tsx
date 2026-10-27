@@ -136,6 +136,19 @@ export function ContactListsTable({
                 header: "Tags",
                 cell: (info) => <TagChips tags={info.row.original.tags} />,
             }),
+            columnHelper.display({
+                id: "assignee",
+                header: "Assigned to",
+                cell: (info) => {
+                    const user = info.row.original.assigned_user;
+                    const label = user ? user.full_name?.trim() || user.email : null;
+                    return (
+                        <span title={label ?? undefined} className="block w-full min-w-0 truncate text-sm text-muted">
+                            {label ?? "Unassigned"}
+                        </span>
+                    );
+                },
+            }),
             columnHelper.accessor(
                 (row) => row.child_count ?? row._count?.children ?? 0,
                 {
@@ -197,7 +210,7 @@ export function ContactListsTable({
                                     key={header.id}
                                     id={header.id}
                                     isRowHeader={header.id === "title"}
-                                    className={extraListColumnClass(header.id, ["description", "tags", "sublists", "contacts", "updated_at"])}
+                                    className={extraListColumnClass(header.id, ["description", "tags", "assignee", "sublists", "contacts", "updated_at"])}
                                 >
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                 </Table.Column>
@@ -238,6 +251,7 @@ export function ContactListsTable({
                                               const columnClass = extraListColumnClass(cell.column.id, [
                                                   "description",
                                                   "tags",
+                                                  "assignee",
                                                   "sublists",
                                                   "contacts",
                                                   "updated_at",

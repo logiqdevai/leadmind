@@ -36,6 +36,7 @@ import {
 } from "@/features/contacts/interfaces/contact.interface";
 import { isLeadStatus } from "@/features/contacts/constants/contacts.constants";
 import { useContactInteractions, useDeleteInteraction } from "@/features/contacts/hooks/use-contacts";
+import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { LogCallModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-call-modal";
 import { LogEmailModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-email-modal";
@@ -269,6 +270,7 @@ interface InteractionTimelineProps {
 export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: InteractionTimelineProps) {
     const { data: interactions, isLoading } = useContactInteractions(contactUuid);
     const deleteInteraction = useDeleteInteraction();
+    const canDelete = useOrganisationPermission("contact_activity_delete");
     const [editing, setEditing] = useState<Interaction | null>(null);
     const [deleting, setDeleting] = useState<Interaction | null>(null);
     const closeEditor = (open: boolean) => {
@@ -386,10 +388,12 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                                                     <Pencil className="size-4" />
                                                     Edit
                                                 </Dropdown.Item>
-                                                <Dropdown.Item id="delete" textValue="Delete" className="text-danger">
-                                                    <Trash2 className="size-4" />
-                                                    Delete
-                                                </Dropdown.Item>
+                                                {canDelete ? (
+                                                    <Dropdown.Item id="delete" textValue="Delete" className="text-danger">
+                                                        <Trash2 className="size-4" />
+                                                        Delete
+                                                    </Dropdown.Item>
+                                                ) : null}
                                             </Dropdown.Menu>
                                         </Dropdown.Popover>
                                     </Dropdown>

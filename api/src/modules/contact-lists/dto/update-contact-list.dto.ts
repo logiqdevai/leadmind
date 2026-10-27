@@ -3,7 +3,7 @@ import { IsArray, IsOptional, IsUUID, ValidateIf } from 'class-validator';
 import { CreateContactListDto } from './create-contact-list.dto';
 
 export class UpdateContactListDto extends PartialType(
-    OmitType(CreateContactListDto, ['parent_list_uuid', 'tag_uuids'] as const),
+    OmitType(CreateContactListDto, ['parent_list_uuid', 'tag_uuids', 'assigned_user_uuid'] as const),
 ) {
     @ApiPropertyOptional({
         description: 'Parent list UUID, or null to move to root',
@@ -13,6 +13,12 @@ export class UpdateContactListDto extends PartialType(
     @ValidateIf((_, value) => value !== null && value !== undefined)
     @IsUUID()
     parent_list_uuid?: string | null;
+
+    @ApiPropertyOptional({ description: 'Team member responsible for this list, or null to unassign', nullable: true })
+    @IsOptional()
+    @ValidateIf((_, value) => value !== null && value !== undefined)
+    @IsUUID()
+    assigned_user_uuid?: string | null;
 
     @ApiPropertyOptional({
         type: [String],

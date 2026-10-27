@@ -19,6 +19,11 @@ export class CreateContactListDto {
     @IsUUID()
     parent_list_uuid?: string;
 
+    @ApiPropertyOptional({ description: 'Team member responsible for this list' })
+    @IsOptional()
+    @IsUUID()
+    assigned_user_uuid?: string;
+
     @ApiPropertyOptional({ type: [String], description: 'Organisation tag UUIDs to group this list under' })
     @IsOptional()
     @IsArray()

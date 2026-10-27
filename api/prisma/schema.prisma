@@ -49,6 +49,7 @@ model User {
   calendar_connections      CalendarConnection[]
   reminder_assignments      ReminderAssignee[]       @relation("ReminderAssignee")
   notifications             Notification[]
+  contact_lists_assigned    ContactList[]            @relation("ContactListAssignee")
 
   @@index([email])
   @@index([phone])
@@ -483,12 +484,15 @@ model ContactList {
   uuid              String   @unique @default(uuid())
   organisation_uuid String
   parent_list_uuid  String?
+  /// Team member responsible for this list; cleared if the member is deleted.
+  assigned_user_uuid String?
   title             String
   description       String?
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
   organisation         Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  assigned_user        User?                     @relation("ContactListAssignee", fields: [assigned_user_uuid], references: [uuid], onDelete: SetNull)
   parent               ContactList?              @relation("ContactListHierarchy", fields: [parent_list_uuid], references: [uuid], onDelete: Cascade)
   children             ContactList[]             @relation("ContactListHierarchy")
   members              ContactListMember[]
@@ -498,6 +502,7 @@ model ContactList {
 
   @@index([organisation_uuid])
   @@index([parent_list_uuid])
+  @@index([assigned_user_uuid])
   @@map("contact_lists")
 }
 

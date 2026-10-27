@@ -7,6 +7,9 @@ import { useCreateContactList, useUpdateContactList } from "@/features/contact-l
 import type { ContactList } from "@/features/contact-lists/interfaces/contact-list.interface";
 import { emptyToNullOnEdit } from "@/lib/profile";
 import { Routes } from "@/routes/routes";
+import { SearchSelect } from "@/components/ui/search-select";
+import { useOrganisationMembers } from "@/features/organisations/hooks/use-organisations";
+import { useAuthStore } from "@/stores/auth";
 import { ParentListSelect } from "./parent-list-select";
 
 interface ContactListFormModalProps {
@@ -33,6 +36,10 @@ export function ContactListFormModal({
   const [description, setDescription] = useState("");
   const [selectedParentUuid, setSelectedParentUuid] = useState<string | null>(parentListUuid ?? null);
   const [tagUuids, setTagUuids] = useState<string[]>([]);
+  const [assigneeUuid, setAssigneeUuid] = useState("");
+  const organisationUuid = useAuthStore((s) => s.organisation_uuid) ?? "";
+  const { data: members = [] } = useOrganisationMembers(organisationUuid);
+  const memberOptions = members.map((m) => ({ id: m.user_uuid, label: m.full_name?.trim() || m.email }));
   const isSublist = !editing && !!selectedParentUuid;
 
   useEffect(() => {
@@ -42,11 +49,13 @@ export function ContactListFormModal({
       setDescription(editing.description ?? "");
       setSelectedParentUuid(editing.parent_list_uuid);
       setTagUuids((editing.tags ?? []).map((t) => t.uuid));
+      setAssigneeUuid(editing.assigned_user_uuid ?? "");
     } else {
       setTitle("");
       setDescription("");
       setSelectedParentUuid(parentListUuid ?? null);
       setTagUuids([]);
+      setAssigneeUuid("");
     }
   }, [isOpen, editing, parentListUuid]);
 
@@ -58,6 +67,7 @@ export function ContactListFormModal({
           payload: {
             title: title.trim(),
             description: emptyToNullOnEdit(description, true),
+            assigned_user_uuid: assigneeUuid || null,
             tag_uuids: tagUuids,
           },
         },
@@ -68,6 +78,7 @@ export function ContactListFormModal({
         {
           title: title.trim(),
           description: description.trim() || undefined,
+          ...(assigneeUuid ? { assigned_user_uuid: assigneeUuid } : {}),
           ...(tagUuids.length ? { tag_uuids: tagUuids } : {}),
           ...(selectedParentUuid ? { parent_list_uuid: selectedParentUuid } : {}),
         },
@@ -115,6 +126,18 @@ export function ContactListFormModal({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label>Assigned to</Label>
+              <SearchSelect
+                aria-label="Assigned to"
+                options={memberOptions}
+                value={assigneeUuid}
+                onChange={setAssigneeUuid}
+                emptyLabel="Unassigned"
+                searchPlaceholder="Search members…"
+                fullWidth
               />
             </div>
             <TagPicker value={tagUuids} onChange={setTagUuids} />

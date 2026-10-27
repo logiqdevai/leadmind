@@ -414,8 +414,11 @@ export class ContactsController {
 
     @ActivityLog({ entityType: ActivityEntityType.CONTACT, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
     @Delete(':uuid/interactions/:interactionUuid')
+    @UseGuards(OrganisationRolesGuard)
+    @OrganisationRoles(OrganisationRole.ADMIN)
     @ApiOperation({ summary: 'Delete a manually logged call, meeting, email or SMS' })
     @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })
     @ApiResponse({ status: 400, description: 'Not a manually logged interaction' })
     @ApiResponse({ status: 404, description: 'Interaction not found' })
     removeInteraction(

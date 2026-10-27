@@ -10,6 +10,9 @@ export interface ContactList {
     uuid: string;
     user_uuid: string;
     parent_list_uuid: string | null;
+    assigned_user_uuid?: string | null;
+    /** Team member responsible for the list. */
+    assigned_user?: { uuid: string; full_name: string | null; email: string } | null;
     title: string;
     description: string | null;
     created_at: string;
@@ -26,6 +29,7 @@ export interface ListContactListsQuery extends TagFilterQuery {
     search?: string;
     parent_list_uuid?: string;
     root_only?: boolean;
+    assigned_user_uuid?: string;
 }
 
 export interface PaginatedContactLists {
@@ -40,6 +44,7 @@ export interface CreateContactListPayload {
     title: string;
     description?: string;
     parent_list_uuid?: string;
+    assigned_user_uuid?: string;
     tag_uuids?: string[];
 }
 
@@ -47,6 +52,8 @@ export interface UpdateContactListPayload {
     title?: string;
     description?: string | null;
     parent_list_uuid?: string | null;
+    /** null unassigns the list. */
+    assigned_user_uuid?: string | null;
     tag_uuids?: string[];
 }
 

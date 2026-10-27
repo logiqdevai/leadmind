@@ -37,7 +37,16 @@ export class ContactListsService {
 
     private readonly listCountInclude = {
         _count: { select: { members: true, children: true } },
+        assigned_user: { select: { uuid: true, full_name: true, email: true } },
     } as const;
+
+    private async assertAssigneeInOrganisation(organisation_uuid: string, user_uuid: string) {
+        const member = await this.prisma.organisationMember.findUnique({
+            where: { organisation_uuid_user_uuid: { organisation_uuid, user_uuid } },
+            select: { uuid: true },
+        });
+        if (!member) throw new BadRequestException('That team member is not part of this organisation');
+    }
 
     private mapListWithCounts<
         T extends {
@@ -58,6 +67,7 @@ export class ContactListsService {
         }
 
         if (dto.tag_uuids?.length) await this.orgTags.assertTagsOwned(organisation_uuid, dto.tag_uuids);
+        if (dto.assigned_user_uuid) await this.assertAssigneeInOrganisation(organisation_uuid, dto.assigned_user_uuid);
 
         const list = await this.prisma.contactList.create({
             data: {
@@ -65,6 +75,7 @@ export class ContactListsService {
                 title: dto.title.trim(),
                 description: dto.description?.trim() || null,
                 parent_list_uuid,
+                assigned_user_uuid: dto.assigned_user_uuid ?? null,
             },
             include: this.listCountInclude,
         });
@@ -93,6 +104,8 @@ export class ContactListsService {
         } else if (query.root_only) {
             where.parent_list_uuid = null;
         }
+
+        if (query.assigned_user_uuid) where.assigned_user_uuid = query.assigned_user_uuid;
 
         if (query.search?.trim()) {
             const search = query.search.trim();
@@ -149,6 +162,8 @@ export class ContactListsService {
             await this.assertValidParent(organisation_uuid, dto.parent_list_uuid, uuid);
         }
 
+        if (dto.assigned_user_uuid) await this.assertAssigneeInOrganisation(organisation_uuid, dto.assigned_user_uuid);
+
         const parentData =
             dto.parent_list_uuid === undefined
                 ? {}
@@ -162,6 +177,7 @@ export class ContactListsService {
                     description: dto.description?.trim() || null,
                 }),
                 ...parentData,
+                ...(dto.assigned_user_uuid !== undefined && { assigned_user_uuid: dto.assigned_user_uuid }),
             },
             include: this.listCountInclude,
         });

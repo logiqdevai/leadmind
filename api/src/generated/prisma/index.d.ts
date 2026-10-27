@@ -8744,6 +8744,7 @@ export namespace Prisma {
     calendar_connections: number
     reminder_assignments: number
     notifications: number
+    contact_lists_assigned: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8772,6 +8773,7 @@ export namespace Prisma {
     calendar_connections?: boolean | UserCountOutputTypeCountCalendar_connectionsArgs
     reminder_assignments?: boolean | UserCountOutputTypeCountReminder_assignmentsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    contact_lists_assigned?: boolean | UserCountOutputTypeCountContact_lists_assignedArgs
   }
 
   // Custom InputTypes
@@ -8958,6 +8960,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountContact_lists_assignedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactListWhereInput
   }
 
 
@@ -10969,6 +10978,7 @@ export namespace Prisma {
     calendar_connections?: boolean | User$calendar_connectionsArgs<ExtArgs>
     reminder_assignments?: boolean | User$reminder_assignmentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    contact_lists_assigned?: boolean | User$contact_lists_assignedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -11035,6 +11045,7 @@ export namespace Prisma {
     calendar_connections?: boolean | User$calendar_connectionsArgs<ExtArgs>
     reminder_assignments?: boolean | User$reminder_assignmentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    contact_lists_assigned?: boolean | User$contact_lists_assignedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -11068,6 +11079,7 @@ export namespace Prisma {
       calendar_connections: Prisma.$CalendarConnectionPayload<ExtArgs>[]
       reminder_assignments: Prisma.$ReminderAssigneePayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      contact_lists_assigned: Prisma.$ContactListPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -11498,6 +11510,7 @@ export namespace Prisma {
     calendar_connections<T extends User$calendar_connectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$calendar_connectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reminder_assignments<T extends User$reminder_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$reminder_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderAssigneePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contact_lists_assigned<T extends User$contact_lists_assignedArgs<ExtArgs> = {}>(args?: Subset<T, User$contact_lists_assignedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12521,6 +12534,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * User.contact_lists_assigned
+   */
+  export type User$contact_lists_assignedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactList
+     */
+    select?: ContactListSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactList
+     */
+    omit?: ContactListOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactListInclude<ExtArgs> | null
+    where?: ContactListWhereInput
+    orderBy?: ContactListOrderByWithRelationInput | ContactListOrderByWithRelationInput[]
+    cursor?: ContactListWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContactListScalarFieldEnum | ContactListScalarFieldEnum[]
   }
 
   /**
@@ -34395,6 +34432,7 @@ export namespace Prisma {
     uuid: string | null
     organisation_uuid: string | null
     parent_list_uuid: string | null
+    assigned_user_uuid: string | null
     title: string | null
     description: string | null
     created_at: Date | null
@@ -34406,6 +34444,7 @@ export namespace Prisma {
     uuid: string | null
     organisation_uuid: string | null
     parent_list_uuid: string | null
+    assigned_user_uuid: string | null
     title: string | null
     description: string | null
     created_at: Date | null
@@ -34417,6 +34456,7 @@ export namespace Prisma {
     uuid: number
     organisation_uuid: number
     parent_list_uuid: number
+    assigned_user_uuid: number
     title: number
     description: number
     created_at: number
@@ -34438,6 +34478,7 @@ export namespace Prisma {
     uuid?: true
     organisation_uuid?: true
     parent_list_uuid?: true
+    assigned_user_uuid?: true
     title?: true
     description?: true
     created_at?: true
@@ -34449,6 +34490,7 @@ export namespace Prisma {
     uuid?: true
     organisation_uuid?: true
     parent_list_uuid?: true
+    assigned_user_uuid?: true
     title?: true
     description?: true
     created_at?: true
@@ -34460,6 +34502,7 @@ export namespace Prisma {
     uuid?: true
     organisation_uuid?: true
     parent_list_uuid?: true
+    assigned_user_uuid?: true
     title?: true
     description?: true
     created_at?: true
@@ -34558,6 +34601,7 @@ export namespace Prisma {
     uuid: string
     organisation_uuid: string
     parent_list_uuid: string | null
+    assigned_user_uuid: string | null
     title: string
     description: string | null
     created_at: Date
@@ -34588,11 +34632,13 @@ export namespace Prisma {
     uuid?: boolean
     organisation_uuid?: boolean
     parent_list_uuid?: boolean
+    assigned_user_uuid?: boolean
     title?: boolean
     description?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    assigned_user?: boolean | ContactList$assigned_userArgs<ExtArgs>
     parent?: boolean | ContactList$parentArgs<ExtArgs>
     children?: boolean | ContactList$childrenArgs<ExtArgs>
     members?: boolean | ContactList$membersArgs<ExtArgs>
@@ -34607,11 +34653,13 @@ export namespace Prisma {
     uuid?: boolean
     organisation_uuid?: boolean
     parent_list_uuid?: boolean
+    assigned_user_uuid?: boolean
     title?: boolean
     description?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    assigned_user?: boolean | ContactList$assigned_userArgs<ExtArgs>
     parent?: boolean | ContactList$parentArgs<ExtArgs>
   }, ExtArgs["result"]["contactList"]>
 
@@ -34620,11 +34668,13 @@ export namespace Prisma {
     uuid?: boolean
     organisation_uuid?: boolean
     parent_list_uuid?: boolean
+    assigned_user_uuid?: boolean
     title?: boolean
     description?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    assigned_user?: boolean | ContactList$assigned_userArgs<ExtArgs>
     parent?: boolean | ContactList$parentArgs<ExtArgs>
   }, ExtArgs["result"]["contactList"]>
 
@@ -34633,15 +34683,17 @@ export namespace Prisma {
     uuid?: boolean
     organisation_uuid?: boolean
     parent_list_uuid?: boolean
+    assigned_user_uuid?: boolean
     title?: boolean
     description?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type ContactListOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "parent_list_uuid" | "title" | "description" | "created_at" | "updated_at", ExtArgs["result"]["contactList"]>
+  export type ContactListOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "parent_list_uuid" | "assigned_user_uuid" | "title" | "description" | "created_at" | "updated_at", ExtArgs["result"]["contactList"]>
   export type ContactListInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    assigned_user?: boolean | ContactList$assigned_userArgs<ExtArgs>
     parent?: boolean | ContactList$parentArgs<ExtArgs>
     children?: boolean | ContactList$childrenArgs<ExtArgs>
     members?: boolean | ContactList$membersArgs<ExtArgs>
@@ -34652,10 +34704,12 @@ export namespace Prisma {
   }
   export type ContactListIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    assigned_user?: boolean | ContactList$assigned_userArgs<ExtArgs>
     parent?: boolean | ContactList$parentArgs<ExtArgs>
   }
   export type ContactListIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    assigned_user?: boolean | ContactList$assigned_userArgs<ExtArgs>
     parent?: boolean | ContactList$parentArgs<ExtArgs>
   }
 
@@ -34663,6 +34717,7 @@ export namespace Prisma {
     name: "ContactList"
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
+      assigned_user: Prisma.$UserPayload<ExtArgs> | null
       parent: Prisma.$ContactListPayload<ExtArgs> | null
       children: Prisma.$ContactListPayload<ExtArgs>[]
       members: Prisma.$ContactListMemberPayload<ExtArgs>[]
@@ -34675,6 +34730,10 @@ export namespace Prisma {
       uuid: string
       organisation_uuid: string
       parent_list_uuid: string | null
+      /**
+       * Team member responsible for this list; cleared if the member is deleted.
+       */
+      assigned_user_uuid: string | null
       title: string
       description: string | null
       created_at: Date
@@ -35074,6 +35133,7 @@ export namespace Prisma {
   export interface Prisma__ContactListClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    assigned_user<T extends ContactList$assigned_userArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$assigned_userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     parent<T extends ContactList$parentArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$parentArgs<ExtArgs>>): Prisma__ContactListClient<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     children<T extends ContactList$childrenArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     members<T extends ContactList$membersArgs<ExtArgs> = {}>(args?: Subset<T, ContactList$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -35113,6 +35173,7 @@ export namespace Prisma {
     readonly uuid: FieldRef<"ContactList", 'String'>
     readonly organisation_uuid: FieldRef<"ContactList", 'String'>
     readonly parent_list_uuid: FieldRef<"ContactList", 'String'>
+    readonly assigned_user_uuid: FieldRef<"ContactList", 'String'>
     readonly title: FieldRef<"ContactList", 'String'>
     readonly description: FieldRef<"ContactList", 'String'>
     readonly created_at: FieldRef<"ContactList", 'DateTime'>
@@ -35510,6 +35571,25 @@ export namespace Prisma {
      * Limit how many ContactLists to delete.
      */
     limit?: number
+  }
+
+  /**
+   * ContactList.assigned_user
+   */
+  export type ContactList$assigned_userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -107728,6 +107808,7 @@ export namespace Prisma {
     uuid: 'uuid',
     organisation_uuid: 'organisation_uuid',
     parent_list_uuid: 'parent_list_uuid',
+    assigned_user_uuid: 'assigned_user_uuid',
     title: 'title',
     description: 'description',
     created_at: 'created_at',
@@ -110014,6 +110095,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionListRelationFilter
     reminder_assignments?: ReminderAssigneeListRelationFilter
     notifications?: NotificationListRelationFilter
+    contact_lists_assigned?: ContactListListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -110051,6 +110133,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionOrderByRelationAggregateInput
     reminder_assignments?: ReminderAssigneeOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    contact_lists_assigned?: ContactListOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -110091,6 +110174,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionListRelationFilter
     reminder_assignments?: ReminderAssigneeListRelationFilter
     notifications?: NotificationListRelationFilter
+    contact_lists_assigned?: ContactListListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -111835,11 +111919,13 @@ export namespace Prisma {
     uuid?: StringFilter<"ContactList"> | string
     organisation_uuid?: StringFilter<"ContactList"> | string
     parent_list_uuid?: StringNullableFilter<"ContactList"> | string | null
+    assigned_user_uuid?: StringNullableFilter<"ContactList"> | string | null
     title?: StringFilter<"ContactList"> | string
     description?: StringNullableFilter<"ContactList"> | string | null
     created_at?: DateTimeFilter<"ContactList"> | Date | string
     updated_at?: DateTimeFilter<"ContactList"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    assigned_user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     parent?: XOR<ContactListNullableScalarRelationFilter, ContactListWhereInput> | null
     children?: ContactListListRelationFilter
     members?: ContactListMemberListRelationFilter
@@ -111853,11 +111939,13 @@ export namespace Prisma {
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     parent_list_uuid?: SortOrderInput | SortOrder
+    assigned_user_uuid?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
+    assigned_user?: UserOrderByWithRelationInput
     parent?: ContactListOrderByWithRelationInput
     children?: ContactListOrderByRelationAggregateInput
     members?: ContactListMemberOrderByRelationAggregateInput
@@ -111874,11 +111962,13 @@ export namespace Prisma {
     NOT?: ContactListWhereInput | ContactListWhereInput[]
     organisation_uuid?: StringFilter<"ContactList"> | string
     parent_list_uuid?: StringNullableFilter<"ContactList"> | string | null
+    assigned_user_uuid?: StringNullableFilter<"ContactList"> | string | null
     title?: StringFilter<"ContactList"> | string
     description?: StringNullableFilter<"ContactList"> | string | null
     created_at?: DateTimeFilter<"ContactList"> | Date | string
     updated_at?: DateTimeFilter<"ContactList"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    assigned_user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     parent?: XOR<ContactListNullableScalarRelationFilter, ContactListWhereInput> | null
     children?: ContactListListRelationFilter
     members?: ContactListMemberListRelationFilter
@@ -111892,6 +111982,7 @@ export namespace Prisma {
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     parent_list_uuid?: SortOrderInput | SortOrder
+    assigned_user_uuid?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -111911,6 +112002,7 @@ export namespace Prisma {
     uuid?: StringWithAggregatesFilter<"ContactList"> | string
     organisation_uuid?: StringWithAggregatesFilter<"ContactList"> | string
     parent_list_uuid?: StringNullableWithAggregatesFilter<"ContactList"> | string | null
+    assigned_user_uuid?: StringNullableWithAggregatesFilter<"ContactList"> | string | null
     title?: StringWithAggregatesFilter<"ContactList"> | string
     description?: StringNullableWithAggregatesFilter<"ContactList"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"ContactList"> | Date | string
@@ -118130,6 +118222,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -118167,6 +118260,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUpdateInput = {
@@ -118203,6 +118297,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -118240,6 +118335,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -120142,6 +120238,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    assigned_user?: UserCreateNestedOneWithoutContact_lists_assignedInput
     parent?: ContactListCreateNestedOneWithoutChildrenInput
     children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
@@ -120155,6 +120252,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -120173,6 +120271,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    assigned_user?: UserUpdateOneWithoutContact_lists_assignedNestedInput
     parent?: ContactListUpdateOneWithoutChildrenNestedInput
     children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
@@ -120186,6 +120285,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -120202,6 +120302,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -120221,6 +120322,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127129,6 +127231,12 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type ContactListListRelationFilter = {
+    every?: ContactListWhereInput
+    some?: ContactListWhereInput
+    none?: ContactListWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -127223,6 +127331,10 @@ export namespace Prisma {
   }
 
   export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ContactListOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -127412,12 +127524,6 @@ export namespace Prisma {
     none?: FormWhereInput
   }
 
-  export type ContactListListRelationFilter = {
-    every?: ContactListWhereInput
-    some?: ContactListWhereInput
-    none?: ContactListWhereInput
-  }
-
   export type SavedContactFilterListRelationFilter = {
     every?: SavedContactFilterWhereInput
     some?: SavedContactFilterWhereInput
@@ -127531,10 +127637,6 @@ export namespace Prisma {
   }
 
   export type FormOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ContactListOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -128965,11 +129067,17 @@ export namespace Prisma {
     score?: SortOrder
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type ContactListCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     parent_list_uuid?: SortOrder
+    assigned_user_uuid?: SortOrder
     title?: SortOrder
     description?: SortOrder
     created_at?: SortOrder
@@ -128985,6 +129093,7 @@ export namespace Prisma {
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     parent_list_uuid?: SortOrder
+    assigned_user_uuid?: SortOrder
     title?: SortOrder
     description?: SortOrder
     created_at?: SortOrder
@@ -128996,6 +129105,7 @@ export namespace Prisma {
     uuid?: SortOrder
     organisation_uuid?: SortOrder
     parent_list_uuid?: SortOrder
+    assigned_user_uuid?: SortOrder
     title?: SortOrder
     description?: SortOrder
     created_at?: SortOrder
@@ -129190,11 +129300,6 @@ export namespace Prisma {
     in?: $Enums.ExternalIntegrationProvider[] | ListEnumExternalIntegrationProviderFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.ExternalIntegrationProvider[] | ListEnumExternalIntegrationProviderFieldRefInput<$PrismaModel> | null
     not?: NestedEnumExternalIntegrationProviderNullableFilter<$PrismaModel> | $Enums.ExternalIntegrationProvider | null
-  }
-
-  export type UserNullableScalarRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
   }
 
   export type SequenceEnrollmentNullableScalarRelationFilter = {
@@ -134106,6 +134211,13 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type ContactListCreateNestedManyWithoutAssigned_userInput = {
+    create?: XOR<ContactListCreateWithoutAssigned_userInput, ContactListUncheckedCreateWithoutAssigned_userInput> | ContactListCreateWithoutAssigned_userInput[] | ContactListUncheckedCreateWithoutAssigned_userInput[]
+    connectOrCreate?: ContactListCreateOrConnectWithoutAssigned_userInput | ContactListCreateOrConnectWithoutAssigned_userInput[]
+    createMany?: ContactListCreateManyAssigned_userInputEnvelope
+    connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -134279,6 +134391,13 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type ContactListUncheckedCreateNestedManyWithoutAssigned_userInput = {
+    create?: XOR<ContactListCreateWithoutAssigned_userInput, ContactListUncheckedCreateWithoutAssigned_userInput> | ContactListCreateWithoutAssigned_userInput[] | ContactListUncheckedCreateWithoutAssigned_userInput[]
+    connectOrCreate?: ContactListCreateOrConnectWithoutAssigned_userInput | ContactListCreateOrConnectWithoutAssigned_userInput[]
+    createMany?: ContactListCreateManyAssigned_userInputEnvelope
+    connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -134647,6 +134766,20 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type ContactListUpdateManyWithoutAssigned_userNestedInput = {
+    create?: XOR<ContactListCreateWithoutAssigned_userInput, ContactListUncheckedCreateWithoutAssigned_userInput> | ContactListCreateWithoutAssigned_userInput[] | ContactListUncheckedCreateWithoutAssigned_userInput[]
+    connectOrCreate?: ContactListCreateOrConnectWithoutAssigned_userInput | ContactListCreateOrConnectWithoutAssigned_userInput[]
+    upsert?: ContactListUpsertWithWhereUniqueWithoutAssigned_userInput | ContactListUpsertWithWhereUniqueWithoutAssigned_userInput[]
+    createMany?: ContactListCreateManyAssigned_userInputEnvelope
+    set?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    disconnect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    delete?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    update?: ContactListUpdateWithWhereUniqueWithoutAssigned_userInput | ContactListUpdateWithWhereUniqueWithoutAssigned_userInput[]
+    updateMany?: ContactListUpdateManyWithWhereWithoutAssigned_userInput | ContactListUpdateManyWithWhereWithoutAssigned_userInput[]
+    deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -135003,6 +135136,20 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput = {
+    create?: XOR<ContactListCreateWithoutAssigned_userInput, ContactListUncheckedCreateWithoutAssigned_userInput> | ContactListCreateWithoutAssigned_userInput[] | ContactListUncheckedCreateWithoutAssigned_userInput[]
+    connectOrCreate?: ContactListCreateOrConnectWithoutAssigned_userInput | ContactListCreateOrConnectWithoutAssigned_userInput[]
+    upsert?: ContactListUpsertWithWhereUniqueWithoutAssigned_userInput | ContactListUpsertWithWhereUniqueWithoutAssigned_userInput[]
+    createMany?: ContactListCreateManyAssigned_userInputEnvelope
+    set?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    disconnect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    delete?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+    update?: ContactListUpdateWithWhereUniqueWithoutAssigned_userInput | ContactListUpdateWithWhereUniqueWithoutAssigned_userInput[]
+    updateMany?: ContactListUpdateManyWithWhereWithoutAssigned_userInput | ContactListUpdateManyWithWhereWithoutAssigned_userInput[]
+    deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -138333,6 +138480,12 @@ export namespace Prisma {
     connect?: OrganisationWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutContact_lists_assignedInput = {
+    create?: XOR<UserCreateWithoutContact_lists_assignedInput, UserUncheckedCreateWithoutContact_lists_assignedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutContact_lists_assignedInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type ContactListCreateNestedOneWithoutChildrenInput = {
     create?: XOR<ContactListCreateWithoutChildrenInput, ContactListUncheckedCreateWithoutChildrenInput>
     connectOrCreate?: ContactListCreateOrConnectWithoutChildrenInput
@@ -138415,6 +138568,16 @@ export namespace Prisma {
     upsert?: OrganisationUpsertWithoutContact_listsInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutContact_listsInput, OrganisationUpdateWithoutContact_listsInput>, OrganisationUncheckedUpdateWithoutContact_listsInput>
+  }
+
+  export type UserUpdateOneWithoutContact_lists_assignedNestedInput = {
+    create?: XOR<UserCreateWithoutContact_lists_assignedInput, UserUncheckedCreateWithoutContact_lists_assignedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutContact_lists_assignedInput
+    upsert?: UserUpsertWithoutContact_lists_assignedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutContact_lists_assignedInput, UserUpdateWithoutContact_lists_assignedInput>, UserUncheckedUpdateWithoutContact_lists_assignedInput>
   }
 
   export type ContactListUpdateOneWithoutChildrenNestedInput = {
@@ -145439,6 +145602,47 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ContactListCreateWithoutAssigned_userInput = {
+    uuid?: string
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    parent?: ContactListCreateNestedOneWithoutChildrenInput
+    children?: ContactListCreateNestedManyWithoutParentInput
+    members?: ContactListMemberCreateNestedManyWithoutListInput
+    audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
+    filters?: FilterCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentCreateNestedManyWithoutListInput
+  }
+
+  export type ContactListUncheckedCreateWithoutAssigned_userInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    parent_list_uuid?: string | null
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    children?: ContactListUncheckedCreateNestedManyWithoutParentInput
+    members?: ContactListMemberUncheckedCreateNestedManyWithoutListInput
+    audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutContactListInput
+    filters?: FilterUncheckedCreateNestedManyWithoutContactListInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutListInput
+  }
+
+  export type ContactListCreateOrConnectWithoutAssigned_userInput = {
+    where: ContactListWhereUniqueInput
+    create: XOR<ContactListCreateWithoutAssigned_userInput, ContactListUncheckedCreateWithoutAssigned_userInput>
+  }
+
+  export type ContactListCreateManyAssigned_userInputEnvelope = {
+    data: ContactListCreateManyAssigned_userInput | ContactListCreateManyAssigned_userInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -146337,6 +146541,37 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"Notification"> | Date | string
   }
 
+  export type ContactListUpsertWithWhereUniqueWithoutAssigned_userInput = {
+    where: ContactListWhereUniqueInput
+    update: XOR<ContactListUpdateWithoutAssigned_userInput, ContactListUncheckedUpdateWithoutAssigned_userInput>
+    create: XOR<ContactListCreateWithoutAssigned_userInput, ContactListUncheckedCreateWithoutAssigned_userInput>
+  }
+
+  export type ContactListUpdateWithWhereUniqueWithoutAssigned_userInput = {
+    where: ContactListWhereUniqueInput
+    data: XOR<ContactListUpdateWithoutAssigned_userInput, ContactListUncheckedUpdateWithoutAssigned_userInput>
+  }
+
+  export type ContactListUpdateManyWithWhereWithoutAssigned_userInput = {
+    where: ContactListScalarWhereInput
+    data: XOR<ContactListUpdateManyMutationInput, ContactListUncheckedUpdateManyWithoutAssigned_userInput>
+  }
+
+  export type ContactListScalarWhereInput = {
+    AND?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
+    OR?: ContactListScalarWhereInput[]
+    NOT?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
+    id?: IntFilter<"ContactList"> | number
+    uuid?: StringFilter<"ContactList"> | string
+    organisation_uuid?: StringFilter<"ContactList"> | string
+    parent_list_uuid?: StringNullableFilter<"ContactList"> | string | null
+    assigned_user_uuid?: StringNullableFilter<"ContactList"> | string | null
+    title?: StringFilter<"ContactList"> | string
+    description?: StringNullableFilter<"ContactList"> | string | null
+    created_at?: DateTimeFilter<"ContactList"> | Date | string
+    updated_at?: DateTimeFilter<"ContactList"> | Date | string
+  }
+
   export type OrganisationMemberCreateWithoutOrganisationInput = {
     uuid?: string
     role?: $Enums.OrganisationRole
@@ -147161,6 +147396,7 @@ export namespace Prisma {
     description?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    assigned_user?: UserCreateNestedOneWithoutContact_lists_assignedInput
     parent?: ContactListCreateNestedOneWithoutChildrenInput
     children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
@@ -147173,6 +147409,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -148948,20 +149185,6 @@ export namespace Prisma {
     data: XOR<ContactListUpdateManyMutationInput, ContactListUncheckedUpdateManyWithoutOrganisationInput>
   }
 
-  export type ContactListScalarWhereInput = {
-    AND?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
-    OR?: ContactListScalarWhereInput[]
-    NOT?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
-    id?: IntFilter<"ContactList"> | number
-    uuid?: StringFilter<"ContactList"> | string
-    organisation_uuid?: StringFilter<"ContactList"> | string
-    parent_list_uuid?: StringNullableFilter<"ContactList"> | string | null
-    title?: StringFilter<"ContactList"> | string
-    description?: StringNullableFilter<"ContactList"> | string | null
-    created_at?: DateTimeFilter<"ContactList"> | Date | string
-    updated_at?: DateTimeFilter<"ContactList"> | Date | string
-  }
-
   export type SavedContactFilterUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: SavedContactFilterWhereUniqueInput
     update: XOR<SavedContactFilterUpdateWithoutOrganisationInput, SavedContactFilterUncheckedUpdateWithoutOrganisationInput>
@@ -149774,6 +149997,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -149810,6 +150034,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -149979,6 +150204,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -150015,6 +150241,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -150162,6 +150389,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -150198,6 +150426,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -150367,6 +150596,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -150403,6 +150633,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutApi_keysInput = {
@@ -150550,6 +150781,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutApi_keys_createdInput = {
@@ -150586,6 +150818,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutApi_keys_createdInput = {
@@ -150755,6 +150988,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApi_keys_createdInput = {
@@ -150791,6 +151025,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -150912,6 +151147,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    assigned_user?: UserCreateNestedOneWithoutContact_lists_assignedInput
     parent?: ContactListCreateNestedOneWithoutChildrenInput
     children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
@@ -150924,6 +151160,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -151343,6 +151580,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    assigned_user?: UserUpdateOneWithoutContact_lists_assignedNestedInput
     parent?: ContactListUpdateOneWithoutChildrenNestedInput
     children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
@@ -151355,6 +151593,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -151774,6 +152013,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutSidebar_favoritesInput = {
@@ -151810,6 +152050,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutSidebar_favoritesInput = {
@@ -151861,6 +152102,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSidebar_favoritesInput = {
@@ -151897,6 +152139,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -155568,6 +155811,84 @@ export namespace Prisma {
     create: XOR<OrganisationCreateWithoutContact_listsInput, OrganisationUncheckedCreateWithoutContact_listsInput>
   }
 
+  export type UserCreateWithoutContact_lists_assignedInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutContact_lists_assignedInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingUncheckedCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutContact_lists_assignedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutContact_lists_assignedInput, UserUncheckedCreateWithoutContact_lists_assignedInput>
+  }
+
   export type ContactListCreateWithoutChildrenInput = {
     uuid?: string
     title: string
@@ -155575,6 +155896,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    assigned_user?: UserCreateNestedOneWithoutContact_lists_assignedInput
     parent?: ContactListCreateNestedOneWithoutChildrenInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
@@ -155587,6 +155909,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -155609,6 +155932,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    assigned_user?: UserCreateNestedOneWithoutContact_lists_assignedInput
     children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
@@ -155620,6 +155944,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     organisation_uuid: string
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -155937,6 +156262,90 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
+  export type UserUpsertWithoutContact_lists_assignedInput = {
+    update: XOR<UserUpdateWithoutContact_lists_assignedInput, UserUncheckedUpdateWithoutContact_lists_assignedInput>
+    create: XOR<UserCreateWithoutContact_lists_assignedInput, UserUncheckedCreateWithoutContact_lists_assignedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutContact_lists_assignedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutContact_lists_assignedInput, UserUncheckedUpdateWithoutContact_lists_assignedInput>
+  }
+
+  export type UserUpdateWithoutContact_lists_assignedInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutContact_lists_assignedInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUncheckedUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type ContactListUpsertWithoutChildrenInput = {
     update: XOR<ContactListUpdateWithoutChildrenInput, ContactListUncheckedUpdateWithoutChildrenInput>
     create: XOR<ContactListCreateWithoutChildrenInput, ContactListUncheckedCreateWithoutChildrenInput>
@@ -155955,6 +156364,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    assigned_user?: UserUpdateOneWithoutContact_lists_assignedNestedInput
     parent?: ContactListUpdateOneWithoutChildrenNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
@@ -155967,6 +156377,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -156064,6 +156475,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    assigned_user?: UserCreateNestedOneWithoutContact_lists_assignedInput
     parent?: ContactListCreateNestedOneWithoutChildrenInput
     children?: ContactListCreateNestedManyWithoutParentInput
     audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutContactListInput
@@ -156076,6 +156488,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -156213,6 +156626,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    assigned_user?: UserUpdateOneWithoutContact_lists_assignedNestedInput
     parent?: ContactListUpdateOneWithoutChildrenNestedInput
     children?: ContactListUpdateManyWithoutParentNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
@@ -156225,6 +156639,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -157746,6 +158161,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -157782,6 +158198,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -158419,6 +158836,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -158455,6 +158873,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput = {
@@ -160705,6 +161124,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    assigned_user?: UserCreateNestedOneWithoutContact_lists_assignedInput
     parent?: ContactListCreateNestedOneWithoutChildrenInput
     children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
@@ -160717,6 +161137,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -161105,6 +161526,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    assigned_user?: UserUpdateOneWithoutContact_lists_assignedNestedInput
     parent?: ContactListUpdateOneWithoutChildrenNestedInput
     children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
@@ -161117,6 +161539,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -161390,6 +161813,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
@@ -161426,6 +161850,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
@@ -161595,6 +162020,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
@@ -161631,6 +162057,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutWebsite_scrape_requestsInput = {
@@ -165125,6 +165552,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput = {
@@ -165161,6 +165589,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput = {
@@ -165330,6 +165759,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput = {
@@ -165366,6 +165796,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -167474,6 +167905,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutReminder_assignmentsInput = {
@@ -167510,6 +167942,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutReminder_assignmentsInput = {
@@ -167609,6 +168042,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReminder_assignmentsInput = {
@@ -167645,6 +168079,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutFormsInput = {
@@ -168278,6 +168713,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -168314,6 +168750,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -168534,6 +168971,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -168570,6 +169008,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -168891,6 +169330,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutContact_listsInput
+    assigned_user?: UserCreateNestedOneWithoutContact_lists_assignedInput
     parent?: ContactListCreateNestedOneWithoutChildrenInput
     children?: ContactListCreateNestedManyWithoutParentInput
     members?: ContactListMemberCreateNestedManyWithoutListInput
@@ -168903,6 +169343,7 @@ export namespace Prisma {
     uuid?: string
     organisation_uuid: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -169206,6 +169647,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    assigned_user?: UserUpdateOneWithoutContact_lists_assignedNestedInput
     parent?: ContactListUpdateOneWithoutChildrenNestedInput
     children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
@@ -169218,6 +169660,7 @@ export namespace Prisma {
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -169937,6 +170380,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -169973,6 +170417,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -170175,6 +170620,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -170211,6 +170657,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -171858,6 +172305,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -171894,6 +172342,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -172093,6 +172542,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -172129,6 +172579,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -172312,6 +172763,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -172348,6 +172800,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -172517,6 +172970,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -172553,6 +173007,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -172700,6 +173155,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -172736,6 +173192,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -172905,6 +173362,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -172941,6 +173399,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutOauth_connectionsInput = {
@@ -173088,6 +173547,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutOauth_connections_grantedInput = {
@@ -173124,6 +173584,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutOauth_connections_grantedInput = {
@@ -173293,6 +173754,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOauth_connections_grantedInput = {
@@ -173329,6 +173791,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutMcp_tool_invocation_logsInput = {
@@ -174043,6 +174506,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutAvailability_schedulesInput = {
@@ -174079,6 +174543,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutAvailability_schedulesInput = {
@@ -174277,6 +174742,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAvailability_schedulesInput = {
@@ -174313,6 +174779,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type AvailabilityOverrideUpsertWithWhereUniqueWithoutScheduleInput = {
@@ -174548,6 +175015,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBooking_blocksInput = {
@@ -174584,6 +175052,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBooking_blocksInput = {
@@ -174624,6 +175093,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBooking_blocks_createdInput = {
@@ -174660,6 +175130,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBooking_blocks_createdInput = {
@@ -174829,6 +175300,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_blocksInput = {
@@ -174865,6 +175337,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUpsertWithoutBooking_blocks_createdInput = {
@@ -174911,6 +175384,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_blocks_createdInput = {
@@ -174947,6 +175421,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_pagesInput = {
@@ -175094,6 +175569,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBooking_pages_createdInput = {
@@ -175130,6 +175606,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBooking_pages_createdInput = {
@@ -175758,6 +176235,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_pages_createdInput = {
@@ -175794,6 +176272,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type MessageTemplateUpsertWithoutBooking_pages_confirmationInput = {
@@ -176267,6 +176746,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBooking_page_membershipsInput = {
@@ -176303,6 +176783,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBooking_page_membershipsInput = {
@@ -176502,6 +176983,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_page_membershipsInput = {
@@ -176538,6 +177020,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_linksInput = {
@@ -176931,6 +177414,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBooking_links_createdInput = {
@@ -176967,6 +177451,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBooking_links_createdInput = {
@@ -177489,6 +177974,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_links_createdInput = {
@@ -177525,6 +178011,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type BookingUpsertWithWhereUniqueWithoutBooking_linkInput = {
@@ -177972,6 +178459,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBookings_assignedInput = {
@@ -178008,6 +178496,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBookings_assignedInput = {
@@ -178048,6 +178537,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBookings_createdInput = {
@@ -178084,6 +178574,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBookings_createdInput = {
@@ -178705,6 +179196,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookings_assignedInput = {
@@ -178741,6 +179233,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUpsertWithoutBookings_createdInput = {
@@ -178787,6 +179280,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookings_createdInput = {
@@ -178823,6 +179317,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type CalendarConnectionUpsertWithoutBookingsInput = {
@@ -179204,6 +179699,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutBooking_eventsInput = {
@@ -179240,6 +179736,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutBooking_eventsInput = {
@@ -179505,6 +180002,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_eventsInput = {
@@ -179541,6 +180039,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type BookingCreateWithoutNotificationsInput = {
@@ -179874,6 +180373,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutCalendar_connectionsInput = {
@@ -179910,6 +180410,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutCalendar_connectionsInput = {
@@ -180174,6 +180675,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCalendar_connectionsInput = {
@@ -180210,6 +180712,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type BookingUpsertWithWhereUniqueWithoutCalendar_connectionInput = {
@@ -180373,6 +180876,7 @@ export namespace Prisma {
     booking_events?: BookingEventCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -180409,6 +180913,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -180578,6 +181083,7 @@ export namespace Prisma {
     booking_events?: BookingEventUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -180614,6 +181120,7 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -181073,6 +181580,17 @@ export namespace Prisma {
     data?: NullableJsonNullValueInput | InputJsonValue
     read_at?: Date | string | null
     created_at?: Date | string
+  }
+
+  export type ContactListCreateManyAssigned_userInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    parent_list_uuid?: string | null
+    title: string
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type OrganisationMemberUpdateWithoutUserInput = {
@@ -182461,6 +182979,48 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ContactListUpdateWithoutAssigned_userInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    parent?: ContactListUpdateOneWithoutChildrenNestedInput
+    children?: ContactListUpdateManyWithoutParentNestedInput
+    members?: ContactListMemberUpdateManyWithoutListNestedInput
+    audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
+    filters?: FilterUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUpdateManyWithoutListNestedInput
+  }
+
+  export type ContactListUncheckedUpdateWithoutAssigned_userInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: ContactListUncheckedUpdateManyWithoutParentNestedInput
+    members?: ContactListMemberUncheckedUpdateManyWithoutListNestedInput
+    audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutContactListNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutContactListNestedInput
+    sequence_enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutListNestedInput
+  }
+
+  export type ContactListUncheckedUpdateManyWithoutAssigned_userInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganisationMemberCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -182762,6 +183322,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     parent_list_uuid?: string | null
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -184217,6 +184778,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    assigned_user?: UserUpdateOneWithoutContact_lists_assignedNestedInput
     parent?: ContactListUpdateOneWithoutChildrenNestedInput
     children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
@@ -184229,6 +184791,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184244,6 +184807,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     parent_list_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -187341,6 +187905,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     organisation_uuid: string
+    assigned_user_uuid?: string | null
     title: string
     description?: string | null
     created_at?: Date | string
@@ -187418,6 +187983,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutContact_listsNestedInput
+    assigned_user?: UserUpdateOneWithoutContact_lists_assignedNestedInput
     children?: ContactListUpdateManyWithoutParentNestedInput
     members?: ContactListMemberUpdateManyWithoutListNestedInput
     audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutContactListNestedInput
@@ -187429,6 +187995,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -187444,6 +188011,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string

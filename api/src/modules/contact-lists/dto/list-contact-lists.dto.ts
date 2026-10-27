@@ -30,6 +30,11 @@ export class ListContactListsDto extends TagFilterQueryDto {
     @IsUUID()
     parent_list_uuid?: string;
 
+    @ApiPropertyOptional({ description: 'Only lists assigned to this member' })
+    @IsOptional()
+    @IsUUID()
+    assigned_user_uuid?: string;
+
     @ApiPropertyOptional({ description: 'When true, only root lists (no parent)' })
     @IsOptional()
     @QueryBooleanTransform
