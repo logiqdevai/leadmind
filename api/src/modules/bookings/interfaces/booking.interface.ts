@@ -23,6 +23,11 @@ export interface CalendarSyncJobData {
     notify_confirmation_after?: boolean;
 }
 
+/** Inbound pull: one connection (from a Google push) or, when empty, all of them plus channel renewal. */
+export interface CalendarPullJobData {
+    connection_uuid?: string;
+}
+
 export interface BookingNotificationJobData {
     booking_uuid: string;
     kind: 'CONFIRMATION' | 'REMINDER' | 'CANCELLATION' | 'RESCHEDULE';

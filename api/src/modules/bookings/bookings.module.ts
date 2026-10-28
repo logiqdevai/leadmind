@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { PrismaModule } from '@/core/databases/prisma/prisma.module';
 import { BOOKING_CALENDAR_SYNC_QUEUE, BOOKING_NOTIFICATION_QUEUE } from '@/core/queues/queues.constants';
@@ -16,6 +16,7 @@ import { BookingPagesController } from './controllers/booking-pages.controller';
 import { AvailabilityController } from './controllers/availability.controller';
 import { CalendarConnectionsController } from './controllers/calendar-connections.controller';
 import { BookingInvitationsController } from './controllers/booking-invitations.controller';
+import { CalendarWebhookController } from './controllers/calendar-webhook.controller';
 import { PublicBookingController } from './controllers/public-booking.controller';
 import { AvailabilityService } from './services/availability.service';
 import { BookingPagesService } from './services/booking-pages.service';
@@ -24,6 +25,7 @@ import { BookingInvitationsService } from './services/booking-invitations.servic
 import { BookingEventsService } from './services/booking-events.service';
 import { BookingNotificationsService } from './services/booking-notifications.service';
 import { BookingCalendarSyncService } from './services/booking-calendar-sync.service';
+import { BookingCalendarInboundService } from './services/booking-calendar-inbound.service';
 import { BookingTeamReminderService } from './services/booking-team-reminder.service';
 import { CalendarConnectionsService } from './services/calendar-connections.service';
 import { PublicBookingService } from './services/public-booking.service';
@@ -47,6 +49,7 @@ import { PublicBookingService } from './services/public-booking.service';
         CalendarConnectionsController,
         BookingInvitationsController,
         PublicBookingController,
+        CalendarWebhookController,
     ],
     providers: [
         BookingsService,
@@ -56,12 +59,19 @@ import { PublicBookingService } from './services/public-booking.service';
         BookingEventsService,
         BookingNotificationsService,
         BookingCalendarSyncService,
+        BookingCalendarInboundService,
         BookingTeamReminderService,
         CalendarConnectionsService,
         BookingInvitationsService,
         PublicBookingService,
         RateLimitGuard,
     ],
-    exports: [BookingsService, BookingNotificationsService, BookingInvitationsService, BookingCalendarSyncService],
+    exports: [BookingsService, BookingNotificationsService, BookingInvitationsService, BookingCalendarSyncService, BookingCalendarInboundService],
 })
-export class BookingsModule {}
+export class BookingsModule implements OnModuleInit {
+    constructor(private readonly inbound: BookingCalendarInboundService) {}
+
+    async onModuleInit() {
+        await this.inbound.schedule();
+    }
+}

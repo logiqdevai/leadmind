@@ -110700,6 +110700,11 @@ export namespace Prisma {
     check_conflicts: boolean | null
     last_error: string | null
     connected_at: Date | null
+    sync_token: string | null
+    watch_channel_id: string | null
+    watch_resource_id: string | null
+    watch_token: string | null
+    watch_expires_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -110719,6 +110724,11 @@ export namespace Prisma {
     check_conflicts: boolean | null
     last_error: string | null
     connected_at: Date | null
+    sync_token: string | null
+    watch_channel_id: string | null
+    watch_resource_id: string | null
+    watch_token: string | null
+    watch_expires_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -110738,6 +110748,11 @@ export namespace Prisma {
     check_conflicts: number
     last_error: number
     connected_at: number
+    sync_token: number
+    watch_channel_id: number
+    watch_resource_id: number
+    watch_token: number
+    watch_expires_at: number
     created_at: number
     updated_at: number
     _all: number
@@ -110767,6 +110782,11 @@ export namespace Prisma {
     check_conflicts?: true
     last_error?: true
     connected_at?: true
+    sync_token?: true
+    watch_channel_id?: true
+    watch_resource_id?: true
+    watch_token?: true
+    watch_expires_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -110786,6 +110806,11 @@ export namespace Prisma {
     check_conflicts?: true
     last_error?: true
     connected_at?: true
+    sync_token?: true
+    watch_channel_id?: true
+    watch_resource_id?: true
+    watch_token?: true
+    watch_expires_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -110805,6 +110830,11 @@ export namespace Prisma {
     check_conflicts?: true
     last_error?: true
     connected_at?: true
+    sync_token?: true
+    watch_channel_id?: true
+    watch_resource_id?: true
+    watch_token?: true
+    watch_expires_at?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -110911,6 +110941,11 @@ export namespace Prisma {
     check_conflicts: boolean
     last_error: string | null
     connected_at: Date | null
+    sync_token: string | null
+    watch_channel_id: string | null
+    watch_resource_id: string | null
+    watch_token: string | null
+    watch_expires_at: Date | null
     created_at: Date
     updated_at: Date
     _count: CalendarConnectionCountAggregateOutputType | null
@@ -110949,6 +110984,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: boolean
     connected_at?: boolean
+    sync_token?: boolean
+    watch_channel_id?: boolean
+    watch_resource_id?: boolean
+    watch_token?: boolean
+    watch_expires_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -110972,6 +111012,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: boolean
     connected_at?: boolean
+    sync_token?: boolean
+    watch_channel_id?: boolean
+    watch_resource_id?: boolean
+    watch_token?: boolean
+    watch_expires_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -110993,6 +111038,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: boolean
     connected_at?: boolean
+    sync_token?: boolean
+    watch_channel_id?: boolean
+    watch_resource_id?: boolean
+    watch_token?: boolean
+    watch_expires_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -111014,11 +111064,16 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: boolean
     connected_at?: boolean
+    sync_token?: boolean
+    watch_channel_id?: boolean
+    watch_resource_id?: boolean
+    watch_token?: boolean
+    watch_expires_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type CalendarConnectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "provider" | "composio_connected_account_id" | "pending_connected_account_id" | "status" | "account_email" | "calendar_id" | "calendar_name" | "check_conflicts" | "last_error" | "connected_at" | "created_at" | "updated_at", ExtArgs["result"]["calendarConnection"]>
+  export type CalendarConnectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "provider" | "composio_connected_account_id" | "pending_connected_account_id" | "status" | "account_email" | "calendar_id" | "calendar_name" | "check_conflicts" | "last_error" | "connected_at" | "sync_token" | "watch_channel_id" | "watch_resource_id" | "watch_token" | "watch_expires_at" | "created_at" | "updated_at", ExtArgs["result"]["calendarConnection"]>
   export type CalendarConnectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -111062,6 +111117,17 @@ export namespace Prisma {
       check_conflicts: boolean
       last_error: string | null
       connected_at: Date | null
+      /**
+       * Google incremental-sync cursor: everything changed since it is returned, however long we were offline.
+       */
+      sync_token: string | null
+      /**
+       * Google push-notification channel (events.watch). Google calls our webhook when the calendar changes.
+       */
+      watch_channel_id: string | null
+      watch_resource_id: string | null
+      watch_token: string | null
+      watch_expires_at: Date | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["calendarConnection"]>
@@ -111504,6 +111570,11 @@ export namespace Prisma {
     readonly check_conflicts: FieldRef<"CalendarConnection", 'Boolean'>
     readonly last_error: FieldRef<"CalendarConnection", 'String'>
     readonly connected_at: FieldRef<"CalendarConnection", 'DateTime'>
+    readonly sync_token: FieldRef<"CalendarConnection", 'String'>
+    readonly watch_channel_id: FieldRef<"CalendarConnection", 'String'>
+    readonly watch_resource_id: FieldRef<"CalendarConnection", 'String'>
+    readonly watch_token: FieldRef<"CalendarConnection", 'String'>
+    readonly watch_expires_at: FieldRef<"CalendarConnection", 'DateTime'>
     readonly created_at: FieldRef<"CalendarConnection", 'DateTime'>
     readonly updated_at: FieldRef<"CalendarConnection", 'DateTime'>
   }
@@ -114655,6 +114726,11 @@ export namespace Prisma {
     check_conflicts: 'check_conflicts',
     last_error: 'last_error',
     connected_at: 'connected_at',
+    sync_token: 'sync_token',
+    watch_channel_id: 'watch_channel_id',
+    watch_resource_id: 'watch_resource_id',
+    watch_token: 'watch_token',
+    watch_expires_at: 'watch_expires_at',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -124181,6 +124257,11 @@ export namespace Prisma {
     check_conflicts?: BoolFilter<"CalendarConnection"> | boolean
     last_error?: StringNullableFilter<"CalendarConnection"> | string | null
     connected_at?: DateTimeNullableFilter<"CalendarConnection"> | Date | string | null
+    sync_token?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_channel_id?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_resource_id?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_token?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_expires_at?: DateTimeNullableFilter<"CalendarConnection"> | Date | string | null
     created_at?: DateTimeFilter<"CalendarConnection"> | Date | string
     updated_at?: DateTimeFilter<"CalendarConnection"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -124203,6 +124284,11 @@ export namespace Prisma {
     check_conflicts?: SortOrder
     last_error?: SortOrderInput | SortOrder
     connected_at?: SortOrderInput | SortOrder
+    sync_token?: SortOrderInput | SortOrder
+    watch_channel_id?: SortOrderInput | SortOrder
+    watch_resource_id?: SortOrderInput | SortOrder
+    watch_token?: SortOrderInput | SortOrder
+    watch_expires_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
@@ -124214,6 +124300,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     composio_connected_account_id?: string
+    watch_channel_id?: string
     organisation_uuid_user_uuid_provider?: CalendarConnectionOrganisation_uuidUser_uuidProviderCompoundUniqueInput
     AND?: CalendarConnectionWhereInput | CalendarConnectionWhereInput[]
     OR?: CalendarConnectionWhereInput[]
@@ -124229,12 +124316,16 @@ export namespace Prisma {
     check_conflicts?: BoolFilter<"CalendarConnection"> | boolean
     last_error?: StringNullableFilter<"CalendarConnection"> | string | null
     connected_at?: DateTimeNullableFilter<"CalendarConnection"> | Date | string | null
+    sync_token?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_resource_id?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_token?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_expires_at?: DateTimeNullableFilter<"CalendarConnection"> | Date | string | null
     created_at?: DateTimeFilter<"CalendarConnection"> | Date | string
     updated_at?: DateTimeFilter<"CalendarConnection"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     bookings?: BookingListRelationFilter
-  }, "id" | "uuid" | "composio_connected_account_id" | "organisation_uuid_user_uuid_provider">
+  }, "id" | "uuid" | "composio_connected_account_id" | "watch_channel_id" | "organisation_uuid_user_uuid_provider">
 
   export type CalendarConnectionOrderByWithAggregationInput = {
     id?: SortOrder
@@ -124251,6 +124342,11 @@ export namespace Prisma {
     check_conflicts?: SortOrder
     last_error?: SortOrderInput | SortOrder
     connected_at?: SortOrderInput | SortOrder
+    sync_token?: SortOrderInput | SortOrder
+    watch_channel_id?: SortOrderInput | SortOrder
+    watch_resource_id?: SortOrderInput | SortOrder
+    watch_token?: SortOrderInput | SortOrder
+    watch_expires_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: CalendarConnectionCountOrderByAggregateInput
@@ -124278,6 +124374,11 @@ export namespace Prisma {
     check_conflicts?: BoolWithAggregatesFilter<"CalendarConnection"> | boolean
     last_error?: StringNullableWithAggregatesFilter<"CalendarConnection"> | string | null
     connected_at?: DateTimeNullableWithAggregatesFilter<"CalendarConnection"> | Date | string | null
+    sync_token?: StringNullableWithAggregatesFilter<"CalendarConnection"> | string | null
+    watch_channel_id?: StringNullableWithAggregatesFilter<"CalendarConnection"> | string | null
+    watch_resource_id?: StringNullableWithAggregatesFilter<"CalendarConnection"> | string | null
+    watch_token?: StringNullableWithAggregatesFilter<"CalendarConnection"> | string | null
+    watch_expires_at?: DateTimeNullableWithAggregatesFilter<"CalendarConnection"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"CalendarConnection"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"CalendarConnection"> | Date | string
   }
@@ -133459,6 +133560,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutCalendar_connectionsInput
@@ -133481,6 +133587,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutCalendar_connectionInput
@@ -133498,6 +133609,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutCalendar_connectionsNestedInput
@@ -133520,6 +133636,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutCalendar_connectionNestedInput
@@ -133540,6 +133661,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -133556,6 +133682,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -133575,6 +133706,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -140867,6 +141003,11 @@ export namespace Prisma {
     check_conflicts?: SortOrder
     last_error?: SortOrder
     connected_at?: SortOrder
+    sync_token?: SortOrder
+    watch_channel_id?: SortOrder
+    watch_resource_id?: SortOrder
+    watch_token?: SortOrder
+    watch_expires_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -140890,6 +141031,11 @@ export namespace Prisma {
     check_conflicts?: SortOrder
     last_error?: SortOrder
     connected_at?: SortOrder
+    sync_token?: SortOrder
+    watch_channel_id?: SortOrder
+    watch_resource_id?: SortOrder
+    watch_token?: SortOrder
+    watch_expires_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -140909,6 +141055,11 @@ export namespace Prisma {
     check_conflicts?: SortOrder
     last_error?: SortOrder
     connected_at?: SortOrder
+    sync_token?: SortOrder
+    watch_channel_id?: SortOrder
+    watch_resource_id?: SortOrder
+    watch_token?: SortOrder
+    watch_expires_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -153142,6 +153293,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutCalendar_connectionsInput
@@ -153162,6 +153318,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutCalendar_connectionInput
@@ -154162,6 +154323,11 @@ export namespace Prisma {
     check_conflicts?: BoolFilter<"CalendarConnection"> | boolean
     last_error?: StringNullableFilter<"CalendarConnection"> | string | null
     connected_at?: DateTimeNullableFilter<"CalendarConnection"> | Date | string | null
+    sync_token?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_channel_id?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_resource_id?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_token?: StringNullableFilter<"CalendarConnection"> | string | null
+    watch_expires_at?: DateTimeNullableFilter<"CalendarConnection"> | Date | string | null
     created_at?: DateTimeFilter<"CalendarConnection"> | Date | string
     updated_at?: DateTimeFilter<"CalendarConnection"> | Date | string
   }
@@ -156417,6 +156583,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutCalendar_connectionsInput
@@ -156437,6 +156608,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutCalendar_connectionInput
@@ -188414,6 +188590,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutCalendar_connectionsInput
@@ -188435,6 +188616,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -189187,6 +189373,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutCalendar_connectionsNestedInput
@@ -189208,6 +189399,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -192594,6 +192790,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -194010,6 +194211,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutCalendar_connectionsNestedInput
@@ -194030,6 +194236,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutCalendar_connectionNestedInput
@@ -194049,6 +194260,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -194956,6 +195172,11 @@ export namespace Prisma {
     check_conflicts?: boolean
     last_error?: string | null
     connected_at?: Date | string | null
+    sync_token?: string | null
+    watch_channel_id?: string | null
+    watch_resource_id?: string | null
+    watch_token?: string | null
+    watch_expires_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -197464,6 +197685,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutCalendar_connectionsNestedInput
@@ -197484,6 +197710,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutCalendar_connectionNestedInput
@@ -197503,6 +197734,11 @@ export namespace Prisma {
     check_conflicts?: BoolFieldUpdateOperationsInput | boolean
     last_error?: NullableStringFieldUpdateOperationsInput | string | null
     connected_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sync_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_channel_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_resource_id?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_token?: NullableStringFieldUpdateOperationsInput | string | null
+    watch_expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -6,7 +6,22 @@ import {
     GoogleCalendarEventInput,
     GoogleCalendarEventResult,
     GoogleCalendarListItem,
+    GoogleChangedEvent,
 } from '../interfaces/google-calendar.interface';
+
+interface GoogleEventsPage {
+    items?: {
+        id: string;
+        status?: string;
+        updated?: string;
+        location?: string;
+        start?: { dateTime?: string };
+        end?: { dateTime?: string };
+        attendees?: { email: string; displayName?: string; responseStatus?: string; organizer?: boolean }[];
+    }[];
+    nextPageToken?: string;
+    nextSyncToken?: string;
+}
 
 interface GoogleEvent {
     id: string;
@@ -66,7 +81,7 @@ export class GoogleCalendarService {
                 connected_account_id,
                 endpoint: `/calendars/${encodeURIComponent(calendar_id)}/events`,
                 method: 'POST',
-                query: { conferenceDataVersion: 1, sendUpdates: 'all' },
+                query: { conferenceDataVersion: 1, sendUpdates: input.silent ? 'none' : 'all' },
                 body: { id: event_id, ...body },
             });
             return this.toResult(data);
@@ -88,7 +103,7 @@ export class GoogleCalendarService {
             connected_account_id,
             endpoint: `/calendars/${encodeURIComponent(calendar_id)}/events/${encodeURIComponent(event_id)}`,
             method: 'PATCH',
-            query: { conferenceDataVersion: 1, sendUpdates: 'all' },
+            query: { conferenceDataVersion: 1, sendUpdates: input.silent ? 'none' : 'all' },
             body: { ...this.toGoogleEvent(input, event_id), status: 'confirmed' },
         });
         return this.toResult(data);
@@ -102,6 +117,99 @@ export class GoogleCalendarService {
                 endpoint: `/calendars/${encodeURIComponent(calendar_id)}/events/${encodeURIComponent(event_id)}`,
                 method: 'DELETE',
                 query: { sendUpdates: 'all' },
+            });
+        } catch (error) {
+            if (error instanceof ComposioRequestError && (error.status === 404 || error.status === 410)) return;
+            throw error;
+        }
+    }
+
+    /**
+     * Incremental listing. With a `sync_token` Google returns exactly what changed since the last call, so an
+     * outage never loses edits. Without one (first run, or after the token expired) it lists events from
+     * `since` onwards and hands back a fresh token. `token_expired` means Google answered 410 and the
+     * caller must start over without a token.
+     */
+    async listChangedEvents(
+        connected_account_id: string,
+        calendar_id: string,
+        options: { sync_token?: string | null; since: Date },
+    ): Promise<{ events: GoogleChangedEvent[]; next_sync_token: string | null; token_expired: boolean }> {
+        const events: GoogleChangedEvent[] = [];
+        let pageToken: string | undefined;
+        let nextSyncToken: string | null = null;
+        for (let page = 0; page < 20; page++) {
+            let data: GoogleEventsPage;
+            try {
+                ({ data } = await this.composio.proxy<GoogleEventsPage>({
+                    connected_account_id,
+                    endpoint: `/calendars/${encodeURIComponent(calendar_id)}/events`,
+                    method: 'GET',
+                    query: {
+                        showDeleted: true,
+                        singleEvents: true,
+                        maxResults: 250,
+                        pageToken,
+                        // Google rejects timeMin together with syncToken.
+                        ...(options.sync_token ? { syncToken: options.sync_token } : { timeMin: options.since.toISOString() }),
+                    },
+                }));
+            } catch (error) {
+                if (options.sync_token && error instanceof ComposioRequestError && error.status === 410) {
+                    return { events: [], next_sync_token: null, token_expired: true };
+                }
+                throw error;
+            }
+            for (const item of data.items ?? []) {
+                events.push({
+                    id: item.id,
+                    cancelled: item.status === 'cancelled',
+                    updated: item.updated ? new Date(item.updated) : null,
+                    start: item.start?.dateTime ? new Date(item.start.dateTime) : null,
+                    end: item.end?.dateTime ? new Date(item.end.dateTime) : null,
+                    location: item.location ?? null,
+                    attendees: (item.attendees ?? []).map((a) => ({
+                        email: a.email.toLowerCase(),
+                        display_name: a.displayName ?? null,
+                        response_status: a.responseStatus ?? null,
+                        is_organizer: !!a.organizer,
+                    })),
+                });
+            }
+            pageToken = data.nextPageToken;
+            if (!pageToken) {
+                nextSyncToken = data.nextSyncToken ?? null;
+                break;
+            }
+        }
+        return { events, next_sync_token: nextSyncToken, token_expired: false };
+    }
+
+    /** Asks Google to POST to `address` whenever the calendar changes. Channels expire (max ~7 days) and must be renewed. */
+    async watchEvents(
+        connected_account_id: string,
+        calendar_id: string,
+        channel: { id: string; token: string; address: string },
+    ): Promise<{ resource_id: string; expires_at: Date }> {
+        const { data } = await this.composio.proxy<{ resourceId: string; expiration?: string }>({
+            connected_account_id,
+            endpoint: `/calendars/${encodeURIComponent(calendar_id)}/events/watch`,
+            method: 'POST',
+            body: { id: channel.id, type: 'web_hook', address: channel.address, token: channel.token },
+        });
+        return {
+            resource_id: data.resourceId,
+            expires_at: data.expiration ? new Date(Number(data.expiration)) : new Date(Date.now() + 6 * 86_400_000),
+        };
+    }
+
+    async stopWatch(connected_account_id: string, channel_id: string, resource_id: string): Promise<void> {
+        try {
+            await this.composio.proxy({
+                connected_account_id,
+                endpoint: '/channels/stop',
+                method: 'POST',
+                body: { id: channel_id, resourceId: resource_id },
             });
         } catch (error) {
             if (error instanceof ComposioRequestError && (error.status === 404 || error.status === 410)) return;

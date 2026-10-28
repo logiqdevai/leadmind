@@ -1393,6 +1393,11 @@ exports.Prisma.CalendarConnectionScalarFieldEnum = {
   check_conflicts: 'check_conflicts',
   last_error: 'last_error',
   connected_at: 'connected_at',
+  sync_token: 'sync_token',
+  watch_channel_id: 'watch_channel_id',
+  watch_resource_id: 'watch_resource_id',
+  watch_token: 'watch_token',
+  watch_expires_at: 'watch_expires_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

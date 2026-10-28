@@ -10,6 +10,9 @@ export const ACTIVE_BOOKING_STATUSES: BookingStatus[] = [
 /** Statuses that get a Google Calendar event. Pending bookings wait for internal confirmation. */
 export const CALENDAR_SYNCED_STATUSES: BookingStatus[] = [BookingStatus.CONFIRMED, BookingStatus.RESCHEDULED];
 
+/** Finished meetings keep their Google event (history); it is only updated, never created or removed for them. */
+export const CALENDAR_RETAINED_STATUSES: BookingStatus[] = [BookingStatus.COMPLETED, BookingStatus.NO_SHOW];
+
 /** Largest window one slot query may scan. */
 export const MAX_SLOT_RANGE_DAYS = 62;
 
@@ -17,12 +20,24 @@ export const MAX_SLOT_RANGE_DAYS = 62;
 export const EXTERNAL_BUSY_CACHE_TTL_SECONDS = 60;
 
 export const CALENDAR_SYNC_ATTEMPTS = 5;
+/**
+ * Google pushes changes to our webhook; this poll is only the safety net and the channel-renewal tick.
+ * The first pull of a connection (no sync token yet) looks this far back for already-synced events.
+ */
+export const CALENDAR_PULL_INTERVAL_MS = 5 * 60_000;
+export const CALENDAR_INITIAL_LOOKBACK_MS = 24 * 60 * 60_000;
+/** Push channels last at most about a week; renew them a day early. */
+export const CALENDAR_WATCH_RENEW_BEFORE_MS = 24 * 60 * 60_000;
+/** Google's `updated` stamp trails our own write by a moment; edits closer than this to our last sync are our echo. */
+export const CALENDAR_ECHO_TOLERANCE_MS = 10_000;
 export const NOTIFICATION_SEND_ATTEMPTS = 3;
 
 export const BookingJobNames = {
     SEND: 'send',
     REMINDER: 'reminder',
     SYNC: 'sync',
+    /** Repeatable: pulls changes made in Google Calendar back into bookings. */
+    PULL: 'pull',
     INVITE_REMINDER: 'invite-reminder',
 } as const;
 

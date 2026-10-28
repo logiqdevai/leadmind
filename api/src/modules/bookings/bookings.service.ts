@@ -37,7 +37,7 @@ import { BookingSlotService } from './services/booking-slot.service';
 import { BookingEventActor, BookingEventsService, userActor } from './services/booking-events.service';
 import { BookingNotificationsService } from './services/booking-notifications.service';
 import { BookingTeamReminderService } from './services/booking-team-reminder.service';
-import { BookingCalendarSyncService } from './services/booking-calendar-sync.service';
+import { BookingCalendarSyncService, googleEventIdFor } from './services/booking-calendar-sync.service';
 import { CalendarConnectionsService } from './services/calendar-connections.service';
 import { GoogleCalendarService } from '@/integrations/composio/services/google-calendar.service';
 import { bookingsToCsv } from './utils/booking-csv.util';
@@ -333,6 +333,8 @@ export class BookingsService {
             from: booking.status,
             to: dto.status,
         });
+        // The Google event stays as history but is marked with the outcome.
+        await this.safely(() => this.calendarSync.enqueue({ uuid, updated_at: new Date() }), 'calendar sync');
         // A finished meeting no longer needs its pending reminder.
         await this.teamReminders.syncSafely(uuid, 'status');
         return this.findOne(actor.organisation_uuid, uuid);
@@ -382,13 +384,25 @@ export class BookingsService {
         });
         if (!booking) throw new NotFoundException('Booking not found');
 
+        await this.safely(
+            () => this.notifications.cancelReminders(booking.uuid, booking.start_at, booking.booking_page_uuid),
+            'reminder cancellation',
+        );
+        // Independent of the reminders above: a failure there must never leave the Google event behind.
+        // The event id is deterministic, so it is still found if the sync job never saved it on the booking.
         await this.safely(async () => {
-            await this.notifications.cancelReminders(booking.uuid, booking.start_at, booking.booking_page_uuid);
-            const connection = booking.calendar_connection;
-            if (booking.calendar_event_id && connection?.composio_connected_account_id) {
-                await this.googleCalendar.deleteEvent(connection.composio_connected_account_id, connection.calendar_id, booking.calendar_event_id);
-            }
-        }, 'delete side effects');
+            const connection =
+                booking.calendar_connection ??
+                (booking.assigned_user_uuid
+                    ? await this.calendarConnections.findUsable(booking.organisation_uuid, booking.assigned_user_uuid)
+                    : null);
+            if (!connection?.composio_connected_account_id) return;
+            await this.googleCalendar.deleteEvent(
+                connection.composio_connected_account_id,
+                connection.calendar_id,
+                booking.calendar_event_id ?? googleEventIdFor(booking.uuid),
+            );
+        }, 'calendar event removal');
         if (booking.reminder_uuid) {
             await this.safely(() => this.prisma.reminder.delete({ where: { uuid: booking.reminder_uuid! } }), 'team reminder removal');
         }
@@ -608,11 +622,12 @@ export class BookingsService {
             reason: options.reason,
             by: options.actor.type,
         });
+        // First and on its own: a failure in reminders/emails must not leave the Google event in place.
+        await this.safely(() => this.calendarSync.enqueue(cancelled), 'calendar sync');
         await this.safely(async () => {
             await this.notifications.cancelReminders(booking.uuid, booking.start_at, booking.booking_page_uuid);
             // An unconfirmed request never got a confirmation, so it doesn't get a cancellation either.
             if (options.notify && booking.status !== BookingStatus.PENDING) await this.notifications.enqueue(cancelled, 'CANCELLATION');
-            await this.calendarSync.enqueue(cancelled);
             if (cancelled.contact_uuid) {
                 await this.logContactInteraction(cancelled, InteractionType.BOOKING_CANCELLED, 'Booking cancelled', options.actor);
             }

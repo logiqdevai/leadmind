@@ -15,12 +15,13 @@ import { LogCallModal } from "@/pages/dashboard/pages/contacts/pages/detail/comp
 import { LogEmailModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-email-modal";
 import { LogMeetingModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-meeting-modal";
 import { LogSmsModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-sms-modal";
-import { RemindersTab } from "@/pages/dashboard/pages/contacts/pages/detail/components";
+import { BookingsTab, RemindersTab } from "@/pages/dashboard/pages/contacts/pages/detail/components";
 import { ContactCallInfo } from "./contact-call-info";
 
 const CALL_TABS = [
     { id: "activity", label: "Notes & Activity" },
     { id: "reminders", label: "Reminders" },
+    { id: "bookings", label: "Bookings" },
 ] as const;
 
 const NotesAndActivity: FC<{ contact: Contact }> = ({ contact }) => {
@@ -199,6 +200,8 @@ export const ContactCallView: FC<ContactCallViewProps> = ({ contactUuid }) => {
             <div>
                 {activeTab === "reminders" ? (
                     <RemindersTab contactUuid={contact.uuid} />
+                ) : activeTab === "bookings" ? (
+                    <BookingsTab contact={contact} />
                 ) : (
                     <NotesAndActivity key={contact.uuid} contact={contact} />
                 )}

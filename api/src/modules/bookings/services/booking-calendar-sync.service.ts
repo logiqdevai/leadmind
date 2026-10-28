@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue, UnrecoverableError } from 'bullmq';
-import { BookingEventType, BookingLocationType, CalendarSyncStatus, Prisma } from '@/generated/prisma';
+import { BookingEventType, BookingLocationType, BookingStatus, CalendarSyncStatus, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { BOOKING_CALENDAR_SYNC_QUEUE } from '@/core/queues/queues.constants';
 import { GoogleCalendarService } from '@/integrations/composio/services/google-calendar.service';
@@ -10,7 +10,7 @@ import { ComposioRequestError } from '@/integrations/composio/interfaces/composi
 import { renderPlaceholders } from '@/shared/utils/placeholder-render.util';
 import { CalendarConnectionsService } from './calendar-connections.service';
 import { BookingEventsService, SYSTEM_ACTOR } from './booking-events.service';
-import { BookingJobNames, CALENDAR_SYNC_ATTEMPTS, CALENDAR_SYNCED_STATUSES } from '../constants/booking.constants';
+import { BookingJobNames, CALENDAR_RETAINED_STATUSES, CALENDAR_SYNC_ATTEMPTS, CALENDAR_SYNCED_STATUSES } from '../constants/booking.constants';
 import { DEFAULT_CALENDAR_EVENT_DESCRIPTION, DEFAULT_CALENDAR_EVENT_TITLE } from '../constants/booking-email-templates';
 import { CalendarSyncJobData } from '../interfaces/booking.interface';
 import { buildBookingVars } from '../utils/booking-template-vars.util';
@@ -85,12 +85,22 @@ export class BookingCalendarSyncService {
     }
 
     private async reconcile(booking: SyncBooking) {
-        const shouldHaveEvent = CALENDAR_SYNCED_STATUSES.includes(booking.status);
         const target = booking.assigned_user_uuid
             ? await this.calendarConnections.findUsable(booking.organisation_uuid, booking.assigned_user_uuid)
             : null;
+        // Finished meetings keep the event they already have (marked with the outcome) and never get a new one.
+        const finished = CALENDAR_RETAINED_STATUSES.includes(booking.status);
+        const keepsEvent =
+            finished &&
+            !!booking.calendar_event_id &&
+            !!target &&
+            booking.calendar_connection?.uuid === target.uuid &&
+            booking.calendar_connection.calendar_id === target.calendar_id;
+        if (finished && !keepsEvent) return;
+        const shouldHaveEvent = CALENDAR_SYNCED_STATUSES.includes(booking.status) || keepsEvent;
         const eventId = booking.calendar_event_id ?? googleEventIdFor(booking.uuid);
-        const previous = booking.calendar_connection;
+        // The connection link is cleared if the connection row goes away; fall back to the member's current one.
+        const previous = booking.calendar_connection ?? (!shouldHaveEvent ? target : null);
 
         // Event lives on a calendar it no longer belongs to (reassigned, cancelled, calendar switched).
         const movedAway =
@@ -147,7 +157,7 @@ export class BookingCalendarSyncService {
         const description = renderPlaceholders(page?.calendar_event_description || DEFAULT_CALENDAR_EVENT_DESCRIPTION, vars);
 
         const result = await this.googleCalendar.upsertEvent(target.composio_connected_account_id, target.calendar_id, eventId, {
-            summary: renderPlaceholders(page?.calendar_event_title || DEFAULT_CALENDAR_EVENT_TITLE, vars),
+            summary: this.outcomePrefix(booking.status) + renderPlaceholders(page?.calendar_event_title || DEFAULT_CALENDAR_EVENT_TITLE, vars),
             description,
             start: booking.start_at,
             end: booking.end_at,
@@ -155,6 +165,8 @@ export class BookingCalendarSyncService {
             location: withMeet ? null : booking.location_value,
             attendees: [{ email: booking.invitee_email, display_name: booking.invitee_name }],
             with_meet: withMeet,
+            // Marking a past meeting's outcome shouldn't email the invitee.
+            silent: finished,
         });
 
         const meetMissing = withMeet && !result.meet_url && !booking.meeting_url;
@@ -177,6 +189,12 @@ export class BookingCalendarSyncService {
             meetMissing ? 'Calendar event saved, but no Google Meet link could be generated' : 'Calendar event saved',
             { calendar_id: target.calendar_id, event_id: result.event_id },
         );
+    }
+
+    private outcomePrefix(status: BookingStatus) {
+        if (status === BookingStatus.COMPLETED) return '[Completed] ';
+        if (status === BookingStatus.NO_SHOW) return '[No-show] ';
+        return '';
     }
 
     private async markFailed(booking: SyncBooking, message: string) {

@@ -2742,6 +2742,13 @@ model CalendarConnection {
   check_conflicts               Boolean                  @default(true)
   last_error                    String?                  @db.Text
   connected_at                  DateTime?
+  /// Google incremental-sync cursor: everything changed since it is returned, however long we were offline.
+  sync_token                    String?                  @db.Text
+  /// Google push-notification channel (events.watch). Google calls our webhook when the calendar changes.
+  watch_channel_id              String?                  @unique
+  watch_resource_id             String?
+  watch_token                   String?
+  watch_expires_at              DateTime?
   created_at                    DateTime                 @default(now())
   updated_at                    DateTime                 @updatedAt
 

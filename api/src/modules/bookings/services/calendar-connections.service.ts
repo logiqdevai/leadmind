@@ -133,6 +133,13 @@ export class CalendarConnectionsService {
                 }),
                 last_error: null,
                 connected_at: new Date(),
+                ...(previous !== connected_account_id && {
+                    sync_token: null,
+                    watch_channel_id: null,
+                    watch_resource_id: null,
+                    watch_token: null,
+                    watch_expires_at: null,
+                }),
             },
             select: CONNECTION_SELECT,
         });
@@ -160,6 +167,8 @@ export class CalendarConnectionsService {
             if (!calendar) throw new BadRequestException('That calendar is not writable by this Google account');
             calendar_name = calendar.summary;
         }
+        // The push channel and sync cursor belong to the old calendar.
+        if (dto.calendar_id && dto.calendar_id !== connection.calendar_id) await this.resetWatch(connection);
         return this.prisma.calendarConnection.update({
             where: { uuid },
             data: {
@@ -175,6 +184,7 @@ export class CalendarConnectionsService {
     async disconnect(actor: BookingActor, uuid: string) {
         const connection = await this.findOwnOrAdmin(actor, uuid);
         const ids = [connection.composio_connected_account_id, connection.pending_connected_account_id].filter(Boolean) as string[];
+        await this.resetWatch(connection);
         for (const id of ids) await this.composio.deleteConnectedAccount(id);
         return this.prisma.calendarConnection.update({
             where: { uuid },
@@ -185,6 +195,24 @@ export class CalendarConnectionsService {
                 last_error: null,
             },
             select: CONNECTION_SELECT,
+        });
+    }
+
+    /** Drops the Google push channel and sync cursor (calendar switched or account disconnected). */
+    async resetWatch(connection: {
+        uuid: string;
+        composio_connected_account_id: string | null;
+        watch_channel_id: string | null;
+        watch_resource_id: string | null;
+    }) {
+        if (connection.composio_connected_account_id && connection.watch_channel_id && connection.watch_resource_id) {
+            await this.googleCalendar
+                .stopWatch(connection.composio_connected_account_id, connection.watch_channel_id, connection.watch_resource_id)
+                .catch(() => undefined);
+        }
+        await this.prisma.calendarConnection.update({
+            where: { uuid: connection.uuid },
+            data: { sync_token: null, watch_channel_id: null, watch_resource_id: null, watch_token: null, watch_expires_at: null },
         });
     }
 
