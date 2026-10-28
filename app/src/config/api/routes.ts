@@ -443,6 +443,7 @@ export const ApiRoutes = {
         cancel: (uuid: string) => `/bookings/${uuid}/cancel`,
         status: (uuid: string) => `/bookings/${uuid}/status`,
         assign: (uuid: string) => `/bookings/${uuid}/assign`,
+        remove: (uuid: string) => `/bookings/${uuid}`,
         sync_calendar: (uuid: string) => `/bookings/${uuid}/sync-calendar`,
     },
     booking_pages: {
@@ -468,6 +469,8 @@ export const ApiRoutes = {
         override: (uuid: string) => `/availability/overrides/${uuid}`,
         blocks: "/availability/blocks",
         block: (uuid: string) => `/availability/blocks/${uuid}`,
+        recurring_blocks: "/availability/recurring-blocks",
+        recurring_block: (uuid: string) => `/availability/recurring-blocks/${uuid}`,
     },
     calendar_connections: {
         prefix: "/calendar-connections",
@@ -479,6 +482,12 @@ export const ApiRoutes = {
         disconnect: (uuid: string) => `/calendar-connections/${uuid}`,
     },
     public_bookings: {
+        slug_page: (organisationSlug: string, pageSlug: string) =>
+            `/public/bookings/by-slug/${encodeURIComponent(organisationSlug)}/${encodeURIComponent(pageSlug)}`,
+        slug_slots: (organisationSlug: string, pageSlug: string) =>
+            `/public/bookings/by-slug/${encodeURIComponent(organisationSlug)}/${encodeURIComponent(pageSlug)}/slots`,
+        slug_book: (organisationSlug: string, pageSlug: string) =>
+            `/public/bookings/by-slug/${encodeURIComponent(organisationSlug)}/${encodeURIComponent(pageSlug)}/book`,
         page: (code: string) => `/public/bookings/pages/${encodeURIComponent(code)}`,
         slots: (code: string) => `/public/bookings/pages/${encodeURIComponent(code)}/slots`,
         book: (code: string) => `/public/bookings/pages/${encodeURIComponent(code)}/book`,

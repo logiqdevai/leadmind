@@ -39,6 +39,7 @@ import { BookingNotificationsService } from './services/booking-notifications.se
 import { BookingTeamReminderService } from './services/booking-team-reminder.service';
 import { BookingCalendarSyncService } from './services/booking-calendar-sync.service';
 import { CalendarConnectionsService } from './services/calendar-connections.service';
+import { GoogleCalendarService } from '@/integrations/composio/services/google-calendar.service';
 import { bookingsToCsv } from './utils/booking-csv.util';
 
 export const BOOKING_LIST_INCLUDE = {
@@ -94,6 +95,7 @@ export class BookingsService {
         private readonly gateway: NotificationsGateway,
         private readonly teamReminders: BookingTeamReminderService,
         private readonly inAppNotifications: NotificationsService,
+        private readonly googleCalendar: GoogleCalendarService,
     ) {}
 
     // --- Queries ---
@@ -368,6 +370,29 @@ export class BookingsService {
         this.emit(updated.assigned_user_uuid, 'booking.assigned', updated);
         await this.notifyAssignee(updated, 'ASSIGNED', actor.uuid);
         return this.findOne(actor.organisation_uuid, uuid);
+    }
+
+    /** Permanently removes a booking (admins): its Google event, queued reminders and history go with it. */
+    async remove(actor: BookingActor, uuid: string) {
+        if (!isOrganisationAdmin(actor)) throw new ForbiddenException('Only admins can delete bookings');
+        const booking = await this.prisma.booking.findFirst({
+            where: { uuid, organisation_uuid: actor.organisation_uuid },
+            include: { calendar_connection: true },
+        });
+        if (!booking) throw new NotFoundException('Booking not found');
+
+        await this.safely(async () => {
+            await this.notifications.cancelReminders(booking.uuid, booking.start_at, booking.booking_page_uuid);
+            const connection = booking.calendar_connection;
+            if (booking.calendar_event_id && connection?.composio_connected_account_id) {
+                await this.googleCalendar.deleteEvent(connection.composio_connected_account_id, connection.calendar_id, booking.calendar_event_id);
+            }
+        }, 'delete side effects');
+        if (booking.reminder_uuid) {
+            await this.safely(() => this.prisma.reminder.delete({ where: { uuid: booking.reminder_uuid! } }), 'team reminder removal');
+        }
+        await this.prisma.booking.delete({ where: { uuid } });
+        return { success: true };
     }
 
     /** Manual retry after a failed sync (e.g. once the member reconnected Google). */

@@ -4,6 +4,7 @@ import {
     assignBooking,
     cancelBooking,
     createBooking,
+    deleteBooking,
     exportBookingsCsv,
     getBooking,
     getBookingCalendar,
@@ -75,6 +76,8 @@ export function useBooking(uuid: string | null | undefined) {
         queryKey: bookingQueryKeys.detail(uuid ?? ""),
         queryFn: () => getBooking(uuid!),
         enabled: !!uuid,
+        // The calendar sync runs in a worker; keep polling until it settles so the status never sticks on "Syncing".
+        refetchInterval: (query) => (query.state.data?.calendar_sync_status === "PENDING" ? 2000 : false),
     });
 }
 
@@ -123,6 +126,18 @@ export function useCancelBooking() {
             toast({ title: "Booking cancelled", duration: 2000 });
         },
         onError: errorToast("Could not cancel booking"),
+    });
+}
+
+export function useDeleteBooking() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (uuid: string) => deleteBooking(uuid),
+        onSuccess: () => {
+            invalidateBookingData(qc);
+            toast({ title: "Booking deleted", duration: 2000 });
+        },
+        onError: errorToast("Could not delete booking"),
     });
 }
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Header, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiProduces, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
@@ -112,6 +112,15 @@ export class BookingsController {
     @ApiResponse({ status: 403, description: 'Organisation admin role required' })
     assign(@CurrentUser() actor: BookingActor, @Param('uuid') uuid: string, @Body() dto: AssignBookingDto) {
         return this.bookingsService.assign(actor, uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.BOOKING, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
+    @Delete(':uuid')
+    @ApiOperation({ summary: 'Permanently delete a booking (admins)' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 403, description: 'Organisation admin role required' })
+    remove(@CurrentUser() actor: BookingActor, @Param('uuid') uuid: string) {
+        return this.bookingsService.remove(actor, uuid);
     }
 
     @Post(':uuid/sync-calendar')

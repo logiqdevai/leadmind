@@ -4,12 +4,16 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { BookingActor, isOrganisationAdmin } from '../interfaces/booking.interface';
 import {
     CreateBookingBlockDto,
+    CreateRecurringBlockDto,
     ListBookingBlocksDto,
+    ListRecurringBlocksDto,
+    UpdateBookingBlockDto,
+    UpdateRecurringBlockDto,
     UpsertAvailabilityOverrideDto,
     UpsertAvailabilityScheduleDto,
 } from '../dto/availability.dto';
 import { normalizeTimeRanges, normalizeWeeklyHours } from '../utils/availability.utils';
-import { DEFAULT_WEEKLY_HOURS, isValidTimeZone, WeeklyHours } from '../utils/slot-calculation.util';
+import { DEFAULT_WEEKLY_HOURS, isValidTimeZone, parseTimeToMinutes, WeeklyHours } from '../utils/slot-calculation.util';
 
 /** Working hours, date overrides and blocked periods of team members. */
 @Injectable()
@@ -129,15 +133,103 @@ export class AvailabilityService {
         });
     }
 
+    async updateBlock(actor: BookingActor, block_uuid: string, dto: UpdateBookingBlockDto) {
+        const block = await this.findBlock(actor, block_uuid);
+        const start_at = dto.start_at ? new Date(dto.start_at) : block.start_at;
+        const end_at = dto.end_at ? new Date(dto.end_at) : block.end_at;
+        if (end_at <= start_at) throw new BadRequestException('Block must end after it starts');
+        return this.prisma.bookingBlock.update({
+            where: { uuid: block_uuid },
+            data: { start_at, end_at, ...(dto.reason !== undefined && { reason: dto.reason || null }) },
+        });
+    }
+
     async removeBlock(actor: BookingActor, block_uuid: string) {
+        await this.findBlock(actor, block_uuid);
+        await this.prisma.bookingBlock.delete({ where: { uuid: block_uuid } });
+        return { success: true };
+    }
+
+    // --- Recurring (weekly) blocked time ---
+
+    async listRecurringBlocks(actor: BookingActor, query: ListRecurringBlocksDto) {
+        return this.prisma.bookingRecurringBlock.findMany({
+            where: {
+                organisation_uuid: actor.organisation_uuid,
+                ...(query.user_uuid && { OR: [{ user_uuid: query.user_uuid }, { user_uuid: null }] }),
+            },
+            include: { user: { select: { uuid: true, full_name: true, email: true } } },
+            orderBy: { created_at: 'asc' },
+        });
+    }
+
+    async createRecurringBlock(actor: BookingActor, dto: CreateRecurringBlockDto) {
+        if (!isValidTimeZone(dto.timezone)) throw new BadRequestException(`Unknown timezone "${dto.timezone}"`);
+        this.assertValidWindow(dto.start_time, dto.end_time);
+
+        let user_uuid: string | null = dto.user_uuid ?? actor.uuid;
+        if (dto.organisation_wide) {
+            if (!isOrganisationAdmin(actor)) throw new ForbiddenException('Only admins can block time for everyone');
+            user_uuid = null;
+        } else {
+            await this.assertCanManage(actor, user_uuid);
+        }
+        return this.prisma.bookingRecurringBlock.create({
+            data: {
+                organisation_uuid: actor.organisation_uuid,
+                user_uuid,
+                weekdays: [...new Set(dto.weekdays)].sort(),
+                start_time: dto.start_time,
+                end_time: dto.end_time,
+                timezone: dto.timezone,
+                reason: dto.reason ?? null,
+                created_by_user_uuid: actor.uuid,
+            },
+        });
+    }
+
+    async updateRecurringBlock(actor: BookingActor, uuid: string, dto: UpdateRecurringBlockDto) {
+        const block = await this.findRecurringBlock(actor, uuid);
+        this.assertValidWindow(dto.start_time ?? block.start_time, dto.end_time ?? block.end_time);
+        return this.prisma.bookingRecurringBlock.update({
+            where: { uuid },
+            data: {
+                ...(dto.weekdays && { weekdays: [...new Set(dto.weekdays)].sort() }),
+                ...(dto.start_time && { start_time: dto.start_time }),
+                ...(dto.end_time && { end_time: dto.end_time }),
+                ...(dto.reason !== undefined && { reason: dto.reason || null }),
+            },
+        });
+    }
+
+    async removeRecurringBlock(actor: BookingActor, uuid: string) {
+        await this.findRecurringBlock(actor, uuid);
+        await this.prisma.bookingRecurringBlock.delete({ where: { uuid } });
+        return { success: true };
+    }
+
+    private assertValidWindow(start: string, end: string) {
+        if (parseTimeToMinutes(end) <= parseTimeToMinutes(start)) throw new BadRequestException('The block must end after it starts');
+    }
+
+    private async findBlock(actor: BookingActor, block_uuid: string) {
         const block = await this.prisma.bookingBlock.findFirst({
             where: { uuid: block_uuid, organisation_uuid: actor.organisation_uuid },
         });
         if (!block) throw new NotFoundException('Blocked period not found');
         if (block.user_uuid) await this.assertCanManage(actor, block.user_uuid);
-        else if (!isOrganisationAdmin(actor)) throw new ForbiddenException('Only admins can remove organisation-wide blocks');
-        await this.prisma.bookingBlock.delete({ where: { uuid: block_uuid } });
-        return { success: true };
+        else if (!isOrganisationAdmin(actor)) throw new ForbiddenException('Only admins can change organisation-wide blocks');
+        return block;
+    }
+
+    private async findRecurringBlock(actor: BookingActor, uuid: string) {
+        const block = await this.prisma.bookingRecurringBlock.findFirst({
+            where: { uuid, organisation_uuid: actor.organisation_uuid },
+        });
+        if (!block) throw new NotFoundException('Recurring block not found');
+        if (block.user_uuid) await this.assertCanManage(actor, block.user_uuid);
+        else if (!isOrganisationAdmin(actor)) throw new ForbiddenException('Only admins can change organisation-wide blocks');
+        return block;
     }
 
     /** Members manage their own availability; admins manage anyone's in the organisation. */

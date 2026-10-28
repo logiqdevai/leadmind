@@ -24,32 +24,34 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  memberships               OrganisationMember[]
-  invitations_sent          OrganisationInvitation[] @relation("InvitationInvitedBy")
-  form_completions          FormCompletion[]         @relation("CompletedByUser")
-  outreach_messages_sent    OutreachMessage[]        @relation("OutreachMessageSentBy")
-  activity_logs             ActivityLog[]            @relation("ActivityLogActor")
-  messaging_goals           MessagingGoal[]
-  goal_achievements         GoalAchievement[]
-  goal_personal_bests       GoalPersonalBest[]
-  bulk_jobs_created         BulkJob[]                @relation("BulkJobCreatedBy")
-  openai_batch_jobs_created OpenAiBatchJob[]         @relation("OpenAiBatchJobCreatedBy")
-  sidebar_favorites         SidebarFavorite[]
-  api_keys_created          ApiKey[]                 @relation("ApiKeyCreatedBy")
-  oauth_connections_granted OAuthConnection[]        @relation("OAuthConnectionGrantedBy")
-  availability_schedules    AvailabilitySchedule[]
-  booking_blocks            BookingBlock[]           @relation("BookingBlockMember")
-  booking_blocks_created    BookingBlock[]           @relation("BookingBlockCreatedBy")
-  booking_pages_created     BookingPage[]            @relation("BookingPageCreatedBy")
-  booking_page_memberships  BookingPageMember[]
-  booking_links_created     BookingLink[]            @relation("BookingLinkCreatedBy")
-  bookings_assigned         Booking[]                @relation("BookingAssignee")
-  bookings_created          Booking[]                @relation("BookingCreatedBy")
-  booking_events            BookingEvent[]           @relation("BookingEventActor")
-  calendar_connections      CalendarConnection[]
-  reminder_assignments      ReminderAssignee[]       @relation("ReminderAssignee")
-  notifications             Notification[]
-  contact_lists_assigned    ContactList[]            @relation("ContactListAssignee")
+  memberships                      OrganisationMember[]
+  invitations_sent                 OrganisationInvitation[] @relation("InvitationInvitedBy")
+  form_completions                 FormCompletion[]         @relation("CompletedByUser")
+  outreach_messages_sent           OutreachMessage[]        @relation("OutreachMessageSentBy")
+  activity_logs                    ActivityLog[]            @relation("ActivityLogActor")
+  messaging_goals                  MessagingGoal[]
+  goal_achievements                GoalAchievement[]
+  goal_personal_bests              GoalPersonalBest[]
+  bulk_jobs_created                BulkJob[]                @relation("BulkJobCreatedBy")
+  openai_batch_jobs_created        OpenAiBatchJob[]         @relation("OpenAiBatchJobCreatedBy")
+  sidebar_favorites                SidebarFavorite[]
+  api_keys_created                 ApiKey[]                 @relation("ApiKeyCreatedBy")
+  oauth_connections_granted        OAuthConnection[]        @relation("OAuthConnectionGrantedBy")
+  availability_schedules           AvailabilitySchedule[]
+  booking_blocks                   BookingBlock[]           @relation("BookingBlockMember")
+  booking_blocks_created           BookingBlock[]           @relation("BookingBlockCreatedBy")
+  booking_recurring_blocks         BookingRecurringBlock[]  @relation("BookingRecurringBlockMember")
+  booking_recurring_blocks_created BookingRecurringBlock[]  @relation("BookingRecurringBlockCreatedBy")
+  booking_pages_created            BookingPage[]            @relation("BookingPageCreatedBy")
+  booking_page_memberships         BookingPageMember[]
+  booking_links_created            BookingLink[]            @relation("BookingLinkCreatedBy")
+  bookings_assigned                Booking[]                @relation("BookingAssignee")
+  bookings_created                 Booking[]                @relation("BookingCreatedBy")
+  booking_events                   BookingEvent[]           @relation("BookingEventActor")
+  calendar_connections             CalendarConnection[]
+  reminder_assignments             ReminderAssignee[]       @relation("ReminderAssignee")
+  notifications                    Notification[]
+  contact_lists_assigned           ContactList[]            @relation("ContactListAssignee")
 
   @@index([email])
   @@index([phone])
@@ -105,6 +107,7 @@ model Organisation {
   mcp_tool_invocation_logs  McpToolInvocationLog[]
   availability_schedules    AvailabilitySchedule[]
   booking_blocks            BookingBlock[]
+  booking_recurring_blocks  BookingRecurringBlock[]
   booking_pages             BookingPage[]
   booking_links             BookingLink[]
   bookings                  Booking[]
@@ -2350,6 +2353,33 @@ model BookingBlock {
   @@map("booking_blocks")
 }
 
+/// A weekly-repeating blocked time window (e.g. every weekday 12:00-13:00). Expanded into busy time when slots are computed.
+model BookingRecurringBlock {
+  id                   Int      @id @default(autoincrement())
+  uuid                 String   @unique @default(uuid())
+  organisation_uuid    String
+  /// Null = every member of the organisation.
+  user_uuid            String?
+  /// ISO weekdays: 1 = Monday .. 7 = Sunday.
+  weekdays             Int[]
+  /// "HH:MM" wall-clock times in `timezone` ("24:00" allowed for end).
+  start_time           String
+  end_time             String
+  timezone             String
+  reason               String?
+  created_by_user_uuid String?
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  user         User?        @relation("BookingRecurringBlockMember", fields: [user_uuid], references: [uuid], onDelete: Cascade)
+  created_by   User?        @relation("BookingRecurringBlockCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+
+  @@index([organisation_uuid])
+  @@index([user_uuid])
+  @@map("booking_recurring_blocks")
+}
+
 /// A bookable appointment type (sales call, demo, onboarding...) with its own scheduling, team and notification rules.
 model BookingPage {
   id                   Int     @id @default(autoincrement())
@@ -2419,7 +2449,8 @@ model BookingPage {
   reminder_offsets_minutes     Int[]    @default([1440, 60])
   send_cancellation_email      Boolean  @default(true)
   send_reschedule_email        Boolean  @default(true)
-  notify_assignee              Boolean  @default(true)
+  /// Off by default: the assignee is only emailed when the page opts in.
+  notify_assignee              Boolean  @default(false)
   additional_recipients        String[] @default([])
   include_meeting_link         Boolean  @default(true)
   include_calendar_details     Boolean  @default(true)

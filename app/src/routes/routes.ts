@@ -4,6 +4,7 @@ export const Routes = {
     unsubscribe: "/unsubscribe/:token",
     booking: {
         page: "/book/:code",
+        slug_page: "/book/:organisation/:slug",
         manage: "/book/manage/:token",
         manage_action_query: "action",
     },

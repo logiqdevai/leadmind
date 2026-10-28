@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
@@ -8,7 +8,11 @@ import { AvailabilityService } from '../services/availability.service';
 import { BookingActor } from '../interfaces/booking.interface';
 import {
     CreateBookingBlockDto,
+    CreateRecurringBlockDto,
     ListBookingBlocksDto,
+    ListRecurringBlocksDto,
+    UpdateBookingBlockDto,
+    UpdateRecurringBlockDto,
     UpsertAvailabilityOverrideDto,
     UpsertAvailabilityScheduleDto,
 } from '../dto/availability.dto';
@@ -74,6 +78,45 @@ export class AvailabilityController {
     @ApiResponse({ status: 201 })
     createBlock(@CurrentUser() actor: BookingActor, @Body() dto: CreateBookingBlockDto) {
         return this.availabilityService.createBlock(actor, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.BOOKING_BLOCK, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
+    @Patch('blocks/:uuid')
+    @ApiOperation({ summary: 'Edit a blocked period' })
+    @ApiResponse({ status: 200 })
+    updateBlock(@CurrentUser() actor: BookingActor, @Param('uuid') uuid: string, @Body() dto: UpdateBookingBlockDto) {
+        return this.availabilityService.updateBlock(actor, uuid, dto);
+    }
+
+    @Get('recurring-blocks')
+    @ApiOperation({ summary: 'Weekly repeating blocked time windows' })
+    @ApiResponse({ status: 200 })
+    listRecurringBlocks(@CurrentUser() actor: BookingActor, @Query() query: ListRecurringBlocksDto) {
+        return this.availabilityService.listRecurringBlocks(actor, query);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.BOOKING_BLOCK, action: ActivityAction.CREATED, entityUuidFrom: 'result.uuid' })
+    @Post('recurring-blocks')
+    @ApiOperation({ summary: 'Permanently block a time window on chosen weekdays' })
+    @ApiResponse({ status: 201 })
+    createRecurringBlock(@CurrentUser() actor: BookingActor, @Body() dto: CreateRecurringBlockDto) {
+        return this.availabilityService.createRecurringBlock(actor, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.BOOKING_BLOCK, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })
+    @Patch('recurring-blocks/:uuid')
+    @ApiOperation({ summary: 'Edit a recurring blocked time window' })
+    @ApiResponse({ status: 200 })
+    updateRecurringBlock(@CurrentUser() actor: BookingActor, @Param('uuid') uuid: string, @Body() dto: UpdateRecurringBlockDto) {
+        return this.availabilityService.updateRecurringBlock(actor, uuid, dto);
+    }
+
+    @ActivityLog({ entityType: ActivityEntityType.BOOKING_BLOCK, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })
+    @Delete('recurring-blocks/:uuid')
+    @ApiOperation({ summary: 'Remove a recurring blocked time window' })
+    @ApiResponse({ status: 200 })
+    removeRecurringBlock(@CurrentUser() actor: BookingActor, @Param('uuid') uuid: string) {
+        return this.availabilityService.removeRecurringBlock(actor, uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.BOOKING_BLOCK, action: ActivityAction.DELETED, entityUuidFrom: 'params.uuid' })

@@ -1,5 +1,5 @@
 import { useState, type FC, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Chip, Drawer, Dropdown, Tabs, TextArea } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import {
@@ -7,22 +7,25 @@ import {
     CalendarDays,
     Check,
     ExternalLink,
+    MailPlus,
     MoreHorizontal,
     Pencil,
     RefreshCcw,
+    Trash2,
     UserRoundCheck,
     UserX,
     Video,
     XCircle,
 } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { CopyButton } from "@/components/ui/copy-button";
 import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
-import { cn } from "@/lib/utils";
 import { Routes } from "@/routes/routes";
 import {
     useBooking,
+    useDeleteBooking,
     useSetBookingStatus,
     useSyncBookingCalendar,
     useUpdateBooking,
@@ -75,6 +78,7 @@ const ActionModals = {
     RESCHEDULE: "reschedule",
     CANCEL: "cancel",
     REASSIGN: "reassign",
+    DELETE: "delete",
 } as const;
 type ActionModal = (typeof ActionModals)[keyof typeof ActionModals];
 
@@ -348,6 +352,8 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
     const isAdmin = useOrganisationPermission("org_manage_bookings");
     const { data: booking, isLoading, isError } = useBooking(isOpen ? bookingUuid : null);
     const setStatus = useSetBookingStatus();
+    const deleteBooking = useDeleteBooking();
+    const navigate = useNavigate();
 
     const [tab, setTab] = useState<string>(DrawerTabs.DETAILS);
     const [modal, setModal] = useState<ActionModal | null>(null);
@@ -440,16 +446,15 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
                                     </Button>
                                 ) : null}
                                 <Dropdown>
-                                    <Dropdown.Trigger
-                                        aria-label="More booking actions"
-                                        className={cn(buttonVariants({ size: "sm", variant: "secondary" }))}
-                                    >
-                                        <MoreHorizontal className="size-4" />
-                                        More
+                                    <Dropdown.Trigger>
+                                        <Button size="sm" variant="secondary" aria-label="More booking actions">
+                                            <MoreHorizontal className="size-4" />
+                                            More
+                                        </Button>
                                     </Dropdown.Trigger>
                                     <Dropdown.Popover
                                         placement="top end"
-                                        className="rounded-xl border border-border bg-surface p-1 shadow-xl outline-none"
+                                        className="rounded-xl border border-border bg-surface p-1 shadow-xl outline-none backdrop-blur-none [backdrop-filter:none]"
                                     >
                                         <Dropdown.Menu
                                             className="min-w-[12rem] bg-transparent p-0 outline-none"
@@ -457,12 +462,25 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
                                                 if (key === "edit") setModal(ActionModals.EDIT);
                                                 if (key === "reassign") setModal(ActionModals.REASSIGN);
                                                 if (key === "cancel") setModal(ActionModals.CANCEL);
+                                                if (key === "delete") setModal(ActionModals.DELETE);
+                                                if (key === "recontact") {
+                                                    if (booking.contact_uuid) navigate(contactDetailHref(booking.contact_uuid));
+                                                    else if (booking.invitee_email) window.location.href = `mailto:${booking.invitee_email}`;
+                                                }
                                                 if (key === "completed")
                                                     setStatus.mutate({ uuid: booking.uuid, status: BookingStatuses.COMPLETED });
                                                 if (key === "no_show")
                                                     setStatus.mutate({ uuid: booking.uuid, status: BookingStatuses.NO_SHOW });
                                             }}
                                         >
+                                            {booking.contact_uuid || booking.invitee_email ? (
+                                                <Dropdown.Item id="recontact" textValue="Recontact">
+                                                    <span className="flex items-center gap-2.5">
+                                                        <MailPlus className="size-4 text-muted" />
+                                                        Recontact
+                                                    </span>
+                                                </Dropdown.Item>
+                                            ) : null}
                                             <Dropdown.Item id="edit" textValue="Edit details">
                                                 <span className="flex items-center gap-2.5">
                                                     <Pencil className="size-4 text-muted" />
@@ -501,6 +519,14 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
                                                     </span>
                                                 </Dropdown.Item>
                                             ) : null}
+                                            {isAdmin ? (
+                                                <Dropdown.Item id="delete" variant="danger" textValue="Delete booking">
+                                                    <span className="flex items-center gap-2.5 text-danger">
+                                                        <Trash2 className="size-4" />
+                                                        Delete booking
+                                                    </span>
+                                                </Dropdown.Item>
+                                            ) : null}
                                         </Dropdown.Menu>
                                     </Dropdown.Popover>
                                 </Dropdown>
@@ -527,6 +553,26 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
                         isOpen={modal === ActionModals.CANCEL}
                         onOpenChange={closeModal}
                     />
+                    {isAdmin ? (
+                        <ConfirmDialog
+                            isOpen={modal === ActionModals.DELETE}
+                            onOpenChange={closeModal}
+                            title="Delete this booking permanently?"
+                            description="The booking, its history and its Google Calendar event are removed. No email is sent. To keep a record, cancel it instead."
+                            confirmLabel="Delete"
+                            variant="danger"
+                            isPending={deleteBooking.isPending}
+                            onConfirm={async () => {
+                                try {
+                                    await deleteBooking.mutateAsync(booking.uuid);
+                                    setModal(null);
+                                    onOpenChange(false);
+                                } catch {
+                                    // toast from hook
+                                }
+                            }}
+                        />
+                    ) : null}
                     {isAdmin && modal === ActionModals.REASSIGN ? (
                         <ReassignBookingModal booking={booking} timezone={timezone} isOpen onOpenChange={closeModal} />
                     ) : null}

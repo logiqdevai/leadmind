@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Calendar, DateField, DatePicker, Label } from "@heroui/react";
 import { parseDate, type DateValue } from "@internationalized/date";
 import { cn } from "@/lib/utils";
@@ -34,13 +35,17 @@ export function AppDatePicker({
     maxValue,
     "aria-label": ariaLabel,
 }: AppDatePickerProps) {
+    // Stable identity: a fresh object on every render makes the field discard what the user is typing.
+    const dateValue = useMemo(() => toDateValue(value), [value]);
+    const minDate = useMemo(() => toDateValue(minValue), [minValue]);
+    const maxDate = useMemo(() => toDateValue(maxValue), [maxValue]);
     return (
         <DatePicker
             name={name}
             className={cn("w-52", className)}
-            value={toDateValue(value)}
-            minValue={toDateValue(minValue) ?? undefined}
-            maxValue={toDateValue(maxValue) ?? undefined}
+            value={dateValue}
+            minValue={minDate ?? undefined}
+            maxValue={maxDate ?? undefined}
             isDisabled={isDisabled}
             aria-label={ariaLabel ?? label}
             onChange={(next) => onChange(next ? next.toString() : "")}

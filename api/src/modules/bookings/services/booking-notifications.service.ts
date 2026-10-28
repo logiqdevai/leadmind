@@ -166,7 +166,7 @@ export class BookingNotificationsService {
 
         const recipients: Recipient[] = [];
         if (inviteeEnabled) recipients.push({ email: booking.invitee_email, internal: false });
-        if ((page?.notify_assignee ?? true) && booking.assigned_user?.email) {
+        if ((page?.notify_assignee ?? false) && booking.assigned_user?.email) {
             recipients.push({ email: booking.assigned_user.email, internal: true });
         }
         // Additional (admin) recipients get the important changes, not every reminder.

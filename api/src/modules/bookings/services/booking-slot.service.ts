@@ -20,6 +20,7 @@ import {
     Interval,
     isValidTimeZone,
     MemberAvailability,
+    parseTimeToMinutes,
     seatsLeftForSlot,
     SlotRules,
     TimeRange,
@@ -29,6 +30,31 @@ import {
 type Db = PrismaService | Prisma.TransactionClient;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+
+interface RecurringWindow {
+    weekdays: number[];
+    start_time: string;
+    end_time: string;
+    timezone: string;
+}
+
+/** Concrete busy intervals a weekly window produces between `from` and `to` (wall-clock times in its own timezone). */
+export function expandRecurringBlock(block: RecurringWindow, from: Date, to: Date): Interval[] {
+    const zone = isValidTimeZone(block.timezone) ? block.timezone : 'UTC';
+    const startMinutes = parseTimeToMinutes(block.start_time);
+    const endMinutes = parseTimeToMinutes(block.end_time);
+    const intervals: Interval[] = [];
+    let day = DateTime.fromJSDate(from, { zone }).startOf('day');
+    const last = DateTime.fromJSDate(to, { zone });
+    for (let guard = 0; day <= last && guard < 400; guard += 1, day = day.plus({ days: 1 })) {
+        if (!block.weekdays.includes(day.weekday)) continue;
+        intervals.push({
+            start: day.plus({ minutes: startMinutes }).toJSDate(),
+            end: day.plus({ minutes: endMinutes }).toJSDate(),
+        });
+    }
+    return intervals;
+}
 
 /** Rules for bookings created without a page, or with "ignore availability": only overlap prevention applies. */
 const UNRESTRICTED_RULES = {
@@ -253,7 +279,7 @@ export class BookingSlotService {
         const fromDate = from.toISOString().slice(0, 10);
         const toDate = to.toISOString().slice(0, 10);
 
-        const [organisation, schedules, blocks, bookings] = await Promise.all([
+        const [organisation, schedules, blocks, recurringBlocks, bookings] = await Promise.all([
             db.organisation.findUniqueOrThrow({ where: { uuid: organisation_uuid }, select: { timezone: true } }),
             db.availabilitySchedule.findMany({
                 where: { organisation_uuid, user_uuid: { in: user_uuids } },
@@ -267,6 +293,10 @@ export class BookingSlotService {
                     end_at: { gt: from },
                 },
                 select: { user_uuid: true, start_at: true, end_at: true },
+            }),
+            db.bookingRecurringBlock.findMany({
+                where: { organisation_uuid, OR: [{ user_uuid: { in: user_uuids } }, { user_uuid: null }] },
+                select: { user_uuid: true, weekdays: true, start_time: true, end_time: true, timezone: true },
             }),
             db.booking.findMany({
                 where: {
@@ -310,6 +340,9 @@ export class BookingSlotService {
                     ...blocks
                         .filter((b) => b.user_uuid === null || b.user_uuid === user_uuid)
                         .map((b) => ({ start: b.start_at, end: b.end_at })),
+                    ...recurringBlocks
+                        .filter((b) => b.user_uuid === null || b.user_uuid === user_uuid)
+                        .flatMap((b) => expandRecurringBlock(b, from, to)),
                     ...externalBusy,
                 ],
                 bookings: own

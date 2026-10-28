@@ -7,6 +7,7 @@ import type {
     PublicBookingResult,
     PublicCreateBookingDto,
     PublicManagedBooking,
+    PublicPageRef,
     SlotsByDate,
     SlotsQuery,
 } from "../interfaces/bookings.interfaces";
@@ -20,9 +21,22 @@ const withCause = (error: unknown, fallback: string) =>
         cause: (error as { response?: { data?: unknown } })?.response?.data,
     });
 
-export const getPublicBookingPage = async (code: string): Promise<PublicBookingPage> => {
+const pageRoutes = (ref: PublicPageRef) =>
+    "code" in ref
+        ? {
+              page: ApiRoutes.public_bookings.page(ref.code),
+              slots: ApiRoutes.public_bookings.slots(ref.code),
+              book: ApiRoutes.public_bookings.book(ref.code),
+          }
+        : {
+              page: ApiRoutes.public_bookings.slug_page(ref.organisation, ref.slug),
+              slots: ApiRoutes.public_bookings.slug_slots(ref.organisation, ref.slug),
+              book: ApiRoutes.public_bookings.slug_book(ref.organisation, ref.slug),
+          };
+
+export const getPublicBookingPage = async (ref: PublicPageRef): Promise<PublicBookingPage> => {
     try {
-        const response = await axios.get(publicUrl(ApiRoutes.public_bookings.page(code)));
+        const response = await axios.get(publicUrl(pageRoutes(ref).page));
         return response.data;
     } catch (error) {
         throw withCause(error, "This booking link is not available.");
@@ -30,23 +44,23 @@ export const getPublicBookingPage = async (code: string): Promise<PublicBookingP
 };
 
 export const getPublicBookingSlots = async (
-    code: string,
+    ref: PublicPageRef,
     query: Omit<SlotsQuery, "exclude_booking_uuid">,
 ): Promise<SlotsByDate> => {
     try {
-        const response = await axios.get(publicUrl(ApiRoutes.public_bookings.slots(code)), { params: query });
+        const response = await axios.get(publicUrl(pageRoutes(ref).slots), { params: query });
         return response.data;
     } catch (error) {
         throw withCause(error, "Could not load available times.");
     }
 };
 
-export const createPublicBooking = async (code: string, payload: PublicCreateBookingDto): Promise<PublicBookingResult> => {
+export const createPublicBooking = async (ref: PublicPageRef, payload: PublicCreateBookingDto): Promise<PublicBookingResult> => {
     try {
-        const response = await axios.post(publicUrl(ApiRoutes.public_bookings.book(code)), payload);
+        const response = await axios.post(publicUrl(pageRoutes(ref).book), payload);
         return response.data;
     } catch (error) {
-        throw withCause(error, "Could not complete your booking. Please try again.");
+        throw withCause(error, "Could not complete the booking.");
     }
 };
 

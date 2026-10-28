@@ -27,29 +27,35 @@ export class BookingPagesService {
     async findAll(organisation_uuid: string) {
         const pages = await this.prisma.bookingPage.findMany({
             where: { organisation_uuid },
-            include: {
-                ...PAGE_INCLUDE,
-                links: { where: { contact_uuid: null, is_active: true }, orderBy: { created_at: 'asc' }, take: 1 },
-            },
+            include: PAGE_INCLUDE,
             orderBy: [{ is_default: 'desc' }, { created_at: 'asc' }],
         });
-        return pages.map(({ links, ...page }) => ({
+        const organisation = await this.prisma.organisation.findUniqueOrThrow({
+            where: { uuid: organisation_uuid },
+            select: { slug: true },
+        });
+        return pages.map((page) => ({
             ...page,
-            public_url: links[0] ? this.bookingLinksService.publicUrl(links[0].code) : null,
+            public_url: this.publicUrlFor(organisation.slug, page),
         }));
+    }
+
+    /** The page's own URL (organisation + page slug); only meaningful while the page is active. */
+    private publicUrlFor(organisation_slug: string, page: { slug: string; is_active: boolean }): string | null {
+        return page.is_active ? this.bookingLinksService.publicSlugUrl(organisation_slug, page.slug) : null;
     }
 
     async findOne(organisation_uuid: string, uuid: string) {
         const page = await this.prisma.bookingPage.findFirst({
             where: { uuid, organisation_uuid },
-            include: {
-                ...PAGE_INCLUDE,
-                links: { where: { contact_uuid: null, is_active: true }, orderBy: { created_at: 'asc' }, take: 1 },
-            },
+            include: PAGE_INCLUDE,
         });
         if (!page) throw new NotFoundException('Booking page not found');
-        const { links, ...rest } = page;
-        return { ...rest, public_url: links[0] ? this.bookingLinksService.publicUrl(links[0].code) : null };
+        const organisation = await this.prisma.organisation.findUniqueOrThrow({
+            where: { uuid: organisation_uuid },
+            select: { slug: true },
+        });
+        return { ...page, public_url: this.publicUrlFor(organisation.slug, page) };
     }
 
     async create(actor: BookingActor, dto: CreateBookingPageDto) {

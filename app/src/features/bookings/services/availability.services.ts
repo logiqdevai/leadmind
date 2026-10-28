@@ -8,8 +8,12 @@ import type {
     CalendarConnection,
     CalendarConnectionsResponse,
     CreateBookingBlockDto,
+    CreateRecurringBlockDto,
     GoogleCalendarItem,
     ListBlocksQuery,
+    RecurringBlock,
+    UpdateBookingBlockDto,
+    UpdateRecurringBlockDto,
     UpdateCalendarConnectionDto,
     UpsertOverrideDto,
     UpsertScheduleDto,
@@ -68,6 +72,50 @@ export const createBookingBlock = async (payload: CreateBookingBlockDto): Promis
         return response.data;
     } catch (error) {
         throw new Error(bookingApiErrorMessage(error, "Failed to block this time."), { cause: error });
+    }
+};
+
+export const updateBookingBlock = async (uuid: string, payload: UpdateBookingBlockDto): Promise<BookingBlock> => {
+    try {
+        const response = await axiosInstance.patch(ApiRoutes.availability.block(uuid), payload);
+        return response.data;
+    } catch (error) {
+        throw new Error(bookingApiErrorMessage(error, "Failed to update the blocked time."), { cause: error });
+    }
+};
+
+export const listRecurringBlocks = async (userUuid?: string): Promise<RecurringBlock[]> => {
+    try {
+        const response = await axiosInstance.get(ApiRoutes.availability.recurring_blocks, memberParams(userUuid));
+        return response.data;
+    } catch (error) {
+        throw new Error(bookingApiErrorMessage(error, "Failed to load recurring blocked time."), { cause: error });
+    }
+};
+
+export const createRecurringBlock = async (payload: CreateRecurringBlockDto): Promise<RecurringBlock> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.availability.recurring_blocks, payload);
+        return response.data;
+    } catch (error) {
+        throw new Error(bookingApiErrorMessage(error, "Failed to block this time."), { cause: error });
+    }
+};
+
+export const updateRecurringBlock = async (uuid: string, payload: UpdateRecurringBlockDto): Promise<RecurringBlock> => {
+    try {
+        const response = await axiosInstance.patch(ApiRoutes.availability.recurring_block(uuid), payload);
+        return response.data;
+    } catch (error) {
+        throw new Error(bookingApiErrorMessage(error, "Failed to update the recurring block."), { cause: error });
+    }
+};
+
+export const deleteRecurringBlock = async (uuid: string): Promise<void> => {
+    try {
+        await axiosInstance.delete(ApiRoutes.availability.recurring_block(uuid));
+    } catch (error) {
+        throw new Error(bookingApiErrorMessage(error, "Failed to remove the recurring block."), { cause: error });
     }
 };
 

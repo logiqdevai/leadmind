@@ -1166,6 +1166,21 @@ exports.Prisma.BookingBlockScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.BookingRecurringBlockScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  user_uuid: 'user_uuid',
+  weekdays: 'weekdays',
+  start_time: 'start_time',
+  end_time: 'end_time',
+  timezone: 'timezone',
+  reason: 'reason',
+  created_by_user_uuid: 'created_by_user_uuid',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.BookingPageScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -2015,6 +2030,7 @@ exports.Prisma.ModelName = {
   AvailabilitySchedule: 'AvailabilitySchedule',
   AvailabilityOverride: 'AvailabilityOverride',
   BookingBlock: 'BookingBlock',
+  BookingRecurringBlock: 'BookingRecurringBlock',
   BookingPage: 'BookingPage',
   BookingPageMember: 'BookingPageMember',
   BookingLink: 'BookingLink',

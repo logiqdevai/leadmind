@@ -29,6 +29,18 @@ const LINK_INCLUDE = {
 
 type PublicLink = Prisma.BookingLinkGetPayload<{ include: typeof LINK_INCLUDE }>;
 
+/** A public page is addressed either by a link's short code or, for the general page URL, by organisation and page slug. */
+export type PublicPageRef = { code: string } | { organisation_slug: string; page_slug: string };
+
+/** What a public ref resolves to. Slug refs have no link (and so no contact). */
+interface PublicTarget {
+    page: PublicLink['booking_page'];
+    organisation: PublicLink['organisation'];
+    organisation_uuid: string;
+    link: PublicLink | null;
+    contact: PublicLink['contact'];
+}
+
 const MANAGE_INCLUDE = {
     booking_page: true,
     organisation: { select: { name: true, timezone: true } },
@@ -54,22 +66,21 @@ export class PublicBookingService {
         private readonly events: BookingEventsService,
     ) {}
 
-    async getPage(code: string) {
-        const link = await this.findActiveLink(code);
-        const page = link.booking_page;
+    async getPage(ref: PublicPageRef) {
+        const { page, organisation, link, contact } = await this.resolve(ref);
         const members = page.show_team_member || page.allow_invitee_member_choice
             ? await this.slotService.eligibleMembers(this.prisma, page)
             : [];
 
         return {
-            code: link.code,
-            organisation_name: link.organisation.name,
-            default_timezone: link.organisation.timezone,
+            code: link?.code ?? null,
+            organisation_name: organisation.name,
+            default_timezone: organisation.timezone,
             page: {
                 title: page.title || page.name,
                 description: page.description,
                 intro_text: page.intro_text,
-                brand_name: page.brand_name || link.organisation.name,
+                brand_name: page.brand_name || organisation.name,
                 logo_url: page.logo_url,
                 primary_color: page.primary_color,
                 show_timezone: page.show_timezone,
@@ -87,22 +98,21 @@ export class PublicBookingService {
                 members: page.allow_invitee_member_choice ? members.map((m) => ({ uuid: m.user.uuid, name: displayName(m.user) })) : [],
             },
             // Contact links greet the invitee; only a masked email is revealed to whoever holds the URL.
-            invitee: link.contact ? { name: link.contact.name ?? '', email_hint: maskEmail(link.contact.email) } : null,
+            invitee: contact ? { name: contact.name ?? '', email_hint: maskEmail(contact.email) } : null,
         };
     }
 
-    async getSlots(code: string, query: BookingSlotsQueryDto) {
-        const link = await this.findActiveLink(code);
-        return this.slotsFor(link.booking_page, query, null);
+    async getSlots(ref: PublicPageRef, query: BookingSlotsQueryDto) {
+        const { page } = await this.resolve(ref);
+        return this.slotsFor(page, query, null);
     }
 
-    async book(code: string, dto: PublicCreateBookingDto) {
-        const link = await this.findActiveLink(code);
-        const page = link.booking_page;
+    async book(ref: PublicPageRef, dto: PublicCreateBookingDto) {
+        const { page, organisation, organisation_uuid, link, contact } = await this.resolve(ref);
         const answers = this.validateAnswers(page.questions as unknown as BookingQuestionDto[] | null, dto.answers);
         if (page.require_phone && !dto.phone?.trim()) throw new BadRequestException('A phone number is required');
 
-        const email = dto.email?.trim() || link.contact?.email;
+        const email = dto.email?.trim() || contact?.email;
         if (!email) throw new BadRequestException('An email address is required');
 
         const start = new Date(dto.start_at);
@@ -119,7 +129,7 @@ export class PublicBookingService {
         }
 
         const booking = await this.bookingsService.placeBooking({
-            organisation_uuid: link.organisation_uuid,
+            organisation_uuid,
             page,
             start,
             duration_minutes: duration,
@@ -127,8 +137,8 @@ export class PublicBookingService {
             ignore_availability: false,
             source: BookingSource.PUBLIC,
             status: page.requires_confirmation ? BookingStatus.PENDING : BookingStatus.CONFIRMED,
-            booking_link_uuid: link.uuid,
-            contact_uuid: link.contact_uuid,
+            booking_link_uuid: link?.uuid ?? null,
+            contact_uuid: contact?.uuid ?? null,
             invitee: {
                 name: dto.name.trim(),
                 email,
@@ -143,13 +153,13 @@ export class PublicBookingService {
         });
 
         // Contact creation happens only once the slot is secured, so failed attempts leave no contacts behind.
-        const withContact = await this.attachContact(link, booking, dto);
+        const withContact = await this.attachContact(link, organisation_uuid, booking, dto);
         await this.bookingsService.afterCreate(withContact, { notify: true });
         const assigned_user = withContact.assigned_user_uuid
             ? await this.prisma.user.findUnique({ where: { uuid: withContact.assigned_user_uuid }, select: { full_name: true } })
             : null;
         return {
-            booking: this.publicSummary({ ...withContact, booking_page: page, organisation: link.organisation, assigned_user }),
+            booking: this.publicSummary({ ...withContact, booking_page: page, organisation, assigned_user }),
             manage_url: BookingPublicUrls.manage(this.appUrl(), withContact.manage_token),
             confirmation_message: page.confirmation_message,
             redirect_url: page.redirect_url,
@@ -211,10 +221,15 @@ export class PublicBookingService {
     }
 
     /** Generic links can create (or match, by email) a contact; contact links already point at one. */
-    private async attachContact(link: PublicLink, booking: Booking, dto: PublicCreateBookingDto): Promise<Booking> {
-        if (booking.contact_uuid || !link.auto_create_contact) return booking;
+    private async attachContact(
+        link: PublicLink | null,
+        organisation_uuid: string,
+        booking: Booking,
+        dto: PublicCreateBookingDto,
+    ): Promise<Booking> {
+        if (booking.contact_uuid || !link?.auto_create_contact) return booking;
         try {
-            const contact = await this.contactsService.create(link.organisation_uuid, {
+            const contact = await this.contactsService.create(organisation_uuid, {
                 name: dto.name.trim(),
                 email: booking.invitee_email,
                 ...(dto.phone?.trim() && { phone: dto.phone.trim() }),
@@ -295,12 +310,23 @@ export class PublicBookingService {
         };
     }
 
-    private async findActiveLink(code: string): Promise<PublicLink> {
-        const link = await this.prisma.bookingLink.findUnique({ where: { code }, include: LINK_INCLUDE });
-        if (!link || !link.is_active || !link.booking_page.is_active) {
-            throw new NotFoundException({ message: 'This booking link is not available', code: BookingErrorCodes.LINK_INACTIVE });
+    private async resolve(ref: PublicPageRef): Promise<PublicTarget> {
+        const unavailable = () =>
+            new NotFoundException({ message: 'This booking link is not available', code: BookingErrorCodes.LINK_INACTIVE });
+
+        if ('code' in ref) {
+            const link = await this.prisma.bookingLink.findUnique({ where: { code: ref.code }, include: LINK_INCLUDE });
+            if (!link || !link.is_active || !link.booking_page.is_active) throw unavailable();
+            return { page: link.booking_page, organisation: link.organisation, organisation_uuid: link.organisation_uuid, link, contact: link.contact };
         }
-        return link;
+
+        const page = await this.prisma.bookingPage.findFirst({
+            where: { slug: ref.page_slug, is_active: true, organisation: { slug: ref.organisation_slug } },
+            include: { organisation: { select: { name: true, timezone: true } } },
+        });
+        if (!page) throw unavailable();
+        const { organisation, ...rest } = page;
+        return { page: rest, organisation, organisation_uuid: page.organisation_uuid, link: null, contact: null };
     }
 
     private async findByToken(token: string): Promise<ManagedBooking> {

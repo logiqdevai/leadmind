@@ -14,13 +14,14 @@ import { PublicCancelBookingDto, PublicCreateBookingDto, PublicRescheduleBooking
 export class PublicBookingController {
     constructor(private readonly publicBookingService: PublicBookingService) {}
 
+    // Contact links and older links: addressed by short code.
     @Get('pages/:code')
     @RateLimit(BookingRateLimits.view)
     @ApiOperation({ summary: 'Public booking page content' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 404, description: 'Link inactive or unknown' })
     getPage(@Param('code') code: string) {
-        return this.publicBookingService.getPage(code);
+        return this.publicBookingService.getPage({ code });
     }
 
     @Get('pages/:code/slots')
@@ -28,7 +29,7 @@ export class PublicBookingController {
     @ApiOperation({ summary: 'Available slots grouped by date in the visitor timezone' })
     @ApiResponse({ status: 200 })
     getSlots(@Param('code') code: string, @Query() query: BookingSlotsQueryDto) {
-        return this.publicBookingService.getSlots(code, query);
+        return this.publicBookingService.getSlots({ code }, query);
     }
 
     @Post('pages/:code/book')
@@ -38,7 +39,43 @@ export class PublicBookingController {
     @ApiResponse({ status: 409, description: 'The slot was just taken' })
     @ApiResponse({ status: 429, description: 'Too many attempts' })
     book(@Param('code') code: string, @Body() dto: PublicCreateBookingDto) {
-        return this.publicBookingService.book(code, dto);
+        return this.publicBookingService.book({ code }, dto);
+    }
+
+    // The page's general URL: /book/<organisation-slug>/<page-slug>.
+    @Get('by-slug/:organisation_slug/:page_slug')
+    @RateLimit(BookingRateLimits.view)
+    @ApiOperation({ summary: 'Public booking page content by organisation and page slug' })
+    @ApiResponse({ status: 200 })
+    @ApiResponse({ status: 404, description: 'Page inactive or unknown' })
+    getPageBySlug(@Param('organisation_slug') organisation_slug: string, @Param('page_slug') page_slug: string) {
+        return this.publicBookingService.getPage({ organisation_slug, page_slug });
+    }
+
+    @Get('by-slug/:organisation_slug/:page_slug/slots')
+    @RateLimit(BookingRateLimits.slots)
+    @ApiOperation({ summary: 'Available slots for a page addressed by slug' })
+    @ApiResponse({ status: 200 })
+    getSlotsBySlug(
+        @Param('organisation_slug') organisation_slug: string,
+        @Param('page_slug') page_slug: string,
+        @Query() query: BookingSlotsQueryDto,
+    ) {
+        return this.publicBookingService.getSlots({ organisation_slug, page_slug }, query);
+    }
+
+    @Post('by-slug/:organisation_slug/:page_slug/book')
+    @RateLimit(BookingRateLimits.book)
+    @ApiOperation({ summary: 'Book a slot on a page addressed by slug' })
+    @ApiResponse({ status: 201 })
+    @ApiResponse({ status: 409, description: 'The slot was just taken' })
+    @ApiResponse({ status: 429, description: 'Too many attempts' })
+    bookBySlug(
+        @Param('organisation_slug') organisation_slug: string,
+        @Param('page_slug') page_slug: string,
+        @Body() dto: PublicCreateBookingDto,
+    ) {
+        return this.publicBookingService.book({ organisation_slug, page_slug }, dto);
     }
 
     @Get('manage/:token')

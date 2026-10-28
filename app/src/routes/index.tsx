@@ -614,6 +614,14 @@ export default function AppRoutes() {
             </Lazy>
           }
         />
+        <Route
+          path={Routes.booking.slug_page}
+          element={
+            <Lazy>
+              <PublicBookingPage />
+            </Lazy>
+          }
+        />
       </Route>
 
       <Route

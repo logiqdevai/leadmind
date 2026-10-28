@@ -370,6 +370,11 @@ export type AvailabilityOverride = $Result.DefaultSelection<Prisma.$Availability
  */
 export type BookingBlock = $Result.DefaultSelection<Prisma.$BookingBlockPayload>
 /**
+ * Model BookingRecurringBlock
+ * A weekly-repeating blocked time window (e.g. every weekday 12:00-13:00). Expanded into busy time when slots are computed.
+ */
+export type BookingRecurringBlock = $Result.DefaultSelection<Prisma.$BookingRecurringBlockPayload>
+/**
  * Model BookingPage
  * A bookable appointment type (sales call, demo, onboarding...) with its own scheduling, team and notification rules.
  */
@@ -2263,6 +2268,16 @@ export class PrismaClient<
   get bookingBlock(): Prisma.BookingBlockDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.bookingRecurringBlock`: Exposes CRUD operations for the **BookingRecurringBlock** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BookingRecurringBlocks
+    * const bookingRecurringBlocks = await prisma.bookingRecurringBlock.findMany()
+    * ```
+    */
+  get bookingRecurringBlock(): Prisma.BookingRecurringBlockDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.bookingPage`: Exposes CRUD operations for the **BookingPage** model.
     * Example usage:
     * ```ts
@@ -2844,6 +2859,7 @@ export namespace Prisma {
     AvailabilitySchedule: 'AvailabilitySchedule',
     AvailabilityOverride: 'AvailabilityOverride',
     BookingBlock: 'BookingBlock',
+    BookingRecurringBlock: 'BookingRecurringBlock',
     BookingPage: 'BookingPage',
     BookingPageMember: 'BookingPageMember',
     BookingLink: 'BookingLink',
@@ -2867,7 +2883,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "booking" | "bookingEvent" | "bookingNotification" | "calendarConnection" | "notification"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingRecurringBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "booking" | "bookingEvent" | "bookingNotification" | "calendarConnection" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -7977,6 +7993,80 @@ export namespace Prisma {
           }
         }
       }
+      BookingRecurringBlock: {
+        payload: Prisma.$BookingRecurringBlockPayload<ExtArgs>
+        fields: Prisma.BookingRecurringBlockFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BookingRecurringBlockFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BookingRecurringBlockFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>
+          }
+          findFirst: {
+            args: Prisma.BookingRecurringBlockFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BookingRecurringBlockFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>
+          }
+          findMany: {
+            args: Prisma.BookingRecurringBlockFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>[]
+          }
+          create: {
+            args: Prisma.BookingRecurringBlockCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>
+          }
+          createMany: {
+            args: Prisma.BookingRecurringBlockCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BookingRecurringBlockCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>[]
+          }
+          delete: {
+            args: Prisma.BookingRecurringBlockDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>
+          }
+          update: {
+            args: Prisma.BookingRecurringBlockUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>
+          }
+          deleteMany: {
+            args: Prisma.BookingRecurringBlockDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BookingRecurringBlockUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BookingRecurringBlockUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>[]
+          }
+          upsert: {
+            args: Prisma.BookingRecurringBlockUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingRecurringBlockPayload>
+          }
+          aggregate: {
+            args: Prisma.BookingRecurringBlockAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBookingRecurringBlock>
+          }
+          groupBy: {
+            args: Prisma.BookingRecurringBlockGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BookingRecurringBlockGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BookingRecurringBlockCountArgs<ExtArgs>
+            result: $Utils.Optional<BookingRecurringBlockCountAggregateOutputType> | number
+          }
+        }
+      }
       BookingPage: {
         payload: Prisma.$BookingPagePayload<ExtArgs>
         fields: Prisma.BookingPageFieldRefs
@@ -8746,6 +8836,7 @@ export namespace Prisma {
     availabilitySchedule?: AvailabilityScheduleOmit
     availabilityOverride?: AvailabilityOverrideOmit
     bookingBlock?: BookingBlockOmit
+    bookingRecurringBlock?: BookingRecurringBlockOmit
     bookingPage?: BookingPageOmit
     bookingPageMember?: BookingPageMemberOmit
     bookingLink?: BookingLinkOmit
@@ -8850,6 +8941,8 @@ export namespace Prisma {
     availability_schedules: number
     booking_blocks: number
     booking_blocks_created: number
+    booking_recurring_blocks: number
+    booking_recurring_blocks_created: number
     booking_pages_created: number
     booking_page_memberships: number
     booking_links_created: number
@@ -8879,6 +8972,8 @@ export namespace Prisma {
     availability_schedules?: boolean | UserCountOutputTypeCountAvailability_schedulesArgs
     booking_blocks?: boolean | UserCountOutputTypeCountBooking_blocksArgs
     booking_blocks_created?: boolean | UserCountOutputTypeCountBooking_blocks_createdArgs
+    booking_recurring_blocks?: boolean | UserCountOutputTypeCountBooking_recurring_blocksArgs
+    booking_recurring_blocks_created?: boolean | UserCountOutputTypeCountBooking_recurring_blocks_createdArgs
     booking_pages_created?: boolean | UserCountOutputTypeCountBooking_pages_createdArgs
     booking_page_memberships?: boolean | UserCountOutputTypeCountBooking_page_membershipsArgs
     booking_links_created?: boolean | UserCountOutputTypeCountBooking_links_createdArgs
@@ -9017,6 +9112,20 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountBooking_recurring_blocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingRecurringBlockWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBooking_recurring_blocks_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingRecurringBlockWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountBooking_pages_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingPageWhereInput
   }
@@ -9127,6 +9236,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs: number
     availability_schedules: number
     booking_blocks: number
+    booking_recurring_blocks: number
     booking_pages: number
     booking_links: number
     bookings: number
@@ -9173,6 +9283,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: boolean | OrganisationCountOutputTypeCountMcp_tool_invocation_logsArgs
     availability_schedules?: boolean | OrganisationCountOutputTypeCountAvailability_schedulesArgs
     booking_blocks?: boolean | OrganisationCountOutputTypeCountBooking_blocksArgs
+    booking_recurring_blocks?: boolean | OrganisationCountOutputTypeCountBooking_recurring_blocksArgs
     booking_pages?: boolean | OrganisationCountOutputTypeCountBooking_pagesArgs
     booking_links?: boolean | OrganisationCountOutputTypeCountBooking_linksArgs
     bookings?: boolean | OrganisationCountOutputTypeCountBookingsArgs
@@ -9449,6 +9560,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountBooking_blocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingBlockWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountBooking_recurring_blocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingRecurringBlockWhereInput
   }
 
   /**
@@ -11093,6 +11211,8 @@ export namespace Prisma {
     availability_schedules?: boolean | User$availability_schedulesArgs<ExtArgs>
     booking_blocks?: boolean | User$booking_blocksArgs<ExtArgs>
     booking_blocks_created?: boolean | User$booking_blocks_createdArgs<ExtArgs>
+    booking_recurring_blocks?: boolean | User$booking_recurring_blocksArgs<ExtArgs>
+    booking_recurring_blocks_created?: boolean | User$booking_recurring_blocks_createdArgs<ExtArgs>
     booking_pages_created?: boolean | User$booking_pages_createdArgs<ExtArgs>
     booking_page_memberships?: boolean | User$booking_page_membershipsArgs<ExtArgs>
     booking_links_created?: boolean | User$booking_links_createdArgs<ExtArgs>
@@ -11160,6 +11280,8 @@ export namespace Prisma {
     availability_schedules?: boolean | User$availability_schedulesArgs<ExtArgs>
     booking_blocks?: boolean | User$booking_blocksArgs<ExtArgs>
     booking_blocks_created?: boolean | User$booking_blocks_createdArgs<ExtArgs>
+    booking_recurring_blocks?: boolean | User$booking_recurring_blocksArgs<ExtArgs>
+    booking_recurring_blocks_created?: boolean | User$booking_recurring_blocks_createdArgs<ExtArgs>
     booking_pages_created?: boolean | User$booking_pages_createdArgs<ExtArgs>
     booking_page_memberships?: boolean | User$booking_page_membershipsArgs<ExtArgs>
     booking_links_created?: boolean | User$booking_links_createdArgs<ExtArgs>
@@ -11194,6 +11316,8 @@ export namespace Prisma {
       availability_schedules: Prisma.$AvailabilitySchedulePayload<ExtArgs>[]
       booking_blocks: Prisma.$BookingBlockPayload<ExtArgs>[]
       booking_blocks_created: Prisma.$BookingBlockPayload<ExtArgs>[]
+      booking_recurring_blocks: Prisma.$BookingRecurringBlockPayload<ExtArgs>[]
+      booking_recurring_blocks_created: Prisma.$BookingRecurringBlockPayload<ExtArgs>[]
       booking_pages_created: Prisma.$BookingPagePayload<ExtArgs>[]
       booking_page_memberships: Prisma.$BookingPageMemberPayload<ExtArgs>[]
       booking_links_created: Prisma.$BookingLinkPayload<ExtArgs>[]
@@ -11625,6 +11749,8 @@ export namespace Prisma {
     availability_schedules<T extends User$availability_schedulesArgs<ExtArgs> = {}>(args?: Subset<T, User$availability_schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvailabilitySchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_blocks<T extends User$booking_blocksArgs<ExtArgs> = {}>(args?: Subset<T, User$booking_blocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_blocks_created<T extends User$booking_blocks_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$booking_blocks_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    booking_recurring_blocks<T extends User$booking_recurring_blocksArgs<ExtArgs> = {}>(args?: Subset<T, User$booking_recurring_blocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    booking_recurring_blocks_created<T extends User$booking_recurring_blocks_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$booking_recurring_blocks_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_pages_created<T extends User$booking_pages_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$booking_pages_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_page_memberships<T extends User$booking_page_membershipsArgs<ExtArgs> = {}>(args?: Subset<T, User$booking_page_membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPageMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_links_created<T extends User$booking_links_createdArgs<ExtArgs> = {}>(args?: Subset<T, User$booking_links_createdArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -12445,6 +12571,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.booking_recurring_blocks
+   */
+  export type User$booking_recurring_blocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    where?: BookingRecurringBlockWhereInput
+    orderBy?: BookingRecurringBlockOrderByWithRelationInput | BookingRecurringBlockOrderByWithRelationInput[]
+    cursor?: BookingRecurringBlockWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookingRecurringBlockScalarFieldEnum | BookingRecurringBlockScalarFieldEnum[]
+  }
+
+  /**
+   * User.booking_recurring_blocks_created
+   */
+  export type User$booking_recurring_blocks_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    where?: BookingRecurringBlockWhereInput
+    orderBy?: BookingRecurringBlockOrderByWithRelationInput | BookingRecurringBlockOrderByWithRelationInput[]
+    cursor?: BookingRecurringBlockWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookingRecurringBlockScalarFieldEnum | BookingRecurringBlockScalarFieldEnum[]
+  }
+
+  /**
    * User.booking_pages_created
    */
   export type User$booking_pages_createdArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12970,6 +13144,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: boolean | Organisation$mcp_tool_invocation_logsArgs<ExtArgs>
     availability_schedules?: boolean | Organisation$availability_schedulesArgs<ExtArgs>
     booking_blocks?: boolean | Organisation$booking_blocksArgs<ExtArgs>
+    booking_recurring_blocks?: boolean | Organisation$booking_recurring_blocksArgs<ExtArgs>
     booking_pages?: boolean | Organisation$booking_pagesArgs<ExtArgs>
     booking_links?: boolean | Organisation$booking_linksArgs<ExtArgs>
     bookings?: boolean | Organisation$bookingsArgs<ExtArgs>
@@ -13054,6 +13229,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: boolean | Organisation$mcp_tool_invocation_logsArgs<ExtArgs>
     availability_schedules?: boolean | Organisation$availability_schedulesArgs<ExtArgs>
     booking_blocks?: boolean | Organisation$booking_blocksArgs<ExtArgs>
+    booking_recurring_blocks?: boolean | Organisation$booking_recurring_blocksArgs<ExtArgs>
     booking_pages?: boolean | Organisation$booking_pagesArgs<ExtArgs>
     booking_links?: boolean | Organisation$booking_linksArgs<ExtArgs>
     bookings?: boolean | Organisation$bookingsArgs<ExtArgs>
@@ -13105,6 +13281,7 @@ export namespace Prisma {
       mcp_tool_invocation_logs: Prisma.$McpToolInvocationLogPayload<ExtArgs>[]
       availability_schedules: Prisma.$AvailabilitySchedulePayload<ExtArgs>[]
       booking_blocks: Prisma.$BookingBlockPayload<ExtArgs>[]
+      booking_recurring_blocks: Prisma.$BookingRecurringBlockPayload<ExtArgs>[]
       booking_pages: Prisma.$BookingPagePayload<ExtArgs>[]
       booking_links: Prisma.$BookingLinkPayload<ExtArgs>[]
       bookings: Prisma.$BookingPayload<ExtArgs>[]
@@ -13553,6 +13730,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs<T extends Organisation$mcp_tool_invocation_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mcp_tool_invocation_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     availability_schedules<T extends Organisation$availability_schedulesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$availability_schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AvailabilitySchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_blocks<T extends Organisation$booking_blocksArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_blocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    booking_recurring_blocks<T extends Organisation$booking_recurring_blocksArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_recurring_blocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_pages<T extends Organisation$booking_pagesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_pagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_links<T extends Organisation$booking_linksArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookings<T extends Organisation$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -14870,6 +15048,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BookingBlockScalarFieldEnum | BookingBlockScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.booking_recurring_blocks
+   */
+  export type Organisation$booking_recurring_blocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    where?: BookingRecurringBlockWhereInput
+    orderBy?: BookingRecurringBlockOrderByWithRelationInput | BookingRecurringBlockOrderByWithRelationInput[]
+    cursor?: BookingRecurringBlockWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookingRecurringBlockScalarFieldEnum | BookingRecurringBlockScalarFieldEnum[]
   }
 
   /**
@@ -97565,6 +97767,1252 @@ export namespace Prisma {
 
 
   /**
+   * Model BookingRecurringBlock
+   */
+
+  export type AggregateBookingRecurringBlock = {
+    _count: BookingRecurringBlockCountAggregateOutputType | null
+    _avg: BookingRecurringBlockAvgAggregateOutputType | null
+    _sum: BookingRecurringBlockSumAggregateOutputType | null
+    _min: BookingRecurringBlockMinAggregateOutputType | null
+    _max: BookingRecurringBlockMaxAggregateOutputType | null
+  }
+
+  export type BookingRecurringBlockAvgAggregateOutputType = {
+    id: number | null
+    weekdays: number | null
+  }
+
+  export type BookingRecurringBlockSumAggregateOutputType = {
+    id: number | null
+    weekdays: number[]
+  }
+
+  export type BookingRecurringBlockMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    start_time: string | null
+    end_time: string | null
+    timezone: string | null
+    reason: string | null
+    created_by_user_uuid: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type BookingRecurringBlockMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    user_uuid: string | null
+    start_time: string | null
+    end_time: string | null
+    timezone: string | null
+    reason: string | null
+    created_by_user_uuid: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type BookingRecurringBlockCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    user_uuid: number
+    weekdays: number
+    start_time: number
+    end_time: number
+    timezone: number
+    reason: number
+    created_by_user_uuid: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type BookingRecurringBlockAvgAggregateInputType = {
+    id?: true
+    weekdays?: true
+  }
+
+  export type BookingRecurringBlockSumAggregateInputType = {
+    id?: true
+    weekdays?: true
+  }
+
+  export type BookingRecurringBlockMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    start_time?: true
+    end_time?: true
+    timezone?: true
+    reason?: true
+    created_by_user_uuid?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type BookingRecurringBlockMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    start_time?: true
+    end_time?: true
+    timezone?: true
+    reason?: true
+    created_by_user_uuid?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type BookingRecurringBlockCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    user_uuid?: true
+    weekdays?: true
+    start_time?: true
+    end_time?: true
+    timezone?: true
+    reason?: true
+    created_by_user_uuid?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type BookingRecurringBlockAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookingRecurringBlock to aggregate.
+     */
+    where?: BookingRecurringBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingRecurringBlocks to fetch.
+     */
+    orderBy?: BookingRecurringBlockOrderByWithRelationInput | BookingRecurringBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BookingRecurringBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingRecurringBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingRecurringBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BookingRecurringBlocks
+    **/
+    _count?: true | BookingRecurringBlockCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BookingRecurringBlockAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BookingRecurringBlockSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BookingRecurringBlockMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BookingRecurringBlockMaxAggregateInputType
+  }
+
+  export type GetBookingRecurringBlockAggregateType<T extends BookingRecurringBlockAggregateArgs> = {
+        [P in keyof T & keyof AggregateBookingRecurringBlock]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBookingRecurringBlock[P]>
+      : GetScalarType<T[P], AggregateBookingRecurringBlock[P]>
+  }
+
+
+
+
+  export type BookingRecurringBlockGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingRecurringBlockWhereInput
+    orderBy?: BookingRecurringBlockOrderByWithAggregationInput | BookingRecurringBlockOrderByWithAggregationInput[]
+    by: BookingRecurringBlockScalarFieldEnum[] | BookingRecurringBlockScalarFieldEnum
+    having?: BookingRecurringBlockScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BookingRecurringBlockCountAggregateInputType | true
+    _avg?: BookingRecurringBlockAvgAggregateInputType
+    _sum?: BookingRecurringBlockSumAggregateInputType
+    _min?: BookingRecurringBlockMinAggregateInputType
+    _max?: BookingRecurringBlockMaxAggregateInputType
+  }
+
+  export type BookingRecurringBlockGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    user_uuid: string | null
+    weekdays: number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason: string | null
+    created_by_user_uuid: string | null
+    created_at: Date
+    updated_at: Date
+    _count: BookingRecurringBlockCountAggregateOutputType | null
+    _avg: BookingRecurringBlockAvgAggregateOutputType | null
+    _sum: BookingRecurringBlockSumAggregateOutputType | null
+    _min: BookingRecurringBlockMinAggregateOutputType | null
+    _max: BookingRecurringBlockMaxAggregateOutputType | null
+  }
+
+  type GetBookingRecurringBlockGroupByPayload<T extends BookingRecurringBlockGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BookingRecurringBlockGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BookingRecurringBlockGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BookingRecurringBlockGroupByOutputType[P]>
+            : GetScalarType<T[P], BookingRecurringBlockGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BookingRecurringBlockSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    weekdays?: boolean
+    start_time?: boolean
+    end_time?: boolean
+    timezone?: boolean
+    reason?: boolean
+    created_by_user_uuid?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | BookingRecurringBlock$userArgs<ExtArgs>
+    created_by?: boolean | BookingRecurringBlock$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingRecurringBlock"]>
+
+  export type BookingRecurringBlockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    weekdays?: boolean
+    start_time?: boolean
+    end_time?: boolean
+    timezone?: boolean
+    reason?: boolean
+    created_by_user_uuid?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | BookingRecurringBlock$userArgs<ExtArgs>
+    created_by?: boolean | BookingRecurringBlock$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingRecurringBlock"]>
+
+  export type BookingRecurringBlockSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    weekdays?: boolean
+    start_time?: boolean
+    end_time?: boolean
+    timezone?: boolean
+    reason?: boolean
+    created_by_user_uuid?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | BookingRecurringBlock$userArgs<ExtArgs>
+    created_by?: boolean | BookingRecurringBlock$created_byArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingRecurringBlock"]>
+
+  export type BookingRecurringBlockSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    user_uuid?: boolean
+    weekdays?: boolean
+    start_time?: boolean
+    end_time?: boolean
+    timezone?: boolean
+    reason?: boolean
+    created_by_user_uuid?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type BookingRecurringBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "user_uuid" | "weekdays" | "start_time" | "end_time" | "timezone" | "reason" | "created_by_user_uuid" | "created_at" | "updated_at", ExtArgs["result"]["bookingRecurringBlock"]>
+  export type BookingRecurringBlockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | BookingRecurringBlock$userArgs<ExtArgs>
+    created_by?: boolean | BookingRecurringBlock$created_byArgs<ExtArgs>
+  }
+  export type BookingRecurringBlockIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | BookingRecurringBlock$userArgs<ExtArgs>
+    created_by?: boolean | BookingRecurringBlock$created_byArgs<ExtArgs>
+  }
+  export type BookingRecurringBlockIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | BookingRecurringBlock$userArgs<ExtArgs>
+    created_by?: boolean | BookingRecurringBlock$created_byArgs<ExtArgs>
+  }
+
+  export type $BookingRecurringBlockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BookingRecurringBlock"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
+      created_by: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      /**
+       * Null = every member of the organisation.
+       */
+      user_uuid: string | null
+      /**
+       * ISO weekdays: 1 = Monday .. 7 = Sunday.
+       */
+      weekdays: number[]
+      /**
+       * "HH:MM" wall-clock times in `timezone` ("24:00" allowed for end).
+       */
+      start_time: string
+      end_time: string
+      timezone: string
+      reason: string | null
+      created_by_user_uuid: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["bookingRecurringBlock"]>
+    composites: {}
+  }
+
+  type BookingRecurringBlockGetPayload<S extends boolean | null | undefined | BookingRecurringBlockDefaultArgs> = $Result.GetResult<Prisma.$BookingRecurringBlockPayload, S>
+
+  type BookingRecurringBlockCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BookingRecurringBlockFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BookingRecurringBlockCountAggregateInputType | true
+    }
+
+  export interface BookingRecurringBlockDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BookingRecurringBlock'], meta: { name: 'BookingRecurringBlock' } }
+    /**
+     * Find zero or one BookingRecurringBlock that matches the filter.
+     * @param {BookingRecurringBlockFindUniqueArgs} args - Arguments to find a BookingRecurringBlock
+     * @example
+     * // Get one BookingRecurringBlock
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BookingRecurringBlockFindUniqueArgs>(args: SelectSubset<T, BookingRecurringBlockFindUniqueArgs<ExtArgs>>): Prisma__BookingRecurringBlockClient<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BookingRecurringBlock that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BookingRecurringBlockFindUniqueOrThrowArgs} args - Arguments to find a BookingRecurringBlock
+     * @example
+     * // Get one BookingRecurringBlock
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BookingRecurringBlockFindUniqueOrThrowArgs>(args: SelectSubset<T, BookingRecurringBlockFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BookingRecurringBlockClient<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookingRecurringBlock that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingRecurringBlockFindFirstArgs} args - Arguments to find a BookingRecurringBlock
+     * @example
+     * // Get one BookingRecurringBlock
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BookingRecurringBlockFindFirstArgs>(args?: SelectSubset<T, BookingRecurringBlockFindFirstArgs<ExtArgs>>): Prisma__BookingRecurringBlockClient<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookingRecurringBlock that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingRecurringBlockFindFirstOrThrowArgs} args - Arguments to find a BookingRecurringBlock
+     * @example
+     * // Get one BookingRecurringBlock
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BookingRecurringBlockFindFirstOrThrowArgs>(args?: SelectSubset<T, BookingRecurringBlockFindFirstOrThrowArgs<ExtArgs>>): Prisma__BookingRecurringBlockClient<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BookingRecurringBlocks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingRecurringBlockFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BookingRecurringBlocks
+     * const bookingRecurringBlocks = await prisma.bookingRecurringBlock.findMany()
+     * 
+     * // Get first 10 BookingRecurringBlocks
+     * const bookingRecurringBlocks = await prisma.bookingRecurringBlock.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bookingRecurringBlockWithIdOnly = await prisma.bookingRecurringBlock.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BookingRecurringBlockFindManyArgs>(args?: SelectSubset<T, BookingRecurringBlockFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BookingRecurringBlock.
+     * @param {BookingRecurringBlockCreateArgs} args - Arguments to create a BookingRecurringBlock.
+     * @example
+     * // Create one BookingRecurringBlock
+     * const BookingRecurringBlock = await prisma.bookingRecurringBlock.create({
+     *   data: {
+     *     // ... data to create a BookingRecurringBlock
+     *   }
+     * })
+     * 
+     */
+    create<T extends BookingRecurringBlockCreateArgs>(args: SelectSubset<T, BookingRecurringBlockCreateArgs<ExtArgs>>): Prisma__BookingRecurringBlockClient<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BookingRecurringBlocks.
+     * @param {BookingRecurringBlockCreateManyArgs} args - Arguments to create many BookingRecurringBlocks.
+     * @example
+     * // Create many BookingRecurringBlocks
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BookingRecurringBlockCreateManyArgs>(args?: SelectSubset<T, BookingRecurringBlockCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BookingRecurringBlocks and returns the data saved in the database.
+     * @param {BookingRecurringBlockCreateManyAndReturnArgs} args - Arguments to create many BookingRecurringBlocks.
+     * @example
+     * // Create many BookingRecurringBlocks
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BookingRecurringBlocks and only return the `id`
+     * const bookingRecurringBlockWithIdOnly = await prisma.bookingRecurringBlock.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BookingRecurringBlockCreateManyAndReturnArgs>(args?: SelectSubset<T, BookingRecurringBlockCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BookingRecurringBlock.
+     * @param {BookingRecurringBlockDeleteArgs} args - Arguments to delete one BookingRecurringBlock.
+     * @example
+     * // Delete one BookingRecurringBlock
+     * const BookingRecurringBlock = await prisma.bookingRecurringBlock.delete({
+     *   where: {
+     *     // ... filter to delete one BookingRecurringBlock
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BookingRecurringBlockDeleteArgs>(args: SelectSubset<T, BookingRecurringBlockDeleteArgs<ExtArgs>>): Prisma__BookingRecurringBlockClient<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BookingRecurringBlock.
+     * @param {BookingRecurringBlockUpdateArgs} args - Arguments to update one BookingRecurringBlock.
+     * @example
+     * // Update one BookingRecurringBlock
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BookingRecurringBlockUpdateArgs>(args: SelectSubset<T, BookingRecurringBlockUpdateArgs<ExtArgs>>): Prisma__BookingRecurringBlockClient<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BookingRecurringBlocks.
+     * @param {BookingRecurringBlockDeleteManyArgs} args - Arguments to filter BookingRecurringBlocks to delete.
+     * @example
+     * // Delete a few BookingRecurringBlocks
+     * const { count } = await prisma.bookingRecurringBlock.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BookingRecurringBlockDeleteManyArgs>(args?: SelectSubset<T, BookingRecurringBlockDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookingRecurringBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingRecurringBlockUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BookingRecurringBlocks
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BookingRecurringBlockUpdateManyArgs>(args: SelectSubset<T, BookingRecurringBlockUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookingRecurringBlocks and returns the data updated in the database.
+     * @param {BookingRecurringBlockUpdateManyAndReturnArgs} args - Arguments to update many BookingRecurringBlocks.
+     * @example
+     * // Update many BookingRecurringBlocks
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BookingRecurringBlocks and only return the `id`
+     * const bookingRecurringBlockWithIdOnly = await prisma.bookingRecurringBlock.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BookingRecurringBlockUpdateManyAndReturnArgs>(args: SelectSubset<T, BookingRecurringBlockUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BookingRecurringBlock.
+     * @param {BookingRecurringBlockUpsertArgs} args - Arguments to update or create a BookingRecurringBlock.
+     * @example
+     * // Update or create a BookingRecurringBlock
+     * const bookingRecurringBlock = await prisma.bookingRecurringBlock.upsert({
+     *   create: {
+     *     // ... data to create a BookingRecurringBlock
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BookingRecurringBlock we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BookingRecurringBlockUpsertArgs>(args: SelectSubset<T, BookingRecurringBlockUpsertArgs<ExtArgs>>): Prisma__BookingRecurringBlockClient<$Result.GetResult<Prisma.$BookingRecurringBlockPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BookingRecurringBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingRecurringBlockCountArgs} args - Arguments to filter BookingRecurringBlocks to count.
+     * @example
+     * // Count the number of BookingRecurringBlocks
+     * const count = await prisma.bookingRecurringBlock.count({
+     *   where: {
+     *     // ... the filter for the BookingRecurringBlocks we want to count
+     *   }
+     * })
+    **/
+    count<T extends BookingRecurringBlockCountArgs>(
+      args?: Subset<T, BookingRecurringBlockCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BookingRecurringBlockCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BookingRecurringBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingRecurringBlockAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BookingRecurringBlockAggregateArgs>(args: Subset<T, BookingRecurringBlockAggregateArgs>): Prisma.PrismaPromise<GetBookingRecurringBlockAggregateType<T>>
+
+    /**
+     * Group by BookingRecurringBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingRecurringBlockGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BookingRecurringBlockGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BookingRecurringBlockGroupByArgs['orderBy'] }
+        : { orderBy?: BookingRecurringBlockGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BookingRecurringBlockGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBookingRecurringBlockGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BookingRecurringBlock model
+   */
+  readonly fields: BookingRecurringBlockFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BookingRecurringBlock.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BookingRecurringBlockClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends BookingRecurringBlock$userArgs<ExtArgs> = {}>(args?: Subset<T, BookingRecurringBlock$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    created_by<T extends BookingRecurringBlock$created_byArgs<ExtArgs> = {}>(args?: Subset<T, BookingRecurringBlock$created_byArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BookingRecurringBlock model
+   */
+  interface BookingRecurringBlockFieldRefs {
+    readonly id: FieldRef<"BookingRecurringBlock", 'Int'>
+    readonly uuid: FieldRef<"BookingRecurringBlock", 'String'>
+    readonly organisation_uuid: FieldRef<"BookingRecurringBlock", 'String'>
+    readonly user_uuid: FieldRef<"BookingRecurringBlock", 'String'>
+    readonly weekdays: FieldRef<"BookingRecurringBlock", 'Int[]'>
+    readonly start_time: FieldRef<"BookingRecurringBlock", 'String'>
+    readonly end_time: FieldRef<"BookingRecurringBlock", 'String'>
+    readonly timezone: FieldRef<"BookingRecurringBlock", 'String'>
+    readonly reason: FieldRef<"BookingRecurringBlock", 'String'>
+    readonly created_by_user_uuid: FieldRef<"BookingRecurringBlock", 'String'>
+    readonly created_at: FieldRef<"BookingRecurringBlock", 'DateTime'>
+    readonly updated_at: FieldRef<"BookingRecurringBlock", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BookingRecurringBlock findUnique
+   */
+  export type BookingRecurringBlockFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingRecurringBlock to fetch.
+     */
+    where: BookingRecurringBlockWhereUniqueInput
+  }
+
+  /**
+   * BookingRecurringBlock findUniqueOrThrow
+   */
+  export type BookingRecurringBlockFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingRecurringBlock to fetch.
+     */
+    where: BookingRecurringBlockWhereUniqueInput
+  }
+
+  /**
+   * BookingRecurringBlock findFirst
+   */
+  export type BookingRecurringBlockFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingRecurringBlock to fetch.
+     */
+    where?: BookingRecurringBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingRecurringBlocks to fetch.
+     */
+    orderBy?: BookingRecurringBlockOrderByWithRelationInput | BookingRecurringBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookingRecurringBlocks.
+     */
+    cursor?: BookingRecurringBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingRecurringBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingRecurringBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookingRecurringBlocks.
+     */
+    distinct?: BookingRecurringBlockScalarFieldEnum | BookingRecurringBlockScalarFieldEnum[]
+  }
+
+  /**
+   * BookingRecurringBlock findFirstOrThrow
+   */
+  export type BookingRecurringBlockFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingRecurringBlock to fetch.
+     */
+    where?: BookingRecurringBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingRecurringBlocks to fetch.
+     */
+    orderBy?: BookingRecurringBlockOrderByWithRelationInput | BookingRecurringBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookingRecurringBlocks.
+     */
+    cursor?: BookingRecurringBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingRecurringBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingRecurringBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookingRecurringBlocks.
+     */
+    distinct?: BookingRecurringBlockScalarFieldEnum | BookingRecurringBlockScalarFieldEnum[]
+  }
+
+  /**
+   * BookingRecurringBlock findMany
+   */
+  export type BookingRecurringBlockFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingRecurringBlocks to fetch.
+     */
+    where?: BookingRecurringBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingRecurringBlocks to fetch.
+     */
+    orderBy?: BookingRecurringBlockOrderByWithRelationInput | BookingRecurringBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BookingRecurringBlocks.
+     */
+    cursor?: BookingRecurringBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingRecurringBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingRecurringBlocks.
+     */
+    skip?: number
+    distinct?: BookingRecurringBlockScalarFieldEnum | BookingRecurringBlockScalarFieldEnum[]
+  }
+
+  /**
+   * BookingRecurringBlock create
+   */
+  export type BookingRecurringBlockCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BookingRecurringBlock.
+     */
+    data: XOR<BookingRecurringBlockCreateInput, BookingRecurringBlockUncheckedCreateInput>
+  }
+
+  /**
+   * BookingRecurringBlock createMany
+   */
+  export type BookingRecurringBlockCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BookingRecurringBlocks.
+     */
+    data: BookingRecurringBlockCreateManyInput | BookingRecurringBlockCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BookingRecurringBlock createManyAndReturn
+   */
+  export type BookingRecurringBlockCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * The data used to create many BookingRecurringBlocks.
+     */
+    data: BookingRecurringBlockCreateManyInput | BookingRecurringBlockCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookingRecurringBlock update
+   */
+  export type BookingRecurringBlockUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BookingRecurringBlock.
+     */
+    data: XOR<BookingRecurringBlockUpdateInput, BookingRecurringBlockUncheckedUpdateInput>
+    /**
+     * Choose, which BookingRecurringBlock to update.
+     */
+    where: BookingRecurringBlockWhereUniqueInput
+  }
+
+  /**
+   * BookingRecurringBlock updateMany
+   */
+  export type BookingRecurringBlockUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BookingRecurringBlocks.
+     */
+    data: XOR<BookingRecurringBlockUpdateManyMutationInput, BookingRecurringBlockUncheckedUpdateManyInput>
+    /**
+     * Filter which BookingRecurringBlocks to update
+     */
+    where?: BookingRecurringBlockWhereInput
+    /**
+     * Limit how many BookingRecurringBlocks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookingRecurringBlock updateManyAndReturn
+   */
+  export type BookingRecurringBlockUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * The data used to update BookingRecurringBlocks.
+     */
+    data: XOR<BookingRecurringBlockUpdateManyMutationInput, BookingRecurringBlockUncheckedUpdateManyInput>
+    /**
+     * Filter which BookingRecurringBlocks to update
+     */
+    where?: BookingRecurringBlockWhereInput
+    /**
+     * Limit how many BookingRecurringBlocks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookingRecurringBlock upsert
+   */
+  export type BookingRecurringBlockUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BookingRecurringBlock to update in case it exists.
+     */
+    where: BookingRecurringBlockWhereUniqueInput
+    /**
+     * In case the BookingRecurringBlock found by the `where` argument doesn't exist, create a new BookingRecurringBlock with this data.
+     */
+    create: XOR<BookingRecurringBlockCreateInput, BookingRecurringBlockUncheckedCreateInput>
+    /**
+     * In case the BookingRecurringBlock was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BookingRecurringBlockUpdateInput, BookingRecurringBlockUncheckedUpdateInput>
+  }
+
+  /**
+   * BookingRecurringBlock delete
+   */
+  export type BookingRecurringBlockDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+    /**
+     * Filter which BookingRecurringBlock to delete.
+     */
+    where: BookingRecurringBlockWhereUniqueInput
+  }
+
+  /**
+   * BookingRecurringBlock deleteMany
+   */
+  export type BookingRecurringBlockDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookingRecurringBlocks to delete
+     */
+    where?: BookingRecurringBlockWhereInput
+    /**
+     * Limit how many BookingRecurringBlocks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookingRecurringBlock.user
+   */
+  export type BookingRecurringBlock$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * BookingRecurringBlock.created_by
+   */
+  export type BookingRecurringBlock$created_byArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * BookingRecurringBlock without action
+   */
+  export type BookingRecurringBlockDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingRecurringBlock
+     */
+    select?: BookingRecurringBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingRecurringBlock
+     */
+    omit?: BookingRecurringBlockOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingRecurringBlockInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model BookingPage
    */
 
@@ -98606,6 +100054,9 @@ export namespace Prisma {
       reminder_offsets_minutes: number[]
       send_cancellation_email: boolean
       send_reschedule_email: boolean
+      /**
+       * Off by default: the assignee is only emailed when the page opts in.
+       */
       notify_assignee: boolean
       additional_recipients: string[]
       include_meeting_link: boolean
@@ -110047,6 +111498,24 @@ export namespace Prisma {
   export type BookingBlockScalarFieldEnum = (typeof BookingBlockScalarFieldEnum)[keyof typeof BookingBlockScalarFieldEnum]
 
 
+  export const BookingRecurringBlockScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    user_uuid: 'user_uuid',
+    weekdays: 'weekdays',
+    start_time: 'start_time',
+    end_time: 'end_time',
+    timezone: 'timezone',
+    reason: 'reason',
+    created_by_user_uuid: 'created_by_user_uuid',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type BookingRecurringBlockScalarFieldEnum = (typeof BookingRecurringBlockScalarFieldEnum)[keyof typeof BookingRecurringBlockScalarFieldEnum]
+
+
   export const BookingPageScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -111406,6 +112875,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleListRelationFilter
     booking_blocks?: BookingBlockListRelationFilter
     booking_blocks_created?: BookingBlockListRelationFilter
+    booking_recurring_blocks?: BookingRecurringBlockListRelationFilter
+    booking_recurring_blocks_created?: BookingRecurringBlockListRelationFilter
     booking_pages_created?: BookingPageListRelationFilter
     booking_page_memberships?: BookingPageMemberListRelationFilter
     booking_links_created?: BookingLinkListRelationFilter
@@ -111444,6 +112915,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleOrderByRelationAggregateInput
     booking_blocks?: BookingBlockOrderByRelationAggregateInput
     booking_blocks_created?: BookingBlockOrderByRelationAggregateInput
+    booking_recurring_blocks?: BookingRecurringBlockOrderByRelationAggregateInput
+    booking_recurring_blocks_created?: BookingRecurringBlockOrderByRelationAggregateInput
     booking_pages_created?: BookingPageOrderByRelationAggregateInput
     booking_page_memberships?: BookingPageMemberOrderByRelationAggregateInput
     booking_links_created?: BookingLinkOrderByRelationAggregateInput
@@ -111485,6 +112958,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleListRelationFilter
     booking_blocks?: BookingBlockListRelationFilter
     booking_blocks_created?: BookingBlockListRelationFilter
+    booking_recurring_blocks?: BookingRecurringBlockListRelationFilter
+    booking_recurring_blocks_created?: BookingRecurringBlockListRelationFilter
     booking_pages_created?: BookingPageListRelationFilter
     booking_page_memberships?: BookingPageMemberListRelationFilter
     booking_links_created?: BookingLinkListRelationFilter
@@ -111579,6 +113054,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogListRelationFilter
     availability_schedules?: AvailabilityScheduleListRelationFilter
     booking_blocks?: BookingBlockListRelationFilter
+    booking_recurring_blocks?: BookingRecurringBlockListRelationFilter
     booking_pages?: BookingPageListRelationFilter
     booking_links?: BookingLinkListRelationFilter
     bookings?: BookingListRelationFilter
@@ -111634,6 +113110,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogOrderByRelationAggregateInput
     availability_schedules?: AvailabilityScheduleOrderByRelationAggregateInput
     booking_blocks?: BookingBlockOrderByRelationAggregateInput
+    booking_recurring_blocks?: BookingRecurringBlockOrderByRelationAggregateInput
     booking_pages?: BookingPageOrderByRelationAggregateInput
     booking_links?: BookingLinkOrderByRelationAggregateInput
     bookings?: BookingOrderByRelationAggregateInput
@@ -111692,6 +113169,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogListRelationFilter
     availability_schedules?: AvailabilityScheduleListRelationFilter
     booking_blocks?: BookingBlockListRelationFilter
+    booking_recurring_blocks?: BookingRecurringBlockListRelationFilter
     booking_pages?: BookingPageListRelationFilter
     booking_links?: BookingLinkListRelationFilter
     bookings?: BookingListRelationFilter
@@ -118387,6 +119865,104 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"BookingBlock"> | Date | string
   }
 
+  export type BookingRecurringBlockWhereInput = {
+    AND?: BookingRecurringBlockWhereInput | BookingRecurringBlockWhereInput[]
+    OR?: BookingRecurringBlockWhereInput[]
+    NOT?: BookingRecurringBlockWhereInput | BookingRecurringBlockWhereInput[]
+    id?: IntFilter<"BookingRecurringBlock"> | number
+    uuid?: StringFilter<"BookingRecurringBlock"> | string
+    organisation_uuid?: StringFilter<"BookingRecurringBlock"> | string
+    user_uuid?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    weekdays?: IntNullableListFilter<"BookingRecurringBlock">
+    start_time?: StringFilter<"BookingRecurringBlock"> | string
+    end_time?: StringFilter<"BookingRecurringBlock"> | string
+    timezone?: StringFilter<"BookingRecurringBlock"> | string
+    reason?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    created_by_user_uuid?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    created_at?: DateTimeFilter<"BookingRecurringBlock"> | Date | string
+    updated_at?: DateTimeFilter<"BookingRecurringBlock"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type BookingRecurringBlockOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrderInput | SortOrder
+    weekdays?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    timezone?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    created_by_user_uuid?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    created_by?: UserOrderByWithRelationInput
+  }
+
+  export type BookingRecurringBlockWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: BookingRecurringBlockWhereInput | BookingRecurringBlockWhereInput[]
+    OR?: BookingRecurringBlockWhereInput[]
+    NOT?: BookingRecurringBlockWhereInput | BookingRecurringBlockWhereInput[]
+    organisation_uuid?: StringFilter<"BookingRecurringBlock"> | string
+    user_uuid?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    weekdays?: IntNullableListFilter<"BookingRecurringBlock">
+    start_time?: StringFilter<"BookingRecurringBlock"> | string
+    end_time?: StringFilter<"BookingRecurringBlock"> | string
+    timezone?: StringFilter<"BookingRecurringBlock"> | string
+    reason?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    created_by_user_uuid?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    created_at?: DateTimeFilter<"BookingRecurringBlock"> | Date | string
+    updated_at?: DateTimeFilter<"BookingRecurringBlock"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "uuid">
+
+  export type BookingRecurringBlockOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrderInput | SortOrder
+    weekdays?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    timezone?: SortOrder
+    reason?: SortOrderInput | SortOrder
+    created_by_user_uuid?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: BookingRecurringBlockCountOrderByAggregateInput
+    _avg?: BookingRecurringBlockAvgOrderByAggregateInput
+    _max?: BookingRecurringBlockMaxOrderByAggregateInput
+    _min?: BookingRecurringBlockMinOrderByAggregateInput
+    _sum?: BookingRecurringBlockSumOrderByAggregateInput
+  }
+
+  export type BookingRecurringBlockScalarWhereWithAggregatesInput = {
+    AND?: BookingRecurringBlockScalarWhereWithAggregatesInput | BookingRecurringBlockScalarWhereWithAggregatesInput[]
+    OR?: BookingRecurringBlockScalarWhereWithAggregatesInput[]
+    NOT?: BookingRecurringBlockScalarWhereWithAggregatesInput | BookingRecurringBlockScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"BookingRecurringBlock"> | number
+    uuid?: StringWithAggregatesFilter<"BookingRecurringBlock"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"BookingRecurringBlock"> | string
+    user_uuid?: StringNullableWithAggregatesFilter<"BookingRecurringBlock"> | string | null
+    weekdays?: IntNullableListFilter<"BookingRecurringBlock">
+    start_time?: StringWithAggregatesFilter<"BookingRecurringBlock"> | string
+    end_time?: StringWithAggregatesFilter<"BookingRecurringBlock"> | string
+    timezone?: StringWithAggregatesFilter<"BookingRecurringBlock"> | string
+    reason?: StringNullableWithAggregatesFilter<"BookingRecurringBlock"> | string | null
+    created_by_user_uuid?: StringNullableWithAggregatesFilter<"BookingRecurringBlock"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"BookingRecurringBlock"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"BookingRecurringBlock"> | Date | string
+  }
+
   export type BookingPageWhereInput = {
     AND?: BookingPageWhereInput | BookingPageWhereInput[]
     OR?: BookingPageWhereInput[]
@@ -119603,6 +121179,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -119641,6 +121219,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -119678,6 +121258,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -119716,6 +121298,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -119809,6 +121393,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -119864,6 +121449,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -119918,6 +121504,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -119973,6 +121560,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -127159,6 +128747,105 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BookingRecurringBlockCreateInput = {
+    uuid?: string
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBooking_recurring_blocksInput
+    user?: UserCreateNestedOneWithoutBooking_recurring_blocksInput
+    created_by?: UserCreateNestedOneWithoutBooking_recurring_blocks_createdInput
+  }
+
+  export type BookingRecurringBlockUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid?: string | null
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_by_user_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BookingRecurringBlockUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBooking_recurring_blocksNestedInput
+    user?: UserUpdateOneWithoutBooking_recurring_blocksNestedInput
+    created_by?: UserUpdateOneWithoutBooking_recurring_blocks_createdNestedInput
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingRecurringBlockCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid?: string | null
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_by_user_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BookingRecurringBlockUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BookingPageCreateInput = {
     uuid?: string
     name: string
@@ -128643,6 +130330,12 @@ export namespace Prisma {
     none?: BookingBlockWhereInput
   }
 
+  export type BookingRecurringBlockListRelationFilter = {
+    every?: BookingRecurringBlockWhereInput
+    some?: BookingRecurringBlockWhereInput
+    none?: BookingRecurringBlockWhereInput
+  }
+
   export type BookingPageListRelationFilter = {
     every?: BookingPageWhereInput
     some?: BookingPageWhereInput
@@ -128759,6 +130452,10 @@ export namespace Prisma {
   }
 
   export type BookingBlockOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BookingRecurringBlockOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -134606,6 +136303,59 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type BookingRecurringBlockCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    weekdays?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    timezone?: SortOrder
+    reason?: SortOrder
+    created_by_user_uuid?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BookingRecurringBlockAvgOrderByAggregateInput = {
+    id?: SortOrder
+    weekdays?: SortOrder
+  }
+
+  export type BookingRecurringBlockMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    timezone?: SortOrder
+    reason?: SortOrder
+    created_by_user_uuid?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BookingRecurringBlockMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    user_uuid?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    timezone?: SortOrder
+    reason?: SortOrder
+    created_by_user_uuid?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BookingRecurringBlockSumOrderByAggregateInput = {
+    id?: SortOrder
+    weekdays?: SortOrder
+  }
+
   export type EnumBookingAssignmentModeFilter<$PrismaModel = never> = {
     equals?: $Enums.BookingAssignmentMode | EnumBookingAssignmentModeFieldRefInput<$PrismaModel>
     in?: $Enums.BookingAssignmentMode[] | ListEnumBookingAssignmentModeFieldRefInput<$PrismaModel>
@@ -135677,6 +137427,20 @@ export namespace Prisma {
     connect?: BookingBlockWhereUniqueInput | BookingBlockWhereUniqueInput[]
   }
 
+  export type BookingRecurringBlockCreateNestedManyWithoutUserInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutUserInput, BookingRecurringBlockUncheckedCreateWithoutUserInput> | BookingRecurringBlockCreateWithoutUserInput[] | BookingRecurringBlockUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutUserInput | BookingRecurringBlockCreateOrConnectWithoutUserInput[]
+    createMany?: BookingRecurringBlockCreateManyUserInputEnvelope
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+  }
+
+  export type BookingRecurringBlockCreateNestedManyWithoutCreated_byInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutCreated_byInput, BookingRecurringBlockUncheckedCreateWithoutCreated_byInput> | BookingRecurringBlockCreateWithoutCreated_byInput[] | BookingRecurringBlockUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutCreated_byInput | BookingRecurringBlockCreateOrConnectWithoutCreated_byInput[]
+    createMany?: BookingRecurringBlockCreateManyCreated_byInputEnvelope
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+  }
+
   export type BookingPageCreateNestedManyWithoutCreated_byInput = {
     create?: XOR<BookingPageCreateWithoutCreated_byInput, BookingPageUncheckedCreateWithoutCreated_byInput> | BookingPageCreateWithoutCreated_byInput[] | BookingPageUncheckedCreateWithoutCreated_byInput[]
     connectOrCreate?: BookingPageCreateOrConnectWithoutCreated_byInput | BookingPageCreateOrConnectWithoutCreated_byInput[]
@@ -135857,6 +137621,20 @@ export namespace Prisma {
     connectOrCreate?: BookingBlockCreateOrConnectWithoutCreated_byInput | BookingBlockCreateOrConnectWithoutCreated_byInput[]
     createMany?: BookingBlockCreateManyCreated_byInputEnvelope
     connect?: BookingBlockWhereUniqueInput | BookingBlockWhereUniqueInput[]
+  }
+
+  export type BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutUserInput, BookingRecurringBlockUncheckedCreateWithoutUserInput> | BookingRecurringBlockCreateWithoutUserInput[] | BookingRecurringBlockUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutUserInput | BookingRecurringBlockCreateOrConnectWithoutUserInput[]
+    createMany?: BookingRecurringBlockCreateManyUserInputEnvelope
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+  }
+
+  export type BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutCreated_byInput, BookingRecurringBlockUncheckedCreateWithoutCreated_byInput> | BookingRecurringBlockCreateWithoutCreated_byInput[] | BookingRecurringBlockUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutCreated_byInput | BookingRecurringBlockCreateOrConnectWithoutCreated_byInput[]
+    createMany?: BookingRecurringBlockCreateManyCreated_byInputEnvelope
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
   }
 
   export type BookingPageUncheckedCreateNestedManyWithoutCreated_byInput = {
@@ -136167,6 +137945,34 @@ export namespace Prisma {
     update?: BookingBlockUpdateWithWhereUniqueWithoutCreated_byInput | BookingBlockUpdateWithWhereUniqueWithoutCreated_byInput[]
     updateMany?: BookingBlockUpdateManyWithWhereWithoutCreated_byInput | BookingBlockUpdateManyWithWhereWithoutCreated_byInput[]
     deleteMany?: BookingBlockScalarWhereInput | BookingBlockScalarWhereInput[]
+  }
+
+  export type BookingRecurringBlockUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutUserInput, BookingRecurringBlockUncheckedCreateWithoutUserInput> | BookingRecurringBlockCreateWithoutUserInput[] | BookingRecurringBlockUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutUserInput | BookingRecurringBlockCreateOrConnectWithoutUserInput[]
+    upsert?: BookingRecurringBlockUpsertWithWhereUniqueWithoutUserInput | BookingRecurringBlockUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BookingRecurringBlockCreateManyUserInputEnvelope
+    set?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    disconnect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    delete?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    update?: BookingRecurringBlockUpdateWithWhereUniqueWithoutUserInput | BookingRecurringBlockUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BookingRecurringBlockUpdateManyWithWhereWithoutUserInput | BookingRecurringBlockUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BookingRecurringBlockScalarWhereInput | BookingRecurringBlockScalarWhereInput[]
+  }
+
+  export type BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutCreated_byInput, BookingRecurringBlockUncheckedCreateWithoutCreated_byInput> | BookingRecurringBlockCreateWithoutCreated_byInput[] | BookingRecurringBlockUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutCreated_byInput | BookingRecurringBlockCreateOrConnectWithoutCreated_byInput[]
+    upsert?: BookingRecurringBlockUpsertWithWhereUniqueWithoutCreated_byInput | BookingRecurringBlockUpsertWithWhereUniqueWithoutCreated_byInput[]
+    createMany?: BookingRecurringBlockCreateManyCreated_byInputEnvelope
+    set?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    disconnect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    delete?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    update?: BookingRecurringBlockUpdateWithWhereUniqueWithoutCreated_byInput | BookingRecurringBlockUpdateWithWhereUniqueWithoutCreated_byInput[]
+    updateMany?: BookingRecurringBlockUpdateManyWithWhereWithoutCreated_byInput | BookingRecurringBlockUpdateManyWithWhereWithoutCreated_byInput[]
+    deleteMany?: BookingRecurringBlockScalarWhereInput | BookingRecurringBlockScalarWhereInput[]
   }
 
   export type BookingPageUpdateManyWithoutCreated_byNestedInput = {
@@ -136539,6 +138345,34 @@ export namespace Prisma {
     update?: BookingBlockUpdateWithWhereUniqueWithoutCreated_byInput | BookingBlockUpdateWithWhereUniqueWithoutCreated_byInput[]
     updateMany?: BookingBlockUpdateManyWithWhereWithoutCreated_byInput | BookingBlockUpdateManyWithWhereWithoutCreated_byInput[]
     deleteMany?: BookingBlockScalarWhereInput | BookingBlockScalarWhereInput[]
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutUserInput, BookingRecurringBlockUncheckedCreateWithoutUserInput> | BookingRecurringBlockCreateWithoutUserInput[] | BookingRecurringBlockUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutUserInput | BookingRecurringBlockCreateOrConnectWithoutUserInput[]
+    upsert?: BookingRecurringBlockUpsertWithWhereUniqueWithoutUserInput | BookingRecurringBlockUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BookingRecurringBlockCreateManyUserInputEnvelope
+    set?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    disconnect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    delete?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    update?: BookingRecurringBlockUpdateWithWhereUniqueWithoutUserInput | BookingRecurringBlockUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BookingRecurringBlockUpdateManyWithWhereWithoutUserInput | BookingRecurringBlockUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BookingRecurringBlockScalarWhereInput | BookingRecurringBlockScalarWhereInput[]
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutCreated_byInput, BookingRecurringBlockUncheckedCreateWithoutCreated_byInput> | BookingRecurringBlockCreateWithoutCreated_byInput[] | BookingRecurringBlockUncheckedCreateWithoutCreated_byInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutCreated_byInput | BookingRecurringBlockCreateOrConnectWithoutCreated_byInput[]
+    upsert?: BookingRecurringBlockUpsertWithWhereUniqueWithoutCreated_byInput | BookingRecurringBlockUpsertWithWhereUniqueWithoutCreated_byInput[]
+    createMany?: BookingRecurringBlockCreateManyCreated_byInputEnvelope
+    set?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    disconnect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    delete?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    update?: BookingRecurringBlockUpdateWithWhereUniqueWithoutCreated_byInput | BookingRecurringBlockUpdateWithWhereUniqueWithoutCreated_byInput[]
+    updateMany?: BookingRecurringBlockUpdateManyWithWhereWithoutCreated_byInput | BookingRecurringBlockUpdateManyWithWhereWithoutCreated_byInput[]
+    deleteMany?: BookingRecurringBlockScalarWhereInput | BookingRecurringBlockScalarWhereInput[]
   }
 
   export type BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput = {
@@ -136940,6 +138774,13 @@ export namespace Prisma {
     connect?: BookingBlockWhereUniqueInput | BookingBlockWhereUniqueInput[]
   }
 
+  export type BookingRecurringBlockCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutOrganisationInput, BookingRecurringBlockUncheckedCreateWithoutOrganisationInput> | BookingRecurringBlockCreateWithoutOrganisationInput[] | BookingRecurringBlockUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutOrganisationInput | BookingRecurringBlockCreateOrConnectWithoutOrganisationInput[]
+    createMany?: BookingRecurringBlockCreateManyOrganisationInputEnvelope
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+  }
+
   export type BookingPageCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<BookingPageCreateWithoutOrganisationInput, BookingPageUncheckedCreateWithoutOrganisationInput> | BookingPageCreateWithoutOrganisationInput[] | BookingPageUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: BookingPageCreateOrConnectWithoutOrganisationInput | BookingPageCreateOrConnectWithoutOrganisationInput[]
@@ -137239,6 +139080,13 @@ export namespace Prisma {
     connectOrCreate?: BookingBlockCreateOrConnectWithoutOrganisationInput | BookingBlockCreateOrConnectWithoutOrganisationInput[]
     createMany?: BookingBlockCreateManyOrganisationInputEnvelope
     connect?: BookingBlockWhereUniqueInput | BookingBlockWhereUniqueInput[]
+  }
+
+  export type BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutOrganisationInput, BookingRecurringBlockUncheckedCreateWithoutOrganisationInput> | BookingRecurringBlockCreateWithoutOrganisationInput[] | BookingRecurringBlockUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutOrganisationInput | BookingRecurringBlockCreateOrConnectWithoutOrganisationInput[]
+    createMany?: BookingRecurringBlockCreateManyOrganisationInputEnvelope
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
   }
 
   export type BookingPageUncheckedCreateNestedManyWithoutOrganisationInput = {
@@ -137799,6 +139647,20 @@ export namespace Prisma {
     update?: BookingBlockUpdateWithWhereUniqueWithoutOrganisationInput | BookingBlockUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: BookingBlockUpdateManyWithWhereWithoutOrganisationInput | BookingBlockUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: BookingBlockScalarWhereInput | BookingBlockScalarWhereInput[]
+  }
+
+  export type BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutOrganisationInput, BookingRecurringBlockUncheckedCreateWithoutOrganisationInput> | BookingRecurringBlockCreateWithoutOrganisationInput[] | BookingRecurringBlockUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutOrganisationInput | BookingRecurringBlockCreateOrConnectWithoutOrganisationInput[]
+    upsert?: BookingRecurringBlockUpsertWithWhereUniqueWithoutOrganisationInput | BookingRecurringBlockUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: BookingRecurringBlockCreateManyOrganisationInputEnvelope
+    set?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    disconnect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    delete?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    update?: BookingRecurringBlockUpdateWithWhereUniqueWithoutOrganisationInput | BookingRecurringBlockUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: BookingRecurringBlockUpdateManyWithWhereWithoutOrganisationInput | BookingRecurringBlockUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: BookingRecurringBlockScalarWhereInput | BookingRecurringBlockScalarWhereInput[]
   }
 
   export type BookingPageUpdateManyWithoutOrganisationNestedInput = {
@@ -138401,6 +140263,20 @@ export namespace Prisma {
     update?: BookingBlockUpdateWithWhereUniqueWithoutOrganisationInput | BookingBlockUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: BookingBlockUpdateManyWithWhereWithoutOrganisationInput | BookingBlockUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: BookingBlockScalarWhereInput | BookingBlockScalarWhereInput[]
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<BookingRecurringBlockCreateWithoutOrganisationInput, BookingRecurringBlockUncheckedCreateWithoutOrganisationInput> | BookingRecurringBlockCreateWithoutOrganisationInput[] | BookingRecurringBlockUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BookingRecurringBlockCreateOrConnectWithoutOrganisationInput | BookingRecurringBlockCreateOrConnectWithoutOrganisationInput[]
+    upsert?: BookingRecurringBlockUpsertWithWhereUniqueWithoutOrganisationInput | BookingRecurringBlockUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: BookingRecurringBlockCreateManyOrganisationInputEnvelope
+    set?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    disconnect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    delete?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    connect?: BookingRecurringBlockWhereUniqueInput | BookingRecurringBlockWhereUniqueInput[]
+    update?: BookingRecurringBlockUpdateWithWhereUniqueWithoutOrganisationInput | BookingRecurringBlockUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: BookingRecurringBlockUpdateManyWithWhereWithoutOrganisationInput | BookingRecurringBlockUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: BookingRecurringBlockScalarWhereInput | BookingRecurringBlockScalarWhereInput[]
   }
 
   export type BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput = {
@@ -143634,6 +145510,61 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBooking_blocks_createdInput, UserUpdateWithoutBooking_blocks_createdInput>, UserUncheckedUpdateWithoutBooking_blocks_createdInput>
   }
 
+  export type BookingRecurringBlockCreateweekdaysInput = {
+    set: number[]
+  }
+
+  export type OrganisationCreateNestedOneWithoutBooking_recurring_blocksInput = {
+    create?: XOR<OrganisationCreateWithoutBooking_recurring_blocksInput, OrganisationUncheckedCreateWithoutBooking_recurring_blocksInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutBooking_recurring_blocksInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutBooking_recurring_blocksInput = {
+    create?: XOR<UserCreateWithoutBooking_recurring_blocksInput, UserUncheckedCreateWithoutBooking_recurring_blocksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBooking_recurring_blocksInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutBooking_recurring_blocks_createdInput = {
+    create?: XOR<UserCreateWithoutBooking_recurring_blocks_createdInput, UserUncheckedCreateWithoutBooking_recurring_blocks_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBooking_recurring_blocks_createdInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BookingRecurringBlockUpdateweekdaysInput = {
+    set?: number[]
+    push?: number | number[]
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutBooking_recurring_blocksNestedInput = {
+    create?: XOR<OrganisationCreateWithoutBooking_recurring_blocksInput, OrganisationUncheckedCreateWithoutBooking_recurring_blocksInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutBooking_recurring_blocksInput
+    upsert?: OrganisationUpsertWithoutBooking_recurring_blocksInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutBooking_recurring_blocksInput, OrganisationUpdateWithoutBooking_recurring_blocksInput>, OrganisationUncheckedUpdateWithoutBooking_recurring_blocksInput>
+  }
+
+  export type UserUpdateOneWithoutBooking_recurring_blocksNestedInput = {
+    create?: XOR<UserCreateWithoutBooking_recurring_blocksInput, UserUncheckedCreateWithoutBooking_recurring_blocksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBooking_recurring_blocksInput
+    upsert?: UserUpsertWithoutBooking_recurring_blocksInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBooking_recurring_blocksInput, UserUpdateWithoutBooking_recurring_blocksInput>, UserUncheckedUpdateWithoutBooking_recurring_blocksInput>
+  }
+
+  export type UserUpdateOneWithoutBooking_recurring_blocks_createdNestedInput = {
+    create?: XOR<UserCreateWithoutBooking_recurring_blocks_createdInput, UserUncheckedCreateWithoutBooking_recurring_blocks_createdInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBooking_recurring_blocks_createdInput
+    upsert?: UserUpsertWithoutBooking_recurring_blocks_createdInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBooking_recurring_blocks_createdInput, UserUpdateWithoutBooking_recurring_blocks_createdInput>, UserUncheckedUpdateWithoutBooking_recurring_blocks_createdInput>
+  }
+
   export type BookingPageCreateduration_optionsInput = {
     set: number[]
   }
@@ -146666,6 +148597,80 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BookingRecurringBlockCreateWithoutUserInput = {
+    uuid?: string
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBooking_recurring_blocksInput
+    created_by?: UserCreateNestedOneWithoutBooking_recurring_blocks_createdInput
+  }
+
+  export type BookingRecurringBlockUncheckedCreateWithoutUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_by_user_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BookingRecurringBlockCreateOrConnectWithoutUserInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    create: XOR<BookingRecurringBlockCreateWithoutUserInput, BookingRecurringBlockUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookingRecurringBlockCreateManyUserInputEnvelope = {
+    data: BookingRecurringBlockCreateManyUserInput | BookingRecurringBlockCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BookingRecurringBlockCreateWithoutCreated_byInput = {
+    uuid?: string
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBooking_recurring_blocksInput
+    user?: UserCreateNestedOneWithoutBooking_recurring_blocksInput
+  }
+
+  export type BookingRecurringBlockUncheckedCreateWithoutCreated_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid?: string | null
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BookingRecurringBlockCreateOrConnectWithoutCreated_byInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    create: XOR<BookingRecurringBlockCreateWithoutCreated_byInput, BookingRecurringBlockUncheckedCreateWithoutCreated_byInput>
+  }
+
+  export type BookingRecurringBlockCreateManyCreated_byInputEnvelope = {
+    data: BookingRecurringBlockCreateManyCreated_byInput | BookingRecurringBlockCreateManyCreated_byInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BookingPageCreateWithoutCreated_byInput = {
     uuid?: string
     name: string
@@ -147791,6 +149796,56 @@ export namespace Prisma {
   export type BookingBlockUpdateManyWithWhereWithoutCreated_byInput = {
     where: BookingBlockScalarWhereInput
     data: XOR<BookingBlockUpdateManyMutationInput, BookingBlockUncheckedUpdateManyWithoutCreated_byInput>
+  }
+
+  export type BookingRecurringBlockUpsertWithWhereUniqueWithoutUserInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    update: XOR<BookingRecurringBlockUpdateWithoutUserInput, BookingRecurringBlockUncheckedUpdateWithoutUserInput>
+    create: XOR<BookingRecurringBlockCreateWithoutUserInput, BookingRecurringBlockUncheckedCreateWithoutUserInput>
+  }
+
+  export type BookingRecurringBlockUpdateWithWhereUniqueWithoutUserInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    data: XOR<BookingRecurringBlockUpdateWithoutUserInput, BookingRecurringBlockUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BookingRecurringBlockUpdateManyWithWhereWithoutUserInput = {
+    where: BookingRecurringBlockScalarWhereInput
+    data: XOR<BookingRecurringBlockUpdateManyMutationInput, BookingRecurringBlockUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BookingRecurringBlockScalarWhereInput = {
+    AND?: BookingRecurringBlockScalarWhereInput | BookingRecurringBlockScalarWhereInput[]
+    OR?: BookingRecurringBlockScalarWhereInput[]
+    NOT?: BookingRecurringBlockScalarWhereInput | BookingRecurringBlockScalarWhereInput[]
+    id?: IntFilter<"BookingRecurringBlock"> | number
+    uuid?: StringFilter<"BookingRecurringBlock"> | string
+    organisation_uuid?: StringFilter<"BookingRecurringBlock"> | string
+    user_uuid?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    weekdays?: IntNullableListFilter<"BookingRecurringBlock">
+    start_time?: StringFilter<"BookingRecurringBlock"> | string
+    end_time?: StringFilter<"BookingRecurringBlock"> | string
+    timezone?: StringFilter<"BookingRecurringBlock"> | string
+    reason?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    created_by_user_uuid?: StringNullableFilter<"BookingRecurringBlock"> | string | null
+    created_at?: DateTimeFilter<"BookingRecurringBlock"> | Date | string
+    updated_at?: DateTimeFilter<"BookingRecurringBlock"> | Date | string
+  }
+
+  export type BookingRecurringBlockUpsertWithWhereUniqueWithoutCreated_byInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    update: XOR<BookingRecurringBlockUpdateWithoutCreated_byInput, BookingRecurringBlockUncheckedUpdateWithoutCreated_byInput>
+    create: XOR<BookingRecurringBlockCreateWithoutCreated_byInput, BookingRecurringBlockUncheckedCreateWithoutCreated_byInput>
+  }
+
+  export type BookingRecurringBlockUpdateWithWhereUniqueWithoutCreated_byInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    data: XOR<BookingRecurringBlockUpdateWithoutCreated_byInput, BookingRecurringBlockUncheckedUpdateWithoutCreated_byInput>
+  }
+
+  export type BookingRecurringBlockUpdateManyWithWhereWithoutCreated_byInput = {
+    where: BookingRecurringBlockScalarWhereInput
+    data: XOR<BookingRecurringBlockUpdateManyMutationInput, BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byInput>
   }
 
   export type BookingPageUpsertWithWhereUniqueWithoutCreated_byInput = {
@@ -149881,6 +151936,43 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BookingRecurringBlockCreateWithoutOrganisationInput = {
+    uuid?: string
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user?: UserCreateNestedOneWithoutBooking_recurring_blocksInput
+    created_by?: UserCreateNestedOneWithoutBooking_recurring_blocks_createdInput
+  }
+
+  export type BookingRecurringBlockUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid?: string | null
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_by_user_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BookingRecurringBlockCreateOrConnectWithoutOrganisationInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    create: XOR<BookingRecurringBlockCreateWithoutOrganisationInput, BookingRecurringBlockUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BookingRecurringBlockCreateManyOrganisationInputEnvelope = {
+    data: BookingRecurringBlockCreateManyOrganisationInput | BookingRecurringBlockCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BookingPageCreateWithoutOrganisationInput = {
     uuid?: string
     name: string
@@ -151367,6 +153459,22 @@ export namespace Prisma {
     data: XOR<BookingBlockUpdateManyMutationInput, BookingBlockUncheckedUpdateManyWithoutOrganisationInput>
   }
 
+  export type BookingRecurringBlockUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    update: XOR<BookingRecurringBlockUpdateWithoutOrganisationInput, BookingRecurringBlockUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<BookingRecurringBlockCreateWithoutOrganisationInput, BookingRecurringBlockUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BookingRecurringBlockUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: BookingRecurringBlockWhereUniqueInput
+    data: XOR<BookingRecurringBlockUpdateWithoutOrganisationInput, BookingRecurringBlockUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type BookingRecurringBlockUpdateManyWithWhereWithoutOrganisationInput = {
+    where: BookingRecurringBlockScalarWhereInput
+    data: XOR<BookingRecurringBlockUpdateManyMutationInput, BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
   export type BookingPageUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: BookingPageWhereUniqueInput
     update: XOR<BookingPageUpdateWithoutOrganisationInput, BookingPageUncheckedUpdateWithoutOrganisationInput>
@@ -151508,6 +153616,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -151562,6 +153671,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -151599,6 +153709,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -151636,6 +153748,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -151709,6 +153823,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -151763,6 +153878,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -151806,6 +153922,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -151843,6 +153961,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -151900,6 +154020,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -151954,6 +154075,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -151991,6 +154113,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -152028,6 +154152,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -152101,6 +154227,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -152155,6 +154282,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -152198,6 +154326,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -152235,6 +154365,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -152292,6 +154424,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -152346,6 +154479,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -152383,6 +154517,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -152420,6 +154556,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -152493,6 +154631,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -152547,6 +154686,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -152590,6 +154730,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -152627,6 +154769,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -152684,6 +154828,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -152738,6 +154883,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -153113,6 +155259,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -153167,6 +155314,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -153408,6 +155556,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -153462,6 +155611,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -153531,6 +155681,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -153585,6 +155736,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -153617,6 +155769,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -153654,6 +155808,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -153706,6 +155862,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -153743,6 +155901,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -153800,6 +155960,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -153854,6 +156015,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -153966,6 +156128,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -154020,6 +156183,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -154910,6 +157074,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -154964,6 +157129,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -155814,6 +157980,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -155868,6 +158035,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -157657,6 +159825,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -157711,6 +159880,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -157749,6 +159919,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -157786,6 +159958,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -158113,6 +160287,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -158167,6 +160342,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -158211,6 +160387,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -158248,6 +160426,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -159046,6 +161226,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -159100,6 +161281,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -159473,6 +161655,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -159527,6 +161710,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -159784,6 +161968,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -159838,6 +162023,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -160079,6 +162265,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -160116,6 +162304,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -160445,6 +162635,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -160499,6 +162690,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -160758,6 +162950,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -160795,6 +162989,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -161076,6 +163272,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -161130,6 +163327,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -161404,6 +163602,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -161458,6 +163657,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -161639,6 +163839,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -161693,6 +163894,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -162027,6 +164229,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -162081,6 +164284,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -163652,6 +165856,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -163706,6 +165911,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -163743,6 +165949,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -163780,6 +165988,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -163853,6 +166063,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -163907,6 +166118,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -163950,6 +166162,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -163987,6 +166201,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -164044,6 +166260,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -164098,6 +166315,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -164167,6 +166385,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -164221,6 +166440,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -164274,6 +166494,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -164328,6 +166549,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -164594,6 +166816,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -164648,6 +166871,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -164749,6 +166973,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -164803,6 +167028,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -165715,6 +167941,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -165769,6 +167996,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -166118,6 +168346,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -166172,6 +168401,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -166649,6 +168879,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -166703,6 +168934,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -167397,6 +169629,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -167451,6 +169684,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -167488,6 +169722,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -167525,6 +169761,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -167598,6 +169836,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -167652,6 +169891,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -167695,6 +169935,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -167732,6 +169974,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -167789,6 +170033,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -167843,6 +170088,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -167978,6 +170224,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -168032,6 +170279,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -168500,6 +170748,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -168554,6 +170803,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -168623,6 +170873,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -168677,6 +170928,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -168730,6 +170982,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -168784,6 +171037,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -168853,6 +171107,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -168907,6 +171162,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -168960,6 +171216,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -169014,6 +171271,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -169393,6 +171651,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -169447,6 +171706,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -169846,6 +172106,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -169883,6 +172145,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -169983,6 +172247,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -170020,6 +172286,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -170076,6 +172344,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -170130,6 +172399,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -170271,6 +172541,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -170325,6 +172596,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -170655,6 +172927,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -170692,6 +172966,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -170915,6 +173191,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -170952,6 +173230,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -171161,6 +173441,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -171215,6 +173496,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -171466,6 +173748,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -171520,6 +173803,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -171773,6 +174057,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -171827,6 +174112,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -171896,6 +174182,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -171950,6 +174237,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -172003,6 +174291,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -172057,6 +174346,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -172126,6 +174416,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -172180,6 +174471,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -172233,6 +174525,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -172287,6 +174580,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -172324,6 +174618,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -172361,6 +174657,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -172467,6 +174765,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -172521,6 +174820,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -172564,6 +174864,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -172601,6 +174903,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -172674,6 +174978,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -172728,6 +175033,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -172797,6 +175103,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -172851,6 +175158,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -172904,6 +175212,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -172958,6 +175267,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -173188,6 +175498,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -173242,6 +175553,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -174158,6 +176470,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -174212,6 +176525,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -174249,6 +176563,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -174286,6 +176602,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -174389,6 +176707,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -174443,6 +176762,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -174486,6 +176806,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -174523,6 +176845,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -174616,6 +176940,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -174670,6 +176995,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -174707,6 +177033,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -174744,6 +177072,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -174817,6 +177147,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -174871,6 +177202,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -174914,6 +177246,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -174951,6 +177285,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -175008,6 +177344,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -175062,6 +177399,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -175099,6 +177437,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -175136,6 +177476,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -175209,6 +177551,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -175263,6 +177606,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -175306,6 +177650,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -175343,6 +177689,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -175400,6 +177748,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -175454,6 +177803,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -175491,6 +177841,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -175528,6 +177880,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -175601,6 +177955,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -175655,6 +178010,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -175698,6 +178054,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -175735,6 +178093,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -175792,6 +178152,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -175846,6 +178207,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -175915,6 +178277,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -175969,6 +178332,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -176022,6 +178386,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -176076,6 +178441,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -176170,6 +178536,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -176224,6 +178591,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -176359,6 +178727,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -176413,6 +178782,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -176450,6 +178820,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -176487,6 +178859,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -176589,6 +178963,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -176643,6 +179018,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -176686,6 +179062,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -176723,6 +179101,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -176868,6 +179248,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -176922,6 +179303,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -176959,6 +179341,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -176996,6 +179380,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -177037,6 +179423,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -177074,6 +179462,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -177147,6 +179537,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -177201,6 +179592,7 @@ export namespace Prisma {
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -177244,6 +179636,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -177281,6 +179675,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -177328,6 +179724,8 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -177365,6 +179763,582 @@ export namespace Prisma {
     oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUncheckedUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+  }
+
+  export type OrganisationCreateWithoutBooking_recurring_blocksInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
+    booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
+    bookings?: BookingCreateNestedManyWithoutOrganisationInput
+    booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutBooking_recurring_blocksInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutBooking_recurring_blocksInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutBooking_recurring_blocksInput, OrganisationUncheckedCreateWithoutBooking_recurring_blocksInput>
+  }
+
+  export type UserCreateWithoutBooking_recurring_blocksInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
+    booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+  }
+
+  export type UserUncheckedCreateWithoutBooking_recurring_blocksInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingUncheckedCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+  }
+
+  export type UserCreateOrConnectWithoutBooking_recurring_blocksInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBooking_recurring_blocksInput, UserUncheckedCreateWithoutBooking_recurring_blocksInput>
+  }
+
+  export type UserCreateWithoutBooking_recurring_blocks_createdInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+  }
+
+  export type UserUncheckedCreateWithoutBooking_recurring_blocks_createdInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingUncheckedCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+  }
+
+  export type UserCreateOrConnectWithoutBooking_recurring_blocks_createdInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBooking_recurring_blocks_createdInput, UserUncheckedCreateWithoutBooking_recurring_blocks_createdInput>
+  }
+
+  export type OrganisationUpsertWithoutBooking_recurring_blocksInput = {
+    update: XOR<OrganisationUpdateWithoutBooking_recurring_blocksInput, OrganisationUncheckedUpdateWithoutBooking_recurring_blocksInput>
+    create: XOR<OrganisationCreateWithoutBooking_recurring_blocksInput, OrganisationUncheckedCreateWithoutBooking_recurring_blocksInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutBooking_recurring_blocksInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutBooking_recurring_blocksInput, OrganisationUncheckedUpdateWithoutBooking_recurring_blocksInput>
+  }
+
+  export type OrganisationUpdateWithoutBooking_recurring_blocksInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
+    booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
+    bookings?: BookingUpdateManyWithoutOrganisationNestedInput
+    booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutBooking_recurring_blocksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type UserUpsertWithoutBooking_recurring_blocksInput = {
+    update: XOR<UserUpdateWithoutBooking_recurring_blocksInput, UserUncheckedUpdateWithoutBooking_recurring_blocksInput>
+    create: XOR<UserCreateWithoutBooking_recurring_blocksInput, UserUncheckedCreateWithoutBooking_recurring_blocksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBooking_recurring_blocksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBooking_recurring_blocksInput, UserUncheckedUpdateWithoutBooking_recurring_blocksInput>
+  }
+
+  export type UserUpdateWithoutBooking_recurring_blocksInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBooking_recurring_blocksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUncheckedUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+  }
+
+  export type UserUpsertWithoutBooking_recurring_blocks_createdInput = {
+    update: XOR<UserUpdateWithoutBooking_recurring_blocks_createdInput, UserUncheckedUpdateWithoutBooking_recurring_blocks_createdInput>
+    create: XOR<UserCreateWithoutBooking_recurring_blocks_createdInput, UserUncheckedCreateWithoutBooking_recurring_blocks_createdInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBooking_recurring_blocks_createdInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBooking_recurring_blocks_createdInput, UserUncheckedUpdateWithoutBooking_recurring_blocks_createdInput>
+  }
+
+  export type UserUpdateWithoutBooking_recurring_blocks_createdInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBooking_recurring_blocks_createdInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -177423,6 +180397,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
@@ -177477,6 +180452,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
@@ -177514,6 +180490,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
     bookings_assigned?: BookingCreateNestedManyWithoutAssigned_userInput
@@ -177551,6 +180529,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
     bookings_assigned?: BookingUncheckedCreateNestedManyWithoutAssigned_userInput
@@ -178083,6 +181063,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
@@ -178137,6 +181118,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -178180,6 +181162,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
     bookings_assigned?: BookingUpdateManyWithoutAssigned_userNestedInput
@@ -178217,6 +181201,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
     bookings_assigned?: BookingUncheckedUpdateManyWithoutAssigned_userNestedInput
@@ -178691,6 +181677,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
     bookings_assigned?: BookingCreateNestedManyWithoutAssigned_userInput
@@ -178728,6 +181716,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
     bookings_assigned?: BookingUncheckedCreateNestedManyWithoutAssigned_userInput
@@ -178928,6 +181918,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
     bookings_assigned?: BookingUpdateManyWithoutAssigned_userNestedInput
@@ -178965,6 +181957,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
     bookings_assigned?: BookingUncheckedUpdateManyWithoutAssigned_userNestedInput
@@ -179022,6 +182016,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
@@ -179076,6 +182071,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
@@ -179361,6 +182357,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     bookings_assigned?: BookingCreateNestedManyWithoutAssigned_userInput
@@ -179398,6 +182396,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     bookings_assigned?: BookingUncheckedCreateNestedManyWithoutAssigned_userInput
@@ -179566,6 +182566,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
@@ -179620,6 +182621,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -179923,6 +182925,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     bookings_assigned?: BookingUpdateManyWithoutAssigned_userNestedInput
@@ -179960,6 +182964,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     bookings_assigned?: BookingUncheckedUpdateManyWithoutAssigned_userNestedInput
@@ -180033,6 +183039,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
@@ -180087,6 +183094,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
@@ -180410,6 +183418,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -180447,6 +183457,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -180488,6 +183500,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -180525,6 +183539,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -180748,6 +183764,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
@@ -180802,6 +183819,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -181149,6 +184167,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -181186,6 +184206,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -181233,6 +184255,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -181270,6 +184294,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -181471,6 +184497,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -181525,6 +184552,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -181652,6 +184680,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -181689,6 +184719,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -181762,6 +184794,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -181816,6 +184849,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -181955,6 +184989,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -181992,6 +185028,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -182235,6 +185273,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -182289,6 +185328,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -182326,6 +185366,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -182363,6 +185405,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -182531,6 +185575,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -182585,6 +185630,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -182628,6 +185674,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -182665,6 +185713,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -182738,6 +185788,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
@@ -182792,6 +185843,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
@@ -182829,6 +185881,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
@@ -182866,6 +185920,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
     booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
     booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
     booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
     booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
     booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
@@ -182939,6 +185995,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
@@ -182993,6 +186050,7 @@ export namespace Prisma {
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -183036,6 +186094,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
@@ -183073,6 +186133,8 @@ export namespace Prisma {
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
     booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
     booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
     booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
@@ -183319,6 +186381,34 @@ export namespace Prisma {
     user_uuid?: string | null
     start_at: Date | string
     end_at: Date | string
+    reason?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BookingRecurringBlockCreateManyUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
+    reason?: string | null
+    created_by_user_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BookingRecurringBlockCreateManyCreated_byInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    user_uuid?: string | null
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
     reason?: string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -184264,6 +187354,88 @@ export namespace Prisma {
     user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingRecurringBlockUpdateWithoutUserInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBooking_recurring_blocksNestedInput
+    created_by?: UserUpdateOneWithoutBooking_recurring_blocks_createdNestedInput
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingRecurringBlockUpdateWithoutCreated_byInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBooking_recurring_blocksNestedInput
+    user?: UserUpdateOneWithoutBooking_recurring_blocksNestedInput
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateWithoutCreated_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185598,6 +188770,20 @@ export namespace Prisma {
     user_uuid?: string | null
     start_at: Date | string
     end_at: Date | string
+    reason?: string | null
+    created_by_user_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BookingRecurringBlockCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    user_uuid?: string | null
+    weekdays?: BookingRecurringBlockCreateweekdaysInput | number[]
+    start_time: string
+    end_time: string
+    timezone: string
     reason?: string | null
     created_by_user_uuid?: string | null
     created_at?: Date | string
@@ -187718,6 +190904,47 @@ export namespace Prisma {
     user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     start_at?: DateTimeFieldUpdateOperationsInput | Date | string
     end_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingRecurringBlockUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutBooking_recurring_blocksNestedInput
+    created_by?: UserUpdateOneWithoutBooking_recurring_blocks_createdNestedInput
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    weekdays?: BookingRecurringBlockUpdateweekdaysInput | number[]
+    start_time?: StringFieldUpdateOperationsInput | string
+    end_time?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string

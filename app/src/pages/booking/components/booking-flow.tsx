@@ -4,6 +4,7 @@ import { CalendarDays } from "lucide-react";
 import type {
     BookingSlot,
     PublicBookingPage,
+    PublicPageRef,
     PublicBookingResult,
 } from "@/features/bookings/interfaces/bookings.interfaces";
 import { useCreatePublicBooking, usePublicBookingSlots } from "@/features/bookings/hooks/use-public-booking";
@@ -42,13 +43,14 @@ const STEP_NUMBERS: Record<BookingStep, number> = {
 };
 
 interface BookingFlowProps {
-    code: string;
+    pageRef: PublicPageRef;
     data: PublicBookingPage;
 }
 
-export const BookingFlow: FC<BookingFlowProps> = ({ code, data }) => {
+export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
     const { page } = data;
-    const defaultTimezone = getBrowserTimezone() ?? resolveBrowserTimezone() ?? data.default_timezone;
+    // The organisation decides the default; visitors can still switch with the timezone selector.
+    const defaultTimezone = data.default_timezone || getBrowserTimezone() || resolveBrowserTimezone() || "UTC";
 
     const [timezoneChoice, setTimezoneChoice] = useState<string | null>(null);
     const timezone = timezoneChoice ?? defaultTimezone;
@@ -62,7 +64,7 @@ export const BookingFlow: FC<BookingFlowProps> = ({ code, data }) => {
 
     const picker = useBookingSlotPicker({ timezone, maxAdvanceDays: page.max_advance_days });
     const slotsQuery = usePublicBookingSlots(
-        code,
+        pageRef,
         picker.range
             ? {
                   ...picker.range,
@@ -72,7 +74,7 @@ export const BookingFlow: FC<BookingFlowProps> = ({ code, data }) => {
               }
             : null,
     );
-    const createBooking = useCreatePublicBooking(code);
+    const createBooking = useCreatePublicBooking(pageRef);
 
     // Move keyboard / screen-reader focus to the step heading whenever the step changes.
     const headingRef = useRef<HTMLHeadingElement>(null);

@@ -104,6 +104,14 @@ export const cancelBooking = async (uuid: string, payload: CancelBookingDto): Pr
     }
 };
 
+export const deleteBooking = async (uuid: string): Promise<void> => {
+    try {
+        await axiosInstance.delete(ApiRoutes.bookings.remove(uuid));
+    } catch (error) {
+        throw new Error(bookingApiErrorMessage(error, "Failed to delete the booking."), { cause: error });
+    }
+};
+
 export const setBookingStatus = async (uuid: string, status: SettableBookingStatus): Promise<BookingDetail> => {
     try {
         const response = await axiosInstance.post(ApiRoutes.bookings.status(uuid), { status });

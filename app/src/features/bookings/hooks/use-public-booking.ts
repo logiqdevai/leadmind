@@ -9,43 +9,44 @@ import {
     getPublicBookingSlots,
     rescheduleManagedBooking,
 } from "../services/public-booking.services";
-import { BookingStatuses, type PublicCreateBookingDto, type SlotsQuery } from "../interfaces/bookings.interfaces";
+import { BookingStatuses, type PublicCreateBookingDto, type PublicPageRef, type SlotsQuery } from "../interfaces/bookings.interfaces";
 import { isSlotUnavailableError } from "../utils/booking-api-error";
 
 type PublicSlotsQuery = Omit<SlotsQuery, "exclude_booking_uuid">;
 
 export const publicBookingQueryKeys = {
     all: ["public-booking"] as const,
-    page: (code: string) => ["public-booking", "page", code] as const,
-    slots: (code: string, query: PublicSlotsQuery) => ["public-booking", "slots", code, query] as const,
+    page: (pageRef: PublicPageRef | undefined) => ["public-booking", "page", pageRef] as const,
+    slots: (pageRef: PublicPageRef | undefined, query: PublicSlotsQuery) => ["public-booking", "slots", pageRef, query] as const,
     manage: (token: string) => ["public-booking", "manage", token] as const,
     manageSlots: (token: string, query: PublicSlotsQuery) => ["public-booking", "manage-slots", token, query] as const,
 };
 
-export function usePublicBookingPage(code: string | undefined) {
+export function usePublicBookingPage(pageRef: PublicPageRef | undefined) {
     return useQuery({
-        queryKey: publicBookingQueryKeys.page(code ?? ""),
-        queryFn: () => getPublicBookingPage(code!),
-        enabled: !!code,
+        queryKey: publicBookingQueryKeys.page(pageRef),
+        queryFn: () => getPublicBookingPage(pageRef!),
+        enabled: !!pageRef,
         retry: false,
+        refetchOnWindowFocus: false,
     });
 }
 
-export function usePublicBookingSlots(code: string | undefined, query: PublicSlotsQuery | null) {
+export function usePublicBookingSlots(pageRef: PublicPageRef | undefined, query: PublicSlotsQuery | null) {
     return useQuery({
-        queryKey: publicBookingQueryKeys.slots(code ?? "", query ?? { from: "", to: "" }),
-        queryFn: () => getPublicBookingSlots(code!, query!),
-        enabled: !!code && !!query,
+        queryKey: publicBookingQueryKeys.slots(pageRef, query ?? { from: "", to: "" }),
+        queryFn: () => getPublicBookingSlots(pageRef!, query!),
+        enabled: !!pageRef && !!query,
         placeholderData: keepPreviousData,
         staleTime: 15_000,
         retry: false,
     });
 }
 
-export function useCreatePublicBooking(code: string) {
+export function useCreatePublicBooking(pageRef: PublicPageRef) {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: (payload: PublicCreateBookingDto) => createPublicBooking(code, payload),
+        mutationFn: (payload: PublicCreateBookingDto) => createPublicBooking(pageRef, payload),
         onSuccess: (result) => {
             qc.invalidateQueries({ queryKey: publicBookingQueryKeys.all });
             const pending = result.booking.status === BookingStatuses.PENDING;

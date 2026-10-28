@@ -32,7 +32,7 @@ const OverrideModal: FC<OverrideModalProps> = ({ isOpen, onOpenChange, editing, 
         resolver: zodResolver(dateOverrideSchema),
         defaultValues: { date: "", unavailable: true, intervals: [{ ...DEFAULT_PERIOD }], reason: "" },
     });
-    const { control, register, reset, formState, handleSubmit } = form;
+    const { control, register, reset, formState, handleSubmit, setError } = form;
     const unavailable = useWatch({ control, name: "unavailable" });
 
     useEffect(() => {
@@ -50,6 +50,11 @@ const OverrideModal: FC<OverrideModalProps> = ({ isOpen, onOpenChange, editing, 
     }, [isOpen, editing, reset]);
 
     const onSubmit = handleSubmit((v) => {
+        // Checked here (not through the picker's min value) so a too-early date explains itself instead of just turning red.
+        if (!editing && v.date < minDate) {
+            setError("date", { message: "Pick today or a later date" });
+            return;
+        }
         saveOverride.mutate(
             {
                 payload: { date: v.date, intervals: v.unavailable ? [] : v.intervals, reason: v.reason.trim() || undefined },
@@ -81,7 +86,6 @@ const OverrideModal: FC<OverrideModalProps> = ({ isOpen, onOpenChange, editing, 
                                             aria-label="Override date"
                                             value={field.value}
                                             onChange={field.onChange}
-                                            minValue={minDate}
                                             isDisabled={!!editing}
                                         />
                                     )}

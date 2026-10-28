@@ -1,7 +1,8 @@
-import type { FC } from "react";
-import { Calendar, DateField, DatePicker, Label, TimeField } from "@heroui/react";
+import { useMemo, type FC } from "react";
+import { Calendar, DateField, DatePicker, Label } from "@heroui/react";
 import { parseDate, Time, type DateValue } from "@internationalized/date";
 import { cn } from "@/lib/utils";
+import { OptionSelect } from "./booking-shared";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -43,11 +44,13 @@ export const DateKeyPicker: FC<DateKeyPickerProps> = ({
     className,
     "aria-label": ariaLabel,
 }) => {
-    const min = minValue ? safeParseDate(minValue) : null;
+    const min = useMemo(() => (minValue ? safeParseDate(minValue) : null), [minValue]);
+    // Stable identity: a fresh object on every render makes the field discard what the user is typing.
+    const dateValue = useMemo(() => safeParseDate(value), [value]);
     return (
         <DatePicker
             className={cn("w-full", className)}
-            value={safeParseDate(value)}
+            value={dateValue}
             onChange={(next) => {
                 if (next) onChange(`${next.year}-${pad(next.month)}-${pad(next.day)}`);
             }}
@@ -101,40 +104,50 @@ interface TimeOfDayFieldProps {
     label?: string;
     isRequired?: boolean;
     isDisabled?: boolean;
+    /** Minutes between listed times. */
+    stepMinutes?: number;
     className?: string;
     "aria-label"?: string;
 }
 
-/** 24h time-of-day field bound to an "HH:MM" string. */
+const timeOptions = (step: number, current: string) => {
+    const times: string[] = [];
+    for (let minutes = 0; minutes < 24 * 60; minutes += step) times.push(`${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}`);
+    // A time that is not on the grid (e.g. from clicking a calendar cell) stays selectable.
+    if (safeParseTime(current) && !times.includes(current)) times.push(current);
+    return times.sort().map((t) => ({ id: t, label: t }));
+};
+
+/** Time-of-day picker (24h): choose from a list of times, bound to an "HH:MM" string. */
 export const TimeOfDayField: FC<TimeOfDayFieldProps> = ({
     value,
     onChange,
     label,
     isRequired,
     isDisabled,
+    stepMinutes = 15,
     className,
     "aria-label": ariaLabel,
-}) => (
-    <TimeField
-        className={cn("w-full", className)}
-        granularity="minute"
-        hourCycle={24}
-        hideTimeZone
-        value={safeParseTime(value)}
-        onChange={(next) => {
-            if (next) onChange(`${pad(next.hour)}:${pad(next.minute)}`);
-        }}
-        isDisabled={isDisabled}
-        aria-label={ariaLabel ?? label ?? "Time"}
-    >
-        {label ? (
-            <Label>
-                {label}
-                {isRequired ? <span className="text-danger"> *</span> : null}
-            </Label>
-        ) : null}
-        <TimeField.Group fullWidth>
-            <TimeField.Input>{(segment) => <TimeField.Segment segment={segment} />}</TimeField.Input>
-        </TimeField.Group>
-    </TimeField>
-);
+}) => {
+    const options = useMemo(() => timeOptions(stepMinutes, value), [stepMinutes, value]);
+    return (
+        <div className={cn("flex w-full flex-col gap-1.5", className)}>
+            {label ? (
+                <Label>
+                    {label}
+                    {isRequired ? <span className="text-danger"> *</span> : null}
+                </Label>
+            ) : null}
+            <OptionSelect
+                aria-label={ariaLabel ?? label ?? "Time"}
+                options={options}
+                value={value}
+                onChange={(next) => {
+                    if (next) onChange(next);
+                }}
+                isDisabled={isDisabled}
+                placeholder="Select time"
+            />
+        </div>
+    );
+};

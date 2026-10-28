@@ -23,6 +23,7 @@ import {
 import { isSlotUnavailableError } from "@/features/bookings/utils/booking-api-error";
 import { DateKeyPicker, TimeOfDayField } from "./booking-date-time-fields";
 import { BookingSlotPicker } from "./booking-slot-picker";
+import { DayAvailability } from "./day-availability";
 import { OptionSelect, SwitchRow } from "./booking-shared";
 import { LOCATION_TYPE_OPTIONS, LOCATION_VALUE_PLACEHOLDERS } from "./utils/booking-options";
 import { ContactSearchPicker, type PickedContact } from "./contact-search-picker";
@@ -53,6 +54,7 @@ const FormError: FC<{ message?: string }> = ({ message }) =>
     message ? <p className="text-xs text-danger">{message}</p> : null;
 
 function buildDefaults(
+    currentUserUuid: string | null | undefined,
     timezone: string,
     pages: BookingPage[],
     contact: PickedContact | null | undefined,
@@ -77,7 +79,8 @@ function buildDefaults(
         date: dateKeyInZone(start, timezone),
         time: initialStart ? timeKeyInZone(start, timezone) : "09:00",
         duration_minutes: page?.duration_minutes ?? 30,
-        assigned_user_uuid: AUTOMATIC,
+        // Whoever is making the booking owns it unless they pick someone else.
+        assigned_user_uuid: currentUserUuid ?? AUTOMATIC,
         ignore_availability: true,
         location_type: page?.location_type ?? BookingLocationTypes.NONE,
         location_value: page?.location_value ?? "",
@@ -102,7 +105,7 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
 
     const form = useForm<CreateBookingFormValues>({
         resolver: zodResolver(createBookingFormSchema),
-        defaultValues: buildDefaults(timezone, pages, contact, initialStart, initialPageUuid),
+        defaultValues: buildDefaults(currentUserUuid, timezone, pages, contact, initialStart, initialPageUuid),
     });
     const { control, setValue, formState, reset, setError } = form;
 
@@ -111,22 +114,24 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
 
     useEffect(() => {
         if (!isOpen) return;
-        reset(buildDefaults(timezone, pages, contact, initialStart, initialPageUuid));
+        reset(buildDefaults(currentUserUuid, timezone, pages, contact, initialStart, initialPageUuid));
         // Pages load async; only re-seed when the modal opens or its prefills change.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOpen, contact?.uuid, initialStart, initialPageUuid, timezone]);
+    }, [isOpen, contact?.uuid, initialStart, initialPageUuid, timezone, currentUserUuid]);
 
-    const [inviteeMode, pageUuid, timeMode, date, duration, slotStart, slotUserUuid, locationType] = useWatch({
+    const [inviteeMode, pageUuid, timeMode, date, time, duration, slotStart, slotUserUuid, locationType, assignedUserUuid] = useWatch({
         control,
         name: [
             "invitee_mode",
             "booking_page_uuid",
             "time_mode",
             "date",
+            "time",
             "duration_minutes",
             "slot_start",
             "slot_user_uuid",
             "location_type",
+            "assigned_user_uuid",
         ],
     });
 
@@ -324,7 +329,7 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
                                                 setValue("slot_user_uuid", slot.userUuid ?? "");
                                             }}
                                             memberName={memberName}
-                                            restrictToUserUuid={isAdmin ? null : currentUserUuid}
+                                            restrictToUserUuid={assignedUserUuid || (isAdmin ? null : currentUserUuid)}
                                         />
                                         {slotStart ? (
                                             <p className="text-xs text-muted">
@@ -358,6 +363,14 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
                                                 <FormError message={errors.time?.message} />
                                             </div>
                                         </div>
+                                        <DayAvailability
+                                            timezone={timezone}
+                                            dateKey={date}
+                                            time={time}
+                                            durationMinutes={duration}
+                                            userUuid={assignedUserUuid || currentUserUuid || null}
+                                            memberName={memberName}
+                                        />
                                         <Controller
                                             control={control}
                                             name="ignore_availability"
@@ -392,8 +405,7 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
                                         />
                                     )}
                                 />
-                                {!usesSlots ? (
-                                    <div className="flex flex-col gap-1.5">
+                                <div className="flex flex-col gap-1.5">
                                         <Label>Assigned to</Label>
                                         <Controller
                                             control={control}
@@ -405,13 +417,16 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
                                                     searchPlaceholder="Search members…"
                                                     options={memberOptions}
                                                     value={field.value}
-                                                    onChange={field.onChange}
+                                                    onChange={(v) => {
+                                                        field.onChange(v);
+                                                        // Slots belong to a member; offer the new member's times.
+                                                        if (usesSlots) clearSlot();
+                                                    }}
                                                     fullWidth
                                                 />
                                             )}
                                         />
-                                    </div>
-                                ) : null}
+                                </div>
                             </section>
 
                             {/* Location */}

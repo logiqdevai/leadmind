@@ -10,6 +10,7 @@ import { Routes } from "@/routes/routes";
 import { useAuthStore } from "@/stores/auth";
 import { BlockedPeriodsSection } from "./components/blocked-periods-section";
 import { DateOverridesSection } from "./components/date-overrides-section";
+import { RecurringBlocksSection } from "./components/recurring-blocks-section";
 import { WeeklyHoursCard } from "./components/weekly-hours-card";
 
 const AvailabilityPage: FC = () => {
@@ -103,6 +104,15 @@ const AvailabilityPage: FC = () => {
                 <div key={selectedUuid} className="space-y-4">
                     <WeeklyHoursCard schedule={schedule} userUuid={hookUserUuid} canEdit={canEdit} memberLabel={memberLabel} />
                     <DateOverridesSection schedule={schedule} userUuid={hookUserUuid} canEdit={canEdit} />
+                    <RecurringBlocksSection
+                        timeZone={schedule.timezone}
+                        userUuid={schedule.user_uuid || selectedUuid || currentUserUuid}
+                        hookUserUuid={hookUserUuid}
+                        currentUserUuid={currentUserUuid}
+                        isAdmin={isAdmin}
+                        canEdit={canEdit}
+                        members={members}
+                    />
                     <BlockedPeriodsSection
                         timeZone={schedule.timezone}
                         userUuid={schedule.user_uuid || selectedUuid || currentUserUuid}

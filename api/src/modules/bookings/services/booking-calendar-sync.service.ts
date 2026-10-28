@@ -143,10 +143,8 @@ export class BookingCalendarSyncService {
         });
         const page = booking.booking_page;
         const withMeet = booking.location_type === BookingLocationType.GOOGLE_MEET;
-        const description = [
-            renderPlaceholders(page?.calendar_event_description || DEFAULT_CALENDAR_EVENT_DESCRIPTION, vars),
-            booking.internal_notes ? `\nInternal notes: ${booking.internal_notes}` : '',
-        ].join('');
+        // Internal notes stay out of the event: the invitee is a guest on it and can read the description.
+        const description = renderPlaceholders(page?.calendar_event_description || DEFAULT_CALENDAR_EVENT_DESCRIPTION, vars);
 
         const result = await this.googleCalendar.upsertEvent(target.composio_connected_account_id, target.calendar_id, eventId, {
             summary: renderPlaceholders(page?.calendar_event_title || DEFAULT_CALENDAR_EVENT_TITLE, vars),

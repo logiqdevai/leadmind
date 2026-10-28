@@ -484,6 +484,44 @@ export interface CreateBookingBlockDto {
     reason?: string;
 }
 
+export interface UpdateBookingBlockDto {
+    start_at?: string;
+    end_at?: string;
+    reason?: string;
+}
+
+export interface RecurringBlock {
+    uuid: string;
+    organisation_uuid: string;
+    user_uuid: string | null;
+    /** ISO weekdays: 1 = Monday .. 7 = Sunday. */
+    weekdays: number[];
+    /** "HH:MM" wall-clock times in `timezone`. */
+    start_time: string;
+    end_time: string;
+    timezone: string;
+    reason: string | null;
+    created_at: string;
+    user?: BookingUserRef | null;
+}
+
+export interface CreateRecurringBlockDto {
+    user_uuid?: string;
+    organisation_wide?: boolean;
+    weekdays: number[];
+    start_time: string;
+    end_time: string;
+    timezone: string;
+    reason?: string;
+}
+
+export interface UpdateRecurringBlockDto {
+    weekdays?: number[];
+    start_time?: string;
+    end_time?: string;
+    reason?: string;
+}
+
 export interface ListBlocksQuery {
     from: string;
     to: string;
@@ -530,8 +568,12 @@ export interface UpdateCalendarConnectionDto {
 
 // --- Public booking pages (unauthenticated) ---------------------------------
 
+/** A public page is addressed by a link's short code, or by organisation + page slug (the page's general URL). */
+export type PublicPageRef = { code: string } | { organisation: string; slug: string };
+
 export interface PublicBookingPage {
-    code: string;
+    /** Null when the page was opened by slug (no link involved). */
+    code: string | null;
     organisation_name: string;
     default_timezone: string;
     page: {

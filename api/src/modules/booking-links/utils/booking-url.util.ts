@@ -21,6 +21,9 @@ const trimSlash = (url: string) => url.replace(/\/+$/, '');
 
 export const BookingPublicUrls = {
     page: (appUrl: string, code: string) => `${trimSlash(appUrl)}/book/${code}`,
+    /** Readable URL of a page's general link (not tied to a contact); contact links keep their short code. */
+    slug: (appUrl: string, organisationSlug: string, pageSlug: string) =>
+        `${trimSlash(appUrl)}/book/${organisationSlug}/${pageSlug}`,
     manage: (appUrl: string, token: string) => `${trimSlash(appUrl)}/book/manage/${token}`,
     cancel: (appUrl: string, token: string) => `${trimSlash(appUrl)}/book/manage/${token}?action=cancel`,
     reschedule: (appUrl: string, token: string) => `${trimSlash(appUrl)}/book/manage/${token}?action=reschedule`,

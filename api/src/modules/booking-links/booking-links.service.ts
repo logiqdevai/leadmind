@@ -35,6 +35,10 @@ export class BookingLinksService {
         return BookingPublicUrls.page(this.appUrl(), code);
     }
 
+    publicSlugUrl(organisation_slug: string, page_slug: string): string {
+        return BookingPublicUrls.slug(this.appUrl(), organisation_slug, page_slug);
+    }
+
     async create(organisation_uuid: string, user_uuid: string | null, dto: CreateBookingLinkDto) {
         await this.assertPage(organisation_uuid, dto.booking_page_uuid);
         if (dto.contact_uuid) await this.assertContact(organisation_uuid, dto.contact_uuid);

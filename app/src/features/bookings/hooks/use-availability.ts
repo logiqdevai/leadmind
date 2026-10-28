@@ -3,6 +3,11 @@ import { toast } from "@/hooks/use-toast";
 import {
     connectGoogleCalendar,
     createBookingBlock,
+    createRecurringBlock,
+    deleteRecurringBlock,
+    listRecurringBlocks,
+    updateBookingBlock,
+    updateRecurringBlock,
     deleteAvailabilityOverride,
     deleteBookingBlock,
     disconnectCalendar,
@@ -17,7 +22,10 @@ import {
 } from "../services/availability.services";
 import type {
     CreateBookingBlockDto,
+    CreateRecurringBlockDto,
     ListBlocksQuery,
+    UpdateBookingBlockDto,
+    UpdateRecurringBlockDto,
     UpdateCalendarConnectionDto,
     UpsertOverrideDto,
     UpsertScheduleDto,
@@ -27,6 +35,7 @@ export const availabilityQueryKeys = {
     all: ["availability"] as const,
     schedule: (userUuid?: string) => ["availability", "schedule", userUuid ?? "me"] as const,
     blocks: (query: ListBlocksQuery) => ["availability", "blocks", query] as const,
+    recurringBlocks: (userUuid?: string) => ["availability", "recurring-blocks", userUuid ?? "me"] as const,
 };
 
 export const calendarConnectionQueryKeys = {
@@ -107,6 +116,61 @@ export function useCreateBookingBlock() {
             toast({ title: "Time blocked", duration: 1500 });
         },
         onError: errorToast("Could not block time"),
+    });
+}
+
+export function useUpdateBookingBlock() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: ({ uuid, payload }: { uuid: string; payload: UpdateBookingBlockDto }) => updateBookingBlock(uuid, payload),
+        onSuccess: () => {
+            invalidateAvailability(qc);
+            toast({ title: "Blocked time updated", duration: 1500 });
+        },
+        onError: errorToast("Could not update blocked time"),
+    });
+}
+
+export function useRecurringBlocks(userUuid?: string) {
+    return useQuery({
+        queryKey: availabilityQueryKeys.recurringBlocks(userUuid),
+        queryFn: () => listRecurringBlocks(userUuid),
+    });
+}
+
+export function useCreateRecurringBlock() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (payload: CreateRecurringBlockDto) => createRecurringBlock(payload),
+        onSuccess: () => {
+            invalidateAvailability(qc);
+            toast({ title: "Recurring time blocked", duration: 1500 });
+        },
+        onError: errorToast("Could not block time"),
+    });
+}
+
+export function useUpdateRecurringBlock() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: ({ uuid, payload }: { uuid: string; payload: UpdateRecurringBlockDto }) => updateRecurringBlock(uuid, payload),
+        onSuccess: () => {
+            invalidateAvailability(qc);
+            toast({ title: "Recurring block updated", duration: 1500 });
+        },
+        onError: errorToast("Could not update recurring block"),
+    });
+}
+
+export function useDeleteRecurringBlock() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (uuid: string) => deleteRecurringBlock(uuid),
+        onSuccess: () => {
+            invalidateAvailability(qc);
+            toast({ title: "Recurring block removed", duration: 1500 });
+        },
+        onError: errorToast("Could not remove recurring block"),
     });
 }
 

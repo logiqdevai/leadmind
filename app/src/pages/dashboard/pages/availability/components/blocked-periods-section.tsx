@@ -2,12 +2,19 @@ import { useEffect, useMemo, useState, type FC } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Chip, Input, Label, Modal } from "@heroui/react";
-import { CalendarOff, Plus, Trash2 } from "lucide-react";
+import { CalendarOff, Pencil, Plus, Trash2 } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { AppDatePicker } from "@/components/ui/date-picker";
+import { TimeOfDayField } from "@/components/bookings/booking-date-time-fields";
+import { timeKeyInZone } from "@/components/bookings/utils/booking-display";
 import { SearchSelect } from "@/components/ui/search-select";
-import { useBookingBlocks, useCreateBookingBlock, useDeleteBookingBlock } from "@/features/bookings/hooks/use-availability";
+import {
+    useBookingBlocks,
+    useCreateBookingBlock,
+    useDeleteBookingBlock,
+    useUpdateBookingBlock,
+} from "@/features/bookings/hooks/use-availability";
 import type { BookingBlock, CreateBookingBlockDto } from "@/features/bookings/interfaces/bookings.interfaces";
 import { addDays, dateKeyInZone, formatDateTime, zonedTimeToIso } from "@/features/bookings/utils/booking-time";
 import type { OrganisationMember } from "@/features/organisations/interfaces/organisation.interfaces";
@@ -17,7 +24,6 @@ import {
     bookingBlockSchema,
     type BookingBlockFormValues,
 } from "@/pages/dashboard/pages/availability/validation-schemas/availability.schema";
-import { TimeInput } from "./time-input";
 
 const EVERYONE = "";
 const LOOKAHEAD_DAYS = 183;
@@ -32,20 +38,45 @@ interface BlockModalProps {
     currentUserUuid: string;
     isAdmin: boolean;
     members: OrganisationMember[];
+    /** When set the modal edits this block instead of creating one. */
+    editing: BookingBlock | null;
 }
 
-const BlockModal: FC<BlockModalProps> = ({ isOpen, onOpenChange, timeZone, defaultUserUuid, currentUserUuid, isAdmin, members }) => {
+/** Form values describing an existing block, in the schedule timezone. */
+function valuesFromBlock(block: BookingBlock, timeZone: string): BookingBlockFormValues {
+    const startDate = dateKeyInZone(block.start_at, timeZone);
+    const startTime = timeKeyInZone(block.start_at, timeZone);
+    const endDate = dateKeyInZone(block.end_at, timeZone);
+    const endTime = timeKeyInZone(block.end_at, timeZone);
+    // Whole-day blocks run midnight to midnight; the form shows the last included day.
+    const allDay = startTime === "00:00" && endTime === "00:00" && endDate > startDate;
+    return {
+        user_uuid: block.user_uuid ?? EVERYONE,
+        all_day: allDay,
+        start_date: startDate,
+        start_time: startTime,
+        end_date: allDay ? addDays(endDate, -1) : endDate,
+        end_time: endTime,
+        reason: block.reason ?? "",
+    };
+}
+
+const BlockModal: FC<BlockModalProps> = ({ isOpen, onOpenChange, timeZone, defaultUserUuid, currentUserUuid, isAdmin, members, editing }) => {
     const createBlock = useCreateBookingBlock();
+    const updateBlock = useUpdateBookingBlock();
     const today = dateKeyInZone(new Date(), timeZone);
-    const defaults = (): BookingBlockFormValues => ({
-        user_uuid: defaultUserUuid,
-        all_day: true,
-        start_date: today,
-        start_time: "09:00",
-        end_date: today,
-        end_time: "17:00",
-        reason: "",
-    });
+    const defaults = (): BookingBlockFormValues =>
+        editing
+            ? valuesFromBlock(editing, timeZone)
+            : {
+                  user_uuid: defaultUserUuid,
+                  all_day: true,
+                  start_date: today,
+                  start_time: "09:00",
+                  end_date: today,
+                  end_time: "17:00",
+                  reason: "",
+              };
     const form = useForm<BookingBlockFormValues>({ resolver: zodResolver(bookingBlockSchema), defaultValues: defaults() });
     const { control, register, reset, setValue, formState, handleSubmit } = form;
     const allDay = useWatch({ control, name: "all_day" });
@@ -55,7 +86,7 @@ const BlockModal: FC<BlockModalProps> = ({ isOpen, onOpenChange, timeZone, defau
     useEffect(() => {
         if (isOpen) reset(defaults());
         // eslint-disable-next-line react-hooks/exhaustive-deps -- reset only when the modal opens
-    }, [isOpen]);
+    }, [isOpen, editing]);
 
     useEffect(() => {
         if (startDate && endDate && endDate < startDate) setValue("end_date", startDate);
@@ -67,15 +98,22 @@ const BlockModal: FC<BlockModalProps> = ({ isOpen, onOpenChange, timeZone, defau
         [members],
     );
 
+    const isPending = createBlock.isPending || updateBlock.isPending;
+
     const onSubmit = handleSubmit((v) => {
         const start_at = zonedTimeToIso(v.start_date, v.all_day ? "00:00" : v.start_time, timeZone);
         const end_at = v.all_day
             ? zonedTimeToIso(addDays(v.end_date, 1), "00:00", timeZone)
             : zonedTimeToIso(v.end_date, v.end_time, timeZone);
+        const close = { onSuccess: () => onOpenChange(false) };
+        if (editing) {
+            updateBlock.mutate({ uuid: editing.uuid, payload: { start_at, end_at, reason: v.reason.trim() } }, close);
+            return;
+        }
         const payload: CreateBookingBlockDto = { start_at, end_at, reason: v.reason.trim() || undefined };
         if (isAdmin && v.user_uuid === EVERYONE) payload.organisation_wide = true;
         else if (isAdmin && v.user_uuid !== currentUserUuid) payload.user_uuid = v.user_uuid;
-        createBlock.mutate(payload, { onSuccess: () => onOpenChange(false) });
+        createBlock.mutate(payload, close);
     });
 
     return (
@@ -84,11 +122,12 @@ const BlockModal: FC<BlockModalProps> = ({ isOpen, onOpenChange, timeZone, defau
                 <Modal.Dialog className="sm:max-w-lg">
                     <Modal.CloseTrigger />
                     <Modal.Header>
-                        <Modal.Heading>Block time</Modal.Heading>
+                        <Modal.Heading>{editing ? "Edit blocked time" : "Block time"}</Modal.Heading>
+                        <p className="text-xs text-muted">Times are in {timeZone}.</p>
                     </Modal.Header>
                     <Modal.Body>
                         <form id="block-form" onSubmit={onSubmit} noValidate className="space-y-4">
-                            {isAdmin ? (
+                            {isAdmin && !editing ? (
                                 <div className="flex flex-col gap-1.5">
                                     <Label>Who</Label>
                                     <Controller
@@ -114,51 +153,59 @@ const BlockModal: FC<BlockModalProps> = ({ isOpen, onOpenChange, timeZone, defau
                                 name="all_day"
                                 render={({ field }) => <SettingSwitch label="All day" isSelected={field.value} onChange={field.onChange} />}
                             />
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <div className="flex flex-col gap-1.5">
-                                    <Label>From</Label>
-                                    <div className="flex items-center gap-2">
+                            <div className="flex flex-col gap-1.5">
+                                <Label>From</Label>
+                                <div className={allDay ? "" : "grid gap-3 sm:grid-cols-2"}>
+                                    <Controller
+                                        control={control}
+                                        name="start_date"
+                                        render={({ field }) => (
+                                            <AppDatePicker
+                                                aria-label="Start date"
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                minValue={editing ? undefined : today}
+                                                className="w-full"
+                                            />
+                                        )}
+                                    />
+                                    {!allDay ? (
                                         <Controller
                                             control={control}
-                                            name="start_date"
-                                            render={({ field }) => (
-                                                <AppDatePicker aria-label="Start date" value={field.value} onChange={field.onChange} minValue={today} className="w-40" />
-                                            )}
+                                            name="start_time"
+                                            render={({ field }) => <TimeOfDayField aria-label="Start time" value={field.value} onChange={field.onChange} />}
                                         />
-                                        {!allDay ? (
-                                            <Controller
-                                                control={control}
-                                                name="start_time"
-                                                render={({ field }) => <TimeInput aria-label="Start time" value={field.value} onChange={field.onChange} />}
-                                            />
-                                        ) : null}
-                                    </div>
-                                    {formState.errors.start_date ? <p className="text-xs text-danger">{formState.errors.start_date.message}</p> : null}
+                                    ) : null}
                                 </div>
-                                <div className="flex flex-col gap-1.5">
-                                    <Label>Until</Label>
-                                    <div className="flex items-center gap-2">
-                                        <Controller
-                                            control={control}
-                                            name="end_date"
-                                            render={({ field }) => (
-                                                <AppDatePicker aria-label="End date" value={field.value} onChange={field.onChange} minValue={startDate || today} className="w-40" />
-                                            )}
-                                        />
-                                        {!allDay ? (
-                                            <Controller
-                                                control={control}
-                                                name="end_time"
-                                                render={({ field }) => <TimeInput aria-label="End time" value={field.value} onChange={field.onChange} />}
-                                            />
-                                        ) : null}
-                                    </div>
-                                    {formState.errors.end_date ? <p className="text-xs text-danger">{formState.errors.end_date.message}</p> : null}
-                                </div>
+                                {formState.errors.start_date ? <p className="text-xs text-danger">{formState.errors.start_date.message}</p> : null}
                             </div>
-                            <p className="text-xs text-muted">
-                                Times are in {timeZone}.{allDay ? " All-day blocks include the end date." : ""}
-                            </p>
+                            <div className="flex flex-col gap-1.5">
+                                <Label>Until</Label>
+                                <div className={allDay ? "" : "grid gap-3 sm:grid-cols-2"}>
+                                    <Controller
+                                        control={control}
+                                        name="end_date"
+                                        render={({ field }) => (
+                                            <AppDatePicker
+                                                aria-label="End date"
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                minValue={startDate || today}
+                                                className="w-full"
+                                            />
+                                        )}
+                                    />
+                                    {!allDay ? (
+                                        <Controller
+                                            control={control}
+                                            name="end_time"
+                                            render={({ field }) => <TimeOfDayField aria-label="End time" value={field.value} onChange={field.onChange} />}
+                                        />
+                                    ) : null}
+                                </div>
+                                {formState.errors.end_date ? <p className="text-xs text-danger">{formState.errors.end_date.message}</p> : null}
+                                {allDay ? <p className="text-xs text-muted">All-day blocks include the end date.</p> : null}
+                            </div>
                             <div className="flex flex-col gap-1.5">
                                 <Label htmlFor="block-reason">Reason</Label>
                                 <Input id="block-reason" {...register("reason")} placeholder="e.g. Vacation, Public holiday" />
@@ -169,8 +216,8 @@ const BlockModal: FC<BlockModalProps> = ({ isOpen, onOpenChange, timeZone, defau
                         <Button variant="tertiary" onPress={() => onOpenChange(false)}>
                             Cancel
                         </Button>
-                        <ActionButtonWithPending type="submit" form="block-form" isPending={createBlock.isPending} isDisabled={createBlock.isPending}>
-                            Block time
+                        <ActionButtonWithPending type="submit" form="block-form" isPending={isPending} isDisabled={isPending}>
+                            {editing ? "Save" : "Block time"}
                         </ActionButtonWithPending>
                     </Modal.Footer>
                 </Modal.Dialog>
@@ -205,6 +252,7 @@ export const BlockedPeriodsSection: FC<BlockedPeriodsSectionProps> = ({
     const { data: blocks = [], isLoading } = useBookingBlocks({ ...range, user_uuid: userUuid });
     const deleteBlock = useDeleteBookingBlock();
     const [modalOpen, setModalOpen] = useState(false);
+    const [editing, setEditing] = useState<BookingBlock | null>(null);
     const [toDelete, setToDelete] = useState<BookingBlock | null>(null);
 
     const sorted = useMemo(() => [...blocks].sort((a, b) => a.start_at.localeCompare(b.start_at)), [blocks]);
@@ -216,7 +264,14 @@ export const BlockedPeriodsSection: FC<BlockedPeriodsSectionProps> = ({
             description="Holidays, vacations and other time off in the next 6 months. Nobody can book a blocked period."
             actions={
                 canEdit ? (
-                    <Button size="sm" variant="secondary" onPress={() => setModalOpen(true)}>
+                    <Button
+                        size="sm"
+                        variant="secondary"
+                        onPress={() => {
+                            setEditing(null);
+                            setModalOpen(true);
+                        }}
+                    >
                         <Plus className="size-3.5" />
                         Block time
                     </Button>
@@ -243,9 +298,22 @@ export const BlockedPeriodsSection: FC<BlockedPeriodsSectionProps> = ({
                                 </Chip>
                             ) : null}
                             {canEdit && canDelete(b) ? (
-                                <Button size="sm" variant="tertiary" aria-label="Remove blocked time" onPress={() => setToDelete(b)}>
-                                    <Trash2 className="size-4 text-danger" />
-                                </Button>
+                                <div className="flex items-center gap-1">
+                                    <Button
+                                        size="sm"
+                                        variant="tertiary"
+                                        aria-label="Edit blocked time"
+                                        onPress={() => {
+                                            setEditing(b);
+                                            setModalOpen(true);
+                                        }}
+                                    >
+                                        <Pencil className="size-4" />
+                                    </Button>
+                                    <Button size="sm" variant="tertiary" aria-label="Remove blocked time" onPress={() => setToDelete(b)}>
+                                        <Trash2 className="size-4 text-danger" />
+                                    </Button>
+                                </div>
                             ) : null}
                         </li>
                     ))}
@@ -262,6 +330,7 @@ export const BlockedPeriodsSection: FC<BlockedPeriodsSectionProps> = ({
                         currentUserUuid={currentUserUuid}
                         isAdmin={isAdmin}
                         members={members}
+                        editing={editing}
                     />
                     <ConfirmDialog
                         isOpen={!!toDelete}

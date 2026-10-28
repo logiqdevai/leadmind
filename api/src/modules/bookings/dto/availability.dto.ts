@@ -1,9 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+    ArrayMinSize,
     IsArray,
     IsBoolean,
     IsDateString,
+    IsInt,
+    Max,
+    Min,
     IsObject,
     IsOptional,
     IsString,
@@ -81,6 +85,97 @@ export class CreateBookingBlockDto {
     @IsString()
     @MaxLength(200)
     reason?: string;
+}
+
+export class UpdateBookingBlockDto {
+    @ApiPropertyOptional({ description: 'ISO 8601 instant' })
+    @IsOptional()
+    @IsDateString()
+    start_at?: string;
+
+    @ApiPropertyOptional({ description: 'ISO 8601 instant' })
+    @IsOptional()
+    @IsDateString()
+    end_at?: string;
+
+    @ApiPropertyOptional({ maxLength: 200 })
+    @IsOptional()
+    @IsString()
+    @MaxLength(200)
+    reason?: string;
+}
+
+export class CreateRecurringBlockDto {
+    @ApiPropertyOptional({ format: 'uuid', description: 'Member to block; defaults to the current user' })
+    @IsOptional()
+    @IsUUID()
+    user_uuid?: string;
+
+    @ApiPropertyOptional({ description: 'Block every member. Admins only.' })
+    @IsOptional()
+    @IsBoolean()
+    organisation_wide?: boolean;
+
+    @ApiProperty({ type: [Number], example: [1, 2, 3, 4, 5], description: 'ISO weekdays, 1 = Monday .. 7 = Sunday' })
+    @IsArray()
+    @ArrayMinSize(1)
+    @IsInt({ each: true })
+    @Min(1, { each: true })
+    @Max(7, { each: true })
+    weekdays: number[];
+
+    @ApiProperty({ example: '12:00' })
+    @Matches(TIME_PATTERN, { message: 'start_time must be HH:MM' })
+    start_time: string;
+
+    @ApiProperty({ example: '13:00' })
+    @Matches(TIME_PATTERN, { message: 'end_time must be HH:MM (24:00 allowed)' })
+    end_time: string;
+
+    @ApiProperty({ example: 'Europe/Athens', description: 'IANA timezone the times are written in' })
+    @IsString()
+    @MaxLength(64)
+    timezone: string;
+
+    @ApiPropertyOptional({ maxLength: 200 })
+    @IsOptional()
+    @IsString()
+    @MaxLength(200)
+    reason?: string;
+}
+
+export class UpdateRecurringBlockDto {
+    @ApiPropertyOptional({ type: [Number] })
+    @IsOptional()
+    @IsArray()
+    @ArrayMinSize(1)
+    @IsInt({ each: true })
+    @Min(1, { each: true })
+    @Max(7, { each: true })
+    weekdays?: number[];
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @Matches(TIME_PATTERN, { message: 'start_time must be HH:MM' })
+    start_time?: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @Matches(TIME_PATTERN, { message: 'end_time must be HH:MM (24:00 allowed)' })
+    end_time?: string;
+
+    @ApiPropertyOptional({ maxLength: 200 })
+    @IsOptional()
+    @IsString()
+    @MaxLength(200)
+    reason?: string;
+}
+
+export class ListRecurringBlocksDto {
+    @ApiPropertyOptional({ format: 'uuid' })
+    @IsOptional()
+    @IsUUID()
+    user_uuid?: string;
 }
 
 export class ListBookingBlocksDto {

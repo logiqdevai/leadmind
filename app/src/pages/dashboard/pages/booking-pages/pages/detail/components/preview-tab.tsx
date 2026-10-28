@@ -13,7 +13,7 @@ import {
     formatTime,
     zonedDayRange,
 } from "@/features/bookings/utils/booking-time";
-import { getBrowserTimezone } from "@/lib/timezone";
+import { useBookingTimezone } from "@/components/bookings/hooks/use-booking-context";
 import { cn } from "@/lib/utils";
 import { DashboardEmptyState } from "@/pages/dashboard/components/dashboard-shared";
 import { SettingsSection, SimpleSelect } from "./form-fields";
@@ -28,7 +28,14 @@ interface PreviewTabProps {
 }
 
 export const PreviewTab: FC<PreviewTabProps> = ({ page }) => {
-    const [timeZone, setTimeZone] = useState(() => getBrowserTimezone() ?? "UTC");
+    const organisationTimezone = useBookingTimezone();
+    // Starts on the organisation's timezone; the picker only overrides it once the user chooses another.
+    const [pickedTimeZone, setTimeZone] = useState<string | null>(null);
+    const timeZone = pickedTimeZone ?? organisationTimezone;
+    const timezoneOptions = useMemo(() => {
+        const options = TimezoneOptions.map((o) => ({ id: o.value, label: o.label }));
+        return options.some((o) => o.id === timeZone) ? options : [{ id: timeZone, label: timeZone }, ...options];
+    }, [timeZone]);
     const [rangeDays, setRangeDays] = useState(7);
     const [offsetDays, setOffsetDays] = useState(0);
     const durations = useMemo(
@@ -119,7 +126,7 @@ export const PreviewTab: FC<PreviewTabProps> = ({ page }) => {
                         <span className="text-xs text-muted">Timezone</span>
                         <SearchSelect
                             aria-label="Preview timezone"
-                            options={TimezoneOptions.map((o) => ({ id: o.value, label: o.label }))}
+                            options={timezoneOptions}
                             value={timeZone}
                             onChange={setTimeZone}
                             searchPlaceholder="Search timezones…"
