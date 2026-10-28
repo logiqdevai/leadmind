@@ -1,17 +1,21 @@
 import axiosInstance from "@/config/api/axios";
 import { ApiRoutes } from "@/config/api/routes";
+import { toTagParams } from "@/features/org-tags/lib/tag-query";
 import type {
     CreateMessageTemplatePayload,
     CreateTemplateFromSourcePayload,
     GenerateTemplateMessagePayload,
     GenerateTemplateMessageResult,
+    ListMessageTemplatesQuery,
     MessageTemplate,
     UpdateMessageTemplatePayload,
 } from "../interfaces/message-template.interface";
 
-export const listMessageTemplates = async (): Promise<MessageTemplate[]> => {
+export const listMessageTemplates = async (query: ListMessageTemplatesQuery = {}): Promise<MessageTemplate[]> => {
     try {
-        const response = await axiosInstance.get<MessageTemplate[]>(ApiRoutes.message_templates.list);
+        const response = await axiosInstance.get<MessageTemplate[]>(ApiRoutes.message_templates.list, {
+            params: toTagParams(query),
+        });
         return response.data;
     } catch {
         throw new Error("Failed to load message templates. Please try again.");

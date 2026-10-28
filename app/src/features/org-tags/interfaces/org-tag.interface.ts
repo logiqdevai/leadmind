@@ -1,6 +1,6 @@
-export type OrgTagEntityType = "CONTACT_LIST" | "SEQUENCE" | "CAMPAIGN" | "FILTER";
+export type OrgTagEntityType = "CONTACT_LIST" | "SEQUENCE" | "CAMPAIGN" | "FILTER" | "MESSAGE_TEMPLATE";
 
-/** The slim tag shape embedded in lists, sequences, campaigns and filters. */
+/** The slim tag shape embedded in lists, sequences, campaigns, filters and message templates. */
 export interface OrgTagSummary {
     uuid: string;
     name: string;

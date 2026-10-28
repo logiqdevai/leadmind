@@ -654,6 +654,7 @@ export class OrganisationDataCopyService {
             [OrgTagEntityType.CONTACT_LIST, idMaps.lists],
             [OrgTagEntityType.SEQUENCE, idMaps.sequences],
             [OrgTagEntityType.CAMPAIGN, idMaps.campaigns],
+            [OrgTagEntityType.MESSAGE_TEMPLATE, idMaps.templates],
         ];
 
         const assignments = await this.prisma.orgTagAssignment.findMany({

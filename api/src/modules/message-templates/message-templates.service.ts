@@ -1,8 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Channel, MarketingCampaign } from '@/generated/prisma';
+import { Channel, MarketingCampaign, OrgTagEntityType, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
+import { OrgTagsService } from '@/modules/org-tags/org-tags.service';
 import { isEmailHtmlEmpty, sanitizeEmailHtml } from '@/shared/utils/sanitize-html.util';
 import { CreateMessageTemplateDto } from './dto/create-message-template.dto';
+import { ListMessageTemplatesDto } from './dto/list-message-templates.dto';
 import { UpdateMessageTemplateDto } from './dto/update-message-template.dto';
 import { CreateTemplateFromSourceDto } from './dto/create-template-from-source.dto';
 import { GenerateTemplateMessageDto } from './dto/generate-template-message.dto';
@@ -41,7 +43,13 @@ export class MessageTemplatesService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly templateAiService: TemplateAiService,
+        private readonly orgTags: OrgTagsService,
     ) {}
+
+    private async withTags<T extends { uuid: string }>(organisation_uuid: string, template: T) {
+        const [withTags] = await this.orgTags.withTags(organisation_uuid, OrgTagEntityType.MESSAGE_TEMPLATE, [template]);
+        return withTags;
+    }
 
     private async assertSenderProfileInOrg(organisation_uuid: string, sender_profile_uuid: string) {
         const profile = await this.prisma.senderProfile.findFirst({
@@ -67,7 +75,9 @@ export class MessageTemplatesService {
         if (dto.booking_page_uuid) {
             await this.assertBookingPageInOrg(organisation_uuid, dto.booking_page_uuid);
         }
-        return this.prisma.messageTemplate.create({
+        // Validate tags up front so a bad tag uuid doesn't leave an untagged template behind.
+        if (dto.tag_uuids?.length) await this.orgTags.assertTagsOwned(organisation_uuid, dto.tag_uuids);
+        const template = await this.prisma.messageTemplate.create({
             data: {
                 organisation_uuid,
                 name: dto.name.trim(),
@@ -80,16 +90,22 @@ export class MessageTemplatesService {
                 append_booking_cta: dto.append_booking_cta ?? false,
             },
         });
+        if (dto.tag_uuids?.length) {
+            await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.MESSAGE_TEMPLATE, template.uuid, dto.tag_uuids);
+        }
+        return this.withTags(organisation_uuid, template);
     }
 
-    async findAll(organisation_uuid: string) {
-        return this.prisma.messageTemplate.findMany({
-            where: { organisation_uuid },
-            orderBy: { updated_at: 'desc' },
-        });
+    async findAll(organisation_uuid: string, filters: ListMessageTemplatesDto = {}) {
+        const where: Prisma.MessageTemplateWhereInput = { organisation_uuid };
+        const tagWhere = await this.orgTags.buildWhere(organisation_uuid, OrgTagEntityType.MESSAGE_TEMPLATE, filters);
+        if (tagWhere) where.uuid = tagWhere.uuid;
+
+        const rows = await this.prisma.messageTemplate.findMany({ where, orderBy: { updated_at: 'desc' } });
+        return this.orgTags.withTags(organisation_uuid, OrgTagEntityType.MESSAGE_TEMPLATE, rows);
     }
 
-    async findOne(organisation_uuid: string, uuid: string) {
+    private async requireOwned(organisation_uuid: string, uuid: string) {
         const row = await this.prisma.messageTemplate.findFirst({
             where: { uuid, organisation_uuid },
         });
@@ -97,8 +113,12 @@ export class MessageTemplatesService {
         return row;
     }
 
+    async findOne(organisation_uuid: string, uuid: string) {
+        return this.withTags(organisation_uuid, await this.requireOwned(organisation_uuid, uuid));
+    }
+
     async update(organisation_uuid: string, uuid: string, dto: UpdateMessageTemplateDto) {
-        const existing = await this.findOne(organisation_uuid, uuid);
+        const existing = await this.requireOwned(organisation_uuid, uuid);
         const merged: CreateMessageTemplateDto = {
             name: dto.name ?? existing.name,
             channels: dto.channels ?? existing.channels,
@@ -114,7 +134,11 @@ export class MessageTemplatesService {
             await this.assertBookingPageInOrg(organisation_uuid, dto.booking_page_uuid);
         }
 
-        return this.prisma.messageTemplate.update({
+        if (dto.tag_uuids !== undefined) {
+            await this.orgTags.setTags(organisation_uuid, OrgTagEntityType.MESSAGE_TEMPLATE, uuid, dto.tag_uuids);
+        }
+
+        const updated = await this.prisma.messageTemplate.update({
             where: { uuid },
             data: {
                 ...(dto.name !== undefined && { name: dto.name.trim() }),
@@ -127,11 +151,13 @@ export class MessageTemplatesService {
                 ...(dto.append_booking_cta !== undefined && { append_booking_cta: dto.append_booking_cta }),
             },
         });
+        return this.withTags(organisation_uuid, updated);
     }
 
     async remove(organisation_uuid: string, uuid: string) {
-        await this.findOne(organisation_uuid, uuid);
+        await this.requireOwned(organisation_uuid, uuid);
         await this.prisma.messageTemplate.delete({ where: { uuid } });
+        await this.orgTags.deleteForEntities(OrgTagEntityType.MESSAGE_TEMPLATE, [uuid]);
         return { uuid };
     }
 

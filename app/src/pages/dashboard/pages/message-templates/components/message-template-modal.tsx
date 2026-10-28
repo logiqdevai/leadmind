@@ -4,6 +4,7 @@ import { ActionButtonWithPending } from "@/components/ui/action-button-with-pend
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
 import { BookingLinkSettings } from "@/components/bookings/booking-link-settings";
+import { TagPicker } from "@/components/tags/tag-picker";
 import {
     MessageComposer,
     type MessageComposerValue,
@@ -62,6 +63,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
     const [senderProfileUuid, setSenderProfileUuid] = useState<string | null>(null);
     const [bookingPageUuid, setBookingPageUuid] = useState<string | null>(null);
     const [appendBookingCta, setAppendBookingCta] = useState(false);
+    const [tagUuids, setTagUuids] = useState<string[]>([]);
     const [nameError, setNameError] = useState<string | null>(null);
     const [contentError, setContentError] = useState<string | null>(null);
     const [composerKey, setComposerKey] = useState(0);
@@ -81,6 +83,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                 setSenderProfileUuid(initial.sender_profile_uuid ?? null);
                 setBookingPageUuid(initial.booking_page_uuid ?? null);
                 setAppendBookingCta(initial.append_booking_cta ?? false);
+                setTagUuids((initial.tags ?? []).map((t) => t.uuid));
                 setComposerValue(templateToComposerValue(initial));
                 const channels = initial.channels.filter(
                     (c) => c === Channel.EMAIL || c === Channel.SMS,
@@ -91,6 +94,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                 setSenderProfileUuid(null);
                 setBookingPageUuid(null);
                 setAppendBookingCta(false);
+                setTagUuids([]);
                 setComposerValue(prefill);
                 setActiveChannel(
                     !isComposerContentEmpty(Channel.EMAIL, prefill) ? Channel.EMAIL : Channel.SMS,
@@ -100,6 +104,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                 setSenderProfileUuid(null);
                 setBookingPageUuid(null);
                 setAppendBookingCta(false);
+                setTagUuids([]);
                 setComposerValue(EMPTY_MESSAGE_COMPOSER_VALUE);
                 setActiveChannel(Channel.EMAIL);
             }
@@ -144,6 +149,8 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
             sender_profile_uuid: initial ? senderProfileUuid : (senderProfileUuid ?? undefined),
             booking_page_uuid: bookingPageUuid,
             append_booking_cta: appendBookingCta,
+            // On update this replaces the full set, so an empty array clears the tags.
+            ...(initial || tagUuids.length ? { tag_uuids: tagUuids } : {}),
         };
         if (initial) {
             await updateMut.mutateAsync({ uuid: initial.uuid, payload });
@@ -194,6 +201,8 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                             />
                             {nameError ? <FieldError>{nameError}</FieldError> : null}
                         </div>
+
+                        <TagPicker value={tagUuids} onChange={setTagUuids} disabled={pending} />
 
                         <SenderProfileSelect
                             value={senderProfileUuid}

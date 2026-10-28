@@ -51,4 +51,14 @@ export class CreateMessageTemplateDto {
     @IsOptional()
     @IsBoolean()
     append_booking_cta?: boolean;
+
+    @ApiPropertyOptional({
+        type: [String],
+        description:
+            'Organisation tag UUIDs to group this template under. On update this replaces the full set (empty array clears).',
+    })
+    @IsOptional()
+    @IsArray()
+    @IsUUID('all', { each: true })
+    tag_uuids?: string[];
 }

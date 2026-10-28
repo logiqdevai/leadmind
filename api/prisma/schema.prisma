@@ -2173,6 +2173,7 @@ enum OrgTagEntityType {
   SEQUENCE
   CAMPAIGN
   FILTER
+  MESSAGE_TEMPLATE
 }
 
 model OrgTag {

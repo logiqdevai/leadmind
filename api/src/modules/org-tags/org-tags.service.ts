@@ -237,6 +237,9 @@ export class OrgTagsService {
             case OrgTagEntityType.FILTER:
                 rows = await this.prisma.filter.findMany({ where, select });
                 break;
+            case OrgTagEntityType.MESSAGE_TEMPLATE:
+                rows = await this.prisma.messageTemplate.findMany({ where, select });
+                break;
         }
         if (rows.length !== uuids.length) throw new NotFoundException('One or more items were not found');
         return rows.map((r) => r.uuid);

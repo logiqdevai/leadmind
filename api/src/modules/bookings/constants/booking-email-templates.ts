@@ -13,25 +13,27 @@ const details = `
 <tr><td style="padding:2px 12px 2px 0;color:#6b7280">With</td><td>{{team_member.name}}</td></tr>
 </tbody></table>`;
 
-const manageLinks = `<p><a href="{{booking.reschedule_url}}">Reschedule</a> &middot; <a href="{{booking.cancel_url}}">Cancel</a></p>`;
+const manageLinks = `<p>Need a different time? No problem - you can <a href="{{booking.reschedule_url}}">reschedule</a> or <a href="{{booking.cancel_url}}">cancel</a> anytime.</p>`;
+
+const signOff = `<p>{{team_member.name}}<br>{{brand.name}}</p>`;
 
 /** Invitee-facing defaults, used when a booking page has no template selected for that email. */
 export const DEFAULT_INVITEE_TEMPLATES: Record<BookingNotificationKind, BookingEmailTemplate> = {
     CONFIRMATION: {
-        subject: 'Confirmed: {{booking.title}} on {{booking.date}}',
-        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting is booked.</p>${details}${manageLinks}<p>{{brand.name}}</p>`,
+        subject: "You're all set: {{booking.title}} on {{booking.date}}",
+        html: `<p>Hi {{contact.first_name}},</p><p>Thanks for booking a call with us - we're really looking forward to speaking with you! Here are the details:</p>${details}<p>Your meeting link is just below, and you can add the call to your calendar with one click.</p>${manageLinks}<p>See you soon!</p>${signOff}`,
     },
     REMINDER: {
-        subject: 'Reminder: {{booking.title}} on {{booking.date}} at {{booking.start_time}}',
-        html: `<p>Hi {{contact.first_name}},</p><p>This is a reminder of your upcoming meeting.</p>${details}${manageLinks}<p>{{brand.name}}</p>`,
+        subject: 'See you soon: {{booking.title}} on {{booking.date}} at {{booking.start_time}}',
+        html: `<p>Hi {{contact.first_name}},</p><p>Just a friendly reminder about our upcoming call. Here's what's coming up:</p>${details}<p>Your meeting link is just below.</p>${manageLinks}<p>Talk soon!</p>${signOff}`,
     },
     CANCELLATION: {
-        subject: 'Cancelled: {{booking.title}} on {{booking.date}}',
-        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting on {{booking.date}} at {{booking.start_time}} has been cancelled.</p><p>{{brand.name}}</p>`,
+        subject: 'Your meeting on {{booking.date}} has been cancelled',
+        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting on {{booking.date}} at {{booking.start_time}} has been cancelled.</p><p>If you'd still like to talk, just reply to this email and we'll find a new time that works for you.</p><p>Hope to speak soon!</p>${signOff}`,
     },
     RESCHEDULE: {
-        subject: 'Rescheduled: {{booking.title}} is now on {{booking.date}}',
-        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting has been moved to a new time.</p>${details}${manageLinks}<p>{{brand.name}}</p>`,
+        subject: 'New time for {{booking.title}}: {{booking.date}} at {{booking.start_time}}',
+        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting has been moved to a new time. Here are the updated details:</p>${details}<p>Your meeting link is just below.</p>${manageLinks}<p>See you then!</p>${signOff}`,
     },
 };
 

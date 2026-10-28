@@ -8,12 +8,16 @@ import {
 import type { MessageTemplate } from "@/features/message-templates/interfaces/message-template.interface";
 import type { MessageComposerValue } from "@/features/messaging/components/message-composer";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { TagFilterBar } from "@/components/tags/tag-filter-bar";
+import { useTagFilterParams } from "@/components/tags/use-tag-filter-params";
 import { MessageTemplatesTable } from "./components/message-templates-table";
 import { MessageTemplateModal } from "./components/message-template-modal";
 import { CreateFromCampaignModal } from "./components/create-from-campaign-modal";
 
 const MessageTemplatesPage: FC = () => {
-    const { data: templates = [], isLoading, refetch } = useMessageTemplates();
+    const { state: tagFilter, setState: setTagFilter, query: tagQuery, isActive: tagFilterActive } =
+        useTagFilterParams();
+    const { data: templates = [], isLoading, refetch } = useMessageTemplates(tagQuery);
     const deleteMut = useDeleteMessageTemplate();
 
     const [modalOpen, setModalOpen] = useState(false);
@@ -56,11 +60,16 @@ const MessageTemplatesPage: FC = () => {
                 </div>
             </div>
 
+            <div className="flex flex-wrap items-center gap-2">
+                <TagFilterBar entityType="MESSAGE_TEMPLATE" value={tagFilter} onChange={setTagFilter} />
+            </div>
+
             {isLoading ? (
                 <div className="h-48 rounded-xl bg-surface-secondary animate-pulse" />
             ) : (
                 <MessageTemplatesTable
                     templates={templates}
+                    isFiltered={tagFilterActive}
                     onEdit={(template) => {
                         setEditing(template);
                         setModalOpen(true);

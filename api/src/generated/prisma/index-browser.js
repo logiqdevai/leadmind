@@ -1922,7 +1922,8 @@ exports.OrgTagEntityType = exports.$Enums.OrgTagEntityType = {
   CONTACT_LIST: 'CONTACT_LIST',
   SEQUENCE: 'SEQUENCE',
   CAMPAIGN: 'CAMPAIGN',
-  FILTER: 'FILTER'
+  FILTER: 'FILTER',
+  MESSAGE_TEMPLATE: 'MESSAGE_TEMPLATE'
 };
 
 exports.BookingAssignmentMode = exports.$Enums.BookingAssignmentMode = {

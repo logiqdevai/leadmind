@@ -12,19 +12,20 @@ import type {
     CreateMessageTemplatePayload,
     CreateTemplateFromSourcePayload,
     GenerateTemplateMessagePayload,
+    ListMessageTemplatesQuery,
     UpdateMessageTemplatePayload,
 } from "../interfaces/message-template.interface";
 import { toast } from "@/hooks/use-toast";
 
 export const messageTemplatesQueryKeys = {
     all: ["message-templates"] as const,
-    list: () => ["message-templates", "list"] as const,
+    list: (query: ListMessageTemplatesQuery = {}) => ["message-templates", "list", query] as const,
 };
 
-export function useMessageTemplates() {
+export function useMessageTemplates(query: ListMessageTemplatesQuery = {}) {
     return useQuery({
-        queryKey: messageTemplatesQueryKeys.list(),
-        queryFn: listMessageTemplates,
+        queryKey: messageTemplatesQueryKeys.list(query),
+        queryFn: () => listMessageTemplates(query),
         staleTime: 30_000,
     });
 }

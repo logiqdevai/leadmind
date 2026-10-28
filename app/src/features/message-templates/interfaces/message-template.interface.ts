@@ -1,4 +1,7 @@
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
+import type { OrgTagSummary, TagFilterQuery } from "@/features/org-tags/interfaces/org-tag.interface";
+
+export type ListMessageTemplatesQuery = TagFilterQuery;
 
 export interface MessageTemplate {
     uuid: string;
@@ -15,6 +18,7 @@ export interface MessageTemplate {
     booking_page_uuid: string | null;
     /** Append a booking button when the email has no `{{booking_link}}`. */
     append_booking_cta: boolean;
+    tags?: OrgTagSummary[];
     created_at: string;
     updated_at: string;
 }
@@ -28,6 +32,8 @@ export type CreateMessageTemplatePayload = {
     sender_profile_uuid?: string | null;
     booking_page_uuid?: string | null;
     append_booking_cta?: boolean;
+    /** Organisation tag uuids. On update this replaces the full set (empty array clears). */
+    tag_uuids?: string[];
 };
 
 export type UpdateMessageTemplatePayload = Partial<CreateMessageTemplatePayload>;

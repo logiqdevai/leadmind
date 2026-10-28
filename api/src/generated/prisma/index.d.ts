@@ -1061,7 +1061,8 @@ export const OrgTagEntityType: {
   CONTACT_LIST: 'CONTACT_LIST',
   SEQUENCE: 'SEQUENCE',
   CAMPAIGN: 'CAMPAIGN',
-  FILTER: 'FILTER'
+  FILTER: 'FILTER',
+  MESSAGE_TEMPLATE: 'MESSAGE_TEMPLATE'
 };
 
 export type OrgTagEntityType = (typeof OrgTagEntityType)[keyof typeof OrgTagEntityType]

@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Put,
+    Query,
     UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -19,6 +20,7 @@ import { CreateMessageTemplateDto } from './dto/create-message-template.dto';
 import { UpdateMessageTemplateDto } from './dto/update-message-template.dto';
 import { CreateTemplateFromSourceDto } from './dto/create-template-from-source.dto';
 import { GenerateTemplateMessageDto } from './dto/generate-template-message.dto';
+import { ListMessageTemplatesDto } from './dto/list-message-templates.dto';
 import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
 import {
     ActivityAction,
@@ -81,8 +83,8 @@ export class MessageTemplatesController {
     @ApiOperation({ summary: 'List message templates for the current user' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
-    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string) {
-        return this.messageTemplatesService.findAll(organisation_uuid);
+    findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() filters: ListMessageTemplatesDto) {
+        return this.messageTemplatesService.findAll(organisation_uuid, filters);
     }
 
     @Get(':uuid')

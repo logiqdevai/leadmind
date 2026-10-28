@@ -45,6 +45,7 @@ function usageSummary(tag: OrgTag) {
         [tag.usage.SEQUENCE, "sequence"],
         [tag.usage.CAMPAIGN, "campaign"],
         [tag.usage.FILTER, "filter"],
+        [tag.usage.MESSAGE_TEMPLATE, "template"],
     ] as const;
     const text = parts
         .filter(([n]) => n)
