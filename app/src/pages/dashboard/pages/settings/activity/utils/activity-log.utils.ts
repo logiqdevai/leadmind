@@ -88,6 +88,7 @@ const ACTION_LABELS: Record<string, string> = {
     default_account_set: "Default account set",
     account_title_updated: "Account title updated",
     completed: "Completed",
+    undone: "Undone",
     reordered: "Reordered",
     created_from_campaign: "Created from campaign",
     created_from_message: "Created from message",

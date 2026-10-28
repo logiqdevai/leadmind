@@ -410,6 +410,12 @@ export type BookingEvent = $Result.DefaultSelection<Prisma.$BookingEventPayload>
  */
 export type BookingInviteSettings = $Result.DefaultSelection<Prisma.$BookingInviteSettingsPayload>
 /**
+ * Model BookingInviteTemplate
+ * A message template the organisation offers for booking-link emails (invite or reminder). The one written in the
+ * contact's language is sent, so several can be offered per kind (one per language).
+ */
+export type BookingInviteTemplate = $Result.DefaultSelection<Prisma.$BookingInviteTemplatePayload>
+/**
  * Model BookingInvitation
  * A booking link emailed to a contact, and the state of its follow-up reminders.
  */
@@ -1158,6 +1164,14 @@ export const BookingInviteUnit: {
 export type BookingInviteUnit = (typeof BookingInviteUnit)[keyof typeof BookingInviteUnit]
 
 
+export const BookingInviteTemplateKind: {
+  INVITE: 'INVITE',
+  REMINDER: 'REMINDER'
+};
+
+export type BookingInviteTemplateKind = (typeof BookingInviteTemplateKind)[keyof typeof BookingInviteTemplateKind]
+
+
 export const BookingInvitationStatus: {
   ACTIVE: 'ACTIVE',
   BOOKED: 'BOOKED',
@@ -1482,6 +1496,10 @@ export const BookingEventType: typeof $Enums.BookingEventType
 export type BookingInviteUnit = $Enums.BookingInviteUnit
 
 export const BookingInviteUnit: typeof $Enums.BookingInviteUnit
+
+export type BookingInviteTemplateKind = $Enums.BookingInviteTemplateKind
+
+export const BookingInviteTemplateKind: typeof $Enums.BookingInviteTemplateKind
 
 export type BookingInvitationStatus = $Enums.BookingInvitationStatus
 
@@ -2399,6 +2417,16 @@ export class PrismaClient<
   get bookingInviteSettings(): Prisma.BookingInviteSettingsDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.bookingInviteTemplate`: Exposes CRUD operations for the **BookingInviteTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BookingInviteTemplates
+    * const bookingInviteTemplates = await prisma.bookingInviteTemplate.findMany()
+    * ```
+    */
+  get bookingInviteTemplate(): Prisma.BookingInviteTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.bookingInvitation`: Exposes CRUD operations for the **BookingInvitation** model.
     * Example usage:
     * ```ts
@@ -2958,6 +2986,7 @@ export namespace Prisma {
     Booking: 'Booking',
     BookingEvent: 'BookingEvent',
     BookingInviteSettings: 'BookingInviteSettings',
+    BookingInviteTemplate: 'BookingInviteTemplate',
     BookingInvitation: 'BookingInvitation',
     BookingNotification: 'BookingNotification',
     BookingPageTemplate: 'BookingPageTemplate',
@@ -2978,7 +3007,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingRecurringBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "bookingLinkVisit" | "booking" | "bookingEvent" | "bookingInviteSettings" | "bookingInvitation" | "bookingNotification" | "bookingPageTemplate" | "calendarConnection" | "notification"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingRecurringBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "bookingLinkVisit" | "booking" | "bookingEvent" | "bookingInviteSettings" | "bookingInviteTemplate" | "bookingInvitation" | "bookingNotification" | "bookingPageTemplate" | "calendarConnection" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -8680,6 +8709,80 @@ export namespace Prisma {
           }
         }
       }
+      BookingInviteTemplate: {
+        payload: Prisma.$BookingInviteTemplatePayload<ExtArgs>
+        fields: Prisma.BookingInviteTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BookingInviteTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BookingInviteTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.BookingInviteTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BookingInviteTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.BookingInviteTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.BookingInviteTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.BookingInviteTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BookingInviteTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.BookingInviteTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>
+          }
+          update: {
+            args: Prisma.BookingInviteTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.BookingInviteTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BookingInviteTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BookingInviteTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.BookingInviteTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingInviteTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.BookingInviteTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBookingInviteTemplate>
+          }
+          groupBy: {
+            args: Prisma.BookingInviteTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BookingInviteTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BookingInviteTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<BookingInviteTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
       BookingInvitation: {
         payload: Prisma.$BookingInvitationPayload<ExtArgs>
         fields: Prisma.BookingInvitationFieldRefs
@@ -9235,6 +9338,7 @@ export namespace Prisma {
     booking?: BookingOmit
     bookingEvent?: BookingEventOmit
     bookingInviteSettings?: BookingInviteSettingsOmit
+    bookingInviteTemplate?: BookingInviteTemplateOmit
     bookingInvitation?: BookingInvitationOmit
     bookingNotification?: BookingNotificationOmit
     bookingPageTemplate?: BookingPageTemplateOmit
@@ -9644,6 +9748,7 @@ export namespace Prisma {
     booking_pages: number
     booking_links: number
     bookings: number
+    booking_invite_templates: number
     booking_invitations: number
     booking_events: number
     calendar_connections: number
@@ -9692,6 +9797,7 @@ export namespace Prisma {
     booking_pages?: boolean | OrganisationCountOutputTypeCountBooking_pagesArgs
     booking_links?: boolean | OrganisationCountOutputTypeCountBooking_linksArgs
     bookings?: boolean | OrganisationCountOutputTypeCountBookingsArgs
+    booking_invite_templates?: boolean | OrganisationCountOutputTypeCountBooking_invite_templatesArgs
     booking_invitations?: boolean | OrganisationCountOutputTypeCountBooking_invitationsArgs
     booking_events?: boolean | OrganisationCountOutputTypeCountBooking_eventsArgs
     calendar_connections?: boolean | OrganisationCountOutputTypeCountCalendar_connectionsArgs
@@ -9994,6 +10100,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountBookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountBooking_invite_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingInviteTemplateWhereInput
   }
 
   /**
@@ -10661,11 +10774,13 @@ export namespace Prisma {
   export type MessageTemplateCountOutputType = {
     sequence_steps: number
     booking_page_templates: number
+    booking_invite_templates: number
   }
 
   export type MessageTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sequence_steps?: boolean | MessageTemplateCountOutputTypeCountSequence_stepsArgs
     booking_page_templates?: boolean | MessageTemplateCountOutputTypeCountBooking_page_templatesArgs
+    booking_invite_templates?: boolean | MessageTemplateCountOutputTypeCountBooking_invite_templatesArgs
   }
 
   // Custom InputTypes
@@ -10691,6 +10806,13 @@ export namespace Prisma {
    */
   export type MessageTemplateCountOutputTypeCountBooking_page_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingPageTemplateWhereInput
+  }
+
+  /**
+   * MessageTemplateCountOutputType without action
+   */
+  export type MessageTemplateCountOutputTypeCountBooking_invite_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingInviteTemplateWhereInput
   }
 
 
@@ -13608,6 +13730,7 @@ export namespace Prisma {
     booking_links?: boolean | Organisation$booking_linksArgs<ExtArgs>
     bookings?: boolean | Organisation$bookingsArgs<ExtArgs>
     booking_invite_settings?: boolean | Organisation$booking_invite_settingsArgs<ExtArgs>
+    booking_invite_templates?: boolean | Organisation$booking_invite_templatesArgs<ExtArgs>
     booking_invitations?: boolean | Organisation$booking_invitationsArgs<ExtArgs>
     booking_events?: boolean | Organisation$booking_eventsArgs<ExtArgs>
     calendar_connections?: boolean | Organisation$calendar_connectionsArgs<ExtArgs>
@@ -13695,6 +13818,7 @@ export namespace Prisma {
     booking_links?: boolean | Organisation$booking_linksArgs<ExtArgs>
     bookings?: boolean | Organisation$bookingsArgs<ExtArgs>
     booking_invite_settings?: boolean | Organisation$booking_invite_settingsArgs<ExtArgs>
+    booking_invite_templates?: boolean | Organisation$booking_invite_templatesArgs<ExtArgs>
     booking_invitations?: boolean | Organisation$booking_invitationsArgs<ExtArgs>
     booking_events?: boolean | Organisation$booking_eventsArgs<ExtArgs>
     calendar_connections?: boolean | Organisation$calendar_connectionsArgs<ExtArgs>
@@ -13749,6 +13873,7 @@ export namespace Prisma {
       booking_links: Prisma.$BookingLinkPayload<ExtArgs>[]
       bookings: Prisma.$BookingPayload<ExtArgs>[]
       booking_invite_settings: Prisma.$BookingInviteSettingsPayload<ExtArgs> | null
+      booking_invite_templates: Prisma.$BookingInviteTemplatePayload<ExtArgs>[]
       booking_invitations: Prisma.$BookingInvitationPayload<ExtArgs>[]
       booking_events: Prisma.$BookingEventPayload<ExtArgs>[]
       calendar_connections: Prisma.$CalendarConnectionPayload<ExtArgs>[]
@@ -14200,6 +14325,7 @@ export namespace Prisma {
     booking_links<T extends Organisation$booking_linksArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookings<T extends Organisation$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_invite_settings<T extends Organisation$booking_invite_settingsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_invite_settingsArgs<ExtArgs>>): Prisma__BookingInviteSettingsClient<$Result.GetResult<Prisma.$BookingInviteSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    booking_invite_templates<T extends Organisation$booking_invite_templatesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_invite_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_invitations<T extends Organisation$booking_invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_events<T extends Organisation$booking_eventsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$booking_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     calendar_connections<T extends Organisation$calendar_connectionsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$calendar_connectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -15630,6 +15756,30 @@ export namespace Prisma {
      */
     include?: BookingInviteSettingsInclude<ExtArgs> | null
     where?: BookingInviteSettingsWhereInput
+  }
+
+  /**
+   * Organisation.booking_invite_templates
+   */
+  export type Organisation$booking_invite_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    where?: BookingInviteTemplateWhereInput
+    orderBy?: BookingInviteTemplateOrderByWithRelationInput | BookingInviteTemplateOrderByWithRelationInput[]
+    cursor?: BookingInviteTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookingInviteTemplateScalarFieldEnum | BookingInviteTemplateScalarFieldEnum[]
   }
 
   /**
@@ -53771,6 +53921,7 @@ export namespace Prisma {
     booking_page?: boolean | MessageTemplate$booking_pageArgs<ExtArgs>
     sequence_steps?: boolean | MessageTemplate$sequence_stepsArgs<ExtArgs>
     booking_page_templates?: boolean | MessageTemplate$booking_page_templatesArgs<ExtArgs>
+    booking_invite_templates?: boolean | MessageTemplate$booking_invite_templatesArgs<ExtArgs>
     _count?: boolean | MessageTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["messageTemplate"]>
 
@@ -53844,6 +53995,7 @@ export namespace Prisma {
     booking_page?: boolean | MessageTemplate$booking_pageArgs<ExtArgs>
     sequence_steps?: boolean | MessageTemplate$sequence_stepsArgs<ExtArgs>
     booking_page_templates?: boolean | MessageTemplate$booking_page_templatesArgs<ExtArgs>
+    booking_invite_templates?: boolean | MessageTemplate$booking_invite_templatesArgs<ExtArgs>
     _count?: boolean | MessageTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MessageTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -53865,6 +54017,7 @@ export namespace Prisma {
       booking_page: Prisma.$BookingPagePayload<ExtArgs> | null
       sequence_steps: Prisma.$OutreachSequenceStepPayload<ExtArgs>[]
       booking_page_templates: Prisma.$BookingPageTemplatePayload<ExtArgs>[]
+      booking_invite_templates: Prisma.$BookingInviteTemplatePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -54282,6 +54435,7 @@ export namespace Prisma {
     booking_page<T extends MessageTemplate$booking_pageArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$booking_pageArgs<ExtArgs>>): Prisma__BookingPageClient<$Result.GetResult<Prisma.$BookingPagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sequence_steps<T extends MessageTemplate$sequence_stepsArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$sequence_stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     booking_page_templates<T extends MessageTemplate$booking_page_templatesArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$booking_page_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    booking_invite_templates<T extends MessageTemplate$booking_invite_templatesArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$booking_invite_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -54806,6 +54960,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BookingPageTemplateScalarFieldEnum | BookingPageTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * MessageTemplate.booking_invite_templates
+   */
+  export type MessageTemplate$booking_invite_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    where?: BookingInviteTemplateWhereInput
+    orderBy?: BookingInviteTemplateOrderByWithRelationInput | BookingInviteTemplateOrderByWithRelationInput[]
+    cursor?: BookingInviteTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookingInviteTemplateScalarFieldEnum | BookingInviteTemplateScalarFieldEnum[]
   }
 
   /**
@@ -109545,6 +109723,1106 @@ export namespace Prisma {
 
 
   /**
+   * Model BookingInviteTemplate
+   */
+
+  export type AggregateBookingInviteTemplate = {
+    _count: BookingInviteTemplateCountAggregateOutputType | null
+    _avg: BookingInviteTemplateAvgAggregateOutputType | null
+    _sum: BookingInviteTemplateSumAggregateOutputType | null
+    _min: BookingInviteTemplateMinAggregateOutputType | null
+    _max: BookingInviteTemplateMaxAggregateOutputType | null
+  }
+
+  export type BookingInviteTemplateAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type BookingInviteTemplateSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type BookingInviteTemplateMinAggregateOutputType = {
+    id: number | null
+    organisation_uuid: string | null
+    template_uuid: string | null
+    kind: $Enums.BookingInviteTemplateKind | null
+    created_at: Date | null
+  }
+
+  export type BookingInviteTemplateMaxAggregateOutputType = {
+    id: number | null
+    organisation_uuid: string | null
+    template_uuid: string | null
+    kind: $Enums.BookingInviteTemplateKind | null
+    created_at: Date | null
+  }
+
+  export type BookingInviteTemplateCountAggregateOutputType = {
+    id: number
+    organisation_uuid: number
+    template_uuid: number
+    kind: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type BookingInviteTemplateAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type BookingInviteTemplateSumAggregateInputType = {
+    id?: true
+  }
+
+  export type BookingInviteTemplateMinAggregateInputType = {
+    id?: true
+    organisation_uuid?: true
+    template_uuid?: true
+    kind?: true
+    created_at?: true
+  }
+
+  export type BookingInviteTemplateMaxAggregateInputType = {
+    id?: true
+    organisation_uuid?: true
+    template_uuid?: true
+    kind?: true
+    created_at?: true
+  }
+
+  export type BookingInviteTemplateCountAggregateInputType = {
+    id?: true
+    organisation_uuid?: true
+    template_uuid?: true
+    kind?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type BookingInviteTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookingInviteTemplate to aggregate.
+     */
+    where?: BookingInviteTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingInviteTemplates to fetch.
+     */
+    orderBy?: BookingInviteTemplateOrderByWithRelationInput | BookingInviteTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BookingInviteTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingInviteTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingInviteTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BookingInviteTemplates
+    **/
+    _count?: true | BookingInviteTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BookingInviteTemplateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BookingInviteTemplateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BookingInviteTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BookingInviteTemplateMaxAggregateInputType
+  }
+
+  export type GetBookingInviteTemplateAggregateType<T extends BookingInviteTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateBookingInviteTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBookingInviteTemplate[P]>
+      : GetScalarType<T[P], AggregateBookingInviteTemplate[P]>
+  }
+
+
+
+
+  export type BookingInviteTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingInviteTemplateWhereInput
+    orderBy?: BookingInviteTemplateOrderByWithAggregationInput | BookingInviteTemplateOrderByWithAggregationInput[]
+    by: BookingInviteTemplateScalarFieldEnum[] | BookingInviteTemplateScalarFieldEnum
+    having?: BookingInviteTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BookingInviteTemplateCountAggregateInputType | true
+    _avg?: BookingInviteTemplateAvgAggregateInputType
+    _sum?: BookingInviteTemplateSumAggregateInputType
+    _min?: BookingInviteTemplateMinAggregateInputType
+    _max?: BookingInviteTemplateMaxAggregateInputType
+  }
+
+  export type BookingInviteTemplateGroupByOutputType = {
+    id: number
+    organisation_uuid: string
+    template_uuid: string
+    kind: $Enums.BookingInviteTemplateKind
+    created_at: Date
+    _count: BookingInviteTemplateCountAggregateOutputType | null
+    _avg: BookingInviteTemplateAvgAggregateOutputType | null
+    _sum: BookingInviteTemplateSumAggregateOutputType | null
+    _min: BookingInviteTemplateMinAggregateOutputType | null
+    _max: BookingInviteTemplateMaxAggregateOutputType | null
+  }
+
+  type GetBookingInviteTemplateGroupByPayload<T extends BookingInviteTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BookingInviteTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BookingInviteTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BookingInviteTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], BookingInviteTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BookingInviteTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organisation_uuid?: boolean
+    template_uuid?: boolean
+    kind?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingInviteTemplate"]>
+
+  export type BookingInviteTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organisation_uuid?: boolean
+    template_uuid?: boolean
+    kind?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingInviteTemplate"]>
+
+  export type BookingInviteTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organisation_uuid?: boolean
+    template_uuid?: boolean
+    kind?: boolean
+    created_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingInviteTemplate"]>
+
+  export type BookingInviteTemplateSelectScalar = {
+    id?: boolean
+    organisation_uuid?: boolean
+    template_uuid?: boolean
+    kind?: boolean
+    created_at?: boolean
+  }
+
+  export type BookingInviteTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organisation_uuid" | "template_uuid" | "kind" | "created_at", ExtArgs["result"]["bookingInviteTemplate"]>
+  export type BookingInviteTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
+  }
+  export type BookingInviteTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
+  }
+  export type BookingInviteTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
+  }
+
+  export type $BookingInviteTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BookingInviteTemplate"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      template: Prisma.$MessageTemplatePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      organisation_uuid: string
+      template_uuid: string
+      kind: $Enums.BookingInviteTemplateKind
+      created_at: Date
+    }, ExtArgs["result"]["bookingInviteTemplate"]>
+    composites: {}
+  }
+
+  type BookingInviteTemplateGetPayload<S extends boolean | null | undefined | BookingInviteTemplateDefaultArgs> = $Result.GetResult<Prisma.$BookingInviteTemplatePayload, S>
+
+  type BookingInviteTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BookingInviteTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BookingInviteTemplateCountAggregateInputType | true
+    }
+
+  export interface BookingInviteTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BookingInviteTemplate'], meta: { name: 'BookingInviteTemplate' } }
+    /**
+     * Find zero or one BookingInviteTemplate that matches the filter.
+     * @param {BookingInviteTemplateFindUniqueArgs} args - Arguments to find a BookingInviteTemplate
+     * @example
+     * // Get one BookingInviteTemplate
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BookingInviteTemplateFindUniqueArgs>(args: SelectSubset<T, BookingInviteTemplateFindUniqueArgs<ExtArgs>>): Prisma__BookingInviteTemplateClient<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BookingInviteTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BookingInviteTemplateFindUniqueOrThrowArgs} args - Arguments to find a BookingInviteTemplate
+     * @example
+     * // Get one BookingInviteTemplate
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BookingInviteTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, BookingInviteTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BookingInviteTemplateClient<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookingInviteTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingInviteTemplateFindFirstArgs} args - Arguments to find a BookingInviteTemplate
+     * @example
+     * // Get one BookingInviteTemplate
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BookingInviteTemplateFindFirstArgs>(args?: SelectSubset<T, BookingInviteTemplateFindFirstArgs<ExtArgs>>): Prisma__BookingInviteTemplateClient<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookingInviteTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingInviteTemplateFindFirstOrThrowArgs} args - Arguments to find a BookingInviteTemplate
+     * @example
+     * // Get one BookingInviteTemplate
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BookingInviteTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, BookingInviteTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__BookingInviteTemplateClient<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BookingInviteTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingInviteTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BookingInviteTemplates
+     * const bookingInviteTemplates = await prisma.bookingInviteTemplate.findMany()
+     * 
+     * // Get first 10 BookingInviteTemplates
+     * const bookingInviteTemplates = await prisma.bookingInviteTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bookingInviteTemplateWithIdOnly = await prisma.bookingInviteTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BookingInviteTemplateFindManyArgs>(args?: SelectSubset<T, BookingInviteTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BookingInviteTemplate.
+     * @param {BookingInviteTemplateCreateArgs} args - Arguments to create a BookingInviteTemplate.
+     * @example
+     * // Create one BookingInviteTemplate
+     * const BookingInviteTemplate = await prisma.bookingInviteTemplate.create({
+     *   data: {
+     *     // ... data to create a BookingInviteTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends BookingInviteTemplateCreateArgs>(args: SelectSubset<T, BookingInviteTemplateCreateArgs<ExtArgs>>): Prisma__BookingInviteTemplateClient<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BookingInviteTemplates.
+     * @param {BookingInviteTemplateCreateManyArgs} args - Arguments to create many BookingInviteTemplates.
+     * @example
+     * // Create many BookingInviteTemplates
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BookingInviteTemplateCreateManyArgs>(args?: SelectSubset<T, BookingInviteTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BookingInviteTemplates and returns the data saved in the database.
+     * @param {BookingInviteTemplateCreateManyAndReturnArgs} args - Arguments to create many BookingInviteTemplates.
+     * @example
+     * // Create many BookingInviteTemplates
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BookingInviteTemplates and only return the `id`
+     * const bookingInviteTemplateWithIdOnly = await prisma.bookingInviteTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BookingInviteTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, BookingInviteTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BookingInviteTemplate.
+     * @param {BookingInviteTemplateDeleteArgs} args - Arguments to delete one BookingInviteTemplate.
+     * @example
+     * // Delete one BookingInviteTemplate
+     * const BookingInviteTemplate = await prisma.bookingInviteTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one BookingInviteTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BookingInviteTemplateDeleteArgs>(args: SelectSubset<T, BookingInviteTemplateDeleteArgs<ExtArgs>>): Prisma__BookingInviteTemplateClient<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BookingInviteTemplate.
+     * @param {BookingInviteTemplateUpdateArgs} args - Arguments to update one BookingInviteTemplate.
+     * @example
+     * // Update one BookingInviteTemplate
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BookingInviteTemplateUpdateArgs>(args: SelectSubset<T, BookingInviteTemplateUpdateArgs<ExtArgs>>): Prisma__BookingInviteTemplateClient<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BookingInviteTemplates.
+     * @param {BookingInviteTemplateDeleteManyArgs} args - Arguments to filter BookingInviteTemplates to delete.
+     * @example
+     * // Delete a few BookingInviteTemplates
+     * const { count } = await prisma.bookingInviteTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BookingInviteTemplateDeleteManyArgs>(args?: SelectSubset<T, BookingInviteTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookingInviteTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingInviteTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BookingInviteTemplates
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BookingInviteTemplateUpdateManyArgs>(args: SelectSubset<T, BookingInviteTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookingInviteTemplates and returns the data updated in the database.
+     * @param {BookingInviteTemplateUpdateManyAndReturnArgs} args - Arguments to update many BookingInviteTemplates.
+     * @example
+     * // Update many BookingInviteTemplates
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BookingInviteTemplates and only return the `id`
+     * const bookingInviteTemplateWithIdOnly = await prisma.bookingInviteTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BookingInviteTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, BookingInviteTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BookingInviteTemplate.
+     * @param {BookingInviteTemplateUpsertArgs} args - Arguments to update or create a BookingInviteTemplate.
+     * @example
+     * // Update or create a BookingInviteTemplate
+     * const bookingInviteTemplate = await prisma.bookingInviteTemplate.upsert({
+     *   create: {
+     *     // ... data to create a BookingInviteTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BookingInviteTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BookingInviteTemplateUpsertArgs>(args: SelectSubset<T, BookingInviteTemplateUpsertArgs<ExtArgs>>): Prisma__BookingInviteTemplateClient<$Result.GetResult<Prisma.$BookingInviteTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BookingInviteTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingInviteTemplateCountArgs} args - Arguments to filter BookingInviteTemplates to count.
+     * @example
+     * // Count the number of BookingInviteTemplates
+     * const count = await prisma.bookingInviteTemplate.count({
+     *   where: {
+     *     // ... the filter for the BookingInviteTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends BookingInviteTemplateCountArgs>(
+      args?: Subset<T, BookingInviteTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BookingInviteTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BookingInviteTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingInviteTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BookingInviteTemplateAggregateArgs>(args: Subset<T, BookingInviteTemplateAggregateArgs>): Prisma.PrismaPromise<GetBookingInviteTemplateAggregateType<T>>
+
+    /**
+     * Group by BookingInviteTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingInviteTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BookingInviteTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BookingInviteTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: BookingInviteTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BookingInviteTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBookingInviteTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BookingInviteTemplate model
+   */
+  readonly fields: BookingInviteTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BookingInviteTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BookingInviteTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    template<T extends MessageTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplateDefaultArgs<ExtArgs>>): Prisma__MessageTemplateClient<$Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BookingInviteTemplate model
+   */
+  interface BookingInviteTemplateFieldRefs {
+    readonly id: FieldRef<"BookingInviteTemplate", 'Int'>
+    readonly organisation_uuid: FieldRef<"BookingInviteTemplate", 'String'>
+    readonly template_uuid: FieldRef<"BookingInviteTemplate", 'String'>
+    readonly kind: FieldRef<"BookingInviteTemplate", 'BookingInviteTemplateKind'>
+    readonly created_at: FieldRef<"BookingInviteTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BookingInviteTemplate findUnique
+   */
+  export type BookingInviteTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingInviteTemplate to fetch.
+     */
+    where: BookingInviteTemplateWhereUniqueInput
+  }
+
+  /**
+   * BookingInviteTemplate findUniqueOrThrow
+   */
+  export type BookingInviteTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingInviteTemplate to fetch.
+     */
+    where: BookingInviteTemplateWhereUniqueInput
+  }
+
+  /**
+   * BookingInviteTemplate findFirst
+   */
+  export type BookingInviteTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingInviteTemplate to fetch.
+     */
+    where?: BookingInviteTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingInviteTemplates to fetch.
+     */
+    orderBy?: BookingInviteTemplateOrderByWithRelationInput | BookingInviteTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookingInviteTemplates.
+     */
+    cursor?: BookingInviteTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingInviteTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingInviteTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookingInviteTemplates.
+     */
+    distinct?: BookingInviteTemplateScalarFieldEnum | BookingInviteTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * BookingInviteTemplate findFirstOrThrow
+   */
+  export type BookingInviteTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingInviteTemplate to fetch.
+     */
+    where?: BookingInviteTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingInviteTemplates to fetch.
+     */
+    orderBy?: BookingInviteTemplateOrderByWithRelationInput | BookingInviteTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookingInviteTemplates.
+     */
+    cursor?: BookingInviteTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingInviteTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingInviteTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookingInviteTemplates.
+     */
+    distinct?: BookingInviteTemplateScalarFieldEnum | BookingInviteTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * BookingInviteTemplate findMany
+   */
+  export type BookingInviteTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingInviteTemplates to fetch.
+     */
+    where?: BookingInviteTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingInviteTemplates to fetch.
+     */
+    orderBy?: BookingInviteTemplateOrderByWithRelationInput | BookingInviteTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BookingInviteTemplates.
+     */
+    cursor?: BookingInviteTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingInviteTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingInviteTemplates.
+     */
+    skip?: number
+    distinct?: BookingInviteTemplateScalarFieldEnum | BookingInviteTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * BookingInviteTemplate create
+   */
+  export type BookingInviteTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BookingInviteTemplate.
+     */
+    data: XOR<BookingInviteTemplateCreateInput, BookingInviteTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * BookingInviteTemplate createMany
+   */
+  export type BookingInviteTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BookingInviteTemplates.
+     */
+    data: BookingInviteTemplateCreateManyInput | BookingInviteTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BookingInviteTemplate createManyAndReturn
+   */
+  export type BookingInviteTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many BookingInviteTemplates.
+     */
+    data: BookingInviteTemplateCreateManyInput | BookingInviteTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookingInviteTemplate update
+   */
+  export type BookingInviteTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BookingInviteTemplate.
+     */
+    data: XOR<BookingInviteTemplateUpdateInput, BookingInviteTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which BookingInviteTemplate to update.
+     */
+    where: BookingInviteTemplateWhereUniqueInput
+  }
+
+  /**
+   * BookingInviteTemplate updateMany
+   */
+  export type BookingInviteTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BookingInviteTemplates.
+     */
+    data: XOR<BookingInviteTemplateUpdateManyMutationInput, BookingInviteTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which BookingInviteTemplates to update
+     */
+    where?: BookingInviteTemplateWhereInput
+    /**
+     * Limit how many BookingInviteTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookingInviteTemplate updateManyAndReturn
+   */
+  export type BookingInviteTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update BookingInviteTemplates.
+     */
+    data: XOR<BookingInviteTemplateUpdateManyMutationInput, BookingInviteTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which BookingInviteTemplates to update
+     */
+    where?: BookingInviteTemplateWhereInput
+    /**
+     * Limit how many BookingInviteTemplates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookingInviteTemplate upsert
+   */
+  export type BookingInviteTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BookingInviteTemplate to update in case it exists.
+     */
+    where: BookingInviteTemplateWhereUniqueInput
+    /**
+     * In case the BookingInviteTemplate found by the `where` argument doesn't exist, create a new BookingInviteTemplate with this data.
+     */
+    create: XOR<BookingInviteTemplateCreateInput, BookingInviteTemplateUncheckedCreateInput>
+    /**
+     * In case the BookingInviteTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BookingInviteTemplateUpdateInput, BookingInviteTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * BookingInviteTemplate delete
+   */
+  export type BookingInviteTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which BookingInviteTemplate to delete.
+     */
+    where: BookingInviteTemplateWhereUniqueInput
+  }
+
+  /**
+   * BookingInviteTemplate deleteMany
+   */
+  export type BookingInviteTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookingInviteTemplates to delete
+     */
+    where?: BookingInviteTemplateWhereInput
+    /**
+     * Limit how many BookingInviteTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookingInviteTemplate without action
+   */
+  export type BookingInviteTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingInviteTemplate
+     */
+    select?: BookingInviteTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingInviteTemplate
+     */
+    omit?: BookingInviteTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInviteTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model BookingInvitation
    */
 
@@ -117124,6 +118402,17 @@ export namespace Prisma {
   export type BookingInviteSettingsScalarFieldEnum = (typeof BookingInviteSettingsScalarFieldEnum)[keyof typeof BookingInviteSettingsScalarFieldEnum]
 
 
+  export const BookingInviteTemplateScalarFieldEnum: {
+    id: 'id',
+    organisation_uuid: 'organisation_uuid',
+    template_uuid: 'template_uuid',
+    kind: 'kind',
+    created_at: 'created_at'
+  };
+
+  export type BookingInviteTemplateScalarFieldEnum = (typeof BookingInviteTemplateScalarFieldEnum)[keyof typeof BookingInviteTemplateScalarFieldEnum]
+
+
   export const BookingInvitationScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -118275,6 +119564,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'BookingInviteTemplateKind'
+   */
+  export type EnumBookingInviteTemplateKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BookingInviteTemplateKind'>
+    
+
+
+  /**
+   * Reference to a field of type 'BookingInviteTemplateKind[]'
+   */
+  export type ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BookingInviteTemplateKind[]'>
+    
+
+
+  /**
    * Reference to a field of type 'BookingInvitationStatus'
    */
   export type EnumBookingInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BookingInvitationStatus'>
@@ -118577,6 +119880,7 @@ export namespace Prisma {
     booking_links?: BookingLinkListRelationFilter
     bookings?: BookingListRelationFilter
     booking_invite_settings?: XOR<BookingInviteSettingsNullableScalarRelationFilter, BookingInviteSettingsWhereInput> | null
+    booking_invite_templates?: BookingInviteTemplateListRelationFilter
     booking_invitations?: BookingInvitationListRelationFilter
     booking_events?: BookingEventListRelationFilter
     calendar_connections?: CalendarConnectionListRelationFilter
@@ -118635,6 +119939,7 @@ export namespace Prisma {
     booking_links?: BookingLinkOrderByRelationAggregateInput
     bookings?: BookingOrderByRelationAggregateInput
     booking_invite_settings?: BookingInviteSettingsOrderByWithRelationInput
+    booking_invite_templates?: BookingInviteTemplateOrderByRelationAggregateInput
     booking_invitations?: BookingInvitationOrderByRelationAggregateInput
     booking_events?: BookingEventOrderByRelationAggregateInput
     calendar_connections?: CalendarConnectionOrderByRelationAggregateInput
@@ -118696,6 +120001,7 @@ export namespace Prisma {
     booking_links?: BookingLinkListRelationFilter
     bookings?: BookingListRelationFilter
     booking_invite_settings?: XOR<BookingInviteSettingsNullableScalarRelationFilter, BookingInviteSettingsWhereInput> | null
+    booking_invite_templates?: BookingInviteTemplateListRelationFilter
     booking_invitations?: BookingInvitationListRelationFilter
     booking_events?: BookingEventListRelationFilter
     calendar_connections?: CalendarConnectionListRelationFilter
@@ -121917,6 +123223,7 @@ export namespace Prisma {
     booking_page?: XOR<BookingPageNullableScalarRelationFilter, BookingPageWhereInput> | null
     sequence_steps?: OutreachSequenceStepListRelationFilter
     booking_page_templates?: BookingPageTemplateListRelationFilter
+    booking_invite_templates?: BookingInviteTemplateListRelationFilter
   }
 
   export type MessageTemplateOrderByWithRelationInput = {
@@ -121941,6 +123248,7 @@ export namespace Prisma {
     booking_page?: BookingPageOrderByWithRelationInput
     sequence_steps?: OutreachSequenceStepOrderByRelationAggregateInput
     booking_page_templates?: BookingPageTemplateOrderByRelationAggregateInput
+    booking_invite_templates?: BookingInviteTemplateOrderByRelationAggregateInput
   }
 
   export type MessageTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -121968,6 +123276,7 @@ export namespace Prisma {
     booking_page?: XOR<BookingPageNullableScalarRelationFilter, BookingPageWhereInput> | null
     sequence_steps?: OutreachSequenceStepListRelationFilter
     booking_page_templates?: BookingPageTemplateListRelationFilter
+    booking_invite_templates?: BookingInviteTemplateListRelationFilter
   }, "id" | "uuid">
 
   export type MessageTemplateOrderByWithAggregationInput = {
@@ -126574,6 +127883,67 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"BookingInviteSettings"> | Date | string
   }
 
+  export type BookingInviteTemplateWhereInput = {
+    AND?: BookingInviteTemplateWhereInput | BookingInviteTemplateWhereInput[]
+    OR?: BookingInviteTemplateWhereInput[]
+    NOT?: BookingInviteTemplateWhereInput | BookingInviteTemplateWhereInput[]
+    id?: IntFilter<"BookingInviteTemplate"> | number
+    organisation_uuid?: StringFilter<"BookingInviteTemplate"> | string
+    template_uuid?: StringFilter<"BookingInviteTemplate"> | string
+    kind?: EnumBookingInviteTemplateKindFilter<"BookingInviteTemplate"> | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFilter<"BookingInviteTemplate"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    template?: XOR<MessageTemplateScalarRelationFilter, MessageTemplateWhereInput>
+  }
+
+  export type BookingInviteTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    organisation_uuid?: SortOrder
+    template_uuid?: SortOrder
+    kind?: SortOrder
+    created_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    template?: MessageTemplateOrderByWithRelationInput
+  }
+
+  export type BookingInviteTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    organisation_uuid_kind_template_uuid?: BookingInviteTemplateOrganisation_uuidKindTemplate_uuidCompoundUniqueInput
+    AND?: BookingInviteTemplateWhereInput | BookingInviteTemplateWhereInput[]
+    OR?: BookingInviteTemplateWhereInput[]
+    NOT?: BookingInviteTemplateWhereInput | BookingInviteTemplateWhereInput[]
+    organisation_uuid?: StringFilter<"BookingInviteTemplate"> | string
+    template_uuid?: StringFilter<"BookingInviteTemplate"> | string
+    kind?: EnumBookingInviteTemplateKindFilter<"BookingInviteTemplate"> | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFilter<"BookingInviteTemplate"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    template?: XOR<MessageTemplateScalarRelationFilter, MessageTemplateWhereInput>
+  }, "id" | "organisation_uuid_kind_template_uuid">
+
+  export type BookingInviteTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    organisation_uuid?: SortOrder
+    template_uuid?: SortOrder
+    kind?: SortOrder
+    created_at?: SortOrder
+    _count?: BookingInviteTemplateCountOrderByAggregateInput
+    _avg?: BookingInviteTemplateAvgOrderByAggregateInput
+    _max?: BookingInviteTemplateMaxOrderByAggregateInput
+    _min?: BookingInviteTemplateMinOrderByAggregateInput
+    _sum?: BookingInviteTemplateSumOrderByAggregateInput
+  }
+
+  export type BookingInviteTemplateScalarWhereWithAggregatesInput = {
+    AND?: BookingInviteTemplateScalarWhereWithAggregatesInput | BookingInviteTemplateScalarWhereWithAggregatesInput[]
+    OR?: BookingInviteTemplateScalarWhereWithAggregatesInput[]
+    NOT?: BookingInviteTemplateScalarWhereWithAggregatesInput | BookingInviteTemplateScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"BookingInviteTemplate"> | number
+    organisation_uuid?: StringWithAggregatesFilter<"BookingInviteTemplate"> | string
+    template_uuid?: StringWithAggregatesFilter<"BookingInviteTemplate"> | string
+    kind?: EnumBookingInviteTemplateKindWithAggregatesFilter<"BookingInviteTemplate"> | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeWithAggregatesFilter<"BookingInviteTemplate"> | Date | string
+  }
+
   export type BookingInvitationWhereInput = {
     AND?: BookingInvitationWhereInput | BookingInvitationWhereInput[]
     OR?: BookingInvitationWhereInput[]
@@ -127335,6 +128705,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -127393,6 +128764,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -127450,6 +128822,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -127508,6 +128881,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -130989,6 +132363,7 @@ export namespace Prisma {
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
     booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateInput = {
@@ -131010,6 +132385,7 @@ export namespace Prisma {
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
     booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUpdateInput = {
@@ -131030,6 +132406,7 @@ export namespace Prisma {
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
     booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateInput = {
@@ -131051,6 +132428,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
     booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateCreateManyInput = {
@@ -136030,6 +137408,57 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BookingInviteTemplateCreateInput = {
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBooking_invite_templatesInput
+    template: MessageTemplateCreateNestedOneWithoutBooking_invite_templatesInput
+  }
+
+  export type BookingInviteTemplateUncheckedCreateInput = {
+    id?: number
+    organisation_uuid: string
+    template_uuid: string
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+  }
+
+  export type BookingInviteTemplateUpdateInput = {
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBooking_invite_templatesNestedInput
+    template?: MessageTemplateUpdateOneRequiredWithoutBooking_invite_templatesNestedInput
+  }
+
+  export type BookingInviteTemplateUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    template_uuid?: StringFieldUpdateOperationsInput | string
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingInviteTemplateCreateManyInput = {
+    id?: number
+    organisation_uuid: string
+    template_uuid: string
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+  }
+
+  export type BookingInviteTemplateUpdateManyMutationInput = {
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingInviteTemplateUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    template_uuid?: StringFieldUpdateOperationsInput | string
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BookingInvitationCreateInput = {
     uuid?: string
     sent_by_user_uuid?: string | null
@@ -137156,6 +138585,12 @@ export namespace Prisma {
     isNot?: BookingInviteSettingsWhereInput | null
   }
 
+  export type BookingInviteTemplateListRelationFilter = {
+    every?: BookingInviteTemplateWhereInput
+    some?: BookingInviteTemplateWhereInput
+    none?: BookingInviteTemplateWhereInput
+  }
+
   export type BookingInvitationListRelationFilter = {
     every?: BookingInvitationWhereInput
     some?: BookingInvitationWhereInput
@@ -137247,6 +138682,10 @@ export namespace Prisma {
   }
 
   export type McpToolInvocationLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BookingInviteTemplateOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -143623,6 +145062,66 @@ export namespace Prisma {
     _max?: NestedEnumBookingInviteUnitFilter<$PrismaModel>
   }
 
+  export type EnumBookingInviteTemplateKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.BookingInviteTemplateKind | EnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.BookingInviteTemplateKind[] | ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BookingInviteTemplateKind[] | ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumBookingInviteTemplateKindFilter<$PrismaModel> | $Enums.BookingInviteTemplateKind
+  }
+
+  export type MessageTemplateScalarRelationFilter = {
+    is?: MessageTemplateWhereInput
+    isNot?: MessageTemplateWhereInput
+  }
+
+  export type BookingInviteTemplateOrganisation_uuidKindTemplate_uuidCompoundUniqueInput = {
+    organisation_uuid: string
+    kind: $Enums.BookingInviteTemplateKind
+    template_uuid: string
+  }
+
+  export type BookingInviteTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    organisation_uuid?: SortOrder
+    template_uuid?: SortOrder
+    kind?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type BookingInviteTemplateAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type BookingInviteTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organisation_uuid?: SortOrder
+    template_uuid?: SortOrder
+    kind?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type BookingInviteTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    organisation_uuid?: SortOrder
+    template_uuid?: SortOrder
+    kind?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type BookingInviteTemplateSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type EnumBookingInviteTemplateKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BookingInviteTemplateKind | EnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.BookingInviteTemplateKind[] | ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BookingInviteTemplateKind[] | ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumBookingInviteTemplateKindWithAggregatesFilter<$PrismaModel> | $Enums.BookingInviteTemplateKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBookingInviteTemplateKindFilter<$PrismaModel>
+    _max?: NestedEnumBookingInviteTemplateKindFilter<$PrismaModel>
+  }
+
   export type EnumBookingInvitationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BookingInvitationStatus | EnumBookingInvitationStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BookingInvitationStatus[] | ListEnumBookingInvitationStatusFieldRefInput<$PrismaModel>
@@ -143796,11 +145295,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBookingNotificationStatusFilter<$PrismaModel>
     _max?: NestedEnumBookingNotificationStatusFilter<$PrismaModel>
-  }
-
-  export type MessageTemplateScalarRelationFilter = {
-    is?: MessageTemplateWhereInput
-    isNot?: MessageTemplateWhereInput
   }
 
   export type BookingPageTemplateBooking_page_uuidKindTemplate_uuidCompoundUniqueInput = {
@@ -145564,6 +147058,13 @@ export namespace Prisma {
     connect?: BookingInviteSettingsWhereUniqueInput
   }
 
+  export type BookingInviteTemplateCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<BookingInviteTemplateCreateWithoutOrganisationInput, BookingInviteTemplateUncheckedCreateWithoutOrganisationInput> | BookingInviteTemplateCreateWithoutOrganisationInput[] | BookingInviteTemplateUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BookingInviteTemplateCreateOrConnectWithoutOrganisationInput | BookingInviteTemplateCreateOrConnectWithoutOrganisationInput[]
+    createMany?: BookingInviteTemplateCreateManyOrganisationInputEnvelope
+    connect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+  }
+
   export type BookingInvitationCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<BookingInvitationCreateWithoutOrganisationInput, BookingInvitationUncheckedCreateWithoutOrganisationInput> | BookingInvitationCreateWithoutOrganisationInput[] | BookingInvitationUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: BookingInvitationCreateOrConnectWithoutOrganisationInput | BookingInvitationCreateOrConnectWithoutOrganisationInput[]
@@ -145883,6 +147384,13 @@ export namespace Prisma {
     create?: XOR<BookingInviteSettingsCreateWithoutOrganisationInput, BookingInviteSettingsUncheckedCreateWithoutOrganisationInput>
     connectOrCreate?: BookingInviteSettingsCreateOrConnectWithoutOrganisationInput
     connect?: BookingInviteSettingsWhereUniqueInput
+  }
+
+  export type BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<BookingInviteTemplateCreateWithoutOrganisationInput, BookingInviteTemplateUncheckedCreateWithoutOrganisationInput> | BookingInviteTemplateCreateWithoutOrganisationInput[] | BookingInviteTemplateUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BookingInviteTemplateCreateOrConnectWithoutOrganisationInput | BookingInviteTemplateCreateOrConnectWithoutOrganisationInput[]
+    createMany?: BookingInviteTemplateCreateManyOrganisationInputEnvelope
+    connect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
   }
 
   export type BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput = {
@@ -146495,6 +148003,20 @@ export namespace Prisma {
     delete?: BookingInviteSettingsWhereInput | boolean
     connect?: BookingInviteSettingsWhereUniqueInput
     update?: XOR<XOR<BookingInviteSettingsUpdateToOneWithWhereWithoutOrganisationInput, BookingInviteSettingsUpdateWithoutOrganisationInput>, BookingInviteSettingsUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<BookingInviteTemplateCreateWithoutOrganisationInput, BookingInviteTemplateUncheckedCreateWithoutOrganisationInput> | BookingInviteTemplateCreateWithoutOrganisationInput[] | BookingInviteTemplateUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BookingInviteTemplateCreateOrConnectWithoutOrganisationInput | BookingInviteTemplateCreateOrConnectWithoutOrganisationInput[]
+    upsert?: BookingInviteTemplateUpsertWithWhereUniqueWithoutOrganisationInput | BookingInviteTemplateUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: BookingInviteTemplateCreateManyOrganisationInputEnvelope
+    set?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    disconnect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    delete?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    connect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    update?: BookingInviteTemplateUpdateWithWhereUniqueWithoutOrganisationInput | BookingInviteTemplateUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: BookingInviteTemplateUpdateManyWithWhereWithoutOrganisationInput | BookingInviteTemplateUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: BookingInviteTemplateScalarWhereInput | BookingInviteTemplateScalarWhereInput[]
   }
 
   export type BookingInvitationUpdateManyWithoutOrganisationNestedInput = {
@@ -147135,6 +148657,20 @@ export namespace Prisma {
     delete?: BookingInviteSettingsWhereInput | boolean
     connect?: BookingInviteSettingsWhereUniqueInput
     update?: XOR<XOR<BookingInviteSettingsUpdateToOneWithWhereWithoutOrganisationInput, BookingInviteSettingsUpdateWithoutOrganisationInput>, BookingInviteSettingsUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<BookingInviteTemplateCreateWithoutOrganisationInput, BookingInviteTemplateUncheckedCreateWithoutOrganisationInput> | BookingInviteTemplateCreateWithoutOrganisationInput[] | BookingInviteTemplateUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: BookingInviteTemplateCreateOrConnectWithoutOrganisationInput | BookingInviteTemplateCreateOrConnectWithoutOrganisationInput[]
+    upsert?: BookingInviteTemplateUpsertWithWhereUniqueWithoutOrganisationInput | BookingInviteTemplateUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: BookingInviteTemplateCreateManyOrganisationInputEnvelope
+    set?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    disconnect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    delete?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    connect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    update?: BookingInviteTemplateUpdateWithWhereUniqueWithoutOrganisationInput | BookingInviteTemplateUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: BookingInviteTemplateUpdateManyWithWhereWithoutOrganisationInput | BookingInviteTemplateUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: BookingInviteTemplateScalarWhereInput | BookingInviteTemplateScalarWhereInput[]
   }
 
   export type BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput = {
@@ -150124,6 +151660,13 @@ export namespace Prisma {
     connect?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
   }
 
+  export type BookingInviteTemplateCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<BookingInviteTemplateCreateWithoutTemplateInput, BookingInviteTemplateUncheckedCreateWithoutTemplateInput> | BookingInviteTemplateCreateWithoutTemplateInput[] | BookingInviteTemplateUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: BookingInviteTemplateCreateOrConnectWithoutTemplateInput | BookingInviteTemplateCreateOrConnectWithoutTemplateInput[]
+    createMany?: BookingInviteTemplateCreateManyTemplateInputEnvelope
+    connect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+  }
+
   export type OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput = {
     create?: XOR<OutreachSequenceStepCreateWithoutMessage_templateInput, OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput> | OutreachSequenceStepCreateWithoutMessage_templateInput[] | OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput[]
     connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput | OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput[]
@@ -150136,6 +151679,13 @@ export namespace Prisma {
     connectOrCreate?: BookingPageTemplateCreateOrConnectWithoutTemplateInput | BookingPageTemplateCreateOrConnectWithoutTemplateInput[]
     createMany?: BookingPageTemplateCreateManyTemplateInputEnvelope
     connect?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
+  }
+
+  export type BookingInviteTemplateUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<BookingInviteTemplateCreateWithoutTemplateInput, BookingInviteTemplateUncheckedCreateWithoutTemplateInput> | BookingInviteTemplateCreateWithoutTemplateInput[] | BookingInviteTemplateUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: BookingInviteTemplateCreateOrConnectWithoutTemplateInput | BookingInviteTemplateCreateOrConnectWithoutTemplateInput[]
+    createMany?: BookingInviteTemplateCreateManyTemplateInputEnvelope
+    connect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
   }
 
   export type MessageTemplateUpdatechannelsInput = {
@@ -150199,6 +151749,20 @@ export namespace Prisma {
     deleteMany?: BookingPageTemplateScalarWhereInput | BookingPageTemplateScalarWhereInput[]
   }
 
+  export type BookingInviteTemplateUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<BookingInviteTemplateCreateWithoutTemplateInput, BookingInviteTemplateUncheckedCreateWithoutTemplateInput> | BookingInviteTemplateCreateWithoutTemplateInput[] | BookingInviteTemplateUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: BookingInviteTemplateCreateOrConnectWithoutTemplateInput | BookingInviteTemplateCreateOrConnectWithoutTemplateInput[]
+    upsert?: BookingInviteTemplateUpsertWithWhereUniqueWithoutTemplateInput | BookingInviteTemplateUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: BookingInviteTemplateCreateManyTemplateInputEnvelope
+    set?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    disconnect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    delete?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    connect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    update?: BookingInviteTemplateUpdateWithWhereUniqueWithoutTemplateInput | BookingInviteTemplateUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: BookingInviteTemplateUpdateManyWithWhereWithoutTemplateInput | BookingInviteTemplateUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: BookingInviteTemplateScalarWhereInput | BookingInviteTemplateScalarWhereInput[]
+  }
+
   export type OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput = {
     create?: XOR<OutreachSequenceStepCreateWithoutMessage_templateInput, OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput> | OutreachSequenceStepCreateWithoutMessage_templateInput[] | OutreachSequenceStepUncheckedCreateWithoutMessage_templateInput[]
     connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput | OutreachSequenceStepCreateOrConnectWithoutMessage_templateInput[]
@@ -150225,6 +151789,20 @@ export namespace Prisma {
     update?: BookingPageTemplateUpdateWithWhereUniqueWithoutTemplateInput | BookingPageTemplateUpdateWithWhereUniqueWithoutTemplateInput[]
     updateMany?: BookingPageTemplateUpdateManyWithWhereWithoutTemplateInput | BookingPageTemplateUpdateManyWithWhereWithoutTemplateInput[]
     deleteMany?: BookingPageTemplateScalarWhereInput | BookingPageTemplateScalarWhereInput[]
+  }
+
+  export type BookingInviteTemplateUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<BookingInviteTemplateCreateWithoutTemplateInput, BookingInviteTemplateUncheckedCreateWithoutTemplateInput> | BookingInviteTemplateCreateWithoutTemplateInput[] | BookingInviteTemplateUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: BookingInviteTemplateCreateOrConnectWithoutTemplateInput | BookingInviteTemplateCreateOrConnectWithoutTemplateInput[]
+    upsert?: BookingInviteTemplateUpsertWithWhereUniqueWithoutTemplateInput | BookingInviteTemplateUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: BookingInviteTemplateCreateManyTemplateInputEnvelope
+    set?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    disconnect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    delete?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    connect?: BookingInviteTemplateWhereUniqueInput | BookingInviteTemplateWhereUniqueInput[]
+    update?: BookingInviteTemplateUpdateWithWhereUniqueWithoutTemplateInput | BookingInviteTemplateUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: BookingInviteTemplateUpdateManyWithWhereWithoutTemplateInput | BookingInviteTemplateUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: BookingInviteTemplateScalarWhereInput | BookingInviteTemplateScalarWhereInput[]
   }
 
   export type MarketingCampaignCreatechannelsInput = {
@@ -153271,6 +154849,38 @@ export namespace Prisma {
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutBooking_invite_settingsInput, OrganisationUpdateWithoutBooking_invite_settingsInput>, OrganisationUncheckedUpdateWithoutBooking_invite_settingsInput>
   }
 
+  export type OrganisationCreateNestedOneWithoutBooking_invite_templatesInput = {
+    create?: XOR<OrganisationCreateWithoutBooking_invite_templatesInput, OrganisationUncheckedCreateWithoutBooking_invite_templatesInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutBooking_invite_templatesInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type MessageTemplateCreateNestedOneWithoutBooking_invite_templatesInput = {
+    create?: XOR<MessageTemplateCreateWithoutBooking_invite_templatesInput, MessageTemplateUncheckedCreateWithoutBooking_invite_templatesInput>
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutBooking_invite_templatesInput
+    connect?: MessageTemplateWhereUniqueInput
+  }
+
+  export type EnumBookingInviteTemplateKindFieldUpdateOperationsInput = {
+    set?: $Enums.BookingInviteTemplateKind
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutBooking_invite_templatesNestedInput = {
+    create?: XOR<OrganisationCreateWithoutBooking_invite_templatesInput, OrganisationUncheckedCreateWithoutBooking_invite_templatesInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutBooking_invite_templatesInput
+    upsert?: OrganisationUpsertWithoutBooking_invite_templatesInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutBooking_invite_templatesInput, OrganisationUpdateWithoutBooking_invite_templatesInput>, OrganisationUncheckedUpdateWithoutBooking_invite_templatesInput>
+  }
+
+  export type MessageTemplateUpdateOneRequiredWithoutBooking_invite_templatesNestedInput = {
+    create?: XOR<MessageTemplateCreateWithoutBooking_invite_templatesInput, MessageTemplateUncheckedCreateWithoutBooking_invite_templatesInput>
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutBooking_invite_templatesInput
+    upsert?: MessageTemplateUpsertWithoutBooking_invite_templatesInput
+    connect?: MessageTemplateWhereUniqueInput
+    update?: XOR<XOR<MessageTemplateUpdateToOneWithWhereWithoutBooking_invite_templatesInput, MessageTemplateUpdateWithoutBooking_invite_templatesInput>, MessageTemplateUncheckedUpdateWithoutBooking_invite_templatesInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutBooking_invitationsInput = {
     create?: XOR<OrganisationCreateWithoutBooking_invitationsInput, OrganisationUncheckedCreateWithoutBooking_invitationsInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutBooking_invitationsInput
@@ -154935,6 +156545,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBookingInviteUnitFilter<$PrismaModel>
     _max?: NestedEnumBookingInviteUnitFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBookingInviteTemplateKindFilter<$PrismaModel = never> = {
+    equals?: $Enums.BookingInviteTemplateKind | EnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.BookingInviteTemplateKind[] | ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BookingInviteTemplateKind[] | ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumBookingInviteTemplateKindFilter<$PrismaModel> | $Enums.BookingInviteTemplateKind
+  }
+
+  export type NestedEnumBookingInviteTemplateKindWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BookingInviteTemplateKind | EnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    in?: $Enums.BookingInviteTemplateKind[] | ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BookingInviteTemplateKind[] | ListEnumBookingInviteTemplateKindFieldRefInput<$PrismaModel>
+    not?: NestedEnumBookingInviteTemplateKindWithAggregatesFilter<$PrismaModel> | $Enums.BookingInviteTemplateKind
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBookingInviteTemplateKindFilter<$PrismaModel>
+    _max?: NestedEnumBookingInviteTemplateKindFilter<$PrismaModel>
   }
 
   export type NestedEnumBookingInvitationStatusFilter<$PrismaModel = never> = {
@@ -158531,6 +160158,7 @@ export namespace Prisma {
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
     booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutOrganisationInput = {
@@ -158551,6 +160179,7 @@ export namespace Prisma {
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
     booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutOrganisationInput = {
@@ -159536,6 +161165,29 @@ export namespace Prisma {
   export type BookingInviteSettingsCreateOrConnectWithoutOrganisationInput = {
     where: BookingInviteSettingsWhereUniqueInput
     create: XOR<BookingInviteSettingsCreateWithoutOrganisationInput, BookingInviteSettingsUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BookingInviteTemplateCreateWithoutOrganisationInput = {
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+    template: MessageTemplateCreateNestedOneWithoutBooking_invite_templatesInput
+  }
+
+  export type BookingInviteTemplateUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    template_uuid: string
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+  }
+
+  export type BookingInviteTemplateCreateOrConnectWithoutOrganisationInput = {
+    where: BookingInviteTemplateWhereUniqueInput
+    create: XOR<BookingInviteTemplateCreateWithoutOrganisationInput, BookingInviteTemplateUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BookingInviteTemplateCreateManyOrganisationInputEnvelope = {
+    data: BookingInviteTemplateCreateManyOrganisationInput | BookingInviteTemplateCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
   }
 
   export type BookingInvitationCreateWithoutOrganisationInput = {
@@ -160874,6 +162526,33 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BookingInviteTemplateUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: BookingInviteTemplateWhereUniqueInput
+    update: XOR<BookingInviteTemplateUpdateWithoutOrganisationInput, BookingInviteTemplateUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<BookingInviteTemplateCreateWithoutOrganisationInput, BookingInviteTemplateUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type BookingInviteTemplateUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: BookingInviteTemplateWhereUniqueInput
+    data: XOR<BookingInviteTemplateUpdateWithoutOrganisationInput, BookingInviteTemplateUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type BookingInviteTemplateUpdateManyWithWhereWithoutOrganisationInput = {
+    where: BookingInviteTemplateScalarWhereInput
+    data: XOR<BookingInviteTemplateUpdateManyMutationInput, BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type BookingInviteTemplateScalarWhereInput = {
+    AND?: BookingInviteTemplateScalarWhereInput | BookingInviteTemplateScalarWhereInput[]
+    OR?: BookingInviteTemplateScalarWhereInput[]
+    NOT?: BookingInviteTemplateScalarWhereInput | BookingInviteTemplateScalarWhereInput[]
+    id?: IntFilter<"BookingInviteTemplate"> | number
+    organisation_uuid?: StringFilter<"BookingInviteTemplate"> | string
+    template_uuid?: StringFilter<"BookingInviteTemplate"> | string
+    kind?: EnumBookingInviteTemplateKindFilter<"BookingInviteTemplate"> | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFilter<"BookingInviteTemplate"> | Date | string
+  }
+
   export type BookingInvitationUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: BookingInvitationWhereUniqueInput
     update: XOR<BookingInvitationUpdateWithoutOrganisationInput, BookingInvitationUncheckedUpdateWithoutOrganisationInput>
@@ -161012,6 +162691,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -161069,6 +162749,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -161225,6 +162906,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -161282,6 +162964,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -161428,6 +163111,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -161485,6 +163169,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -161641,6 +163326,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -161698,6 +163384,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -161844,6 +163531,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -161901,6 +163589,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -162057,6 +163746,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -162114,6 +163804,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -162260,6 +163951,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -162317,6 +164009,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -162699,6 +164392,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -162756,6 +164450,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -163000,6 +164695,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -163057,6 +164753,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -163129,6 +164826,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -163186,6 +164884,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -163416,6 +165115,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -163473,6 +165173,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -163588,6 +165289,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -163645,6 +165347,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -164542,6 +166245,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -164599,6 +166303,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -165519,6 +167224,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -165576,6 +167282,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -167424,6 +169131,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -167481,6 +169189,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -167892,6 +169601,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -167949,6 +169659,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -168857,6 +170568,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -168914,6 +170626,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -169294,6 +171007,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -169351,6 +171065,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -169611,6 +171326,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -169668,6 +171384,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -170294,6 +172011,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -170351,6 +172069,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -170941,6 +172660,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -170998,6 +172718,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -171279,6 +173000,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -171336,6 +173058,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -171524,6 +173247,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -171581,6 +173305,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -171920,6 +173645,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -171977,6 +173703,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -172178,6 +173905,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
     booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutSequence_stepsInput = {
@@ -172198,6 +173926,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutSequence_stepsInput = {
@@ -172516,6 +174245,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
     booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutSequence_stepsInput = {
@@ -172536,6 +174266,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type BookingPageUpsertWithoutSequence_stepsInput = {
@@ -173553,6 +175284,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -173610,6 +175342,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -173766,6 +175499,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -173823,6 +175557,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -173969,6 +175704,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -174026,6 +175762,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -174098,6 +175835,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -174155,6 +175893,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -174211,6 +175950,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -174268,6 +176008,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -174483,6 +176224,7 @@ export namespace Prisma {
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
     booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutSender_profileInput = {
@@ -174503,6 +176245,7 @@ export namespace Prisma {
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
     booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutSender_profileInput = {
@@ -174617,6 +176360,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -174674,6 +176418,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -174868,6 +176613,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -174925,6 +176671,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -175216,6 +176963,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BookingInviteTemplateCreateWithoutTemplateInput = {
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBooking_invite_templatesInput
+  }
+
+  export type BookingInviteTemplateUncheckedCreateWithoutTemplateInput = {
+    id?: number
+    organisation_uuid: string
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+  }
+
+  export type BookingInviteTemplateCreateOrConnectWithoutTemplateInput = {
+    where: BookingInviteTemplateWhereUniqueInput
+    create: XOR<BookingInviteTemplateCreateWithoutTemplateInput, BookingInviteTemplateUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type BookingInviteTemplateCreateManyTemplateInputEnvelope = {
+    data: BookingInviteTemplateCreateManyTemplateInput | BookingInviteTemplateCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationUpsertWithoutMessage_templatesInput = {
     update: XOR<OrganisationUpdateWithoutMessage_templatesInput, OrganisationUncheckedUpdateWithoutMessage_templatesInput>
     create: XOR<OrganisationCreateWithoutMessage_templatesInput, OrganisationUncheckedCreateWithoutMessage_templatesInput>
@@ -175277,6 +177047,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -175334,6 +177105,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -175601,6 +177373,22 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"BookingPageTemplate"> | Date | string
   }
 
+  export type BookingInviteTemplateUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: BookingInviteTemplateWhereUniqueInput
+    update: XOR<BookingInviteTemplateUpdateWithoutTemplateInput, BookingInviteTemplateUncheckedUpdateWithoutTemplateInput>
+    create: XOR<BookingInviteTemplateCreateWithoutTemplateInput, BookingInviteTemplateUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type BookingInviteTemplateUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: BookingInviteTemplateWhereUniqueInput
+    data: XOR<BookingInviteTemplateUpdateWithoutTemplateInput, BookingInviteTemplateUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type BookingInviteTemplateUpdateManyWithWhereWithoutTemplateInput = {
+    where: BookingInviteTemplateScalarWhereInput
+    data: XOR<BookingInviteTemplateUpdateManyMutationInput, BookingInviteTemplateUncheckedUpdateManyWithoutTemplateInput>
+  }
+
   export type OrganisationCreateWithoutMarketing_campaignsInput = {
     uuid?: string
     name: string
@@ -175651,6 +177439,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -175708,6 +177497,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -176190,6 +177980,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -176247,6 +178038,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -176954,6 +178746,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -177011,6 +178804,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -177167,6 +178961,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -177224,6 +179019,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -177370,6 +179166,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -177427,6 +179224,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -177565,6 +179363,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -177622,6 +179421,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -178093,6 +179893,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -178150,6 +179951,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -178222,6 +180024,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -178279,6 +180082,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -178335,6 +180139,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -178392,6 +180197,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -178464,6 +180270,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -178521,6 +180328,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -178577,6 +180385,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -178634,6 +180443,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -179122,6 +180932,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -179179,6 +180990,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -179947,6 +181759,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -180004,6 +181817,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -180148,6 +181962,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -180205,6 +182020,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -181064,6 +182880,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -181121,6 +182938,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -181375,6 +183193,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -181432,6 +183251,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -181688,6 +183508,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -181745,6 +183566,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -181817,6 +183639,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -181874,6 +183697,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -181930,6 +183754,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -181987,6 +183812,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -182059,6 +183885,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -182116,6 +183943,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -182172,6 +184000,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -182229,6 +184058,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -182418,6 +184248,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -182475,6 +184306,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -182637,6 +184469,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -182694,6 +184527,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -182766,6 +184600,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -182823,6 +184658,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -182879,6 +184715,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -182936,6 +184773,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -183169,6 +185007,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -183226,6 +185065,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -184145,6 +185985,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -184202,6 +186043,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -184388,6 +186230,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -184445,6 +186288,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -184627,6 +186471,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -184684,6 +186529,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -184840,6 +186686,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -184897,6 +186744,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -185043,6 +186891,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -185100,6 +186949,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -185256,6 +187106,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -185313,6 +187164,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -185459,6 +187311,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -185516,6 +187369,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -185672,6 +187526,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -185729,6 +187584,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -185875,6 +187731,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -185932,6 +187789,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -186004,6 +187862,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -186061,6 +187920,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -186117,6 +187977,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -186174,6 +188035,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -186271,6 +188133,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -186328,6 +188191,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -186466,6 +188330,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -186523,6 +188388,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -186708,6 +188574,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -186765,6 +188632,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -186999,6 +188867,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -187056,6 +188925,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -187296,6 +189166,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -187353,6 +189224,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -187589,6 +189461,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -187646,6 +189519,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -187886,6 +189760,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -187943,6 +189818,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -188179,6 +190055,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -188236,6 +190113,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -188595,6 +190473,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
     booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutBooking_pageInput = {
@@ -188615,6 +190494,7 @@ export namespace Prisma {
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
     booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutBooking_pageInput = {
@@ -188739,6 +190619,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -188796,6 +190677,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -189518,6 +191400,7 @@ export namespace Prisma {
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -189575,6 +191458,7 @@ export namespace Prisma {
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -190158,6 +192042,7 @@ export namespace Prisma {
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -190215,6 +192100,7 @@ export namespace Prisma {
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -190779,6 +192665,7 @@ export namespace Prisma {
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -190836,6 +192723,7 @@ export namespace Prisma {
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -191586,6 +193474,7 @@ export namespace Prisma {
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -191643,6 +193532,7 @@ export namespace Prisma {
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -192408,6 +194298,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
     notifications?: NotificationCreateNestedManyWithoutOrganisationInput
@@ -192465,6 +194356,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
@@ -192717,6 +194609,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
@@ -192774,6 +194667,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -193021,6 +194915,7 @@ export namespace Prisma {
     booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -193078,6 +194973,7 @@ export namespace Prisma {
     booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -193150,6 +195046,7 @@ export namespace Prisma {
     booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -193207,10 +195104,355 @@ export namespace Prisma {
     booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationCreateWithoutBooking_invite_templatesInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
+    booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
+    booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
+    bookings?: BookingCreateNestedManyWithoutOrganisationInput
+    booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
+    booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutBooking_invite_templatesInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutBooking_invite_templatesInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutBooking_invite_templatesInput, OrganisationUncheckedCreateWithoutBooking_invite_templatesInput>
+  }
+
+  export type MessageTemplateCreateWithoutBooking_invite_templatesInput = {
+    uuid?: string
+    name: string
+    channels?: MessageTemplateCreatechannelsInput | $Enums.Channel[]
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    source_campaign_uuid?: string | null
+    source_message_uuid?: string | null
+    append_booking_cta?: boolean
+    language?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
+    sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
+    booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
+    sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
+    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+  }
+
+  export type MessageTemplateUncheckedCreateWithoutBooking_invite_templatesInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    channels?: MessageTemplateCreatechannelsInput | $Enums.Channel[]
+    email_subject?: string | null
+    email_content?: string | null
+    sms_content?: string | null
+    source_campaign_uuid?: string | null
+    source_message_uuid?: string | null
+    sender_profile_uuid?: string | null
+    booking_page_uuid?: string | null
+    append_booking_cta?: boolean
+    language?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
+    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type MessageTemplateCreateOrConnectWithoutBooking_invite_templatesInput = {
+    where: MessageTemplateWhereUniqueInput
+    create: XOR<MessageTemplateCreateWithoutBooking_invite_templatesInput, MessageTemplateUncheckedCreateWithoutBooking_invite_templatesInput>
+  }
+
+  export type OrganisationUpsertWithoutBooking_invite_templatesInput = {
+    update: XOR<OrganisationUpdateWithoutBooking_invite_templatesInput, OrganisationUncheckedUpdateWithoutBooking_invite_templatesInput>
+    create: XOR<OrganisationCreateWithoutBooking_invite_templatesInput, OrganisationUncheckedCreateWithoutBooking_invite_templatesInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutBooking_invite_templatesInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutBooking_invite_templatesInput, OrganisationUncheckedUpdateWithoutBooking_invite_templatesInput>
+  }
+
+  export type OrganisationUpdateWithoutBooking_invite_templatesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
+    booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
+    booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
+    bookings?: BookingUpdateManyWithoutOrganisationNestedInput
+    booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
+    booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutBooking_invite_templatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type MessageTemplateUpsertWithoutBooking_invite_templatesInput = {
+    update: XOR<MessageTemplateUpdateWithoutBooking_invite_templatesInput, MessageTemplateUncheckedUpdateWithoutBooking_invite_templatesInput>
+    create: XOR<MessageTemplateCreateWithoutBooking_invite_templatesInput, MessageTemplateUncheckedCreateWithoutBooking_invite_templatesInput>
+    where?: MessageTemplateWhereInput
+  }
+
+  export type MessageTemplateUpdateToOneWithWhereWithoutBooking_invite_templatesInput = {
+    where?: MessageTemplateWhereInput
+    data: XOR<MessageTemplateUpdateWithoutBooking_invite_templatesInput, MessageTemplateUncheckedUpdateWithoutBooking_invite_templatesInput>
+  }
+
+  export type MessageTemplateUpdateWithoutBooking_invite_templatesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    channels?: MessageTemplateUpdatechannelsInput | $Enums.Channel[]
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    append_booking_cta?: BoolFieldUpdateOperationsInput | boolean
+    language?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
+    sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
+    booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
+    sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
+    booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type MessageTemplateUncheckedUpdateWithoutBooking_invite_templatesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    channels?: MessageTemplateUpdatechannelsInput | $Enums.Channel[]
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_content?: NullableStringFieldUpdateOperationsInput | string | null
+    sms_content?: NullableStringFieldUpdateOperationsInput | string | null
+    source_campaign_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_page_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    append_booking_cta?: BoolFieldUpdateOperationsInput | boolean
+    language?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
+    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_invitationsInput = {
@@ -193264,6 +195506,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
     notifications?: NotificationCreateNestedManyWithoutOrganisationInput
@@ -193321,6 +195564,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
@@ -193689,6 +195933,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
@@ -193746,6 +195991,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -194422,6 +196668,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutBooking_page_templatesInput = {
@@ -194442,6 +196689,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutBooking_page_templatesInput = {
@@ -194625,6 +196873,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutBooking_page_templatesInput = {
@@ -194645,6 +196894,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type OrganisationCreateWithoutCalendar_connectionsInput = {
@@ -194698,6 +196948,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     notifications?: NotificationCreateNestedManyWithoutOrganisationInput
@@ -194755,6 +197006,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
@@ -195012,6 +197264,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
@@ -195069,6 +197322,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -195231,6 +197485,7 @@ export namespace Prisma {
     booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
     bookings?: BookingCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
@@ -195288,6 +197543,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
     bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
     booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
     booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
@@ -195444,6 +197700,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
@@ -195501,6 +197758,7 @@ export namespace Prisma {
     booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -198529,6 +200787,13 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type BookingInviteTemplateCreateManyOrganisationInput = {
+    id?: number
+    template_uuid: string
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+  }
+
   export type BookingInvitationCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -199851,6 +202116,7 @@ export namespace Prisma {
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
     booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutOrganisationInput = {
@@ -199871,6 +202137,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
     booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateManyWithoutOrganisationInput = {
@@ -200995,6 +203262,26 @@ export namespace Prisma {
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingInviteTemplateUpdateWithoutOrganisationInput = {
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: MessageTemplateUpdateOneRequiredWithoutBooking_invite_templatesNestedInput
+  }
+
+  export type BookingInviteTemplateUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    template_uuid?: StringFieldUpdateOperationsInput | string
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    template_uuid?: StringFieldUpdateOperationsInput | string
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BookingInvitationUpdateWithoutOrganisationInput = {
@@ -204539,6 +206826,7 @@ export namespace Prisma {
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
     booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutSender_profileInput = {
@@ -204559,6 +206847,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
     booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateManyWithoutSender_profileInput = {
@@ -204650,6 +206939,13 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type BookingInviteTemplateCreateManyTemplateInput = {
+    id?: number
+    organisation_uuid: string
+    kind: $Enums.BookingInviteTemplateKind
+    created_at?: Date | string
+  }
+
   export type OutreachSequenceStepUpdateWithoutMessage_templateInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     order_index?: IntFieldUpdateOperationsInput | number
@@ -204728,6 +207024,26 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     booking_page_uuid?: StringFieldUpdateOperationsInput | string
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingInviteTemplateUpdateWithoutTemplateInput = {
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBooking_invite_templatesNestedInput
+  }
+
+  export type BookingInviteTemplateUncheckedUpdateWithoutTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingInviteTemplateUncheckedUpdateManyWithoutTemplateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    kind?: EnumBookingInviteTemplateKindFieldUpdateOperationsInput | $Enums.BookingInviteTemplateKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -206547,6 +208863,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
     booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutBooking_pageInput = {
@@ -206567,6 +208884,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
     booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateManyWithoutBooking_pageInput = {

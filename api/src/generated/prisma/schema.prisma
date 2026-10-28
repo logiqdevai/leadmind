@@ -113,6 +113,7 @@ model Organisation {
   booking_links             BookingLink[]
   bookings                  Booking[]
   booking_invite_settings   BookingInviteSettings?
+  booking_invite_templates  BookingInviteTemplate[]
   booking_invitations       BookingInvitation[]
   booking_events            BookingEvent[]
   calendar_connections      CalendarConnection[]
@@ -971,11 +972,12 @@ model MessageTemplate {
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
-  organisation           Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  sender_profile         SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
-  booking_page           BookingPage?           @relation("MessageTemplateBookingPage", fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
-  sequence_steps         OutreachSequenceStep[]
-  booking_page_templates BookingPageTemplate[]
+  organisation             Organisation            @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile           SenderProfile?          @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  booking_page             BookingPage?            @relation("MessageTemplateBookingPage", fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
+  sequence_steps           OutreachSequenceStep[]
+  booking_page_templates   BookingPageTemplate[]
+  booking_invite_templates BookingInviteTemplate[]
 
   @@index([organisation_uuid])
   @@index([sender_profile_uuid])
@@ -2285,6 +2287,11 @@ enum BookingInviteUnit {
   WEEKS
 }
 
+enum BookingInviteTemplateKind {
+  INVITE
+  REMINDER
+}
+
 enum BookingInvitationStatus {
   /// Waiting for a booking; follow-up reminders may still be due.
   ACTIVE
@@ -2700,6 +2707,24 @@ model BookingInviteSettings {
   organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
 
   @@map("booking_invite_settings")
+}
+
+/// A message template the organisation offers for booking-link emails (invite or reminder). The one written in the
+/// contact's language is sent, so several can be offered per kind (one per language).
+model BookingInviteTemplate {
+  id                Int                       @id @default(autoincrement())
+  organisation_uuid String
+  template_uuid     String
+  kind              BookingInviteTemplateKind
+  created_at        DateTime                  @default(now())
+
+  organisation Organisation    @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  template     MessageTemplate @relation(fields: [template_uuid], references: [uuid], onDelete: Cascade)
+
+  @@unique([organisation_uuid, kind, template_uuid])
+  @@index([organisation_uuid, kind])
+  @@index([template_uuid])
+  @@map("booking_invite_templates")
 }
 
 /// A booking link emailed to a contact, and the state of its follow-up reminders.

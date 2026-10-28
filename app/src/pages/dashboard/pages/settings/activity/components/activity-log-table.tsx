@@ -1,5 +1,8 @@
 import { Fragment, useState } from "react";
-import { Button } from "@heroui/react";
+import { AlertDialog, Button } from "@heroui/react";
+import { AlertTriangle, Undo2 } from "lucide-react";
+import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { useUndoActivityLog } from "@/features/activity-logs/hooks/use-activity-logs";
 import type { ActivityLog } from "@/features/activity-logs/interfaces/activity-log.interface";
 import {
     formatActivityActor,
@@ -35,6 +38,8 @@ function ActivityWhenCell({ iso }: { iso: string }) {
 
 export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
     const [expanded, setExpanded] = useState<Set<string>>(new Set());
+    const [undoing, setUndoing] = useState<ActivityLog | null>(null);
+    const undo = useUndoActivityLog();
 
     if (rows.length === 0) {
         return (
@@ -55,7 +60,7 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
 
     return (
         <div className="w-full max-w-full overflow-x-auto rounded-xl">
-            <table className="w-full min-w-[40rem] border-collapse text-sm">
+            <table className="w-full min-w-[44rem] border-collapse text-sm">
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
                         <th className="w-[7.5rem] px-3 py-2 text-left font-medium">When</th>
@@ -65,6 +70,7 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
                             Entity
                         </th>
                         <th className="w-[7rem] px-3 py-2 text-left font-medium">Details</th>
+                        <th className="w-[6rem] px-3 py-2 text-left font-medium" />
                     </tr>
                 </thead>
                 <tbody>
@@ -119,10 +125,25 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
                                             <span className="text-muted">{row.action}</span>
                                         )}
                                     </td>
+                                    <td className="px-3 py-2 align-top text-xs whitespace-nowrap">
+                                        {row.undone_at ? (
+                                            <span className="text-muted">Undone</span>
+                                        ) : row.undoable ? (
+                                            <Button
+                                                size="sm"
+                                                variant="ghost"
+                                                className="h-6 px-2 text-[12px]"
+                                                onPress={() => setUndoing(row)}
+                                            >
+                                                <Undo2 className="size-3" />
+                                                Undo
+                                            </Button>
+                                        ) : null}
+                                    </td>
                                 </tr>
                                 {isExpanded && changeEntries.length > 0 ? (
                                     <tr className="border-t border-border bg-surface-secondary/20">
-                                        <td colSpan={5} className="px-3 py-2">
+                                        <td colSpan={6} className="px-3 py-2">
                                             <table className="w-full text-xs">
                                                 <thead className="text-muted">
                                                     <tr>
@@ -168,6 +189,51 @@ export function ActivityLogTable({ rows }: { rows: ActivityLog[] }) {
                     })}
                 </tbody>
             </table>
+
+            <AlertDialog.Backdrop
+                isOpen={!!undoing}
+                onOpenChange={(open) => {
+                    if (!open) setUndoing(null);
+                }}
+            >
+                <AlertDialog.Container>
+                    <AlertDialog.Dialog className="sm:max-w-md">
+                        <AlertDialog.Header>
+                            <AlertDialog.Icon status="warning">
+                                <AlertTriangle className="size-5" />
+                            </AlertDialog.Icon>
+                            <AlertDialog.Heading>Undo this action?</AlertDialog.Heading>
+                        </AlertDialog.Header>
+                        <AlertDialog.Body>
+                            <p className="text-sm text-muted">
+                                <span className="font-medium text-foreground">
+                                    {undoing ? formatActivityDescription(undoing) : ""}
+                                </span>{" "}
+                                will be reverted. Related records removed together with a deleted
+                                item (such as its notes) are not brought back.
+                            </p>
+                        </AlertDialog.Body>
+                        <AlertDialog.Footer>
+                            <Button slot="close" variant="secondary" isDisabled={undo.isPending}>
+                                Cancel
+                            </Button>
+                            <ActionButtonWithPending
+                                variant="primary"
+                                isDisabled={undo.isPending}
+                                isPending={undo.isPending}
+                                onPress={() => {
+                                    if (!undoing) return;
+                                    undo.mutate(undoing.uuid, {
+                                        onSettled: () => setUndoing(null),
+                                    });
+                                }}
+                            >
+                                Undo
+                            </ActionButtonWithPending>
+                        </AlertDialog.Footer>
+                    </AlertDialog.Dialog>
+                </AlertDialog.Container>
+            </AlertDialog.Backdrop>
         </div>
     );
 }

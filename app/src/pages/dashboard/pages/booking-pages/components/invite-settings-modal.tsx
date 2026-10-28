@@ -1,6 +1,8 @@
-import { useState, type FC } from "react";
+import { useMemo, useState, type FC } from "react";
 import { Button, Input, Modal, TextArea } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { LanguageLabel } from "@/components/ui/language-picker";
+import { MultiSelect } from "@/components/ui/multi-select";
 import {
     useBookingInviteSettings,
     useUpdateBookingInviteSettings,
@@ -10,6 +12,9 @@ import {
     type BookingInviteSettings,
     type BookingInviteUnit,
 } from "@/features/bookings/interfaces/bookings.interfaces";
+import { Channel } from "@/features/contacts/interfaces/contact.interface";
+import { useMessageTemplates } from "@/features/message-templates/hooks/use-message-templates";
+import { getLanguageItem } from "@/lib/languages";
 import {
     Field,
     NumberInput,
@@ -35,6 +40,8 @@ interface FormState {
     invite_message: string;
     reminder_subject: string;
     reminder_message: string;
+    invite_template_uuids: string[];
+    reminder_template_uuids: string[];
 }
 
 const toFormState = (settings: BookingInviteSettings): FormState => ({
@@ -46,9 +53,11 @@ const toFormState = (settings: BookingInviteSettings): FormState => ({
     invite_message: settings.invite_message ?? "",
     reminder_subject: settings.reminder_subject ?? "",
     reminder_message: settings.reminder_message ?? "",
+    invite_template_uuids: settings.invite_template_uuids ?? [],
+    reminder_template_uuids: settings.reminder_template_uuids ?? [],
 });
 
-const VARIABLES = "{{contact.first_name}}, {{booking.title}}, {{brand.name}}, {{sender.name}}, {{booking_link}}, {{booking_button}}";
+const VARIABLES = "{{contact.first_name}}, {{booking.title}}, {{brand.name}}, {{sender.name}}, {{signature}}, {{booking_link}}, {{booking_button}}";
 
 interface FormProps {
     settings: BookingInviteSettings;
@@ -59,6 +68,17 @@ interface FormProps {
 const SettingsForm: FC<FormProps> = ({ settings, readOnly, onClose }) => {
     const update = useUpdateBookingInviteSettings();
     const [form, setForm] = useState<FormState>(() => toFormState(settings));
+    const { data: templates = [], isLoading: templatesLoading } = useMessageTemplates();
+    const templateOptions = useMemo(
+        () =>
+            templates
+                .filter((t) => t.channels.includes(Channel.EMAIL) && !!t.email_content)
+                .map((t) => ({ value: t.uuid, label: `${t.name} (${getLanguageItem(t.language)?.label ?? t.language.toUpperCase()})` })),
+        [templates],
+    );
+    const languagesOf = (uuids: string[]) => [
+        ...new Set(uuids.map((uuid) => templates.find((t) => t.uuid === uuid)?.language).filter((l): l is string => !!l)),
+    ];
     const set = <K extends keyof FormState>(key: K, value: FormState[K]) => setForm((prev) => ({ ...prev, [key]: value }));
 
     const delayDays = form.reminder_delay_value * UNIT_DAYS[form.reminder_delay_unit];
@@ -76,6 +96,8 @@ const SettingsForm: FC<FormProps> = ({ settings, readOnly, onClose }) => {
                 invite_message: form.invite_message,
                 reminder_subject: form.reminder_subject,
                 reminder_message: form.reminder_message,
+                invite_template_uuids: form.invite_template_uuids,
+                reminder_template_uuids: form.reminder_template_uuids,
             },
             { onSuccess: onClose },
         );
@@ -128,9 +150,46 @@ const SettingsForm: FC<FormProps> = ({ settings, readOnly, onClose }) => {
 
                 <div className="space-y-4 border-t border-border/60 pt-4">
                     <div>
+                        <h3 className="text-sm font-semibold text-foreground">Message templates</h3>
+                        <p className="text-xs text-muted">
+                            Pick one template per language. The one matching the contact&apos;s language (from their
+                            country) is sent, falling back to English. When none is picked, the text below is used.
+                        </p>
+                    </div>
+                    {(
+                        [
+                            { key: "invite_template_uuids", label: "Booking link email" },
+                            { key: "reminder_template_uuids", label: "Reminder email" },
+                        ] as const
+                    ).map((f) => (
+                        <Field key={f.key} label={f.label}>
+                            <div className="space-y-1.5">
+                                <MultiSelect
+                                    aria-label={f.label}
+                                    options={templateOptions}
+                                    value={form[f.key]}
+                                    onChange={(next) => set(f.key, next)}
+                                    placeholder="Use the text below"
+                                    searchPlaceholder="Search templates…"
+                                    disabled={readOnly || templatesLoading}
+                                />
+                                {languagesOf(form[f.key]).length > 1 ? (
+                                    <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+                                        {languagesOf(form[f.key]).map((code) => (
+                                            <LanguageLabel key={code} code={code} />
+                                        ))}
+                                    </p>
+                                ) : null}
+                            </div>
+                        </Field>
+                    ))}
+                </div>
+
+                <div className="space-y-4 border-t border-border/60 pt-4">
+                    <div>
                         <h3 className="text-sm font-semibold text-foreground">Email text</h3>
                         <p className="text-xs text-muted">
-                            Leave a field empty to use the default shown in it. Variables: {VARIABLES}. The booking
+                            Used when no template is picked. Leave a field empty to use the default shown in it. Variables: {VARIABLES}. The booking
                             button is added automatically when your message has neither link variable.
                         </p>
                     </div>

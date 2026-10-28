@@ -683,6 +683,9 @@ export interface BookingInviteSettings {
     invite_message: string | null;
     reminder_subject: string | null;
     reminder_message: string | null;
+    /** Message templates offered per email, one per language; the contact's language picks one. Empty = text above. */
+    invite_template_uuids: string[];
+    reminder_template_uuids: string[];
     defaults: {
         invite_subject: string;
         invite_message: string;

@@ -1,16 +1,18 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { BookingInvitationStatus, BookingStatus, InteractionType, Prisma } from '@/generated/prisma';
+import { BookingInvitationStatus, BookingInviteTemplateKind, BookingStatus, InteractionType, MessageTemplate, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { BOOKING_NOTIFICATION_QUEUE } from '@/core/queues/queues.constants';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
+import { OutreachRenderService } from '@/modules/outreach/services/outreach-render.service';
 import { BookingLinksService, bookingCtaHtml } from '@/modules/booking-links/booking-links.service';
 import { renderPlaceholders } from '@/shared/utils/placeholder-render.util';
 import { BookingJobNames, NOTIFICATION_SEND_ATTEMPTS } from '../constants/booking.constants';
 import {
     DEFAULT_INVITE_REMINDER_SETTINGS,
     DEFAULT_INVITE_TEXT,
+    defaultInviteText,
     INVITE_UNIT_MINUTES,
     MAX_INVITE_DELAY_MINUTES,
 } from '../constants/booking-invitation-templates';
@@ -20,13 +22,19 @@ import {
     UpdateBookingInviteSettingsDto,
 } from '../dto/booking-invitation.dto';
 import { escapeHtml, escapeVars } from '../utils/booking-template-vars.util';
+import { pickTemplateForLanguage, resolveRecipientLanguage } from '../utils/booking-template-language.util';
 
 type InviteKind = 'invite' | 'reminder';
 
 interface ComposeInput {
     kind: InviteKind;
     settings: { invite_subject: string | null; invite_message: string | null; reminder_subject: string | null; reminder_message: string | null };
-    contact: { name: string | null };
+    contact: { name: string | null; country: string | null };
+    /** Message templates the organisation offers for this email kind; the one in the contact's language is used. */
+    templates: MessageTemplate[];
+    /** Team member the email is sent as: their sender profile supplies {{signature}}. */
+    sender_user_uuid: string | null;
+    organisation_uuid: string;
     page: { name: string; title: string | null; brand_name: string | null; cta_label: string | null; primary_color: string | null };
     sender: { full_name: string | null; email: string } | null;
     organisation_name: string;
@@ -45,13 +53,18 @@ export class BookingInvitationsService {
         private readonly prisma: PrismaService,
         private readonly messageSendService: MessageSendService,
         private readonly bookingLinksService: BookingLinksService,
+        private readonly outreachRenderService: OutreachRenderService,
         @InjectQueue(BOOKING_NOTIFICATION_QUEUE) private readonly queue: Queue<BookingInviteReminderJobData>,
     ) {}
 
     // --- Central settings -------------------------------------------------------------------
 
     async getSettings(organisation_uuid: string) {
-        const row = await this.prisma.bookingInviteSettings.findUnique({ where: { organisation_uuid } });
+        const [row, templateRows] = await Promise.all([
+            this.prisma.bookingInviteSettings.findUnique({ where: { organisation_uuid } }),
+            this.prisma.bookingInviteTemplate.findMany({ where: { organisation_uuid }, orderBy: { created_at: 'asc' }, select: { kind: true, template_uuid: true } }),
+        ]);
+        const templateUuids = (kind: BookingInviteTemplateKind) => templateRows.filter((r) => r.kind === kind).map((r) => r.template_uuid);
         return {
             reminder_enabled: row?.reminder_enabled ?? DEFAULT_INVITE_REMINDER_SETTINGS.reminder_enabled,
             reminder_delay_value: row?.reminder_delay_value ?? DEFAULT_INVITE_REMINDER_SETTINGS.reminder_delay_value,
@@ -61,6 +74,8 @@ export class BookingInvitationsService {
             invite_message: row?.invite_message ?? null,
             reminder_subject: row?.reminder_subject ?? null,
             reminder_message: row?.reminder_message ?? null,
+            invite_template_uuids: templateUuids(BookingInviteTemplateKind.INVITE),
+            reminder_template_uuids: templateUuids(BookingInviteTemplateKind.REMINDER),
             defaults: DEFAULT_INVITE_TEXT,
         };
     }
@@ -83,10 +98,18 @@ export class BookingInvitationsService {
             reminder_subject: text(dto.reminder_subject),
             reminder_message: text(dto.reminder_message),
         };
-        await this.prisma.bookingInviteSettings.upsert({
-            where: { organisation_uuid },
-            create: { organisation_uuid, ...data },
-            update: data,
+        const templates = {
+            [BookingInviteTemplateKind.INVITE]: dto.invite_template_uuids,
+            [BookingInviteTemplateKind.REMINDER]: dto.reminder_template_uuids,
+        };
+        await this.assertTemplates(organisation_uuid, templates);
+        await this.prisma.$transaction(async (tx) => {
+            await tx.bookingInviteSettings.upsert({
+                where: { organisation_uuid },
+                create: { organisation_uuid, ...data },
+                update: data,
+            });
+            await this.replaceTemplates(tx, organisation_uuid, templates);
         });
         return this.getSettings(organisation_uuid);
     }
@@ -97,7 +120,7 @@ export class BookingInvitationsService {
         const { organisation_uuid } = actor;
         const contact = await this.prisma.contact.findFirst({
             where: { uuid: dto.contact_uuid, organisation_uuid },
-            select: { uuid: true, name: true, email: true, unsubscribed_at: true, bounced_at: true },
+            select: { uuid: true, name: true, email: true, country: true, unsubscribed_at: true, bounced_at: true },
         });
         if (!contact) throw new NotFoundException('Contact not found');
         if (!contact.email) throw new BadRequestException('This contact has no email address');
@@ -113,10 +136,13 @@ export class BookingInvitationsService {
             this.prisma.user.findUnique({ where: { uuid: actor.uuid }, select: { full_name: true, email: true } }),
             this.prisma.organisation.findUnique({ where: { uuid: organisation_uuid }, select: { name: true } }),
         ]);
-        const { subject, html } = this.compose({
+        const { subject, html } = await this.compose({
             kind: 'invite',
             settings,
             contact,
+            templates: await this.templatesFor(organisation_uuid, BookingInviteTemplateKind.INVITE),
+            sender_user_uuid: actor.uuid,
+            organisation_uuid,
             page,
             sender,
             organisation_name: organisation?.name ?? '',
@@ -208,7 +234,7 @@ export class BookingInvitationsService {
                 booking_page: {
                     select: { uuid: true, name: true, title: true, brand_name: true, cta_label: true, primary_color: true, is_active: true },
                 },
-                contact: { select: { name: true, email: true, unsubscribed_at: true, bounced_at: true } },
+                contact: { select: { name: true, email: true, country: true, unsubscribed_at: true, bounced_at: true } },
             },
         });
         if (!invitation || invitation.status !== BookingInvitationStatus.ACTIVE) return;
@@ -236,10 +262,13 @@ export class BookingInvitationsService {
                 : null,
             this.prisma.organisation.findUnique({ where: { uuid: invitation.organisation_uuid }, select: { name: true } }),
         ]);
-        const { subject, html } = this.compose({
+        const { subject, html } = await this.compose({
             kind: 'reminder',
             settings,
             contact,
+            templates: await this.templatesFor(invitation.organisation_uuid, BookingInviteTemplateKind.REMINDER),
+            sender_user_uuid: invitation.sent_by_user_uuid,
+            organisation_uuid: invitation.organisation_uuid,
             page,
             sender,
             organisation_name: organisation?.name ?? '',
@@ -410,40 +439,111 @@ export class BookingInvitationsService {
         for (const invitation of active) await this.end(invitation, BookingInvitationStatus.STOPPED);
     }
 
-    private compose(input: ComposeInput): { subject: string; html: string } {
+    /** Message templates the organisation offers for one kind of booking-link email (email-capable ones only). */
+    private async templatesFor(organisation_uuid: string, kind: BookingInviteTemplateKind): Promise<MessageTemplate[]> {
+        const rows = await this.prisma.bookingInviteTemplate.findMany({
+            where: { organisation_uuid, kind },
+            orderBy: { created_at: 'asc' },
+            include: { template: true },
+        });
+        return rows.map((r) => r.template).filter((t) => !!t.email_content?.trim());
+    }
+
+    private async assertTemplates(
+        organisation_uuid: string,
+        templates: Partial<Record<BookingInviteTemplateKind, string[] | undefined>>,
+    ) {
+        const unique = [...new Set(Object.values(templates).flat().filter(Boolean) as string[])];
+        if (!unique.length) return;
+        const count = await this.prisma.messageTemplate.count({
+            where: { organisation_uuid, uuid: { in: unique }, channels: { has: 'EMAIL' } },
+        });
+        if (count !== unique.length) throw new BadRequestException('Email template not found');
+    }
+
+    private async replaceTemplates(
+        tx: Prisma.TransactionClient,
+        organisation_uuid: string,
+        templates: Partial<Record<BookingInviteTemplateKind, string[] | undefined>>,
+    ) {
+        for (const [kind, uuids] of Object.entries(templates) as Array<[BookingInviteTemplateKind, string[] | undefined]>) {
+            if (!uuids) continue;
+            const unique = [...new Set(uuids)];
+            await tx.bookingInviteTemplate.deleteMany({ where: { organisation_uuid, kind, template_uuid: { notIn: unique } } });
+            if (unique.length) {
+                await tx.bookingInviteTemplate.createMany({
+                    data: unique.map((template_uuid) => ({ organisation_uuid, kind, template_uuid })),
+                    skipDuplicates: true,
+                });
+            }
+        }
+    }
+
+    /**
+     * Content in order of preference: the organisation's message template in the contact's language (HTML), else its
+     * own plain text from the invite settings, else the built-in default in that language.
+     */
+    private async compose(input: ComposeInput): Promise<{ subject: string; html: string }> {
         const { kind, settings, contact, page, sender, url } = input;
+        const language = resolveRecipientLanguage({ contact_country: contact.country });
+        const template = pickTemplateForLanguage(input.templates, language);
+        const defaults = defaultInviteText(language);
         const subjectTemplate =
+            template?.email_subject?.trim() ||
             (kind === 'invite' ? settings.invite_subject : settings.reminder_subject) ||
-            DEFAULT_INVITE_TEXT[kind === 'invite' ? 'invite_subject' : 'reminder_subject'];
-        const messageTemplate =
-            (kind === 'invite' ? settings.invite_message : settings.reminder_message) ||
-            DEFAULT_INVITE_TEXT[kind === 'invite' ? 'invite_message' : 'reminder_message'];
+            defaults[kind === 'invite' ? 'invite_subject' : 'reminder_subject'];
 
         const fullName = contact.name?.trim() ?? '';
+        const team = await this.outreachRenderService.buildVarsForTeamMember(input.organisation_uuid, input.sender_user_uuid);
+        const senderName = sender?.full_name || sender?.email || '';
         const vars: Record<string, string> = {
-            'contact.first_name': fullName.split(/\s+/)[0] || 'there',
+            ...team,
+            'contact.first_name': fullName.split(/\s+/)[0] || (language === 'el' ? '' : 'there'),
             'contact.full_name': fullName,
             'booking.title': page.title || page.name,
             'brand.name': page.brand_name?.trim() ?? '',
-            'sender.name': sender?.full_name || sender?.email || '',
+            'sender.name': senderName,
             'organisation.name': input.organisation_name,
             booking_link: url,
         };
+        // The sender profile's signature is org-authored HTML, so it is not escaped; without one it falls back to a
+        // plain sign-off rather than leaving a gap.
+        const signature = vars.signature?.trim() || this.fallbackSignature(senderName, vars['brand.name']);
         const button = bookingCtaHtml(url, page.cta_label, page.primary_color);
-        const hasLink = /\{\{\s*booking_(link|button)\s*\}\}/.test(messageTemplate);
-        const body = hasLink ? messageTemplate : `${messageTemplate}\n\n{{booking_button}}`;
+        const raw = { signature, booking_button: button };
 
-        const blocks = body
+        const messageTemplate =
+            template?.email_content ||
+            (kind === 'invite' ? settings.invite_message : settings.reminder_message) ||
+            defaults[kind === 'invite' ? 'invite_message' : 'reminder_message'];
+        const hasLink = /\{\{\s*booking_(link|button)\s*\}\}/.test(messageTemplate);
+
+        // Message templates are already HTML; plain text from the settings is turned into paragraphs.
+        const body = template?.email_content
+            ? messageTemplate
+            : this.plainTextToHtml(hasLink ? messageTemplate : `${messageTemplate}\n\n{{booking_button}}`);
+        let html = renderPlaceholders(body, { ...escapeVars(vars), ...raw });
+        if (template?.email_content && !hasLink) html += button;
+        return { subject: renderPlaceholders(subjectTemplate, vars), html };
+    }
+
+    private plainTextToHtml(text: string): string {
+        return text
             .split(/\n{2,}/)
             .map((paragraph) => paragraph.trim())
             .filter(Boolean)
             .map((paragraph) =>
-                /^\{\{\s*booking_button\s*\}\}$/.test(paragraph)
+                // The button and signature are HTML blocks of their own.
+                /^\{\{\s*(booking_button|signature)\s*\}\}$/.test(paragraph)
                     ? paragraph
                     : `<p>${escapeHtml(paragraph).replace(/\n/g, '<br>')}</p>`,
-            );
-        const html = renderPlaceholders(blocks.join(''), { ...escapeVars(vars), booking_button: button });
-        return { subject: renderPlaceholders(subjectTemplate, vars), html };
+            )
+            .join('');
+    }
+
+    private fallbackSignature(name: string, brand: string): string {
+        const lines = [name, brand].map((v) => v.trim()).filter(Boolean);
+        return lines.length ? `<p>${lines.map((l) => escapeHtml(l)).join('<br>')}</p>` : '';
     }
 
     private present(

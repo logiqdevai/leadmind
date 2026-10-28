@@ -21,6 +21,9 @@ export interface ActivityLog {
     changes: Record<string, ActivityLogFieldChange> | null;
     created_at: string;
     actor: ActivityLogActor | null;
+    /** True while the action can still be taken back (edit, delete or create of one record). */
+    undoable: boolean;
+    undone_at: string | null;
 }
 
 export interface ListActivityLogsQuery {

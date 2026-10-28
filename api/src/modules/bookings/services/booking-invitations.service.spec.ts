@@ -20,6 +20,7 @@ const contact = {
     uuid: 'contact-1',
     name: 'Ada Lovelace',
     email: 'ada@example.com',
+    country: null,
     unsubscribed_at: null,
     bounced_at: null,
 };
@@ -48,7 +49,14 @@ function makeInvitation(overrides: Record<string, unknown> = {}) {
     };
 }
 
-function setup(options: { settings?: Record<string, unknown> | null; contact?: Record<string, unknown> | null } = {}) {
+function setup(
+    options: {
+        settings?: Record<string, unknown> | null;
+        contact?: Record<string, unknown> | null;
+        templates?: Array<Record<string, unknown>>;
+        signature?: string;
+    } = {},
+) {
     const prisma = {
         contact: {
             findFirst: jest.fn().mockResolvedValue(options.contact === undefined ? contact : options.contact),
@@ -60,6 +68,15 @@ function setup(options: { settings?: Record<string, unknown> | null; contact?: R
             findUnique: jest.fn().mockResolvedValue(options.settings ?? null),
             upsert: jest.fn().mockResolvedValue({}),
         },
+        bookingInviteTemplate: {
+            findMany: jest.fn().mockImplementation(({ include }) =>
+                Promise.resolve((options.templates ?? []).map((template) => ({ kind: 'INVITE', template_uuid: template.uuid, ...(include ? { template } : {}) }))),
+            ),
+            deleteMany: jest.fn().mockResolvedValue({}),
+            createMany: jest.fn().mockResolvedValue({}),
+        },
+        messageTemplate: { count: jest.fn().mockResolvedValue(0) },
+        $transaction: jest.fn().mockImplementation((fn) => fn(prisma)),
         bookingInvitation: {
             create: jest.fn().mockImplementation(({ data }) => Promise.resolve({ uuid: 'inv-1', status: 'ACTIVE', sent_at: new Date(), last_error: null, reminders_sent: 0, ...data })),
             findUnique: jest.fn(),
@@ -77,8 +94,9 @@ function setup(options: { settings?: Record<string, unknown> | null; contact?: R
         getOrCreateContactLink: jest.fn().mockResolvedValue({ uuid: 'link-1', code: 'CODE123' }),
         publicUrl: jest.fn().mockReturnValue(LINK_URL),
     };
+    const outreachRender = { buildVarsForTeamMember: jest.fn().mockResolvedValue({ signature: options.signature ?? '' }) };
     const queue = { add: jest.fn().mockResolvedValue({}), getJob: jest.fn().mockResolvedValue(null) };
-    const service = new BookingInvitationsService(prisma as never, messageSend as never, links as never, queue as never);
+    const service = new BookingInvitationsService(prisma as never, messageSend as never, links as never, outreachRender as never, queue as never);
     return { service, prisma, messageSend, links, queue };
 }
 
@@ -93,9 +111,11 @@ describe('BookingInvitationsService', () => {
             const email = messageSend.sendTransactionalEmail.mock.calls[0][1];
             expect(email.to).toBe('ada@example.com');
             expect(email.replyTo).toBe('petros@example.com');
-            expect(email.subject).toBe('Pick a time: 30 minute intro call');
+            expect(email.subject).toBe("Let's find a time: 30 minute intro call");
             expect(email.html).toContain(LINK_URL);
             expect(email.html).toContain('Hi Ada,');
+            // No sender profile signature: falls back to the sender's name and the brand.
+            expect(email.html).toContain('Petros<br>logiqdev');
 
             expect(prisma.bookingInvitation.create.mock.calls[0][0].data).toMatchObject({
                 reminder_enabled: true,
@@ -159,6 +179,50 @@ describe('BookingInvitationsService', () => {
             const { html } = messageSend.sendTransactionalEmail.mock.calls[0][1];
             expect(html).toContain('Hello Ada, let us talk.');
             expect(html).toContain(`href="${LINK_URL}"`);
+        });
+
+        describe('message templates', () => {
+            const en = { uuid: 't-en', language: 'en', email_subject: 'Book {{booking.title}}', email_content: '<p>Hello {{contact.first_name}}</p>{{signature}}' };
+            const el = { uuid: 't-el', language: 'el', email_subject: 'Κλείστε {{booking.title}}', email_content: '<p>Γεια {{contact.first_name}}</p>{{signature}}' };
+
+            it("sends the template written in the contact's language, with the sender's signature and the button appended", async () => {
+                const { service, messageSend } = setup({
+                    contact: { ...contact, country: 'GR' },
+                    templates: [en, el],
+                    signature: '<p><strong>Petros</strong></p>',
+                });
+                await service.send(actor, { contact_uuid: 'contact-1', booking_page_uuid: 'page-1' });
+                const email = messageSend.sendTransactionalEmail.mock.calls[0][1];
+                expect(email.subject).toBe('Κλείστε 30 minute intro call');
+                expect(email.html).toContain('<p>Γεια Ada</p>');
+                expect(email.html).toContain('<p><strong>Petros</strong></p>');
+                expect(email.html).toContain(`href="${LINK_URL}"`);
+            });
+
+            it('falls back to the English template for other or unknown countries', async () => {
+                const { service, messageSend } = setup({ contact: { ...contact, country: 'DE' }, templates: [el, en] });
+                await service.send(actor, { contact_uuid: 'contact-1', booking_page_uuid: 'page-1' });
+                expect(messageSend.sendTransactionalEmail.mock.calls[0][1].subject).toBe('Book 30 minute intro call');
+            });
+
+            it('prefers a picked template over the custom text of the settings', async () => {
+                const { service, messageSend } = setup({
+                    settings: { invite_message: 'Custom text', reminder_enabled: false, reminder_delay_value: 3, reminder_delay_unit: 'DAYS', max_reminders: 1 },
+                    templates: [en],
+                });
+                await service.send(actor, { contact_uuid: 'contact-1', booking_page_uuid: 'page-1' });
+                const { html } = messageSend.sendTransactionalEmail.mock.calls[0][1];
+                expect(html).toContain('Hello Ada');
+                expect(html).not.toContain('Custom text');
+            });
+        });
+
+        it('uses the Greek built-in text for Greek contacts', async () => {
+            const { service, messageSend } = setup({ contact: { ...contact, country: 'CY' } });
+            await service.send(actor, { contact_uuid: 'contact-1', booking_page_uuid: 'page-1' });
+            const email = messageSend.sendTransactionalEmail.mock.calls[0][1];
+            expect(email.subject).toBe('Ας βρούμε μια ώρα: 30 minute intro call');
+            expect(email.html).toContain('Γεια σας Ada,');
         });
 
         it('escapes contact-provided text in the email body', async () => {
@@ -268,7 +332,7 @@ describe('BookingInvitationsService', () => {
             await service.processReminder({ invitation_uuid: 'inv-1', reminder_number: 1 });
 
             const email = messageSend.sendTransactionalEmail.mock.calls[0][1];
-            expect(email.subject).toBe('Reminder: pick a time for 30 minute intro call');
+            expect(email.subject).toBe('Still keen to talk? Pick a time for 30 minute intro call');
             expect(email.html).toContain(LINK_URL);
             expect(prisma.bookingInvitation.update.mock.calls[0][0].data).toMatchObject({ reminders_sent: 1, status: BookingInvitationStatus.ACTIVE });
             expect(queue.add).toHaveBeenCalledWith(
@@ -331,6 +395,24 @@ describe('BookingInvitationsService', () => {
         it('rejects a delay longer than 90 days', async () => {
             const { service } = setup();
             await expect(service.updateSettings('org-1', { reminder_delay_value: 20, reminder_delay_unit: BookingInviteUnit.WEEKS })).rejects.toBeInstanceOf(BadRequestException);
+        });
+
+        it('replaces the offered templates per kind', async () => {
+            const { service, prisma } = setup();
+            prisma.messageTemplate.count.mockResolvedValue(2);
+            await service.updateSettings('org-1', { invite_template_uuids: ['a', 'b'], reminder_template_uuids: [] });
+            expect(prisma.bookingInviteTemplate.deleteMany).toHaveBeenCalledWith({ where: { organisation_uuid: 'org-1', kind: 'INVITE', template_uuid: { notIn: ['a', 'b'] } } });
+            expect(prisma.bookingInviteTemplate.createMany.mock.calls[0][0].data).toEqual([
+                { organisation_uuid: 'org-1', kind: 'INVITE', template_uuid: 'a' },
+                { organisation_uuid: 'org-1', kind: 'INVITE', template_uuid: 'b' },
+            ]);
+            expect(prisma.bookingInviteTemplate.deleteMany).toHaveBeenCalledWith({ where: { organisation_uuid: 'org-1', kind: 'REMINDER', template_uuid: { notIn: [] } } });
+        });
+
+        it('rejects templates that are not email templates of the organisation', async () => {
+            const { service, prisma } = setup();
+            prisma.messageTemplate.count.mockResolvedValue(1);
+            await expect(service.updateSettings('org-1', { invite_template_uuids: ['a', 'b'] })).rejects.toBeInstanceOf(BadRequestException);
         });
 
         it('stores an emptied message as null so the default applies again', async () => {

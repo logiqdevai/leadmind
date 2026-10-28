@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, MaxLength, Min } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsBoolean, IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, MaxLength, Min } from 'class-validator';
 import { BookingInviteUnit } from '@/generated/prisma';
 
 export class SendBookingInvitationDto {
@@ -60,4 +60,9 @@ export class UpdateBookingInviteSettingsDto {
     @IsOptional() @IsString() @MaxLength(5000) invite_message?: string;
     @ApiPropertyOptional({ maxLength: 200 }) @IsOptional() @IsString() @MaxLength(200) reminder_subject?: string;
     @ApiPropertyOptional({ maxLength: 5000 }) @IsOptional() @IsString() @MaxLength(5000) reminder_message?: string;
+
+    @ApiPropertyOptional({ type: [String], description: 'Message templates for the invite email, one per language; replaces the full set. Empty uses the text above or the built-in default' })
+    @IsOptional() @IsArray() @ArrayMaxSize(20) @IsUUID('all', { each: true }) invite_template_uuids?: string[];
+    @ApiPropertyOptional({ type: [String], description: 'Message templates for the reminder email, one per language; replaces the full set' })
+    @IsOptional() @IsArray() @ArrayMaxSize(20) @IsUUID('all', { each: true }) reminder_template_uuids?: string[];
 }

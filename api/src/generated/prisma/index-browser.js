@@ -1358,6 +1358,14 @@ exports.Prisma.BookingInviteSettingsScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.BookingInviteTemplateScalarFieldEnum = {
+  id: 'id',
+  organisation_uuid: 'organisation_uuid',
+  template_uuid: 'template_uuid',
+  kind: 'kind',
+  created_at: 'created_at'
+};
+
 exports.Prisma.BookingInvitationScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -2001,6 +2009,11 @@ exports.BookingInviteUnit = exports.$Enums.BookingInviteUnit = {
   WEEKS: 'WEEKS'
 };
 
+exports.BookingInviteTemplateKind = exports.$Enums.BookingInviteTemplateKind = {
+  INVITE: 'INVITE',
+  REMINDER: 'REMINDER'
+};
+
 exports.BookingInvitationStatus = exports.$Enums.BookingInvitationStatus = {
   ACTIVE: 'ACTIVE',
   BOOKED: 'BOOKED',
@@ -2119,6 +2132,7 @@ exports.Prisma.ModelName = {
   Booking: 'Booking',
   BookingEvent: 'BookingEvent',
   BookingInviteSettings: 'BookingInviteSettings',
+  BookingInviteTemplate: 'BookingInviteTemplate',
   BookingInvitation: 'BookingInvitation',
   BookingNotification: 'BookingNotification',
   BookingPageTemplate: 'BookingPageTemplate',

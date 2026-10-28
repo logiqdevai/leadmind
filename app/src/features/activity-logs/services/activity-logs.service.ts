@@ -31,3 +31,11 @@ export async function listActivityLogs(
         throw new Error("Failed to load activity history. Please try again.");
     }
 }
+
+export async function undoActivityLog(uuid: string): Promise<void> {
+    try {
+        await axiosInstance.post(ApiRoutes.activity_logs.undo(uuid));
+    } catch (error: any) {
+        throw new Error(error?.response?.data?.message || "Failed to undo this action.");
+    }
+}

@@ -32,7 +32,7 @@ function setup(members: string[] = [ME, 'user-2', 'user-3']) {
     };
     const gateway = { emitToUsers: jest.fn(), emitToUser: jest.fn() };
     const queue = { add: jest.fn(), getJob: jest.fn() };
-    const service = new RemindersService(prisma as never, gateway as never, {} as never, queue as never);
+    const service = new RemindersService(prisma as never, gateway as never, {} as never, queue as never, { register: jest.fn() } as never);
     return { service, prisma, gateway };
 }
 
@@ -164,7 +164,7 @@ describe('RemindersService Google Calendar sync', () => {
         };
         const gateway = { emitToUsers: jest.fn() };
         const queue = { add: jest.fn(), getJob: jest.fn().mockResolvedValue(null) };
-        const service = new RemindersService(prisma as never, gateway as never, calendar as never, queue as never);
+        const service = new RemindersService(prisma as never, gateway as never, calendar as never, queue as never, { register: jest.fn() } as never);
         return { service, calendar };
     }
 

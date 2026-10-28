@@ -329,6 +329,7 @@ export const ApiRoutes = {
     },
     activity_logs: {
         list: "/activity-logs",
+        undo: (uuid: string) => `/activity-logs/${uuid}/undo`,
     },
     organisations: {
         list: "/organisations",

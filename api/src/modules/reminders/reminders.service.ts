@@ -13,6 +13,7 @@ import { NotificationsGateway } from '@/gateways/notifications.gateway';
 import { CreateReminderDto } from './dto/create-reminder.dto';
 import { UpdateReminderDto } from './dto/update-reminder.dto';
 import { ListRemindersDto } from './dto/list-reminders.dto';
+import { ActivityUndoRegistry } from '@/modules/activity-logs/activity-undo.registry';
 import { ReminderCalendarService } from './services/reminder-calendar.service';
 
 const CONTACT_SELECT = {
@@ -45,7 +46,18 @@ export class RemindersService {
         private readonly gateway: NotificationsGateway,
         private readonly calendar: ReminderCalendarService,
         @InjectQueue(REMINDER_TRIGGER_QUEUE) private readonly reminderQueue: Queue,
-    ) {}
+        undoRegistry: ActivityUndoRegistry,
+    ) {
+        undoRegistry.register('reminder', {
+            remove: async (organisation_uuid, uuid) => {
+                await this.remove(organisation_uuid, uuid);
+            },
+            restore: (organisation_uuid, snapshot, relations) =>
+                this.restoreFromSnapshot(organisation_uuid, snapshot, relations),
+            revert: (organisation_uuid, uuid, values, relations) =>
+                this.revertToValues(organisation_uuid, uuid, values, relations),
+        });
+    }
 
     async create(
         organisation_uuid: string,
@@ -516,6 +528,95 @@ export class RemindersService {
             where: { uuid },
             data: { metadata: { ai_draft } as Prisma.InputJsonValue },
         });
+    }
+
+    /** Queues the trigger job for a pending reminder that is still in the future; returns its job id. */
+    private async scheduleJob(uuid: string, status: ReminderStatus, remindAt: Date): Promise<string | null> {
+        if (status !== ReminderStatus.PENDING || remindAt <= new Date()) return null;
+        const jobId = `reminder-${uuid}`;
+        await this.reminderQueue.add(
+            'trigger',
+            { reminder_uuid: uuid },
+            {
+                delay: remindAt.getTime() - Date.now(),
+                jobId,
+                attempts: 1,
+                removeOnComplete: { age: 86400 },
+                removeOnFail: { age: 86400 },
+            },
+        );
+        return jobId;
+    }
+
+    /** Activity undo of a delete: puts the row and its assignees back and re-queues its job. The Google Calendar event is not recreated. */
+    private async restoreFromSnapshot(
+        organisation_uuid: string,
+        snapshot: Record<string, unknown>,
+        relations: Record<string, unknown>,
+    ) {
+        const assignees = (relations.assignees as { user_uuid: string }[] | undefined) ?? [];
+        const remindAt = new Date(snapshot.remind_at as string);
+        const status = snapshot.status as ReminderStatus;
+        const uuid = snapshot.uuid as string;
+
+        await this.prisma.reminder.create({
+            data: {
+                uuid,
+                organisation_uuid,
+                contact_uuid: snapshot.contact_uuid as string,
+                title: (snapshot.title as string | null) ?? undefined,
+                notes: (snapshot.notes as string | null) ?? undefined,
+                remind_at: remindAt,
+                status,
+                source: snapshot.source as ReminderSource,
+                type: snapshot.type as ReminderType,
+                outreach_message_uuid: (snapshot.outreach_message_uuid as string | null) ?? undefined,
+                metadata: (snapshot.metadata as Prisma.InputJsonValue | null) ?? undefined,
+                assignees: { create: assignees.map(({ user_uuid }) => ({ user_uuid })) },
+            },
+        });
+
+        const job_id = await this.scheduleJob(uuid, status, remindAt);
+        if (job_id) await this.prisma.reminder.update({ where: { uuid }, data: { job_id } });
+
+        await this.emitToRecipients(await this.findOne(organisation_uuid, uuid), 'reminder.created');
+    }
+
+    /** Activity undo of an edit: restores the changed fields, then re-syncs the trigger job with the result. */
+    private async revertToValues(
+        organisation_uuid: string,
+        uuid: string,
+        values: Record<string, unknown>,
+        relations: Record<string, unknown> | undefined,
+    ) {
+        const existing = await this.prisma.reminder.findFirst({ where: { uuid, organisation_uuid } });
+        if (!existing) throw new NotFoundException('Reminder not found');
+
+        const remindAt = values.remind_at ? new Date(values.remind_at as string) : existing.remind_at;
+        const status = (values.status as ReminderStatus | undefined) ?? existing.status;
+        const assignees = relations?.assignees as { user_uuid: string }[] | undefined;
+
+        await this.cancelJob(existing.job_id);
+        const job_id = await this.scheduleJob(uuid, status, remindAt);
+
+        await this.prisma.reminder.update({
+            where: { uuid },
+            data: {
+                ...('title' in values && { title: values.title as string | null }),
+                ...('notes' in values && { notes: values.notes as string | null }),
+                ...('metadata' in values && {
+                    metadata: (values.metadata as Prisma.InputJsonValue | null) ?? Prisma.DbNull,
+                }),
+                remind_at: remindAt,
+                status,
+                job_id,
+                ...(assignees && {
+                    assignees: { deleteMany: {}, create: assignees.map(({ user_uuid }) => ({ user_uuid })) },
+                }),
+            },
+        });
+
+        await this.emitToRecipients(await this.findOne(organisation_uuid, uuid), 'reminder.updated');
     }
 
     private async cancelJob(job_id: string | null) {

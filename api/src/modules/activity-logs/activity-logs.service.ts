@@ -108,7 +108,16 @@ export class ActivityLogsService {
     const total_pages = Math.ceil(total / limit) || 1;
 
     return {
-      data,
+      data: data.map(({ metadata, ...log }) => {
+        // The stored undo payload is a raw row copy: never sent to the client, only summarised.
+        const { undo, ...publicMetadata } = (metadata ?? {}) as Record<string, unknown>;
+        return {
+          ...log,
+          metadata: publicMetadata,
+          undoable: !!undo && !!log.entity_uuid && !publicMetadata.undone_at,
+          undone_at: (publicMetadata.undone_at as string | undefined) ?? null,
+        };
+      }),
       pagination: {
         total,
         page,

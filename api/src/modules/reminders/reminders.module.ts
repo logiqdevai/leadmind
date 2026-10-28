@@ -8,11 +8,13 @@ import { RemindersController } from './reminders.controller';
 import { RemindersService } from './reminders.service';
 import { FollowUpDraftService } from './services/follow-up-draft.service';
 import { ReminderCalendarService } from './services/reminder-calendar.service';
+import { ActivityLogsModule } from '@/modules/activity-logs/activity-logs.module';
 import { ComposioModule } from '@/integrations/composio/composio.module';
 
 @Module({
     imports: [
         PrismaModule,
+        ActivityLogsModule,
         ComposioModule,
         GatewaysModule,
         AiIntegrationModule,
