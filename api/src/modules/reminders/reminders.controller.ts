@@ -39,7 +39,12 @@ export class RemindersController {
 
     @ActivityLog({ entityType: ActivityEntityType.REMINDER, action: ActivityAction.CREATED })
     @Post()
-    @ApiOperation({ summary: 'Create a reminder for a contact' })
+    @ApiOperation({
+        summary: 'Create a reminder for a contact',
+        description:
+            'Only the assigned members are notified. Without assignee_user_uuids the creating member is the assignee; ' +
+            'an empty array assigns every member of the organisation.',
+    })
     @ApiResponse({ status: 201 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 404, description: 'Contact not found' })
@@ -53,7 +58,12 @@ export class RemindersController {
     }
 
     @Get()
-    @ApiOperation({ summary: 'List reminders with optional filters' })
+    @ApiOperation({
+        summary: 'List reminders with optional filters',
+        description:
+            'Paginated. Use for_user_uuid to see what a member receives (assigned to them or to everyone), ' +
+            "range=overdue for missed ones, and sort=closest to put the next due reminder first.",
+    })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     findAll(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: ListRemindersDto) {
@@ -106,7 +116,10 @@ export class RemindersController {
     @Delete(':uuid')
     @UseGuards(OrganisationRolesGuard)
     @OrganisationRoles(OrganisationRole.ADMIN)
-    @ApiOperation({ summary: 'Delete a reminder and cancel its scheduled job' })
+    @ApiOperation({
+        summary: 'Delete a reminder and cancel its scheduled job',
+        description: 'Requires the organisation admin role. To close a reminder without deleting it, complete it instead.',
+    })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 403, description: 'Forbidden — organisation admin role required' })

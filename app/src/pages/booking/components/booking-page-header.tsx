@@ -50,14 +50,20 @@ export const BookingPageHeader: FC<BookingPageHeaderProps> = ({
 
     return (
         <header className="flex flex-col gap-6">
-            {page.logo_url ? (
-                <img
-                    src={page.logo_url}
-                    alt={t("booking.header.logoAlt", { brand: brand || page.title })}
-                    className="h-9 max-w-full self-start object-contain"
-                />
-            ) : brand ? (
-                <span className="text-2xl font-semibold tracking-tight text-foreground">{brand}</span>
+            {page.logo_url || brand ? (
+                <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 self-start">
+                    {page.logo_url ? (
+                        <img
+                            src={page.logo_url}
+                            // The brand name is rendered next to the logo, so don't announce it twice.
+                            alt={brand ? "" : t("booking.header.logoAlt", { brand: page.title })}
+                            className="h-9 max-w-full object-contain"
+                        />
+                    ) : null}
+                    {brand ? (
+                        <span className="min-w-0 break-words text-2xl font-semibold tracking-tight text-foreground">{brand}</span>
+                    ) : null}
+                </div>
             ) : null}
 
             <div className="flex flex-col gap-3">

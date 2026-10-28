@@ -185,7 +185,7 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
                             <div className="flex items-center justify-between gap-3 rounded-xl bg-surface-secondary/50 px-4 py-3">
                                 <span className="flex min-w-0 items-center gap-2 text-sm text-foreground">
                                     <CalendarDays className="size-4 shrink-0 text-muted" aria-hidden />
-                                    <span className="truncate">
+                                    <span className="break-words">
                                         {formatDateLong(selectedSlot.start, timezone)} ({formatDurationLocalized(duration)})
                                     </span>
                                 </span>
@@ -245,24 +245,27 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
                                 data={data}
                                 summary={
                                     selectedSlot ? (
-                                        <div className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-surface-secondary/60 p-3">
+                                        <div className="flex flex-col gap-3 rounded-xl border border-border/60 bg-surface-secondary/60 p-3 sm:flex-row sm:items-center sm:justify-between">
                                             <span className="flex min-w-0 items-center gap-3">
                                                 <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-accent">
                                                     <CalendarDays className="size-5" aria-hidden />
                                                 </span>
                                                 <span className="flex min-w-0 flex-col">
-                                                    <span className="truncate text-sm font-semibold text-foreground">
+                                                    <span className="break-words text-sm font-semibold text-foreground">
                                                         {formatDateLong(selectedSlot.start, timezone)}
                                                     </span>
-                                                    <span className="truncate text-sm text-muted">
-                                                        {formatTimeRange(selectedSlot.start, selectedSlot.end, timezone)} ({formatDurationLocalized(duration)})
+                                                    <span className="break-words text-sm text-muted">
+                                                        {formatTimeRange(selectedSlot.start, selectedSlot.end, timezone)}{" "}
+                                                        <span className="whitespace-nowrap">
+                                                            ({formatDurationLocalized(duration)})
+                                                        </span>
                                                     </span>
                                                 </span>
                                             </span>
                                             <Button
                                                 size="sm"
                                                 variant="secondary"
-                                                className="shrink-0 rounded-full"
+                                                className="w-full shrink-0 rounded-full sm:w-auto"
                                                 onPress={() => goTo(BookingSteps.PICK)}
                                             >
                                                 <CalendarDays className="size-4" aria-hidden />

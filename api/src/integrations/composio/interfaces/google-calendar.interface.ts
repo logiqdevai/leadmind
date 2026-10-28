@@ -18,6 +18,8 @@ export interface GoogleCalendarEventInput {
     with_meet: boolean;
     /** Don't email guests about this change. */
     silent?: boolean;
+    /** Show the time as free, so the event doesn't count as busy in free/busy lookups. */
+    free?: boolean;
 }
 
 export interface GoogleCalendarEventResult {

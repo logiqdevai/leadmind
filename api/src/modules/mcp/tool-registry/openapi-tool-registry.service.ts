@@ -97,9 +97,9 @@ export class OpenApiToolRegistryService {
         tools.push({
           name,
           description:
-            operation.summary ||
-            operation.description ||
-            `${method.toUpperCase()} ${path}`,
+            [operation.summary, operation.description]
+              .filter(Boolean)
+              .join('\n\n') || `${method.toUpperCase()} ${path}`,
           method,
           pathTemplate: path,
           pathParams,

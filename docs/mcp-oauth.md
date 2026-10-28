@@ -36,7 +36,7 @@ Claude / ChatGPT                Leadmind API (Nest, single process)
 `OpenApiToolRegistryService` (`api/src/modules/mcp/tool-registry/`) reads the same
 `SwaggerModule.createDocument()` output already used for `/api` docs (via
 `OpenApiDocumentRegistry`, set once in `main.ts`). For every documented path+method not on the
-denylist, it builds an MCP tool: name, description (from `@ApiOperation summary`), a flattened
+denylist, it builds an MCP tool: name, description (`@ApiOperation summary`, followed by its `description` when set), a flattened
 JSON Schema input (path params + query params + `body`, `$ref`s dereferenced inline), and a
 required scope (`mcp:read` for GET, `mcp:write` otherwise).
 

@@ -4,6 +4,7 @@ import { BookingsController } from '@/modules/bookings/bookings.controller';
 import { BookingPagesController } from '@/modules/bookings/controllers/booking-pages.controller';
 import { AvailabilityController } from '@/modules/bookings/controllers/availability.controller';
 import { CalendarConnectionsController } from '@/modules/bookings/controllers/calendar-connections.controller';
+import { BookingInvitationsController } from '@/modules/bookings/controllers/booking-invitations.controller';
 import { PublicBookingController } from '@/modules/bookings/controllers/public-booking.controller';
 import { BookingLinksController } from '@/modules/booking-links/booking-links.controller';
 import { RemindersController } from '@/modules/reminders/reminders.controller';
@@ -27,6 +28,7 @@ describe('MCP tool catalogue for bookings and reminders', () => {
                 BookingPagesController,
                 AvailabilityController,
                 CalendarConnectionsController,
+                BookingInvitationsController,
                 PublicBookingController,
                 BookingLinksController,
                 RemindersController,
@@ -55,6 +57,9 @@ describe('MCP tool catalogue for bookings and reminders', () => {
             ['post', '/bookings/{uuid}/cancel'],
             ['post', '/bookings/{uuid}/status'],
             ['post', '/bookings/{uuid}/assign'],
+            ['delete', '/bookings/{uuid}'],
+            ['post', '/bookings/{uuid}/sync-calendar'],
+            ['post', '/bookings/{uuid}/resend-confirmation'],
             ['get', '/booking-pages'],
             ['post', '/booking-pages'],
             ['patch', '/booking-pages/{uuid}'],
@@ -65,6 +70,22 @@ describe('MCP tool catalogue for bookings and reminders', () => {
             ['get', '/availability/schedule'],
             ['put', '/availability/schedule'],
             ['post', '/availability/blocks'],
+            ['put', '/availability/overrides'],
+            ['delete', '/availability/overrides/{uuid}'],
+            ['post', '/availability/recurring-blocks'],
+            ['post', '/booking-invitations'],
+            ['get', '/booking-invitations'],
+            ['post', '/booking-invitations/{uuid}/stop'],
+            ['post', '/booking-invitations/{uuid}/resend'],
+            ['get', '/booking-invite-settings'],
+            ['patch', '/booking-invite-settings'],
+            ['get', '/reminders'],
+            ['get', '/reminders/stats'],
+            ['get', '/reminders/{uuid}'],
+            ['post', '/reminders'],
+            ['put', '/reminders/{uuid}'],
+            ['put', '/reminders/{uuid}/complete'],
+            ['delete', '/reminders/{uuid}'],
             ['get', '/calendar-connections'],
             ['get', '/calendar-connections/{uuid}/calendars'],
             ['patch', '/calendar-connections/{uuid}'],
@@ -132,5 +153,24 @@ describe('MCP tool catalogue for bookings and reminders', () => {
             'assignee_user_uuids',
         );
         expect(route('get', '/reminders')!.queryParams).toContain('for_user_uuid');
+    });
+
+    it('lets a tool add a reminder to Google Calendar', () => {
+        for (const tool of [byName('reminders_create')!, route('put', '/reminders/{uuid}')!]) {
+            const body = tool.inputSchema.properties!.body as { properties: Record<string, unknown> };
+            expect(body.properties).toHaveProperty('add_to_google_calendar');
+        }
+    });
+
+    it('tells the agent about side effects and permissions, not only the one-line summary', () => {
+        expect(route('post', '/reminders')!.description).toMatch(/^Create a reminder for a contact\n\n.*assignee_user_uuids/s);
+        expect(route('delete', '/reminders/{uuid}')!.description).toMatch(/admin/);
+        expect(route('post', '/bookings/{uuid}/resend-confirmation')!.description).toMatch(/email/);
+        expect(route('post', '/bookings/{uuid}/sync-calendar')!.description).toMatch(/queued/);
+        expect(route('get', '/bookings/export')!.description).toMatch(/CSV/);
+        // An operation with no longer description keeps its summary unchanged.
+        expect(route('get', '/reminders/stats')!.description).toBe(
+            'Reminder statistics: pending, due today, overdue, completed this week',
+        );
     });
 });

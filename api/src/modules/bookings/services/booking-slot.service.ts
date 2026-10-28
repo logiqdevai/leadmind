@@ -1,7 +1,7 @@
 import { BadRequestException, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import type Redis from 'ioredis';
 import { DateTime } from 'luxon';
-import { BookingAssignmentMode, BookingPage, Prisma } from '@/generated/prisma';
+import { BookingAssignmentMode, BookingPage, BookingSource, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { REDIS_CLIENT } from '@/core/databases/redis/redis.constants';
 import { GoogleCalendarService } from '@/integrations/composio/services/google-calendar.service';
@@ -309,6 +309,7 @@ export class BookingSlotService {
                 select: {
                     uuid: true,
                     assigned_user_uuid: true,
+                    source: true,
                     start_at: true,
                     end_at: true,
                     booking_page_uuid: true,
@@ -323,11 +324,14 @@ export class BookingSlotService {
 
         return user_uuids.map((user_uuid, index) => {
             const schedule = schedules.find((s) => s.user_uuid === user_uuid);
-            const own = bookings.filter((b) => b.assigned_user_uuid === user_uuid);
+            const mine = bookings.filter((b) => b.assigned_user_uuid === user_uuid);
+            // Reminder placeholders only show the reminder on the calendar; they never take a slot.
+            const own = mine.filter((b) => b.source !== BookingSource.REMINDER);
             // Google free/busy also reports the events we synced for our own bookings. Those are already
             // accounted for as bookings (with seat logic), so drop busy intervals one of them fully covers.
+            // Reminder events are dropped too (older ones were created as busy).
             const externalBusy = external[index].filter(
-                (busy) => !own.some((b) => b.start_at <= busy.start && b.end_at >= busy.end),
+                (busy) => !mine.some((b) => b.start_at <= busy.start && b.end_at >= busy.end),
             );
             return {
                 user_uuid,

@@ -48,7 +48,10 @@ export class BookingsController {
     @Header('Content-Type', 'text/csv; charset=utf-8')
     @Header('Content-Disposition', 'attachment; filename="bookings.csv"')
     @ApiProduces('text/csv')
-    @ApiOperation({ summary: 'Export bookings matching the filters as CSV' })
+    @ApiOperation({
+        summary: 'Export bookings matching the filters as CSV',
+        description: 'Returns the CSV text, not JSON. Accepts the same filters as the bookings list.',
+    })
     @ApiResponse({ status: 200 })
     export(@CurrentUser('organisation_uuid') organisation_uuid: string, @Query() query: BookingFiltersDto) {
         return this.bookingsService.exportCsv(organisation_uuid, query);
@@ -64,7 +67,12 @@ export class BookingsController {
 
     @ActivityLog({ entityType: ActivityEntityType.BOOKING, action: ActivityAction.CREATED, entityUuidFrom: 'result.uuid' })
     @Post()
-    @ApiOperation({ summary: 'Create a manual booking for a contact or visitor' })
+    @ApiOperation({
+        summary: 'Create a manual booking for a contact or visitor',
+        description:
+            'Pass contact_uuid, or invitee_name and invitee_email. The slot must be free (409 otherwise); ' +
+            'preview slots with the booking-pages slots tool. Set notify=false to skip the confirmation email and reminders.',
+    })
     @ApiResponse({ status: 201 })
     @ApiResponse({ status: 409, description: 'The slot is no longer available' })
     create(@CurrentUser() actor: BookingActor, @Body() dto: CreateBookingDto) {
@@ -91,7 +99,10 @@ export class BookingsController {
 
     @ActivityLog({ entityType: ActivityEntityType.BOOKING, action: ActivityAction.CANCELLED, entityUuidFrom: 'params.uuid' })
     @Post(':uuid/cancel')
-    @ApiOperation({ summary: 'Cancel a booking and release its slot' })
+    @ApiOperation({
+        summary: 'Cancel a booking and release its slot',
+        description: 'Emails the invitee unless notify=false. Optionally records a reason.',
+    })
     @ApiResponse({ status: 201 })
     cancel(@CurrentUser() actor: BookingActor, @Param('uuid') uuid: string, @Body() dto: CancelBookingDto) {
         return this.bookingsService.cancel(actor, uuid, dto);
@@ -124,14 +135,21 @@ export class BookingsController {
     }
 
     @Post(':uuid/sync-calendar')
-    @ApiOperation({ summary: 'Retry Google Calendar synchronisation for a booking' })
+    @ApiOperation({
+        summary: 'Retry Google Calendar synchronisation for a booking',
+        description: 'Queues a sync job and returns immediately ({ queued: true }); it does not wait for Google Calendar.',
+    })
     @ApiResponse({ status: 201 })
     syncCalendar(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.bookingsService.resyncCalendar(organisation_uuid, uuid);
     }
 
     @Post(':uuid/resend-confirmation')
-    @ApiOperation({ summary: 'Resend the confirmation email to the invitee' })
+    @ApiOperation({
+        summary: 'Resend the confirmation email to the invitee',
+        description:
+            'Sends an email to the invitee immediately. Only confirmed upcoming bookings qualify (400 otherwise, or if the email fails).',
+    })
     @ApiResponse({ status: 201 })
     resendConfirmation(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.bookingsService.resendConfirmation(organisation_uuid, uuid);

@@ -243,6 +243,7 @@ export class GoogleCalendarService {
             start: { dateTime: input.start.toISOString(), timeZone: input.time_zone },
             end: { dateTime: input.end.toISOString(), timeZone: input.time_zone },
             attendees: input.attendees.map((a) => ({ email: a.email, displayName: a.display_name ?? undefined })),
+            transparency: input.free ? 'transparent' : 'opaque',
             ...(input.with_meet
                 ? {
                       conferenceData: {

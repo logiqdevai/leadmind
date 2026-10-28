@@ -76,6 +76,7 @@ export class ReminderCalendarService {
                     attendees: [],
                     with_meet: false,
                     silent: true,
+                    free: true,
                 },
             );
             await this.prisma.reminder.update({
