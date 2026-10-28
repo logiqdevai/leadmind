@@ -111,6 +111,8 @@ model Organisation {
   booking_pages             BookingPage[]
   booking_links             BookingLink[]
   bookings                  Booking[]
+  booking_invite_settings   BookingInviteSettings?
+  booking_invitations       BookingInvitation[]
   booking_events            BookingEvent[]
   calendar_connections      CalendarConnection[]
   notifications             Notification[]
@@ -407,6 +409,7 @@ model Contact {
   sequence_enrollments SequenceEnrollment[]
   bookings             Booking[]
   booking_links        BookingLink[]
+  booking_invitations  BookingInvitation[]
   opening_hours_rows   ContactOpeningHour[]
 
   @@unique([organisation_uuid, lead_uuid])
@@ -2261,6 +2264,21 @@ enum BookingEventType {
   CALENDAR_SYNC_FAILED
 }
 
+enum BookingInviteUnit {
+  HOURS
+  DAYS
+  WEEKS
+}
+
+enum BookingInvitationStatus {
+  /// Waiting for a booking; follow-up reminders may still be due.
+  ACTIVE
+  /// The contact booked, so no more reminders are sent.
+  BOOKED
+  /// Reminders ended (all sent, stopped by a user, or the contact can no longer be emailed).
+  STOPPED
+}
+
 enum BookingNotificationKind {
   CONFIRMATION
   REMINDER
@@ -2481,6 +2499,7 @@ model BookingPage {
   members               BookingPageMember[]
   links                 BookingLink[]
   bookings              Booking[]
+  invitations           BookingInvitation[]
   message_templates     MessageTemplate[]      @relation("MessageTemplateBookingPage")
   sequence_steps        OutreachSequenceStep[]
 
@@ -2524,11 +2543,12 @@ model BookingLink {
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  booking_page BookingPage  @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
-  contact      Contact?     @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  created_by   User?        @relation("BookingLinkCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+  organisation Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  booking_page BookingPage         @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
+  contact      Contact?            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  created_by   User?               @relation("BookingLinkCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
   bookings     Booking[]
+  invitations  BookingInvitation[]
 
   @@index([organisation_uuid])
   @@index([booking_page_uuid, contact_uuid, is_active])
@@ -2626,6 +2646,61 @@ model BookingEvent {
   @@index([booking_uuid, created_at])
   @@index([organisation_uuid, created_at])
   @@map("booking_events")
+}
+
+/// Organisation-wide defaults for booking links emailed to contacts (one row per organisation, created on first save).
+model BookingInviteSettings {
+  id                   Int               @id @default(autoincrement())
+  organisation_uuid    String            @unique
+  /// Remind contacts who have not booked yet.
+  reminder_enabled     Boolean           @default(true)
+  reminder_delay_value Int               @default(3)
+  reminder_delay_unit  BookingInviteUnit @default(DAYS)
+  /// Total reminders per invitation, each one `reminder delay` after the previous email.
+  max_reminders        Int               @default(1)
+  invite_subject       String?
+  invite_message       String?           @db.Text
+  reminder_subject     String?
+  reminder_message     String?           @db.Text
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@map("booking_invite_settings")
+}
+
+/// A booking link emailed to a contact, and the state of its follow-up reminders.
+model BookingInvitation {
+  id                     Int                     @id @default(autoincrement())
+  uuid                   String                  @unique @default(uuid())
+  organisation_uuid      String
+  booking_page_uuid      String
+  booking_link_uuid      String
+  contact_uuid           String
+  sent_by_user_uuid      String?
+  recipient_email        String
+  status                 BookingInvitationStatus @default(ACTIVE)
+  /// Settings captured when the invitation was sent, so later settings changes never rewrite a running sequence.
+  reminder_enabled       Boolean                 @default(false)
+  reminder_delay_minutes Int                     @default(0)
+  max_reminders          Int                     @default(0)
+  reminders_sent         Int                     @default(0)
+  next_reminder_at       DateTime?
+  last_error             String?                 @db.Text
+  sent_at                DateTime                @default(now())
+  created_at             DateTime                @default(now())
+  updated_at             DateTime                @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  booking_page BookingPage  @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
+  booking_link BookingLink  @relation(fields: [booking_link_uuid], references: [uuid], onDelete: Cascade)
+  contact      Contact      @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid])
+  @@index([contact_uuid, sent_at])
+  @@index([booking_link_uuid])
+  @@map("booking_invitations")
 }
 
 /// One row per email attempt; dedupe_key makes retries and duplicate jobs idempotent.

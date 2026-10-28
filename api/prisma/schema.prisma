@@ -24,34 +24,34 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  memberships               OrganisationMember[]
-  invitations_sent          OrganisationInvitation[] @relation("InvitationInvitedBy")
-  form_completions          FormCompletion[]         @relation("CompletedByUser")
-  outreach_messages_sent    OutreachMessage[]        @relation("OutreachMessageSentBy")
-  activity_logs             ActivityLog[]            @relation("ActivityLogActor")
-  messaging_goals           MessagingGoal[]
-  goal_achievements         GoalAchievement[]
-  goal_personal_bests       GoalPersonalBest[]
-  bulk_jobs_created         BulkJob[]                @relation("BulkJobCreatedBy")
-  openai_batch_jobs_created OpenAiBatchJob[]         @relation("OpenAiBatchJobCreatedBy")
-  sidebar_favorites         SidebarFavorite[]
-  api_keys_created          ApiKey[]                 @relation("ApiKeyCreatedBy")
-  oauth_connections_granted OAuthConnection[]        @relation("OAuthConnectionGrantedBy")
-  availability_schedules    AvailabilitySchedule[]
-  booking_blocks            BookingBlock[]           @relation("BookingBlockMember")
-  booking_blocks_created    BookingBlock[]           @relation("BookingBlockCreatedBy")
-  booking_recurring_blocks  BookingRecurringBlock[]  @relation("BookingRecurringBlockMember")
-  booking_recurring_blocks_created BookingRecurringBlock[] @relation("BookingRecurringBlockCreatedBy")
-  booking_pages_created     BookingPage[]            @relation("BookingPageCreatedBy")
-  booking_page_memberships  BookingPageMember[]
-  booking_links_created     BookingLink[]            @relation("BookingLinkCreatedBy")
-  bookings_assigned         Booking[]                @relation("BookingAssignee")
-  bookings_created          Booking[]                @relation("BookingCreatedBy")
-  booking_events            BookingEvent[]           @relation("BookingEventActor")
-  calendar_connections      CalendarConnection[]
-  reminder_assignments      ReminderAssignee[]       @relation("ReminderAssignee")
-  notifications             Notification[]
-  contact_lists_assigned    ContactList[]            @relation("ContactListAssignee")
+  memberships                      OrganisationMember[]
+  invitations_sent                 OrganisationInvitation[] @relation("InvitationInvitedBy")
+  form_completions                 FormCompletion[]         @relation("CompletedByUser")
+  outreach_messages_sent           OutreachMessage[]        @relation("OutreachMessageSentBy")
+  activity_logs                    ActivityLog[]            @relation("ActivityLogActor")
+  messaging_goals                  MessagingGoal[]
+  goal_achievements                GoalAchievement[]
+  goal_personal_bests              GoalPersonalBest[]
+  bulk_jobs_created                BulkJob[]                @relation("BulkJobCreatedBy")
+  openai_batch_jobs_created        OpenAiBatchJob[]         @relation("OpenAiBatchJobCreatedBy")
+  sidebar_favorites                SidebarFavorite[]
+  api_keys_created                 ApiKey[]                 @relation("ApiKeyCreatedBy")
+  oauth_connections_granted        OAuthConnection[]        @relation("OAuthConnectionGrantedBy")
+  availability_schedules           AvailabilitySchedule[]
+  booking_blocks                   BookingBlock[]           @relation("BookingBlockMember")
+  booking_blocks_created           BookingBlock[]           @relation("BookingBlockCreatedBy")
+  booking_recurring_blocks         BookingRecurringBlock[]  @relation("BookingRecurringBlockMember")
+  booking_recurring_blocks_created BookingRecurringBlock[]  @relation("BookingRecurringBlockCreatedBy")
+  booking_pages_created            BookingPage[]            @relation("BookingPageCreatedBy")
+  booking_page_memberships         BookingPageMember[]
+  booking_links_created            BookingLink[]            @relation("BookingLinkCreatedBy")
+  bookings_assigned                Booking[]                @relation("BookingAssignee")
+  bookings_created                 Booking[]                @relation("BookingCreatedBy")
+  booking_events                   BookingEvent[]           @relation("BookingEventActor")
+  calendar_connections             CalendarConnection[]
+  reminder_assignments             ReminderAssignee[]       @relation("ReminderAssignee")
+  notifications                    Notification[]
+  contact_lists_assigned           ContactList[]            @relation("ContactListAssignee")
 
   @@index([email])
   @@index([phone])
@@ -111,6 +111,8 @@ model Organisation {
   booking_pages             BookingPage[]
   booking_links             BookingLink[]
   bookings                  Booking[]
+  booking_invite_settings   BookingInviteSettings?
+  booking_invitations       BookingInvitation[]
   booking_events            BookingEvent[]
   calendar_connections      CalendarConnection[]
   notifications             Notification[]
@@ -407,6 +409,7 @@ model Contact {
   sequence_enrollments SequenceEnrollment[]
   bookings             Booking[]
   booking_links        BookingLink[]
+  booking_invitations  BookingInvitation[]
   opening_hours_rows   ContactOpeningHour[]
 
   @@unique([organisation_uuid, lead_uuid])
@@ -422,10 +425,10 @@ model Contact {
 /// One opening interval of a contact's business on one weekday; several rows per day = split shifts.
 /// Stored as rows (not JSON) so contacts can be filtered by the hours they are open.
 model ContactOpeningHour {
-  id           Int    @id @default(autoincrement())
-  contact_uuid String
+  id            Int    @id @default(autoincrement())
+  contact_uuid  String
   /// 0 = Monday ... 6 = Sunday
-  day_of_week  Int
+  day_of_week   Int
   /// Minutes after midnight
   opens_minute  Int
   /// Minutes after midnight; above 1440 when the interval runs past midnight into the next day.
@@ -505,16 +508,16 @@ model ContactScore {
 }
 
 model ContactList {
-  id                Int      @id @default(autoincrement())
-  uuid              String   @unique @default(uuid())
-  organisation_uuid String
-  parent_list_uuid  String?
+  id                 Int      @id @default(autoincrement())
+  uuid               String   @unique @default(uuid())
+  organisation_uuid  String
+  parent_list_uuid   String?
   /// Team member responsible for this list; cleared if the member is deleted.
   assigned_user_uuid String?
-  title             String
-  description       String?
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  title              String
+  description        String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
 
   organisation         Organisation              @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   assigned_user        User?                     @relation("ContactListAssignee", fields: [assigned_user_uuid], references: [uuid], onDelete: SetNull)
@@ -1226,6 +1229,8 @@ enum InteractionType {
   UNSUBSCRIBED
   BOOKING_SCHEDULED
   BOOKING_CANCELLED
+  BOOKING_LINK_SENT
+  BOOKING_REMINDER_SENT
 }
 
 /// What the caller noted about a logged call; one value per call so outcomes can be counted.
@@ -1539,9 +1544,9 @@ model Reminder {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  organisation     Organisation     @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  contact          Contact          @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  outreach_message OutreachMessage? @relation(fields: [outreach_message_uuid], references: [uuid], onDelete: SetNull)
+  organisation     Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  contact          Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  outreach_message OutreachMessage?   @relation(fields: [outreach_message_uuid], references: [uuid], onDelete: SetNull)
   booking          Booking?
   /// Members who get the reminder. Empty = every member of the organisation.
   assignees        ReminderAssignee[]
@@ -2261,6 +2266,21 @@ enum BookingEventType {
   CALENDAR_SYNC_FAILED
 }
 
+enum BookingInviteUnit {
+  HOURS
+  DAYS
+  WEEKS
+}
+
+enum BookingInvitationStatus {
+  /// Waiting for a booking; follow-up reminders may still be due.
+  ACTIVE
+  /// The contact booked, so no more reminders are sent.
+  BOOKED
+  /// Reminders ended (all sent, stopped by a user, or the contact can no longer be emailed).
+  STOPPED
+}
+
 enum BookingNotificationKind {
   CONFIRMATION
   REMINDER
@@ -2394,43 +2414,43 @@ model BookingPage {
 
   // Public page content & branding
   title                String?
-  description          String? @db.Text
-  intro_text           String? @db.Text
+  description          String?  @db.Text
+  intro_text           String?  @db.Text
   /// "What to expect" bullet points shown on the public page (shared by every link of the page).
   expectations         String[] @default([])
   brand_name           String?
   logo_url             String?
-  primary_color        String? @db.VarChar(9)
-  confirmation_message String? @db.Text
+  primary_color        String?  @db.VarChar(9)
+  confirmation_message String?  @db.Text
   redirect_url         String?
   cta_label            String?
-  show_team_member     Boolean @default(true)
-  show_timezone        Boolean @default(true)
+  show_team_member     Boolean  @default(true)
+  show_timezone        Boolean  @default(true)
   /// [{ id, label, type: TEXT|TEXTAREA|SELECT|CHECKBOX, required, options? }]
   questions            Json?
-  require_phone        Boolean @default(false)
+  require_phone        Boolean  @default(false)
 
   // Scheduling rules
-  duration_minutes            Int                   @default(30)
+  duration_minutes            Int                         @default(30)
   /// Extra durations the invitee may choose from (duration_minutes is always offered).
-  duration_options            Int[]                 @default([])
+  duration_options            Int[]                       @default([])
   /// Step between offered start times; null = duration_minutes.
   slot_interval_minutes       Int?
-  min_notice_minutes          Int                   @default(240)
-  max_advance_days            Int                   @default(60)
-  buffer_before_minutes       Int                   @default(0)
-  buffer_after_minutes        Int                   @default(0)
+  min_notice_minutes          Int                         @default(240)
+  max_advance_days            Int                         @default(60)
+  buffer_before_minutes       Int                         @default(0)
+  buffer_after_minutes        Int                         @default(0)
   /// Minimum free time between this booking and any other booking of the member.
-  min_gap_minutes             Int                   @default(0)
+  min_gap_minutes             Int                         @default(0)
   /// When set and the member already has bookings that day, new slots must start/end within this many minutes of one.
   max_gap_minutes             Int?
   max_bookings_per_day        Int?
   /// Invitees that can share the same slot with the same member (group sessions).
-  seats_per_slot              Int                   @default(1)
-  assignment_mode             BookingAssignmentMode @default(ROUND_ROBIN)
+  seats_per_slot              Int                         @default(1)
+  assignment_mode             BookingAssignmentMode       @default(ROUND_ROBIN)
   /// Off by default: assignment is internal. Only when enabled may invitees pick a member.
-  allow_invitee_member_choice Boolean               @default(false)
-  requires_confirmation       Boolean               @default(false)
+  allow_invitee_member_choice Boolean                     @default(false)
+  requires_confirmation       Boolean                     @default(false)
   /// How public pages show start times that are inside working hours but not bookable.
   unavailable_slots_mode      BookingUnavailableSlotsMode @default(HIDE)
 
@@ -2446,24 +2466,24 @@ model BookingPage {
   require_cancellation_reason   Boolean @default(false)
 
   // Notifications
-  send_confirmation_email    Boolean  @default(true)
-  send_reminder_emails       Boolean  @default(true)
-  reminder_offsets_minutes   Int[]    @default([1440, 60])
-  send_cancellation_email    Boolean  @default(true)
-  send_reschedule_email      Boolean  @default(true)
+  send_confirmation_email      Boolean  @default(true)
+  send_reminder_emails         Boolean  @default(true)
+  reminder_offsets_minutes     Int[]    @default([1440, 60])
+  send_cancellation_email      Boolean  @default(true)
+  send_reschedule_email        Boolean  @default(true)
   /// Off by default: the assignee is only emailed when the page opts in.
-  notify_assignee            Boolean  @default(false)
-  additional_recipients      String[] @default([])
-  include_meeting_link       Boolean  @default(true)
-  include_calendar_details   Boolean  @default(true)
+  notify_assignee              Boolean  @default(false)
+  additional_recipients        String[] @default([])
+  include_meeting_link         Boolean  @default(true)
+  include_calendar_details     Boolean  @default(true)
   /// Create a Meeting reminder on the contact's Reminders for confirmed bookings (kept in sync on changes).
-  create_team_reminder           Boolean  @default(false)
+  create_team_reminder         Boolean  @default(false)
   /// How long before the start the team reminder is due.
-  team_reminder_offset_minutes   Int      @default(60)
-  confirmation_template_uuid String?
-  reminder_template_uuid     String?
-  cancellation_template_uuid String?
-  reschedule_template_uuid   String?
+  team_reminder_offset_minutes Int      @default(60)
+  confirmation_template_uuid   String?
+  reminder_template_uuid       String?
+  cancellation_template_uuid   String?
+  reschedule_template_uuid     String?
 
   // Google Calendar event content (supports booking variables)
   calendar_event_title       String?
@@ -2481,6 +2501,7 @@ model BookingPage {
   members               BookingPageMember[]
   links                 BookingLink[]
   bookings              Booking[]
+  invitations           BookingInvitation[]
   message_templates     MessageTemplate[]      @relation("MessageTemplateBookingPage")
   sequence_steps        OutreachSequenceStep[]
 
@@ -2524,11 +2545,12 @@ model BookingLink {
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
-  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  booking_page BookingPage  @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
-  contact      Contact?     @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
-  created_by   User?        @relation("BookingLinkCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+  organisation Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  booking_page BookingPage         @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
+  contact      Contact?            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+  created_by   User?               @relation("BookingLinkCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
   bookings     Booking[]
+  invitations  BookingInvitation[]
 
   @@index([organisation_uuid])
   @@index([booking_page_uuid, contact_uuid, is_active])
@@ -2554,21 +2576,21 @@ model Booking {
   invitee_timezone String?
 
   // Invitee details as submitted (kept even when a Contact is linked, so history survives contact edits).
-  invitee_name   String
-  invitee_email  String
-  invitee_phone  String?
+  invitee_name    String
+  invitee_email   String
+  invitee_phone   String?
   invitee_company String?
-  invitee_notes  String? @db.Text
+  invitee_notes   String? @db.Text
   /// { [question_id]: answer }
-  answers        Json?
-  internal_notes String? @db.Text
+  answers         Json?
+  internal_notes  String? @db.Text
 
   location_type  BookingLocationType @default(NONE)
   location_value String?
   meeting_url    String?
 
   /// Team reminder created for this booking (see BookingPage.create_team_reminder); cleared if the reminder is deleted.
-  reminder_uuid            String?  @unique
+  reminder_uuid            String?            @unique
   calendar_connection_uuid String?
   calendar_event_id        String?
   calendar_html_link       String?
@@ -2626,6 +2648,61 @@ model BookingEvent {
   @@index([booking_uuid, created_at])
   @@index([organisation_uuid, created_at])
   @@map("booking_events")
+}
+
+/// Organisation-wide defaults for booking links emailed to contacts (one row per organisation, created on first save).
+model BookingInviteSettings {
+  id                   Int               @id @default(autoincrement())
+  organisation_uuid    String            @unique
+  /// Remind contacts who have not booked yet.
+  reminder_enabled     Boolean           @default(true)
+  reminder_delay_value Int               @default(3)
+  reminder_delay_unit  BookingInviteUnit @default(DAYS)
+  /// Total reminders per invitation, each one `reminder delay` after the previous email.
+  max_reminders        Int               @default(1)
+  invite_subject       String?
+  invite_message       String?           @db.Text
+  reminder_subject     String?
+  reminder_message     String?           @db.Text
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+
+  @@map("booking_invite_settings")
+}
+
+/// A booking link emailed to a contact, and the state of its follow-up reminders.
+model BookingInvitation {
+  id                     Int                     @id @default(autoincrement())
+  uuid                   String                  @unique @default(uuid())
+  organisation_uuid      String
+  booking_page_uuid      String
+  booking_link_uuid      String
+  contact_uuid           String
+  sent_by_user_uuid      String?
+  recipient_email        String
+  status                 BookingInvitationStatus @default(ACTIVE)
+  /// Settings captured when the invitation was sent, so later settings changes never rewrite a running sequence.
+  reminder_enabled       Boolean                 @default(false)
+  reminder_delay_minutes Int                     @default(0)
+  max_reminders          Int                     @default(0)
+  reminders_sent         Int                     @default(0)
+  next_reminder_at       DateTime?
+  last_error             String?                 @db.Text
+  sent_at                DateTime                @default(now())
+  created_at             DateTime                @default(now())
+  updated_at             DateTime                @updatedAt
+
+  organisation Organisation @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  booking_page BookingPage  @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
+  booking_link BookingLink  @relation(fields: [booking_link_uuid], references: [uuid], onDelete: Cascade)
+  contact      Contact      @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([organisation_uuid])
+  @@index([contact_uuid, sent_at])
+  @@index([booking_link_uuid])
+  @@map("booking_invitations")
 }
 
 /// One row per email attempt; dedupe_key makes retries and duplicate jobs idempotent.

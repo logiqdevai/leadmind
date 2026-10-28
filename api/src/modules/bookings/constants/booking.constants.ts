@@ -23,6 +23,7 @@ export const BookingJobNames = {
     SEND: 'send',
     REMINDER: 'reminder',
     SYNC: 'sync',
+    INVITE_REMINDER: 'invite-reminder',
 } as const;
 
 export const BookingErrorCodes = {

@@ -30,3 +30,10 @@ export interface BookingNotificationJobData {
     offset_minutes?: number;
     scheduled_for_start?: string;
 }
+
+/** Delayed follow-up for an emailed booking link: fires only if the contact still has not booked. */
+export interface BookingInviteReminderJobData {
+    invitation_uuid: string;
+    /** 1-based index of the reminder this job sends. */
+    reminder_number: number;
+}

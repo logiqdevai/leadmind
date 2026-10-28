@@ -655,3 +655,55 @@ export interface PublicManagedBooking {
     booking: PublicBookingSummary;
     policy: PublicBookingPolicy;
 }
+
+// --- Emailed booking links (invitations) ---------------------------------------
+
+export const BookingInviteUnits = { HOURS: "HOURS", DAYS: "DAYS", WEEKS: "WEEKS" } as const;
+export type BookingInviteUnit = (typeof BookingInviteUnits)[keyof typeof BookingInviteUnits];
+
+export const BookingInvitationStatuses = { ACTIVE: "ACTIVE", BOOKED: "BOOKED", STOPPED: "STOPPED" } as const;
+export type BookingInvitationStatus = (typeof BookingInvitationStatuses)[keyof typeof BookingInvitationStatuses];
+
+/** Organisation-wide defaults for booking links emailed to contacts. */
+export interface BookingInviteSettings {
+    reminder_enabled: boolean;
+    reminder_delay_value: number;
+    reminder_delay_unit: BookingInviteUnit;
+    max_reminders: number;
+    /** Null = built-in default text. */
+    invite_subject: string | null;
+    invite_message: string | null;
+    reminder_subject: string | null;
+    reminder_message: string | null;
+    defaults: {
+        invite_subject: string;
+        invite_message: string;
+        reminder_subject: string;
+        reminder_message: string;
+    };
+}
+
+export type UpdateBookingInviteSettingsDto = Partial<Omit<BookingInviteSettings, "defaults">>;
+
+export interface BookingInvitation {
+    uuid: string;
+    status: BookingInvitationStatus;
+    recipient_email: string;
+    sent_at: string;
+    reminder_enabled: boolean;
+    reminders_sent: number;
+    max_reminders: number;
+    next_reminder_at: string | null;
+    last_error: string | null;
+    has_booked: boolean;
+    booking_page: { uuid: string; name: string };
+    booking_link: { uuid: string; url: string };
+}
+
+export interface SendBookingInvitationDto {
+    contact_uuid: string;
+    booking_page_uuid?: string;
+    booking_link_uuid?: string;
+    /** Omit to follow the organisation default. */
+    remind?: boolean;
+}

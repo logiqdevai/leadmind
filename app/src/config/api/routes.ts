@@ -463,6 +463,13 @@ export const ApiRoutes = {
         regenerate: (uuid: string) => `/booking-links/${uuid}/regenerate`,
         remove: (uuid: string) => `/booking-links/${uuid}`,
     },
+    booking_invitations: {
+        list: "/booking-invitations",
+        send: "/booking-invitations",
+        stop: (uuid: string) => `/booking-invitations/${uuid}/stop`,
+        resend: (uuid: string) => `/booking-invitations/${uuid}/resend`,
+        settings: "/booking-invite-settings",
+    },
     availability: {
         schedule: "/availability/schedule",
         overrides: "/availability/overrides",

@@ -1329,6 +1329,42 @@ exports.Prisma.BookingEventScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.BookingInviteSettingsScalarFieldEnum = {
+  id: 'id',
+  organisation_uuid: 'organisation_uuid',
+  reminder_enabled: 'reminder_enabled',
+  reminder_delay_value: 'reminder_delay_value',
+  reminder_delay_unit: 'reminder_delay_unit',
+  max_reminders: 'max_reminders',
+  invite_subject: 'invite_subject',
+  invite_message: 'invite_message',
+  reminder_subject: 'reminder_subject',
+  reminder_message: 'reminder_message',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.BookingInvitationScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  booking_page_uuid: 'booking_page_uuid',
+  booking_link_uuid: 'booking_link_uuid',
+  contact_uuid: 'contact_uuid',
+  sent_by_user_uuid: 'sent_by_user_uuid',
+  recipient_email: 'recipient_email',
+  status: 'status',
+  reminder_enabled: 'reminder_enabled',
+  reminder_delay_minutes: 'reminder_delay_minutes',
+  max_reminders: 'max_reminders',
+  reminders_sent: 'reminders_sent',
+  next_reminder_at: 'next_reminder_at',
+  last_error: 'last_error',
+  sent_at: 'sent_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.BookingNotificationScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -1516,7 +1552,9 @@ exports.InteractionType = exports.$Enums.InteractionType = {
   SMS_FAILED: 'SMS_FAILED',
   UNSUBSCRIBED: 'UNSUBSCRIBED',
   BOOKING_SCHEDULED: 'BOOKING_SCHEDULED',
-  BOOKING_CANCELLED: 'BOOKING_CANCELLED'
+  BOOKING_CANCELLED: 'BOOKING_CANCELLED',
+  BOOKING_LINK_SENT: 'BOOKING_LINK_SENT',
+  BOOKING_REMINDER_SENT: 'BOOKING_REMINDER_SENT'
 };
 
 exports.CallNoteStatus = exports.$Enums.CallNoteStatus = {
@@ -1928,6 +1966,18 @@ exports.BookingEventType = exports.$Enums.BookingEventType = {
   CALENDAR_SYNC_FAILED: 'CALENDAR_SYNC_FAILED'
 };
 
+exports.BookingInviteUnit = exports.$Enums.BookingInviteUnit = {
+  HOURS: 'HOURS',
+  DAYS: 'DAYS',
+  WEEKS: 'WEEKS'
+};
+
+exports.BookingInvitationStatus = exports.$Enums.BookingInvitationStatus = {
+  ACTIVE: 'ACTIVE',
+  BOOKED: 'BOOKED',
+  STOPPED: 'STOPPED'
+};
+
 exports.BookingNotificationKind = exports.$Enums.BookingNotificationKind = {
   CONFIRMATION: 'CONFIRMATION',
   REMINDER: 'REMINDER',
@@ -2038,6 +2088,8 @@ exports.Prisma.ModelName = {
   BookingLink: 'BookingLink',
   Booking: 'Booking',
   BookingEvent: 'BookingEvent',
+  BookingInviteSettings: 'BookingInviteSettings',
+  BookingInvitation: 'BookingInvitation',
   BookingNotification: 'BookingNotification',
   CalendarConnection: 'CalendarConnection',
   Notification: 'Notification'

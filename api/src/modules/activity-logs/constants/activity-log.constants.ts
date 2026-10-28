@@ -30,6 +30,8 @@ export const ActivityEntityType = {
   BOOKING: 'booking',
   BOOKING_PAGE: 'booking_page',
   BOOKING_LINK: 'booking_link',
+  BOOKING_INVITATION: 'booking_invitation',
+  BOOKING_INVITE_SETTINGS: 'booking_invite_settings',
   BOOKING_BLOCK: 'booking_block',
   AVAILABILITY_SCHEDULE: 'availability_schedule',
   CALENDAR_CONNECTION: 'calendar_connection',
@@ -40,6 +42,7 @@ export type ActivityEntityType =
 
 export const ActivityAction = {
   CREATED: 'created',
+  SENT: 'sent',
   UPDATED: 'updated',
   DELETED: 'deleted',
   DUPLICATED: 'duplicated',

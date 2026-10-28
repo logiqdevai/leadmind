@@ -1,7 +1,7 @@
 import { useMemo, useState, type FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@heroui/react";
-import { CalendarCheck, Plus } from "lucide-react";
+import { CalendarCheck, Mail, Plus } from "lucide-react";
 import { useDashboardNavbarTitle } from "@/components/providers/dashboard-navbar-provider";
 import { useBookingPages } from "@/features/bookings/hooks/use-booking-pages";
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
@@ -9,6 +9,7 @@ import { DashboardEmptyState } from "@/pages/dashboard/components/dashboard-shar
 import { Routes } from "@/routes/routes";
 import { BookingPageCard } from "./components/booking-page-card";
 import { CreateBookingPageModal } from "./components/create-booking-page-modal";
+import { InviteSettingsModal } from "./components/invite-settings-modal";
 
 const BookingPagesPage: FC = () => {
     useDashboardNavbarTitle("Booking pages");
@@ -16,6 +17,7 @@ const BookingPagesPage: FC = () => {
     const canManage = useOrganisationPermission("org_manage_bookings");
     const { data: pages = [], isLoading, isError, error } = useBookingPages();
     const [createOpen, setCreateOpen] = useState(false);
+    const [inviteSettingsOpen, setInviteSettingsOpen] = useState(false);
 
     // Default first, then active, then by name.
     const sorted = useMemo(
@@ -48,12 +50,18 @@ const BookingPagesPage: FC = () => {
                         {!canManage ? " Only owners and admins can create or change booking pages." : ""}
                     </p>
                 </div>
-                {canManage ? (
-                    <Button variant="primary" size="sm" onPress={() => setCreateOpen(true)}>
-                        <Plus className="size-3.5" />
-                        New booking page
+                <div className="flex flex-wrap items-center gap-2">
+                    <Button variant="secondary" size="sm" onPress={() => setInviteSettingsOpen(true)}>
+                        <Mail className="size-3.5" />
+                        Invitation settings
                     </Button>
-                ) : null}
+                    {canManage ? (
+                        <Button variant="primary" size="sm" onPress={() => setCreateOpen(true)}>
+                            <Plus className="size-3.5" />
+                            New booking page
+                        </Button>
+                    ) : null}
+                </div>
             </header>
 
             {isLoading ? (
@@ -97,6 +105,9 @@ const BookingPagesPage: FC = () => {
             )}
 
             {canManage ? <CreateBookingPageModal isOpen={createOpen} onOpenChange={setCreateOpen} /> : null}
+            {inviteSettingsOpen ? (
+                <InviteSettingsModal isOpen={inviteSettingsOpen} onOpenChange={setInviteSettingsOpen} readOnly={!canManage} />
+            ) : null}
         </div>
     );
 };

@@ -15,10 +15,12 @@ import { BookingsService } from './bookings.service';
 import { BookingPagesController } from './controllers/booking-pages.controller';
 import { AvailabilityController } from './controllers/availability.controller';
 import { CalendarConnectionsController } from './controllers/calendar-connections.controller';
+import { BookingInvitationsController } from './controllers/booking-invitations.controller';
 import { PublicBookingController } from './controllers/public-booking.controller';
 import { AvailabilityService } from './services/availability.service';
 import { BookingPagesService } from './services/booking-pages.service';
 import { BookingSlotService } from './services/booking-slot.service';
+import { BookingInvitationsService } from './services/booking-invitations.service';
 import { BookingEventsService } from './services/booking-events.service';
 import { BookingNotificationsService } from './services/booking-notifications.service';
 import { BookingCalendarSyncService } from './services/booking-calendar-sync.service';
@@ -43,6 +45,7 @@ import { PublicBookingService } from './services/public-booking.service';
         BookingPagesController,
         AvailabilityController,
         CalendarConnectionsController,
+        BookingInvitationsController,
         PublicBookingController,
     ],
     providers: [
@@ -55,9 +58,10 @@ import { PublicBookingService } from './services/public-booking.service';
         BookingCalendarSyncService,
         BookingTeamReminderService,
         CalendarConnectionsService,
+        BookingInvitationsService,
         PublicBookingService,
         RateLimitGuard,
     ],
-    exports: [BookingsService, BookingNotificationsService, BookingCalendarSyncService],
+    exports: [BookingsService, BookingNotificationsService, BookingInvitationsService, BookingCalendarSyncService],
 })
 export class BookingsModule {}

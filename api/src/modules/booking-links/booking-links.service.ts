@@ -220,7 +220,7 @@ export class BookingLinksService {
 }
 
 /** Table-cell button: survives sanitizeEmailHtml (which only allows padding/background on td) and most clients. */
-function bookingCtaHtml(url: string, label: string | null, color: string | null): string {
+export function bookingCtaHtml(url: string, label: string | null, color: string | null): string {
     const background = /^#[0-9a-fA-F]{3,8}$/.test(color ?? '') ? color : '#111827';
     const text = escapeHtml(label?.trim() || DEFAULT_CTA_LABEL);
     return (

@@ -2,25 +2,27 @@ import React, { useMemo, useState } from "react";
 import { Chip, Dropdown } from "@heroui/react";
 import {
     ArrowRight,
+    BellRing,
+    CalendarCheck,
+    CalendarClock,
     CalendarDays,
+    CalendarX,
     ExternalLink,
+    Globe,
+    Link2,
     Mail,
     MailOpen,
     Megaphone,
     MessageCircleReply,
     MessageSquare,
+    MoreHorizontal,
     MousePointerClick,
+    Pencil,
     Phone,
     StickyNote,
+    Trash2,
     UserMinus,
     XCircle,
-    Globe,
-    CalendarClock,
-    CalendarCheck,
-    CalendarX,
-    MoreHorizontal,
-    Pencil,
-    Trash2,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import {
@@ -72,6 +74,8 @@ const ICONS: Record<InteractionType, React.ComponentType<{ className?: string }>
     [InteractionType.UNSUBSCRIBED]: UserMinus,
     [InteractionType.BOOKING_SCHEDULED]: CalendarCheck,
     [InteractionType.BOOKING_CANCELLED]: CalendarX,
+    [InteractionType.BOOKING_LINK_SENT]: Link2,
+    [InteractionType.BOOKING_REMINDER_SENT]: BellRing,
 };
 
 const ICON_TONE: Record<InteractionType, string> = {
@@ -96,6 +100,8 @@ const ICON_TONE: Record<InteractionType, string> = {
     [InteractionType.UNSUBSCRIBED]: "text-warning bg-warning-soft/40 border-warning/30",
     [InteractionType.BOOKING_SCHEDULED]: "text-emerald-600 bg-emerald-500/15 border-emerald-500/30",
     [InteractionType.BOOKING_CANCELLED]: "text-danger bg-danger/10 border-danger/30",
+    [InteractionType.BOOKING_LINK_SENT]: "text-accent bg-accent/15 border-accent/30",
+    [InteractionType.BOOKING_REMINDER_SENT]: "text-warning bg-warning-soft/40 border-warning/30",
 };
 
 const BADGE_COLOR: Record<InteractionType, "default" | "success" | "warning" | "danger"> = {
@@ -120,6 +126,8 @@ const BADGE_COLOR: Record<InteractionType, "default" | "success" | "warning" | "
     [InteractionType.UNSUBSCRIBED]: "warning",
     [InteractionType.BOOKING_SCHEDULED]: "success",
     [InteractionType.BOOKING_CANCELLED]: "danger",
+    [InteractionType.BOOKING_LINK_SENT]: "success",
+    [InteractionType.BOOKING_REMINDER_SENT]: "warning",
 };
 
 const BADGE_LABEL: Record<InteractionType, string> = {
@@ -144,6 +152,8 @@ const BADGE_LABEL: Record<InteractionType, string> = {
     [InteractionType.UNSUBSCRIBED]: "Unsubscribed",
     [InteractionType.BOOKING_SCHEDULED]: "Booking scheduled",
     [InteractionType.BOOKING_CANCELLED]: "Booking cancelled",
+    [InteractionType.BOOKING_LINK_SENT]: "Booking link sent",
+    [InteractionType.BOOKING_REMINDER_SENT]: "Booking reminder sent",
 };
 
 const CALL_OUTCOME_LABEL: Record<CallOutcome, string> = {

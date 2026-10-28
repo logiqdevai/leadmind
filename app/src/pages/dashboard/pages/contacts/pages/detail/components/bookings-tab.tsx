@@ -1,6 +1,6 @@
 import { useMemo, useState, type FC, type ReactNode } from "react";
 import { Button, Chip, Label, Modal, Input } from "@heroui/react";
-import { CalendarDays, Link2, Plus, RefreshCcw, Trash2 } from "lucide-react";
+import { CalendarDays, Link2, Mail, Plus, RefreshCcw, Trash2 } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { CopyButton } from "@/components/ui/copy-button";
@@ -22,11 +22,19 @@ import {
     useUpdateBookingLink,
 } from "@/features/bookings/hooks/use-booking-pages";
 import {
+    useBookingInvitations,
+    useResendBookingInvitation,
+    useStopBookingInvitation,
+} from "@/features/bookings/hooks/use-booking-invitations";
+import {
     ACTIVE_BOOKING_STATUSES,
+    BookingInvitationStatuses,
     BookingStatuses,
     type Booking,
+    type BookingInvitation,
     type BookingLink,
 } from "@/features/bookings/interfaces/bookings.interfaces";
+import { SendBookingLinkModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/send-booking-link-modal";
 import { formatDateShort, formatDateTime, formatTimeRange } from "@/features/bookings/utils/booking-time";
 import type { Contact } from "@/features/contacts/interfaces/contact.interface";
 import { cn } from "@/lib/utils";
@@ -184,7 +192,77 @@ const CreateLinkModal: FC<{ contactUuid: string; isOpen: boolean; onOpenChange: 
     );
 };
 
-const LinkRow: FC<{ link: BookingLink; timezone: string; isAdmin: boolean }> = ({ link, timezone, isAdmin }) => {
+const InvitationRow: FC<{ invitation: BookingInvitation; timezone: string }> = ({ invitation, timezone }) => {
+    const stop = useStopBookingInvitation();
+    const resend = useResendBookingInvitation();
+    const booked = invitation.has_booked || invitation.status === BookingInvitationStatuses.BOOKED;
+    const waiting = !booked && invitation.status === BookingInvitationStatuses.ACTIVE;
+    const remindersLeft = waiting && !!invitation.next_reminder_at;
+
+    return (
+        <li className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:px-5">
+            <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                    <span className="truncate text-sm font-medium text-foreground">{invitation.booking_page.name}</span>
+                    {booked ? (
+                        <Chip size="sm" variant="soft" color="success">
+                            <Chip.Label>Booked</Chip.Label>
+                        </Chip>
+                    ) : remindersLeft ? (
+                        <Chip size="sm" variant="soft" color="warning">
+                            <Chip.Label>Reminder due {formatDateTime(invitation.next_reminder_at!, timezone)}</Chip.Label>
+                        </Chip>
+                    ) : waiting ? (
+                        <Chip size="sm" variant="soft" color="default">
+                            <Chip.Label>Waiting for a booking</Chip.Label>
+                        </Chip>
+                    ) : (
+                        <Chip size="sm" variant="soft" color="default">
+                            <Chip.Label>Reminders ended</Chip.Label>
+                        </Chip>
+                    )}
+                </div>
+                <p className="text-xs text-muted">
+                    Sent to {invitation.recipient_email} · {formatDateTime(invitation.sent_at, timezone)}
+                    {invitation.max_reminders > 0 ? ` · ${invitation.reminders_sent} of ${invitation.max_reminders} reminders sent` : " · no reminders"}
+                </p>
+                {invitation.last_error ? <p className="text-xs text-danger">Last reminder failed: {invitation.last_error}</p> : null}
+            </div>
+            <div className="flex shrink-0 flex-wrap items-center gap-1">
+                {!booked ? (
+                    <ActionButtonWithPending
+                        size="sm"
+                        variant="tertiary"
+                        idleLeading={<Mail className="size-3.5" />}
+                        isPending={resend.isPending}
+                        isDisabled={resend.isPending}
+                        onPress={() => resend.mutate(invitation.uuid)}
+                    >
+                        Resend
+                    </ActionButtonWithPending>
+                ) : null}
+                {remindersLeft ? (
+                    <ActionButtonWithPending
+                        size="sm"
+                        variant="tertiary"
+                        isPending={stop.isPending}
+                        isDisabled={stop.isPending}
+                        onPress={() => stop.mutate(invitation.uuid)}
+                    >
+                        Stop reminders
+                    </ActionButtonWithPending>
+                ) : null}
+            </div>
+        </li>
+    );
+};
+
+const LinkRow: FC<{ link: BookingLink; timezone: string; isAdmin: boolean; onEmail: (link: BookingLink) => void }> = ({
+    link,
+    timezone,
+    isAdmin,
+    onEmail,
+}) => {
     const update = useUpdateBookingLink();
     const regenerate = useRegenerateBookingLink();
     const remove = useDeleteBookingLink();
@@ -221,6 +299,12 @@ const LinkRow: FC<{ link: BookingLink; timezone: string; isAdmin: boolean }> = (
                 </p>
             </div>
             <div className="flex shrink-0 flex-wrap items-center gap-1">
+                {link.is_active ? (
+                    <Button size="sm" variant="tertiary" onPress={() => onEmail(link)} aria-label="Email link to contact">
+                        <Mail className="size-3.5" />
+                        Email
+                    </Button>
+                ) : null}
                 <ActionButtonWithPending
                     size="sm"
                     variant="tertiary"
@@ -282,6 +366,9 @@ export const BookingsTab: FC<BookingsTabProps> = ({ contact }) => {
     const isAdmin = useOrganisationPermission("org_manage_bookings");
     const [createOpen, setCreateOpen] = useState(false);
     const [linkOpen, setLinkOpen] = useState(false);
+    const [emailOpen, setEmailOpen] = useState(false);
+    // Set when emailing an existing link; null lets the modal pick a page instead.
+    const [emailLink, setEmailLink] = useState<BookingLink | null>(null);
     const [selectedUuid, setSelectedUuid] = useState<string | null>(null);
 
     // Stable "now" per mount keeps query keys from changing on every render.
@@ -312,6 +399,12 @@ export const BookingsTab: FC<BookingsTabProps> = ({ contact }) => {
         limit: SECTION_LIMIT,
     });
     const { data: links = [], isLoading: linksLoading } = useBookingLinks({ contact_uuid: contact.uuid, include_inactive: true });
+    const { data: invitations = [] } = useBookingInvitations(contact.uuid);
+
+    const openEmailModal = (link: BookingLink | null) => {
+        setEmailLink(link);
+        setEmailOpen(true);
+    };
 
     const prefilledContact = useMemo<PickedContact>(
         () => ({ uuid: contact.uuid, name: contact.name, email: contact.email, phone: contact.phone, company: contact.company }),
@@ -379,10 +472,16 @@ export const BookingsTab: FC<BookingsTabProps> = ({ contact }) => {
                 title="Booking links"
                 icon={<Link2 className="size-4 text-muted" />}
                 action={
-                    <Button size="sm" variant="secondary" onPress={() => setLinkOpen(true)} className="h-6 min-h-6 px-2.5 text-[13px]">
-                        <Plus className="size-3.5" />
-                        Create link
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Button size="sm" variant="primary" onPress={() => openEmailModal(null)} className="h-6 min-h-6 px-2.5 text-[13px]">
+                            <Mail className="size-3.5" />
+                            Email link
+                        </Button>
+                        <Button size="sm" variant="secondary" onPress={() => setLinkOpen(true)} className="h-6 min-h-6 px-2.5 text-[13px]">
+                            <Plus className="size-3.5" />
+                            Create link
+                        </Button>
+                    </div>
                 }
             >
                 {linksLoading ? (
@@ -391,15 +490,28 @@ export const BookingsTab: FC<BookingsTabProps> = ({ contact }) => {
                     <DashboardEmptyState
                         icon={Link2}
                         title="No personal links"
-                        body="A personal link pre-fills this contact's details and attaches bookings to them."
+                        body="A personal link pre-fills this contact's details and attaches bookings to them. Email it straight to the contact, with reminders if they don't book."
                     />
                 ) : (
                     <ul className="divide-y divide-border/40">
                         {links.map((link) => (
-                            <LinkRow key={link.uuid} link={link} timezone={timezone} isAdmin={isAdmin} />
+                            <LinkRow key={link.uuid} link={link} timezone={timezone} isAdmin={isAdmin} onEmail={openEmailModal} />
                         ))}
                     </ul>
                 )}
+                {invitations.length > 0 ? (
+                    <section>
+                        <h4 className="border-y border-border/40 bg-surface-secondary/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted sm:px-5">
+                            Sent by email
+                            <span className="ml-1.5 tabular-nums">({invitations.length})</span>
+                        </h4>
+                        <ul className="divide-y divide-border/40">
+                            {invitations.map((invitation) => (
+                                <InvitationRow key={invitation.uuid} invitation={invitation} timezone={timezone} />
+                            ))}
+                        </ul>
+                    </section>
+                ) : null}
             </Card>
 
             <CreateBookingModal
@@ -409,6 +521,9 @@ export const BookingsTab: FC<BookingsTabProps> = ({ contact }) => {
                 onCreated={setSelectedUuid}
             />
             <CreateLinkModal contactUuid={contact.uuid} isOpen={linkOpen} onOpenChange={setLinkOpen} />
+            {emailOpen ? (
+                <SendBookingLinkModal contact={contact} link={emailLink} isOpen={emailOpen} onOpenChange={setEmailOpen} />
+            ) : null}
             <BookingDetailsDrawer
                 bookingUuid={selectedUuid}
                 isOpen={!!selectedUuid}
