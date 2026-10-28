@@ -10,6 +10,7 @@ export const CONTACT_PROFILE_UPDATE_KEYS = [
     'linkedin_url',
     'title',
     'location',
+    'country',
     'industry',
     'description',
 ] as const satisfies readonly (keyof UpdateContactDto)[];

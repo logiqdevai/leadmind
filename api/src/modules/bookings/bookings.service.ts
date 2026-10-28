@@ -74,6 +74,8 @@ export interface PlaceBookingInput {
         company?: string | null;
         notes?: string | null;
         timezone?: string | null;
+        /** Language the invitee used on the public booking page (ISO 639-1). */
+        language?: string | null;
     };
     location_type: BookingLocationType;
     location_value?: string | null;
@@ -489,6 +491,7 @@ export class BookingsService {
                                 end_at: slot.end,
                                 duration_minutes: input.duration_minutes,
                                 invitee_timezone: input.invitee.timezone ?? null,
+                                invitee_language: input.invitee.language ?? null,
                                 invitee_name: input.invitee.name,
                                 invitee_email: input.invitee.email.trim().toLowerCase(),
                                 invitee_phone: input.invitee.phone || null,

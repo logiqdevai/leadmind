@@ -23,6 +23,7 @@ export class UpdateContactDto extends PartialType(
         'google_maps_url',
         'title',
         'location',
+        'country',
         'linkedin_url',
         'industry',
         'description',

@@ -8,6 +8,8 @@ export interface ProfileDraft {
   google_maps_url: string;
   title: string;
   location: string;
+  /** ISO 3166-1 alpha-2 code, "" when none. */
+  country: string;
   linkedin_url: string;
   industry: string;
   description: string;

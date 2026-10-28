@@ -356,10 +356,11 @@ export interface BookingPage {
     /** Create a Meeting reminder on the contact's Reminders for confirmed bookings. */
     create_team_reminder: boolean;
     team_reminder_offset_minutes: number;
-    confirmation_template_uuid: string | null;
-    reminder_template_uuid: string | null;
-    cancellation_template_uuid: string | null;
-    reschedule_template_uuid: string | null;
+    /** Templates offered per email type; the one matching the invitee's language is sent. */
+    confirmation_template_uuids: string[];
+    reminder_template_uuids: string[];
+    cancellation_template_uuids: string[];
+    reschedule_template_uuids: string[];
     calendar_event_title: string | null;
     calendar_event_description: string | null;
     created_at: string;
@@ -628,6 +629,8 @@ export interface PublicCreateBookingDto {
     start_at: string;
     duration_minutes?: number;
     timezone: string;
+    /** Language of the booking page the invitee used (ISO 639-1). */
+    language?: string;
     name: string;
     email?: string;
     phone?: string;

@@ -276,6 +276,7 @@ export class OrganisationDataCopyService {
                     email_subject: r.email_subject,
                     email_content: r.email_content,
                     sms_content: r.sms_content,
+                    language: r.language,
                     source_campaign_uuid: null,
                     source_message_uuid: null,
                 };

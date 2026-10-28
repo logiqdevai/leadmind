@@ -311,6 +311,7 @@ exports.Prisma.ContactScalarFieldEnum = {
   linkedin_url: 'linkedin_url',
   title: 'title',
   location: 'location',
+  country: 'country',
   industry: 'industry',
   description: 'description',
   enrichment_summary: 'enrichment_summary',
@@ -641,6 +642,7 @@ exports.Prisma.MessageTemplateScalarFieldEnum = {
   sender_profile_uuid: 'sender_profile_uuid',
   booking_page_uuid: 'booking_page_uuid',
   append_booking_cta: 'append_booking_cta',
+  language: 'language',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1241,10 +1243,6 @@ exports.Prisma.BookingPageScalarFieldEnum = {
   include_calendar_details: 'include_calendar_details',
   create_team_reminder: 'create_team_reminder',
   team_reminder_offset_minutes: 'team_reminder_offset_minutes',
-  confirmation_template_uuid: 'confirmation_template_uuid',
-  reminder_template_uuid: 'reminder_template_uuid',
-  cancellation_template_uuid: 'cancellation_template_uuid',
-  reschedule_template_uuid: 'reschedule_template_uuid',
   calendar_event_title: 'calendar_event_title',
   calendar_event_description: 'calendar_event_description',
   created_at: 'created_at',
@@ -1302,6 +1300,7 @@ exports.Prisma.BookingScalarFieldEnum = {
   end_at: 'end_at',
   duration_minutes: 'duration_minutes',
   invitee_timezone: 'invitee_timezone',
+  invitee_language: 'invitee_language',
   invitee_name: 'invitee_name',
   invitee_email: 'invitee_email',
   invitee_phone: 'invitee_phone',
@@ -1391,6 +1390,15 @@ exports.Prisma.BookingNotificationScalarFieldEnum = {
   error: 'error',
   sent_at: 'sent_at',
   created_at: 'created_at'
+};
+
+exports.Prisma.BookingPageTemplateScalarFieldEnum = {
+  id: 'id',
+  booking_page_uuid: 'booking_page_uuid',
+  template_uuid: 'template_uuid',
+  kind: 'kind',
+  created_at: 'created_at',
+  outreachSequenceId: 'outreachSequenceId'
 };
 
 exports.Prisma.CalendarConnectionScalarFieldEnum = {
@@ -2114,6 +2122,7 @@ exports.Prisma.ModelName = {
   BookingInviteSettings: 'BookingInviteSettings',
   BookingInvitation: 'BookingInvitation',
   BookingNotification: 'BookingNotification',
+  BookingPageTemplate: 'BookingPageTemplate',
   CalendarConnection: 'CalendarConnection',
   Notification: 'Notification'
 };

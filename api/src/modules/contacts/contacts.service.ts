@@ -204,6 +204,7 @@ export class ContactsService {
                 status: LeadStatus.NEW,
                 notes: dto.notes,
                 ...profile,
+                ...(dto.country ? { country: dto.country } : {}),
                 email_validation_status: lead.email_validation_status,
                 email_validation_reason: lead.email_validation_reason,
                 email_validated_at: lead.email_validated_at,

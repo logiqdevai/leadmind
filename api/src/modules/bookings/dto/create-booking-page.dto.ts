@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
     ArrayMaxSize,
+    ArrayUnique,
     IsArray,
     IsBoolean,
     IsEmail,
@@ -289,10 +290,49 @@ export class CreateBookingPageDto {
     @Max(60 * 24 * 14)
     team_reminder_offset_minutes?: number;
 
-    @ApiPropertyOptional({ format: 'uuid', nullable: true }) @IsOptional() @IsUUID() confirmation_template_uuid?: string | null;
-    @ApiPropertyOptional({ format: 'uuid', nullable: true }) @IsOptional() @IsUUID() reminder_template_uuid?: string | null;
-    @ApiPropertyOptional({ format: 'uuid', nullable: true }) @IsOptional() @IsUUID() cancellation_template_uuid?: string | null;
-    @ApiPropertyOptional({ format: 'uuid', nullable: true }) @IsOptional() @IsUUID() reschedule_template_uuid?: string | null;
+    @ApiPropertyOptional({
+        type: [String],
+        format: 'uuid',
+        description: 'Templates offered for the confirmation email (replaces the set). The one written in the language of the invitee is sent.',
+    })
+    @IsOptional()
+    @IsArray()
+    @ArrayUnique()
+    @IsUUID('all', { each: true })
+    confirmation_template_uuids?: string[];
+
+    @ApiPropertyOptional({
+        type: [String],
+        format: 'uuid',
+        description: 'Templates offered for the reminder email (replaces the set). The one written in the language of the invitee is sent.',
+    })
+    @IsOptional()
+    @IsArray()
+    @ArrayUnique()
+    @IsUUID('all', { each: true })
+    reminder_template_uuids?: string[];
+
+    @ApiPropertyOptional({
+        type: [String],
+        format: 'uuid',
+        description: 'Templates offered for the cancellation email (replaces the set). The one written in the language of the invitee is sent.',
+    })
+    @IsOptional()
+    @IsArray()
+    @ArrayUnique()
+    @IsUUID('all', { each: true })
+    cancellation_template_uuids?: string[];
+
+    @ApiPropertyOptional({
+        type: [String],
+        format: 'uuid',
+        description: 'Templates offered for the reschedule email (replaces the set). The one written in the language of the invitee is sent.',
+    })
+    @IsOptional()
+    @IsArray()
+    @ArrayUnique()
+    @IsUUID('all', { each: true })
+    reschedule_template_uuids?: string[];
 
     @ApiPropertyOptional({ maxLength: 200, description: 'Supports booking variables' })
     @IsOptional()

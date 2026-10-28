@@ -88,6 +88,7 @@ export class MessageTemplatesService {
                 sender_profile_uuid: dto.sender_profile_uuid ?? null,
                 booking_page_uuid: dto.booking_page_uuid ?? null,
                 append_booking_cta: dto.append_booking_cta ?? false,
+                language: dto.language, // omitted -> the column default (Greek)
             },
         });
         if (dto.tag_uuids?.length) {
@@ -149,6 +150,7 @@ export class MessageTemplatesService {
                 ...(dto.sender_profile_uuid !== undefined && { sender_profile_uuid: dto.sender_profile_uuid }),
                 ...(dto.booking_page_uuid !== undefined && { booking_page_uuid: dto.booking_page_uuid }),
                 ...(dto.append_booking_cta !== undefined && { append_booking_cta: dto.append_booking_cta }),
+                ...(dto.language !== undefined && { language: dto.language }),
             },
         });
         return this.withTags(organisation_uuid, updated);

@@ -19,6 +19,8 @@ export interface MessageTemplate {
     /** Append a booking button when the email has no `{{booking_link}}`. */
     append_booking_cta: boolean;
     tags?: OrgTagSummary[];
+    /** Language the content is written in (ISO 639-1); booking emails pick the template matching the invitee. */
+    language: string;
     created_at: string;
     updated_at: string;
 }
@@ -34,6 +36,7 @@ export type CreateMessageTemplatePayload = {
     append_booking_cta?: boolean;
     /** Organisation tag uuids. On update this replaces the full set (empty array clears). */
     tag_uuids?: string[];
+    language?: string;
 };
 
 export type UpdateMessageTemplatePayload = Partial<CreateMessageTemplatePayload>;

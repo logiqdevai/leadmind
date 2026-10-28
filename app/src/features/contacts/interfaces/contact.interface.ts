@@ -345,6 +345,8 @@ export interface Contact {
     linkedin_url: string | null;
     title: string | null;
     location: string | null;
+    /** ISO 3166-1 alpha-2 code, e.g. "GR". */
+    country: string | null;
     industry: string | null;
     description: string | null;
     /** Business opening hours; only on the single-contact response. */
@@ -522,6 +524,7 @@ export interface CreateContactPayload {
     google_maps_url?: string;
     title?: string;
     location?: string;
+    country?: string;
     linkedin_url?: string;
     industry?: string;
     description?: string;
@@ -539,6 +542,8 @@ export interface UpdateContactPayload {
     google_maps_url?: string | null;
     title?: string | null;
     location?: string | null;
+    /** Null clears the country. */
+    country?: string | null;
     linkedin_url?: string | null;
     industry?: string | null;
     description?: string | null;

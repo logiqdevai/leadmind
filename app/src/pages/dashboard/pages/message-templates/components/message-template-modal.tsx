@@ -5,6 +5,7 @@ import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import { SenderProfileSelect } from "@/features/messaging/components/sender-profile-select";
 import { BookingLinkSettings } from "@/components/bookings/booking-link-settings";
 import { TagPicker } from "@/components/tags/tag-picker";
+import { LanguagePicker } from "@/components/ui/language-picker";
 import {
     MessageComposer,
     type MessageComposerValue,
@@ -36,6 +37,9 @@ function templateToComposerValue(template?: MessageTemplate | null): MessageComp
     return messageTemplateToComposerValue(template);
 }
 
+/** Templates are Greek unless changed (matches the API default). */
+const DEFAULT_TEMPLATE_LANGUAGE = "el";
+
 const TEMPLATE_COMPOSER_CHANNELS = [Channel.EMAIL, Channel.SMS] as const;
 
 function deriveTemplateChannels(value: MessageComposerValue): Channel[] {
@@ -64,6 +68,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
     const [bookingPageUuid, setBookingPageUuid] = useState<string | null>(null);
     const [appendBookingCta, setAppendBookingCta] = useState(false);
     const [tagUuids, setTagUuids] = useState<string[]>([]);
+    const [language, setLanguage] = useState(DEFAULT_TEMPLATE_LANGUAGE);
     const [nameError, setNameError] = useState<string | null>(null);
     const [contentError, setContentError] = useState<string | null>(null);
     const [composerKey, setComposerKey] = useState(0);
@@ -84,6 +89,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                 setBookingPageUuid(initial.booking_page_uuid ?? null);
                 setAppendBookingCta(initial.append_booking_cta ?? false);
                 setTagUuids((initial.tags ?? []).map((t) => t.uuid));
+                setLanguage(initial.language ?? DEFAULT_TEMPLATE_LANGUAGE);
                 setComposerValue(templateToComposerValue(initial));
                 const channels = initial.channels.filter(
                     (c) => c === Channel.EMAIL || c === Channel.SMS,
@@ -95,6 +101,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                 setBookingPageUuid(null);
                 setAppendBookingCta(false);
                 setTagUuids([]);
+                setLanguage(DEFAULT_TEMPLATE_LANGUAGE);
                 setComposerValue(prefill);
                 setActiveChannel(
                     !isComposerContentEmpty(Channel.EMAIL, prefill) ? Channel.EMAIL : Channel.SMS,
@@ -105,6 +112,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                 setBookingPageUuid(null);
                 setAppendBookingCta(false);
                 setTagUuids([]);
+                setLanguage(DEFAULT_TEMPLATE_LANGUAGE);
                 setComposerValue(EMPTY_MESSAGE_COMPOSER_VALUE);
                 setActiveChannel(Channel.EMAIL);
             }
@@ -149,6 +157,7 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
             sender_profile_uuid: initial ? senderProfileUuid : (senderProfileUuid ?? undefined),
             booking_page_uuid: bookingPageUuid,
             append_booking_cta: appendBookingCta,
+            language,
             // On update this replaces the full set, so an empty array clears the tags.
             ...(initial || tagUuids.length ? { tag_uuids: tagUuids } : {}),
         };
@@ -201,6 +210,14 @@ export const MessageTemplateModal: FC<MessageTemplateModalProps> = ({
                             />
                             {nameError ? <FieldError>{nameError}</FieldError> : null}
                         </div>
+
+                        <LanguagePicker
+                            label="Language"
+                            value={language}
+                            onChange={(code) => setLanguage(code ?? DEFAULT_TEMPLATE_LANGUAGE)}
+                            description="The language this template is written in. Booking emails send the template matching the invitee's language."
+                            disabled={pending}
+                        />
 
                         <TagPicker value={tagUuids} onChange={setTagUuids} disabled={pending} />
 

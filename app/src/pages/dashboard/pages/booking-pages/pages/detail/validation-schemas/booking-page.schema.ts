@@ -99,11 +99,11 @@ export const bookingPageFormSchema = z
         include_calendar_details: z.boolean(),
         create_team_reminder: z.boolean(),
         team_reminder_offset_minutes: int(5, 20160),
-        /** "" = default template. */
-        confirmation_template_uuid: z.string(),
-        reminder_template_uuid: z.string(),
-        cancellation_template_uuid: z.string(),
-        reschedule_template_uuid: z.string(),
+        /** Empty = the built-in default template. */
+        confirmation_template_uuids: z.array(z.string()),
+        reminder_template_uuids: z.array(z.string()),
+        cancellation_template_uuids: z.array(z.string()),
+        reschedule_template_uuids: z.array(z.string()),
         calendar_event_title: z.string().max(300),
         calendar_event_description: z.string().max(5000),
 

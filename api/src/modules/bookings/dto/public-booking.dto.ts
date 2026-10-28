@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
     IsDateString,
     IsEmail,
@@ -8,6 +8,7 @@ import {
     IsOptional,
     IsString,
     IsUUID,
+    Matches,
     Max,
     MaxLength,
     Min,
@@ -32,6 +33,12 @@ export class PublicCreateBookingDto {
     @IsString()
     @MaxLength(64)
     timezone: string;
+
+    @ApiPropertyOptional({ example: 'el', description: 'Language the invitee is using on the booking page (ISO 639-1)' })
+    @IsOptional()
+    @Transform(({ value }) => (typeof value === 'string' ? value.trim().toLowerCase().slice(0, 2) : value))
+    @Matches(/^[a-z]{2}$/)
+    language?: string;
 
     @ApiProperty({ maxLength: 200 })
     @IsString()

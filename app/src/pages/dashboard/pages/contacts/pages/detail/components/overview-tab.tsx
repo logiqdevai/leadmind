@@ -32,6 +32,7 @@ import { initialsFromName, formatShortDate, normalizeUrl } from "@/lib/profile";
 import { EmailValidationChip, StatusChip } from "@/pages/dashboard/pages/leads/components/badges";
 import { ContactListFormModal } from "@/pages/dashboard/pages/lists/components/contact-list-form-modal";
 import { Routes } from "@/routes/routes";
+import { CountryLabel, CountryPicker } from "@/components/ui/country-picker";
 import type { ProfileDraft } from "../types";
 import { profileDraftFromContact, profileFieldPatch, sameUuidSet } from "../utils/profile-draft";
 import { BounceNotice } from "./bounce-notice";
@@ -267,6 +268,9 @@ function DetailPanel({ contact, onEdit }: { contact: Contact; onEdit: () => void
                 <Row label="Location">
                     <ProfileValue value={contact.location} />
                 </Row>
+                <Row label="Country">
+                    {contact.country ? <CountryLabel code={contact.country} /> : <ProfileValue value={null} />}
+                </Row>
             </SectionCard>
 
             <SectionCard title="Links & Presence" icon={Globe}>
@@ -382,6 +386,7 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
             google_maps_url: profileFieldPatch(draft.google_maps_url, prev.google_maps_url),
             title: profileFieldPatch(draft.title, prev.title),
             location: profileFieldPatch(draft.location, prev.location),
+            country: profileFieldPatch(draft.country, prev.country),
             linkedin_url: profileFieldPatch(draft.linkedin_url, prev.linkedin_url),
             industry: profileFieldPatch(draft.industry, prev.industry),
             description: profileFieldPatch(draft.description, prev.description),
@@ -488,6 +493,14 @@ function EditForm({ contact, onDone }: { contact: Contact; onDone: () => void })
                 <div className="flex flex-col gap-1.5">
                     <Label htmlFor="pf-location">Location</Label>
                     <Input id="pf-location" placeholder="City, Country" value={draft.location} onChange={(e) => setField("location", e.target.value)} />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                    <CountryPicker
+                        label="Country"
+                        value={draft.country || null}
+                        onChange={(code) => setField("country", code ?? "")}
+                        clearLabel="None"
+                    />
                 </div>
                 <div className="flex flex-col gap-1.5">
                     <Label htmlFor="pf-industry">Industry</Label>

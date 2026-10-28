@@ -147,6 +147,7 @@ export class PublicBookingService {
                 company: dto.company?.trim() || null,
                 notes: dto.notes?.trim() || null,
                 timezone: isValidTimeZone(dto.timezone) ? dto.timezone : null,
+                language: dto.language ?? null,
             },
             location_type: page.location_type,
             location_value: page.location_value,

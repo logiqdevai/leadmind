@@ -3,10 +3,12 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Button, Input, TextArea } from "@heroui/react";
 import { Plus, X } from "lucide-react";
 import { CopyButton } from "@/components/ui/copy-button";
-import { SearchSelect } from "@/components/ui/search-select";
+import { LanguageLabel } from "@/components/ui/language-picker";
+import { MultiSelect } from "@/components/ui/multi-select";
 import { BOOKING_REMINDER_PRESETS, BOOKING_TEMPLATE_VARIABLES } from "@/features/bookings/constants/booking-labels";
 import { formatMinutesSpan } from "@/features/bookings/utils/booking-time";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
+import { getLanguageItem } from "@/lib/languages";
 import { useMessageTemplates } from "@/features/message-templates/hooks/use-message-templates";
 import type { BookingPageFormValues } from "@/pages/dashboard/pages/booking-pages/pages/detail/validation-schemas/booking-page.schema";
 import { firstErrorMessage } from "@/pages/dashboard/pages/booking-pages/pages/detail/utils/booking-page-form";
@@ -23,16 +25,16 @@ const TEAM_REMINDER_PRESETS = [
 const EMAIL_PATTERN =/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type TemplateField =
-    | "confirmation_template_uuid"
-    | "reminder_template_uuid"
-    | "cancellation_template_uuid"
-    | "reschedule_template_uuid";
+    | "confirmation_template_uuids"
+    | "reminder_template_uuids"
+    | "cancellation_template_uuids"
+    | "reschedule_template_uuids";
 
 const TEMPLATE_FIELDS: { name: TemplateField; label: string }[] = [
-    { name: "confirmation_template_uuid", label: "Confirmation email" },
-    { name: "reminder_template_uuid", label: "Reminder email" },
-    { name: "cancellation_template_uuid", label: "Cancellation email" },
-    { name: "reschedule_template_uuid", label: "Reschedule email" },
+    { name: "confirmation_template_uuids", label: "Confirmation email" },
+    { name: "reminder_template_uuids", label: "Reminder email" },
+    { name: "cancellation_template_uuids", label: "Cancellation email" },
+    { name: "reschedule_template_uuids", label: "Reschedule email" },
 ];
 
 type BooleanField = {
@@ -119,9 +121,13 @@ export const NotificationsTab: FC<NotificationsTabProps> = ({ readOnly }) => {
         () =>
             templates
                 .filter((t) => t.channels.includes(Channel.EMAIL) || !!t.email_content)
-                .map((t) => ({ id: t.uuid, label: t.name })),
+                .map((t) => ({ value: t.uuid, label: `${t.name} (${getLanguageItem(t.language)?.label ?? t.language.toUpperCase()})` })),
         [templates],
     );
+
+    const languagesOf = (uuids: string[]) => [
+        ...new Set(uuids.map((uuid) => templates.find((t) => t.uuid === uuid)?.language).filter((l): l is string => !!l)),
+    ];
 
     const renderSwitch = (name: BooleanField, label: string, description?: string) => (
         <Controller
@@ -211,7 +217,7 @@ export const NotificationsTab: FC<NotificationsTabProps> = ({ readOnly }) => {
 
             <SettingsSection
                 title="Email templates"
-                description="Pick one of your message templates per email, or keep the built-in default. Templates can use the variables listed below."
+                description="Pick the message templates for each email, or keep the built-in default. Add one template per language: the one matching the invitee's language (from their contact's country, else the language they booked in) is sent, falling back to English. Templates can use the variables listed below."
             >
                 <div className="grid gap-4 sm:grid-cols-2">
                     {TEMPLATE_FIELDS.map((tf) => (
@@ -220,16 +226,24 @@ export const NotificationsTab: FC<NotificationsTabProps> = ({ readOnly }) => {
                                 control={control}
                                 name={tf.name}
                                 render={({ field }) => (
-                                    <SearchSelect
-                                        aria-label={tf.label}
-                                        options={templateOptions}
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        emptyLabel="Default template"
-                                        searchPlaceholder="Search templates…"
-                                        isDisabled={readOnly || templatesLoading}
-                                        fullWidth
-                                    />
+                                    <div className="space-y-1.5">
+                                        <MultiSelect
+                                            aria-label={tf.label}
+                                            options={templateOptions}
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            placeholder="Default template"
+                                            searchPlaceholder="Search templates…"
+                                            disabled={readOnly || templatesLoading}
+                                        />
+                                        {languagesOf(field.value).length > 1 ? (
+                                            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+                                                {languagesOf(field.value).map((code) => (
+                                                    <LanguageLabel key={code} code={code} />
+                                                ))}
+                                            </p>
+                                        ) : null}
+                                    </div>
                                 )}
                             />
                         </Field>

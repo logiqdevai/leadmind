@@ -22,6 +22,7 @@ import {
 } from '../constants/booking.constants';
 import { DEFAULT_INTERNAL_TEMPLATES, DEFAULT_INVITEE_TEMPLATES } from '../constants/booking-email-templates';
 import { BookingNotificationJobData } from '../interfaces/booking.interface';
+import { pickTemplateForLanguage, resolveRecipientLanguage } from '../utils/booking-template-language.util';
 import {
     buildBookingVars,
     escapeHtml,
@@ -32,12 +33,11 @@ import {
 const NOTIFICATION_INCLUDE = {
     booking_page: {
         include: {
-            confirmation_template: true,
-            reminder_template: true,
-            cancellation_template: true,
-            reschedule_template: true,
+            // Every template the page offers; compose() picks the one matching the recipient's language.
+            notification_templates: { include: { template: true }, orderBy: { created_at: 'asc' } },
         },
     },
+    contact: { select: { country: true } },
     assigned_user: { select: { full_name: true, email: true } },
     organisation: { select: { name: true, timezone: true } },
 } satisfies Prisma.BookingInclude;
@@ -277,7 +277,7 @@ export class BookingNotificationsService {
             }),
         };
 
-        const custom = recipient.internal ? null : templateFor(page, kind);
+        const custom = recipient.internal ? null : templateFor(booking, kind);
         const fallback = (recipient.internal ? DEFAULT_INTERNAL_TEMPLATES : DEFAULT_INVITEE_TEMPLATES)[kind];
         const subjectTemplate = custom?.email_subject || fallback.subject;
         const bodyTemplate = custom?.email_content || fallback.html;
@@ -325,14 +325,16 @@ export class BookingNotificationsService {
     }
 }
 
-function templateFor(page: NotificationBooking['booking_page'], kind: BookingNotificationKind) {
-    if (!page) return null;
-    return {
-        CONFIRMATION: page.confirmation_template,
-        REMINDER: page.reminder_template,
-        CANCELLATION: page.cancellation_template,
-        RESCHEDULE: page.reschedule_template,
-    }[kind];
+/** The page's template for this email type written in the recipient's language (see pickTemplateForLanguage). */
+function templateFor(booking: NotificationBooking, kind: BookingNotificationKind) {
+    const candidates = (booking.booking_page?.notification_templates ?? [])
+        .filter((row) => row.kind === kind)
+        .map((row) => row.template);
+    const language = resolveRecipientLanguage({
+        contact_country: booking.contact?.country,
+        invitee_language: booking.invitee_language,
+    });
+    return pickTemplateForLanguage(candidates, language);
 }
 
 function labelFor(kind: BookingNotificationKind): string {

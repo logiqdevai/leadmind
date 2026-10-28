@@ -1,13 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
     ArrayUnique,
     IsArray,
     IsEmail,
+    IsISO31661Alpha2,
     IsOptional,
     IsString,
     IsUrl,
     IsUUID,
     MaxLength,
+    ValidateIf,
 } from 'class-validator';
 
 export class CreateContactDto {
@@ -63,6 +66,17 @@ export class CreateContactDto {
     @IsString()
     @MaxLength(200)
     location?: string;
+
+    @ApiPropertyOptional({
+        nullable: true,
+        example: 'GR',
+        description: 'ISO 3166-1 alpha-2 country code. Null clears it on update.',
+    })
+    @IsOptional()
+    @Transform(({ value }) => (typeof value === 'string' ? value.trim().toUpperCase() : value))
+    @ValidateIf((_, value) => value !== null)
+    @IsISO31661Alpha2()
+    country?: string | null;
 
     @ApiPropertyOptional()
     @IsOptional()

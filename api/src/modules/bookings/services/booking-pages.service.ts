@@ -1,5 +1,5 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { BookingLocationType, Prisma } from '@/generated/prisma';
+import { BookingLocationType, BookingNotificationKind, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { BookingLinksService } from '@/modules/booking-links/booking-links.service';
 import { BookingActor } from '../interfaces/booking.interface';
@@ -13,8 +13,34 @@ const PAGE_INCLUDE = {
         include: { user: { select: { uuid: true, full_name: true, email: true } } },
         orderBy: [{ priority: 'desc' }, { created_at: 'asc' }],
     },
+    notification_templates: { select: { kind: true, template_uuid: true }, orderBy: { created_at: 'asc' } },
     _count: { select: { bookings: true, links: true } },
 } satisfies Prisma.BookingPageInclude;
+
+type TemplateUuids = Pick<
+    CreateBookingPageDto,
+    'confirmation_template_uuids' | 'reminder_template_uuids' | 'cancellation_template_uuids' | 'reschedule_template_uuids'
+>;
+
+/** Which dto field holds the templates of each email type. */
+const TEMPLATE_FIELDS = {
+    [BookingNotificationKind.CONFIRMATION]: 'confirmation_template_uuids',
+    [BookingNotificationKind.REMINDER]: 'reminder_template_uuids',
+    [BookingNotificationKind.CANCELLATION]: 'cancellation_template_uuids',
+    [BookingNotificationKind.RESCHEDULE]: 'reschedule_template_uuids',
+} as const satisfies Record<BookingNotificationKind, keyof TemplateUuids>;
+
+/** Replaces the raw join rows with one uuid list per email type, the shape the dto accepts. */
+function withTemplateUuids<T extends { notification_templates: Array<{ kind: BookingNotificationKind; template_uuid: string }> }>(
+    page: T,
+) {
+    const { notification_templates, ...rest } = page;
+    const lists = Object.fromEntries(
+        Object.values(TEMPLATE_FIELDS).map((field) => [field, [] as string[]]),
+    ) as Required<TemplateUuids>;
+    for (const row of notification_templates) lists[TEMPLATE_FIELDS[row.kind]].push(row.template_uuid);
+    return { ...rest, ...lists };
+}
 
 @Injectable()
 export class BookingPagesService {
@@ -35,7 +61,7 @@ export class BookingPagesService {
             select: { slug: true },
         });
         return pages.map((page) => ({
-            ...page,
+            ...withTemplateUuids(page),
             public_url: this.publicUrlFor(organisation.slug, page),
         }));
     }
@@ -55,16 +81,17 @@ export class BookingPagesService {
             where: { uuid: organisation_uuid },
             select: { slug: true },
         });
-        return { ...page, public_url: this.publicUrlFor(organisation.slug, page) };
+        return { ...withTemplateUuids(page), public_url: this.publicUrlFor(organisation.slug, page) };
     }
 
     async create(actor: BookingActor, dto: CreateBookingPageDto) {
-        const { members, questions, ...fields } = dto;
+        const { members, questions, ...rest } = dto;
+        const { templates, fields } = this.splitTemplates(rest);
         this.assertConsistent(dto);
         const slug = dto.slug ?? (await this.uniqueSlug(actor.organisation_uuid, dto.name));
         const memberRows = members?.length ? members : [{ user_uuid: actor.uuid, priority: 0 }];
         await this.assertMembers(actor.organisation_uuid, memberRows.map((m) => m.user_uuid));
-        await this.assertTemplates(actor.organisation_uuid, dto);
+        await this.assertTemplates(actor.organisation_uuid, templates);
 
         const page = await this.prisma.$transaction(async (tx) => {
             const isFirst = (await tx.bookingPage.count({ where: { organisation_uuid: actor.organisation_uuid } })) === 0;
@@ -76,7 +103,7 @@ export class BookingPagesService {
                 });
             }
             try {
-                return await tx.bookingPage.create({
+                const created = await tx.bookingPage.create({
                     data: {
                         ...fields,
                         slug,
@@ -89,6 +116,8 @@ export class BookingPagesService {
                         },
                     },
                 });
+                await this.replaceTemplates(tx, created.uuid, templates);
+                return created;
             } catch (error) {
                 throw this.mapUniqueError(error);
             }
@@ -106,12 +135,13 @@ export class BookingPagesService {
         const existing = await this.prisma.bookingPage.findFirst({ where: { uuid, organisation_uuid: actor.organisation_uuid } });
         if (!existing) throw new NotFoundException('Booking page not found');
         this.assertConsistent({ ...existing, ...dto } as CreateBookingPageDto);
-        const { members, questions, ...fields } = dto;
+        const { members, questions, ...rest } = dto;
+        const { templates, fields } = this.splitTemplates(rest);
         if (members) {
             if (members.length === 0) throw new BadRequestException('A booking page needs at least one eligible team member');
             await this.assertMembers(actor.organisation_uuid, members.map((m) => m.user_uuid));
         }
-        await this.assertTemplates(actor.organisation_uuid, dto);
+        await this.assertTemplates(actor.organisation_uuid, templates);
 
         await this.prisma.$transaction(async (tx) => {
             if (dto.is_default) {
@@ -131,6 +161,7 @@ export class BookingPagesService {
             } catch (error) {
                 throw this.mapUniqueError(error);
             }
+            await this.replaceTemplates(tx, uuid, templates);
             if (members) {
                 // Keep round-robin history (last_assigned_at) for members that stay.
                 await tx.bookingPageMember.deleteMany({
@@ -193,17 +224,53 @@ export class BookingPagesService {
         if (count !== unique.length) throw new BadRequestException('Every eligible member must belong to this organisation');
     }
 
-    private async assertTemplates(organisation_uuid: string, dto: Partial<CreateBookingPageDto>) {
-        const uuids = [
-            dto.confirmation_template_uuid,
-            dto.reminder_template_uuid,
-            dto.cancellation_template_uuid,
-            dto.reschedule_template_uuid,
-        ].filter(Boolean) as string[];
-        if (!uuids.length) return;
-        const unique = [...new Set(uuids)];
+    /** Separates the per-email-type template lists (join rows) from the page's own columns. */
+    private splitTemplates<T extends Partial<TemplateUuids>>(dto: T) {
+        const {
+            confirmation_template_uuids,
+            reminder_template_uuids,
+            cancellation_template_uuids,
+            reschedule_template_uuids,
+            ...fields
+        } = dto;
+        const templates: Partial<Record<BookingNotificationKind, string[]>> = {
+            [BookingNotificationKind.CONFIRMATION]: confirmation_template_uuids,
+            [BookingNotificationKind.REMINDER]: reminder_template_uuids,
+            [BookingNotificationKind.CANCELLATION]: cancellation_template_uuids,
+            [BookingNotificationKind.RESCHEDULE]: reschedule_template_uuids,
+        };
+        return { templates, fields };
+    }
+
+    private async assertTemplates(
+        organisation_uuid: string,
+        templates: Partial<Record<BookingNotificationKind, string[]>>,
+    ) {
+        const unique = [...new Set(Object.values(templates).flat().filter(Boolean) as string[])];
+        if (!unique.length) return;
         const count = await this.prisma.messageTemplate.count({ where: { organisation_uuid, uuid: { in: unique } } });
         if (count !== unique.length) throw new BadRequestException('Email template not found');
+    }
+
+    /** Replaces the templates of each email type that was sent (an empty list clears it); omitted types are left alone. */
+    private async replaceTemplates(
+        tx: Prisma.TransactionClient,
+        booking_page_uuid: string,
+        templates: Partial<Record<BookingNotificationKind, string[]>>,
+    ) {
+        for (const [kind, uuids] of Object.entries(templates) as Array<[BookingNotificationKind, string[] | undefined]>) {
+            if (!uuids) continue;
+            const unique = [...new Set(uuids)];
+            await tx.bookingPageTemplate.deleteMany({
+                where: { booking_page_uuid, kind, template_uuid: { notIn: unique } },
+            });
+            if (unique.length) {
+                await tx.bookingPageTemplate.createMany({
+                    data: unique.map((template_uuid) => ({ booking_page_uuid, kind, template_uuid })),
+                    skipDuplicates: true,
+                });
+            }
+        }
     }
 
     private async uniqueSlug(organisation_uuid: string, name: string): Promise<string> {

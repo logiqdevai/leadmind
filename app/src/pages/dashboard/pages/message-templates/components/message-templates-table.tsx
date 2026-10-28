@@ -2,6 +2,7 @@ import { Chip } from "@heroui/react";
 import { Mail, MessageSquare, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@heroui/react";
 import { TagChips } from "@/components/tags/tag-chips";
+import { LanguageLabel } from "@/components/ui/language-picker";
 import { Channel } from "@/features/contacts/interfaces/contact.interface";
 import type { MessageTemplate } from "@/features/message-templates/interfaces/message-template.interface";
 
@@ -50,6 +51,7 @@ export function MessageTemplatesTable({ templates, onEdit, onDelete, isFiltered 
                 <thead className="bg-surface-secondary/40 text-muted">
                     <tr>
                         <th className="min-w-0 max-w-0 overflow-hidden px-4 py-3 text-left font-medium">Name</th>
+                        <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Language</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Tags</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Channels</th>
                         <th className="hidden lg:table-cell px-4 py-3 text-left font-medium">Preview</th>
@@ -61,6 +63,9 @@ export function MessageTemplatesTable({ templates, onEdit, onDelete, isFiltered 
                     {templates.map((template) => (
                         <tr key={template.uuid} className="border-t border-border hover:bg-surface-secondary/30">
                             <td className="min-w-0 max-w-0 overflow-hidden px-4 py-3 align-top font-medium text-foreground truncate">{template.name}</td>
+                            <td className="hidden lg:table-cell px-4 py-3 align-top whitespace-nowrap">
+                                <LanguageLabel code={template.language} />
+                            </td>
                             <td className="hidden lg:table-cell px-4 py-3 align-top">
                                 <TagChips tags={template.tags} max={2} />
                             </td>

@@ -11,6 +11,7 @@ import type {
 import { useCreatePublicBooking, usePublicBookingSlots } from "@/features/bookings/hooks/use-public-booking";
 import { isSlotUnavailableError } from "@/features/bookings/utils/booking-api-error";
 import { formatDateLong, formatTimeRange } from "@/features/bookings/utils/booking-time";
+import { getCurrentLanguage } from "@/lib/i18n";
 import { getBrowserTimezone } from "@/lib/timezone";
 import { useBookingSlotPicker } from "@/pages/booking/hooks/use-booking-slot-picker";
 import { resolveBrowserTimezone } from "@/pages/booking/utils/booking-dates";
@@ -107,6 +108,7 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
                 start_at: selectedSlot.start,
                 duration_minutes: duration,
                 timezone,
+                language: getCurrentLanguage(),
                 member_uuid: page.allow_member_choice ? (memberUuid ?? undefined) : undefined,
                 ...toBookingPayloadDetails(data, details),
             },

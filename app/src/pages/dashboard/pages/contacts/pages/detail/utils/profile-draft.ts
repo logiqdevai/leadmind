@@ -12,6 +12,7 @@ export function profileDraftFromContact(contact: Contact): ProfileDraft {
     google_maps_url: contact.google_maps_url ?? "",
     title: contact.title ?? "",
     location: contact.location ?? "",
+    country: contact.country ?? "",
     linkedin_url: contact.linkedin_url ?? "",
     industry: contact.industry ?? "",
     description: contact.description ?? "",

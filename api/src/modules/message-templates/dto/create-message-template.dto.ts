@@ -1,6 +1,18 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Channel } from '@/generated/prisma';
-import { ArrayMinSize, IsArray, IsBoolean, IsEnum, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+    ArrayMinSize,
+    IsArray,
+    IsBoolean,
+    IsEnum,
+    IsOptional,
+    IsString,
+    IsUUID,
+    Matches,
+    MaxLength,
+    MinLength,
+} from 'class-validator';
 
 const TEMPLATE_CHANNELS = [Channel.EMAIL, Channel.SMS] as const;
 
@@ -51,6 +63,16 @@ export class CreateMessageTemplateDto {
     @IsOptional()
     @IsBoolean()
     append_booking_cta?: boolean;
+
+    @ApiPropertyOptional({
+        example: 'el',
+        default: 'el',
+        description: 'Language the template is written in (ISO 639-1 code). Booking emails use the template matching the invitee language.',
+    })
+    @IsOptional()
+    @Transform(({ value }) => (typeof value === 'string' ? value.trim().toLowerCase() : value))
+    @Matches(/^[a-z]{2,3}$/, { message: 'language must be a 2-3 letter language code' })
+    language?: string;
 
     @ApiPropertyOptional({
         type: [String],

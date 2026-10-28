@@ -374,6 +374,8 @@ model Contact {
   linkedin_url              String?
   title                     String?
   location                  String?
+  // ISO 3166-1 alpha-2 code (e.g. "GR"); null = unknown.
+  country                   String?
   industry                  String?
   description               String?
   enrichment_summary        String?                @db.Text
@@ -731,11 +733,12 @@ model OutreachSequence {
   created_at          DateTime       @default(now())
   updated_at          DateTime       @updatedAt
 
-  organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  sender_profile SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
-  steps          OutreachSequenceStep[]
-  enrollments    SequenceEnrollment[]
-  campaigns      MarketingCampaign[]
+  booking_page_templates BookingPageTemplate[]
+  organisation           Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile         SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  steps                  OutreachSequenceStep[]
+  enrollments            SequenceEnrollment[]
+  campaigns              MarketingCampaign[]
 
   @@index([organisation_uuid])
   @@index([organisation_uuid, status])
@@ -964,18 +967,16 @@ model MessageTemplate {
   booking_page_uuid    String?
   // Append a booking call-to-action block when the content has no `{{booking_link}}` of its own.
   append_booking_cta   Boolean   @default(false)
+  // Language the content is written in (ISO 639-1 code); booking emails pick the template matching the invitee's language.
+  language             String    @default("el")
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
-  organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  sender_profile SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
-  booking_page   BookingPage?           @relation("MessageTemplateBookingPage", fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
-  sequence_steps OutreachSequenceStep[]
-
-  booking_pages_confirmation BookingPage[] @relation("BookingPageConfirmationTemplate")
-  booking_pages_reminder     BookingPage[] @relation("BookingPageReminderTemplate")
-  booking_pages_cancellation BookingPage[] @relation("BookingPageCancellationTemplate")
-  booking_pages_reschedule   BookingPage[] @relation("BookingPageRescheduleTemplate")
+  organisation         Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile       SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  booking_page         BookingPage?           @relation("MessageTemplateBookingPage", fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
+  sequence_steps       OutreachSequenceStep[]
+  bookingPageTemplates BookingPageTemplate[]
 
   @@index([organisation_uuid])
   @@index([sender_profile_uuid])
@@ -2495,10 +2496,6 @@ model BookingPage {
   create_team_reminder         Boolean  @default(false)
   /// How long before the start the team reminder is due.
   team_reminder_offset_minutes Int      @default(60)
-  confirmation_template_uuid   String?
-  reminder_template_uuid       String?
-  cancellation_template_uuid   String?
-  reschedule_template_uuid     String?
 
   // Google Calendar event content (supports booking variables)
   calendar_event_title       String?
@@ -2507,18 +2504,15 @@ model BookingPage {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  organisation          Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  created_by            User?                  @relation("BookingPageCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
-  confirmation_template MessageTemplate?       @relation("BookingPageConfirmationTemplate", fields: [confirmation_template_uuid], references: [uuid], onDelete: SetNull)
-  reminder_template     MessageTemplate?       @relation("BookingPageReminderTemplate", fields: [reminder_template_uuid], references: [uuid], onDelete: SetNull)
-  cancellation_template MessageTemplate?       @relation("BookingPageCancellationTemplate", fields: [cancellation_template_uuid], references: [uuid], onDelete: SetNull)
-  reschedule_template   MessageTemplate?       @relation("BookingPageRescheduleTemplate", fields: [reschedule_template_uuid], references: [uuid], onDelete: SetNull)
-  members               BookingPageMember[]
-  links                 BookingLink[]
-  bookings              Booking[]
-  invitations           BookingInvitation[]
-  message_templates     MessageTemplate[]      @relation("MessageTemplateBookingPage")
-  sequence_steps        OutreachSequenceStep[]
+  organisation           Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  created_by             User?                  @relation("BookingPageCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
+  members                BookingPageMember[]
+  notification_templates BookingPageTemplate[]
+  links                  BookingLink[]
+  bookings               Booking[]
+  invitations            BookingInvitation[]
+  message_templates      MessageTemplate[]      @relation("MessageTemplateBookingPage")
+  sequence_steps         OutreachSequenceStep[]
 
   @@unique([organisation_uuid, slug])
   @@index([organisation_uuid])
@@ -2606,6 +2600,8 @@ model Booking {
   end_at           DateTime
   duration_minutes Int
   invitee_timezone String?
+  // Language the invitee used on the public booking page (ISO 639-1); fallback when the contact has no country.
+  invitee_language String?
 
   // Invitee details as submitted (kept even when a Contact is linked, so history survives contact edits).
   invitee_name    String
@@ -2757,6 +2753,26 @@ model BookingNotification {
 
   @@index([booking_uuid])
   @@map("booking_notifications")
+}
+
+/// A message template a booking page may send for one notification kind. Several per kind are allowed; at send time
+/// the one whose language matches the invitee's is used.
+model BookingPageTemplate {
+  id                Int                     @id @default(autoincrement())
+  booking_page_uuid String
+  template_uuid     String
+  kind              BookingNotificationKind
+  created_at        DateTime                @default(now())
+
+  booking_page       BookingPage       @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
+  template           MessageTemplate   @relation(fields: [template_uuid], references: [uuid], onDelete: Cascade)
+  outreachSequence   OutreachSequence? @relation(fields: [outreachSequenceId], references: [id])
+  outreachSequenceId Int?
+
+  @@unique([booking_page_uuid, kind, template_uuid])
+  @@index([booking_page_uuid, kind])
+  @@index([template_uuid])
+  @@map("booking_page_templates")
 }
 
 /// A team member's Google Calendar, connected through Composio (one connected account per member per organisation).
