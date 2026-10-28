@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { DateTime } from 'luxon';
 import { Prisma, ReminderSource, ReminderStatus, ReminderType } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
@@ -91,6 +91,18 @@ export class BookingTeamReminderService {
         const assignee = booking.assigned_user;
         const stillMember = assignee?.memberships.some((m) => m.organisation_uuid === booking.organisation_uuid);
         return booking.assigned_user_uuid && stillMember ? [booking.assigned_user_uuid] : [];
+    }
+
+    /**
+     * Deletes the contact's reminder behind a REMINDER placeholder booking, along with its Google event and the
+     * booking itself. Used when the booking is removed or cancelled from the app.
+     */
+    async deleteSourceReminder(organisation_uuid: string, reminder_uuid: string): Promise<void> {
+        try {
+            await this.reminders.remove(organisation_uuid, reminder_uuid);
+        } catch (error) {
+            if (!(error instanceof NotFoundException)) throw error;
+        }
     }
 
     /** Never lets a reminder problem affect the booking itself. */

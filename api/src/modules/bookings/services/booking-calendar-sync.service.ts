@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue, UnrecoverableError } from 'bullmq';
-import { BookingEventType, BookingLocationType, BookingStatus, CalendarSyncStatus, Prisma } from '@/generated/prisma';
+import { BookingEventType, BookingLocationType, BookingSource, BookingStatus, CalendarSyncStatus, Prisma } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { BOOKING_CALENDAR_SYNC_QUEUE } from '@/core/queues/queues.constants';
 import { GoogleCalendarService } from '@/integrations/composio/services/google-calendar.service';
@@ -67,6 +67,17 @@ export class BookingCalendarSyncService {
     async process(job: CalendarSyncJobData, is_last_attempt: boolean): Promise<void> {
         const booking = await this.prisma.booking.findUnique({ where: { uuid: job.booking_uuid }, include: SYNC_INCLUDE });
         if (!booking) return;
+
+        // A reminder's placeholder booking shares the reminder's own Google event; syncing it would add a second one.
+        if (booking.source === BookingSource.REMINDER) {
+            await this.prisma.booking.update({
+                where: { uuid: booking.uuid },
+                data: {
+                    calendar_sync_status: booking.calendar_connection_uuid ? CalendarSyncStatus.SYNCED : CalendarSyncStatus.NOT_SYNCED,
+                },
+            });
+            return;
+        }
 
         try {
             await this.reconcile(booking);

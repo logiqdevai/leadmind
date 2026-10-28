@@ -389,6 +389,13 @@ export class BookingsService {
         });
         if (!booking) throw new NotFoundException('Booking not found');
 
+        // Placeholder for a contact reminder: deleting it removes the reminder (and its Google event) too.
+        if (booking.source_reminder_uuid) {
+            await this.teamReminders.deleteSourceReminder(booking.organisation_uuid, booking.source_reminder_uuid);
+            await this.prisma.booking.deleteMany({ where: { uuid } });
+            return { success: true };
+        }
+
         await this.safely(
             () => this.notifications.cancelReminders(booking.uuid, booking.start_at, booking.booking_page_uuid),
             'reminder cancellation',
@@ -625,6 +632,12 @@ export class BookingsService {
 
     async cancelBooking(booking: Booking, options: { reason: string | null; notify: boolean; actor: BookingEventActor }) {
         if (!ACTIVE_BOOKING_STATUSES.includes(booking.status)) throw new BadRequestException('This booking is not active');
+        // Placeholder for a contact reminder: cancelling it deletes the reminder (and its Google event) and itself.
+        if (booking.source_reminder_uuid) {
+            await this.teamReminders.deleteSourceReminder(booking.organisation_uuid, booking.source_reminder_uuid);
+            await this.prisma.booking.deleteMany({ where: { uuid: booking.uuid } });
+            return { ...booking, status: BookingStatus.CANCELLED, cancelled_at: new Date(), cancellation_reason: options.reason };
+        }
         const cancelled = await this.prisma.booking.update({
             where: { uuid: booking.uuid },
             data: {

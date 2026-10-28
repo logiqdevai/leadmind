@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { BookingSource, BookingStatus, CalendarConnectionStatus, CalendarProvider } from '@/generated/prisma';
+import { BookingSource, BookingStatus, CalendarConnectionStatus, CalendarProvider, CalendarSyncStatus } from '@/generated/prisma';
 import { generateManageToken } from '@/modules/booking-links/utils/booking-url.util';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { GoogleCalendarService } from '@/integrations/composio/services/google-calendar.service';
@@ -83,7 +83,7 @@ export class ReminderCalendarService {
                 data: { calendar_event_id: result.event_id, calendar_connection_uuid: connection.uuid },
             });
             if (org) {
-                await this.syncPlaceholderBooking(reminder, summary, connection, org).catch((error) =>
+                await this.syncPlaceholderBooking(reminder, summary, connection, org, result.html_link).catch((error) =>
                     this.logger.warn(`Could not hold calendar time for reminder ${reminder.uuid}: ${(error as Error).message}`),
                 );
             }
@@ -97,13 +97,15 @@ export class ReminderCalendarService {
     /**
      * Keeps an empty booking (source REMINDER, no invitee) on our calendar for the reminder's slot.
      * It deliberately has no calendar_event_id: the reminder owns the Google event, and the inbound
-     * Google sync matches bookings by that id.
+     * Google sync matches bookings by that id. It is marked as already synced (and the booking calendar
+     * sync skips REMINDER bookings), so it never creates a second event for the same slot.
      */
     private async syncPlaceholderBooking(
         reminder: ReminderEventSource,
         title: string,
         connection: { uuid: string; user_uuid: string },
         org: { organisation_uuid: string; contact: { uuid: string; email: string | null } },
+        html_link: string | null,
     ) {
         const start_at = reminder.remind_at;
         const end_at = new Date(start_at.getTime() + EVENT_DURATION_MS);
@@ -113,6 +115,11 @@ export class ReminderCalendarService {
             duration_minutes: EVENT_DURATION_MS / 60_000,
             invitee_name: title,
             internal_notes: reminder.notes,
+            calendar_connection_uuid: connection.uuid,
+            calendar_html_link: html_link,
+            calendar_sync_status: CalendarSyncStatus.SYNCED,
+            calendar_sync_error: null,
+            calendar_synced_at: new Date(),
         };
         await this.prisma.booking.upsert({
             where: { source_reminder_uuid: reminder.uuid },

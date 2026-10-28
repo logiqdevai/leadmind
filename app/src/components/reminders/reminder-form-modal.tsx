@@ -84,7 +84,10 @@ export function ReminderFormModal({
     const hasGoogleCalendar = (calendarData?.connections ?? []).some(
         (c) => c.user_uuid === currentUserUuid && c.status === "ACTIVE",
     );
-    const [addToGoogleCalendar, setAddToGoogleCalendar] = useState(false);
+    // On by default, but only takes effect when the member actually has a connected calendar.
+    const [addToGoogleCalendarChoice, setAddToGoogleCalendar] = useState(true);
+    const canToggleCalendar = hasGoogleCalendar || !!editing?.calendar_event_id;
+    const addToGoogleCalendar = addToGoogleCalendarChoice && canToggleCalendar;
 
     const [selectedContact, setSelectedContact] = useState<ReminderContact | null>(null);
     const [selectedFilterUuid, setSelectedFilterUuid] = useState<string>("");
@@ -118,7 +121,7 @@ export function ReminderFormModal({
             setAssigneeUuids((editing.assignees ?? []).map((a) => a.uuid));
             setAddToGoogleCalendar(!!editing.calendar_event_id);
         } else {
-            setAddToGoogleCalendar(false);
+            setAddToGoogleCalendar(true);
             setTitle("");
             setNotes("");
             setRemindAt(defaultRemindAt());
@@ -400,7 +403,7 @@ export function ReminderFormModal({
                             <Checkbox
                                 isSelected={addToGoogleCalendar}
                                 onChange={(checked: boolean) => setAddToGoogleCalendar(checked)}
-                                isDisabled={(!hasGoogleCalendar && !editing?.calendar_event_id) || isPending}
+                                isDisabled={!canToggleCalendar || isPending}
                             >
                                 <Checkbox.Control>
                                     <Checkbox.Indicator />

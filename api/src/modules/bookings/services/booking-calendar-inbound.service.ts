@@ -1,5 +1,6 @@
 import { randomBytes, randomUUID } from 'crypto';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { RemindersService } from '@/modules/reminders/reminders.service';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
@@ -43,6 +44,7 @@ export class BookingCalendarInboundService {
         private readonly calendarConnections: CalendarConnectionsService,
         private readonly bookings: BookingsService,
         private readonly events: BookingEventsService,
+        private readonly reminders: RemindersService,
         @InjectQueue(BOOKING_CALENDAR_SYNC_QUEUE) private readonly queue: Queue,
     ) {}
 
@@ -124,7 +126,25 @@ export class BookingCalendarInboundService {
             : [];
         const byEventId = new Map(bookings.map((b) => [b.calendar_event_id!, b]));
 
+        // An event a reminder owns was deleted in Google: the contact's reminder (and its placeholder booking) go too.
+        const deletedIds = result.events.filter((e) => e.cancelled).map((e) => e.id);
+        const deletedReminders = deletedIds.length
+            ? await this.prisma.reminder.findMany({
+                  where: { calendar_connection_uuid: connection.uuid, calendar_event_id: { in: deletedIds } },
+                  select: { uuid: true, organisation_uuid: true },
+              })
+            : [];
+
         let allApplied = true;
+        for (const reminder of deletedReminders) {
+            try {
+                await this.reminders.remove(reminder.organisation_uuid, reminder.uuid);
+            } catch (error) {
+                if (error instanceof NotFoundException) continue;
+                allApplied = false;
+                this.logger.warn(`Could not remove reminder ${reminder.uuid} after its Google event was deleted: ${(error as Error).message}`);
+            }
+        }
         for (const event of result.events) {
             const booking = byEventId.get(event.id);
             if (!booking || this.isEcho(booking, event)) continue;
