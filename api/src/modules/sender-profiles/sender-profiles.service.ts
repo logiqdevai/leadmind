@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, SenderProfile } from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { normalizeUtmParamsInput } from '@/shared/utils/utm-params.util';
@@ -10,6 +10,7 @@ export class SenderProfilesService {
     constructor(private readonly prisma: PrismaService) { }
 
     async create(organisation_uuid: string, dto: CreateSenderProfileDto): Promise<SenderProfile> {
+        if (dto.user_uuid) await this.assertMember(organisation_uuid, dto.user_uuid);
         const data: Prisma.SenderProfileUncheckedCreateInput = {
             organisation_uuid,
             name: dto.name,
@@ -31,6 +32,7 @@ export class SenderProfilesService {
             signature: dto.signature,
             business_description: dto.business_description,
             is_default: dto.is_default ?? false,
+            user_uuid: dto.user_uuid ?? null,
         };
 
         if (data.is_default) {
@@ -69,6 +71,18 @@ export class SenderProfilesService {
         });
     }
 
+    /** The profile linked to this team member, falling back to the organisation default when none is linked. */
+    async findForUser(organisation_uuid: string, user_uuid?: string | null): Promise<SenderProfile | null> {
+        if (user_uuid) {
+            const linked = await this.prisma.senderProfile.findFirst({
+                where: { organisation_uuid, user_uuid },
+                orderBy: { created_at: 'asc' },
+            });
+            if (linked) return linked;
+        }
+        return this.findDefault(organisation_uuid);
+    }
+
     async findForCampaign(organisation_uuid: string, campaign_uuid: string): Promise<SenderProfile | null> {
         const campaign = await this.prisma.marketingCampaign.findFirst({
             where: { uuid: campaign_uuid, organisation_uuid },
@@ -91,8 +105,9 @@ export class SenderProfilesService {
         dto: UpdateSenderProfileDto,
     ): Promise<SenderProfile> {
         await this.requireOwnedProfile(organisation_uuid, uuid);
+        if (dto.user_uuid) await this.assertMember(organisation_uuid, dto.user_uuid);
 
-        const data: Prisma.SenderProfileUpdateInput = {};
+        const data: Prisma.SenderProfileUncheckedUpdateInput = {};
         const writable: (keyof UpdateSenderProfileDto)[] = [
             'name',
             'company_name',
@@ -113,6 +128,7 @@ export class SenderProfilesService {
             'signature',
             'business_description',
             'is_default',
+            'user_uuid',
         ];
         for (const key of writable) {
             if (dto[key] === undefined) {
@@ -162,6 +178,14 @@ export class SenderProfilesService {
             return Prisma.JsonNull;
         }
         return normalized as Prisma.InputJsonValue;
+    }
+
+    private async assertMember(organisation_uuid: string, user_uuid: string) {
+        const member = await this.prisma.organisationMember.findFirst({
+            where: { organisation_uuid, user_uuid },
+            select: { uuid: true },
+        });
+        if (!member) throw new BadRequestException('That user is not a member of this organisation');
     }
 
     private async requireOwnedProfile(

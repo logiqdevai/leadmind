@@ -264,7 +264,8 @@ export class BookingNotificationsService {
     private async compose(booking: NotificationBooking, kind: BookingNotificationKind, recipient: Recipient) {
         const page = booking.booking_page;
         const vars = {
-            ...(await this.outreachRenderService.buildVarsForUser(booking.organisation_uuid)),
+            // Signature and sender details of the assigned member's profile, else the default profile.
+            ...(await this.outreachRenderService.buildVarsForTeamMember(booking.organisation_uuid, booking.assigned_user_uuid)),
             ...buildBookingVars({
                 booking,
                 page,
@@ -281,9 +282,18 @@ export class BookingNotificationsService {
         const subjectTemplate = custom?.email_subject || fallback.subject;
         const bodyTemplate = custom?.email_content || fallback.html;
 
-        let html = renderPlaceholders(bodyTemplate, escapeVars(vars));
+        // The sender profile's signature is org-authored HTML, so it must not be escaped like invitee-typed values.
+        // Without one (or without a default profile) `{{signature}}` falls back to a plain team-member sign-off
+        // instead of rendering as an empty gap.
+        const signature = vars.signature?.trim() || this.fallbackSignature(vars);
+        let html = renderPlaceholders(bodyTemplate, { ...escapeVars(vars), signature });
         if (kind !== BookingNotificationKind.CANCELLATION) html += this.extraBlocks(booking, vars, recipient);
         return { subject: renderPlaceholders(subjectTemplate, vars), html };
+    }
+
+    private fallbackSignature(vars: Record<string, string>): string {
+        const lines = [vars['team_member.name'], vars['brand.name']].map((v) => v?.trim()).filter(Boolean);
+        return lines.length ? `<p>${lines.map((l) => escapeHtml(l)).join('<br>')}</p>` : '';
     }
 
     /** Meeting link and calendar details, appended unless the page turned them off. */

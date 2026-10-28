@@ -33,6 +33,12 @@ export class OutreachRenderService {
         return this.buildVarsForProfile(profile);
     }
 
+    /** Sender variables (incl. signature) of a team member's linked profile, else the default profile. */
+    async buildVarsForTeamMember(organisation_uuid: string, user_uuid?: string | null): Promise<PlaceholderVars> {
+        const profile = await this.senderProfilesService.findForUser(organisation_uuid, user_uuid);
+        return this.buildVarsForProfile(profile);
+    }
+
     buildVarsForProfile(
         profile: SenderProfile | null | undefined,
         options?: { campaignUuid?: string | null },

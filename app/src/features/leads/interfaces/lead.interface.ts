@@ -27,6 +27,8 @@ export interface Lead {
     enrichment_summary: string | null;
     enrichment_metadata?: Record<string, unknown> | null;
     raw_data: Record<string, unknown> | null;
+    /** Set on list responses when this lead is already a contact in the current organisation. */
+    contact_uuid?: string | null;
     created_at: string;
     updated_at: string;
 }

@@ -622,6 +622,7 @@ exports.Prisma.SenderProfileScalarFieldEnum = {
   signature: 'signature',
   business_description: 'business_description',
   is_default: 'is_default',
+  user_uuid: 'user_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

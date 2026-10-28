@@ -9256,6 +9256,7 @@ export namespace Prisma {
     reminder_assignments: number
     notifications: number
     contact_lists_assigned: number
+    sender_profiles: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9287,6 +9288,7 @@ export namespace Prisma {
     reminder_assignments?: boolean | UserCountOutputTypeCountReminder_assignmentsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     contact_lists_assigned?: boolean | UserCountOutputTypeCountContact_lists_assignedArgs
+    sender_profiles?: boolean | UserCountOutputTypeCountSender_profilesArgs
   }
 
   // Custom InputTypes
@@ -9494,6 +9496,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountContact_lists_assignedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContactListWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSender_profilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SenderProfileWhereInput
   }
 
 
@@ -11571,6 +11580,7 @@ export namespace Prisma {
     reminder_assignments?: boolean | User$reminder_assignmentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     contact_lists_assigned?: boolean | User$contact_lists_assignedArgs<ExtArgs>
+    sender_profiles?: boolean | User$sender_profilesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -11640,6 +11650,7 @@ export namespace Prisma {
     reminder_assignments?: boolean | User$reminder_assignmentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     contact_lists_assigned?: boolean | User$contact_lists_assignedArgs<ExtArgs>
+    sender_profiles?: boolean | User$sender_profilesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -11676,6 +11687,7 @@ export namespace Prisma {
       reminder_assignments: Prisma.$ReminderAssigneePayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       contact_lists_assigned: Prisma.$ContactListPayload<ExtArgs>[]
+      sender_profiles: Prisma.$SenderProfilePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -12109,6 +12121,7 @@ export namespace Prisma {
     reminder_assignments<T extends User$reminder_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$reminder_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderAssigneePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contact_lists_assigned<T extends User$contact_lists_assignedArgs<ExtArgs> = {}>(args?: Subset<T, User$contact_lists_assignedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sender_profiles<T extends User$sender_profilesArgs<ExtArgs> = {}>(args?: Subset<T, User$sender_profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SenderProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13204,6 +13217,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContactListScalarFieldEnum | ContactListScalarFieldEnum[]
+  }
+
+  /**
+   * User.sender_profiles
+   */
+  export type User$sender_profilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SenderProfile
+     */
+    select?: SenderProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SenderProfile
+     */
+    omit?: SenderProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SenderProfileInclude<ExtArgs> | null
+    where?: SenderProfileWhereInput
+    orderBy?: SenderProfileOrderByWithRelationInput | SenderProfileOrderByWithRelationInput[]
+    cursor?: SenderProfileWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SenderProfileScalarFieldEnum | SenderProfileScalarFieldEnum[]
   }
 
   /**
@@ -51944,6 +51981,7 @@ export namespace Prisma {
     signature: string | null
     business_description: string | null
     is_default: boolean | null
+    user_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -51969,6 +52007,7 @@ export namespace Prisma {
     signature: string | null
     business_description: string | null
     is_default: boolean | null
+    user_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -51996,6 +52035,7 @@ export namespace Prisma {
     signature: number
     business_description: number
     is_default: number
+    user_uuid: number
     created_at: number
     updated_at: number
     _all: number
@@ -52031,6 +52071,7 @@ export namespace Prisma {
     signature?: true
     business_description?: true
     is_default?: true
+    user_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -52056,6 +52097,7 @@ export namespace Prisma {
     signature?: true
     business_description?: true
     is_default?: true
+    user_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -52083,6 +52125,7 @@ export namespace Prisma {
     signature?: true
     business_description?: true
     is_default?: true
+    user_uuid?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -52197,6 +52240,7 @@ export namespace Prisma {
     signature: string | null
     business_description: string | null
     is_default: boolean
+    user_uuid: string | null
     created_at: Date
     updated_at: Date
     _count: SenderProfileCountAggregateOutputType | null
@@ -52243,9 +52287,11 @@ export namespace Prisma {
     signature?: boolean
     business_description?: boolean
     is_default?: boolean
+    user_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | SenderProfile$userArgs<ExtArgs>
     marketing_campaigns?: boolean | SenderProfile$marketing_campaignsArgs<ExtArgs>
     message_templates?: boolean | SenderProfile$message_templatesArgs<ExtArgs>
     sequences?: boolean | SenderProfile$sequencesArgs<ExtArgs>
@@ -52275,9 +52321,11 @@ export namespace Prisma {
     signature?: boolean
     business_description?: boolean
     is_default?: boolean
+    user_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | SenderProfile$userArgs<ExtArgs>
   }, ExtArgs["result"]["senderProfile"]>
 
   export type SenderProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -52303,9 +52351,11 @@ export namespace Prisma {
     signature?: boolean
     business_description?: boolean
     is_default?: boolean
+    user_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | SenderProfile$userArgs<ExtArgs>
   }, ExtArgs["result"]["senderProfile"]>
 
   export type SenderProfileSelectScalar = {
@@ -52331,13 +52381,15 @@ export namespace Prisma {
     signature?: boolean
     business_description?: boolean
     is_default?: boolean
+    user_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type SenderProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "company_name" | "title" | "first_name" | "last_name" | "email" | "phone" | "website" | "website_utm" | "address" | "city" | "country" | "logo_url" | "booking_url" | "booking_utm" | "sender_id" | "signature" | "business_description" | "is_default" | "created_at" | "updated_at", ExtArgs["result"]["senderProfile"]>
+  export type SenderProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "company_name" | "title" | "first_name" | "last_name" | "email" | "phone" | "website" | "website_utm" | "address" | "city" | "country" | "logo_url" | "booking_url" | "booking_utm" | "sender_id" | "signature" | "business_description" | "is_default" | "user_uuid" | "created_at" | "updated_at", ExtArgs["result"]["senderProfile"]>
   export type SenderProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | SenderProfile$userArgs<ExtArgs>
     marketing_campaigns?: boolean | SenderProfile$marketing_campaignsArgs<ExtArgs>
     message_templates?: boolean | SenderProfile$message_templatesArgs<ExtArgs>
     sequences?: boolean | SenderProfile$sequencesArgs<ExtArgs>
@@ -52345,15 +52397,18 @@ export namespace Prisma {
   }
   export type SenderProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | SenderProfile$userArgs<ExtArgs>
   }
   export type SenderProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    user?: boolean | SenderProfile$userArgs<ExtArgs>
   }
 
   export type $SenderProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SenderProfile"
     objects: {
       organisation: Prisma.$OrganisationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
       marketing_campaigns: Prisma.$MarketingCampaignPayload<ExtArgs>[]
       message_templates: Prisma.$MessageTemplatePayload<ExtArgs>[]
       sequences: Prisma.$OutreachSequencePayload<ExtArgs>[]
@@ -52381,6 +52436,7 @@ export namespace Prisma {
       signature: string | null
       business_description: string | null
       is_default: boolean
+      user_uuid: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["senderProfile"]>
@@ -52778,6 +52834,7 @@ export namespace Prisma {
   export interface Prisma__SenderProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends SenderProfile$userArgs<ExtArgs> = {}>(args?: Subset<T, SenderProfile$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     marketing_campaigns<T extends SenderProfile$marketing_campaignsArgs<ExtArgs> = {}>(args?: Subset<T, SenderProfile$marketing_campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MarketingCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     message_templates<T extends SenderProfile$message_templatesArgs<ExtArgs> = {}>(args?: Subset<T, SenderProfile$message_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sequences<T extends SenderProfile$sequencesArgs<ExtArgs> = {}>(args?: Subset<T, SenderProfile$sequencesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -52832,6 +52889,7 @@ export namespace Prisma {
     readonly signature: FieldRef<"SenderProfile", 'String'>
     readonly business_description: FieldRef<"SenderProfile", 'String'>
     readonly is_default: FieldRef<"SenderProfile", 'Boolean'>
+    readonly user_uuid: FieldRef<"SenderProfile", 'String'>
     readonly created_at: FieldRef<"SenderProfile", 'DateTime'>
     readonly updated_at: FieldRef<"SenderProfile", 'DateTime'>
   }
@@ -53227,6 +53285,25 @@ export namespace Prisma {
      * Limit how many SenderProfiles to delete.
      */
     limit?: number
+  }
+
+  /**
+   * SenderProfile.user
+   */
+  export type SenderProfile$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -115176,6 +115253,7 @@ export namespace Prisma {
     signature: 'signature',
     business_description: 'business_description',
     is_default: 'is_default',
+    user_uuid: 'user_uuid',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -117317,6 +117395,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeListRelationFilter
     notifications?: NotificationListRelationFilter
     contact_lists_assigned?: ContactListListRelationFilter
+    sender_profiles?: SenderProfileListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -117357,6 +117436,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     contact_lists_assigned?: ContactListOrderByRelationAggregateInput
+    sender_profiles?: SenderProfileOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -117400,6 +117480,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeListRelationFilter
     notifications?: NotificationListRelationFilter
     contact_lists_assigned?: ContactListListRelationFilter
+    sender_profiles?: SenderProfileListRelationFilter
   }, "id" | "uuid" | "email" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -120656,9 +120737,11 @@ export namespace Prisma {
     signature?: StringNullableFilter<"SenderProfile"> | string | null
     business_description?: StringNullableFilter<"SenderProfile"> | string | null
     is_default?: BoolFilter<"SenderProfile"> | boolean
+    user_uuid?: StringNullableFilter<"SenderProfile"> | string | null
     created_at?: DateTimeFilter<"SenderProfile"> | Date | string
     updated_at?: DateTimeFilter<"SenderProfile"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     marketing_campaigns?: MarketingCampaignListRelationFilter
     message_templates?: MessageTemplateListRelationFilter
     sequences?: OutreachSequenceListRelationFilter
@@ -120687,9 +120770,11 @@ export namespace Prisma {
     signature?: SortOrderInput | SortOrder
     business_description?: SortOrderInput | SortOrder
     is_default?: SortOrder
+    user_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
     marketing_campaigns?: MarketingCampaignOrderByRelationAggregateInput
     message_templates?: MessageTemplateOrderByRelationAggregateInput
     sequences?: OutreachSequenceOrderByRelationAggregateInput
@@ -120721,9 +120806,11 @@ export namespace Prisma {
     signature?: StringNullableFilter<"SenderProfile"> | string | null
     business_description?: StringNullableFilter<"SenderProfile"> | string | null
     is_default?: BoolFilter<"SenderProfile"> | boolean
+    user_uuid?: StringNullableFilter<"SenderProfile"> | string | null
     created_at?: DateTimeFilter<"SenderProfile"> | Date | string
     updated_at?: DateTimeFilter<"SenderProfile"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     marketing_campaigns?: MarketingCampaignListRelationFilter
     message_templates?: MessageTemplateListRelationFilter
     sequences?: OutreachSequenceListRelationFilter
@@ -120752,6 +120839,7 @@ export namespace Prisma {
     signature?: SortOrderInput | SortOrder
     business_description?: SortOrderInput | SortOrder
     is_default?: SortOrder
+    user_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: SenderProfileCountOrderByAggregateInput
@@ -120787,6 +120875,7 @@ export namespace Prisma {
     signature?: StringNullableWithAggregatesFilter<"SenderProfile"> | string | null
     business_description?: StringNullableWithAggregatesFilter<"SenderProfile"> | string | null
     is_default?: BoolWithAggregatesFilter<"SenderProfile"> | boolean
+    user_uuid?: StringNullableWithAggregatesFilter<"SenderProfile"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"SenderProfile"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"SenderProfile"> | Date | string
   }
@@ -125990,6 +126079,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -126030,6 +126120,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -126069,6 +126160,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -126109,6 +126201,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -129647,6 +129740,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
+    user?: UserCreateNestedOneWithoutSender_profilesInput
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
     message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
     sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
@@ -129675,6 +129769,7 @@ export namespace Prisma {
     signature?: string | null
     business_description?: string | null
     is_default?: boolean
+    user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
@@ -129706,6 +129801,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
+    user?: UserUpdateOneWithoutSender_profilesNestedInput
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
     sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
@@ -129734,6 +129830,7 @@ export namespace Prisma {
     signature?: NullableStringFieldUpdateOperationsInput | string | null
     business_description?: NullableStringFieldUpdateOperationsInput | string | null
     is_default?: BoolFieldUpdateOperationsInput | boolean
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
@@ -129764,6 +129861,7 @@ export namespace Prisma {
     signature?: string | null
     business_description?: string | null
     is_default?: boolean
+    user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -129816,6 +129914,7 @@ export namespace Prisma {
     signature?: NullableStringFieldUpdateOperationsInput | string | null
     business_description?: NullableStringFieldUpdateOperationsInput | string | null
     is_default?: BoolFieldUpdateOperationsInput | boolean
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -135600,6 +135699,12 @@ export namespace Prisma {
     none?: ContactListWhereInput
   }
 
+  export type SenderProfileListRelationFilter = {
+    every?: SenderProfileWhereInput
+    some?: SenderProfileWhereInput
+    none?: SenderProfileWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -135702,6 +135807,10 @@ export namespace Prisma {
   }
 
   export type ContactListOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SenderProfileOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -135855,12 +135964,6 @@ export namespace Prisma {
     none?: InteractionWhereInput
   }
 
-  export type SenderProfileListRelationFilter = {
-    every?: SenderProfileWhereInput
-    some?: SenderProfileWhereInput
-    none?: SenderProfileWhereInput
-  }
-
   export type MarketingCampaignListRelationFilter = {
     every?: MarketingCampaignWhereInput
     some?: MarketingCampaignWhereInput
@@ -135991,10 +136094,6 @@ export namespace Prisma {
   }
 
   export type InteractionOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type SenderProfileOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -138704,6 +138803,7 @@ export namespace Prisma {
     signature?: SortOrder
     business_description?: SortOrder
     is_default?: SortOrder
+    user_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -138733,6 +138833,7 @@ export namespace Prisma {
     signature?: SortOrder
     business_description?: SortOrder
     is_default?: SortOrder
+    user_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -138758,6 +138859,7 @@ export namespace Prisma {
     signature?: SortOrder
     business_description?: SortOrder
     is_default?: SortOrder
+    user_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -142988,6 +143090,13 @@ export namespace Prisma {
     connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
   }
 
+  export type SenderProfileCreateNestedManyWithoutUserInput = {
+    create?: XOR<SenderProfileCreateWithoutUserInput, SenderProfileUncheckedCreateWithoutUserInput> | SenderProfileCreateWithoutUserInput[] | SenderProfileUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SenderProfileCreateOrConnectWithoutUserInput | SenderProfileCreateOrConnectWithoutUserInput[]
+    createMany?: SenderProfileCreateManyUserInputEnvelope
+    connect?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+  }
+
   export type OrganisationMemberUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<OrganisationMemberCreateWithoutUserInput, OrganisationMemberUncheckedCreateWithoutUserInput> | OrganisationMemberCreateWithoutUserInput[] | OrganisationMemberUncheckedCreateWithoutUserInput[]
     connectOrCreate?: OrganisationMemberCreateOrConnectWithoutUserInput | OrganisationMemberCreateOrConnectWithoutUserInput[]
@@ -143182,6 +143291,13 @@ export namespace Prisma {
     connectOrCreate?: ContactListCreateOrConnectWithoutAssigned_userInput | ContactListCreateOrConnectWithoutAssigned_userInput[]
     createMany?: ContactListCreateManyAssigned_userInputEnvelope
     connect?: ContactListWhereUniqueInput | ContactListWhereUniqueInput[]
+  }
+
+  export type SenderProfileUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SenderProfileCreateWithoutUserInput, SenderProfileUncheckedCreateWithoutUserInput> | SenderProfileCreateWithoutUserInput[] | SenderProfileUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SenderProfileCreateOrConnectWithoutUserInput | SenderProfileCreateOrConnectWithoutUserInput[]
+    createMany?: SenderProfileCreateManyUserInputEnvelope
+    connect?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -143592,6 +143708,20 @@ export namespace Prisma {
     deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
   }
 
+  export type SenderProfileUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SenderProfileCreateWithoutUserInput, SenderProfileUncheckedCreateWithoutUserInput> | SenderProfileCreateWithoutUserInput[] | SenderProfileUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SenderProfileCreateOrConnectWithoutUserInput | SenderProfileCreateOrConnectWithoutUserInput[]
+    upsert?: SenderProfileUpsertWithWhereUniqueWithoutUserInput | SenderProfileUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SenderProfileCreateManyUserInputEnvelope
+    set?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+    disconnect?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+    delete?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+    connect?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+    update?: SenderProfileUpdateWithWhereUniqueWithoutUserInput | SenderProfileUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SenderProfileUpdateManyWithWhereWithoutUserInput | SenderProfileUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SenderProfileScalarWhereInput | SenderProfileScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -143990,6 +144120,20 @@ export namespace Prisma {
     update?: ContactListUpdateWithWhereUniqueWithoutAssigned_userInput | ContactListUpdateWithWhereUniqueWithoutAssigned_userInput[]
     updateMany?: ContactListUpdateManyWithWhereWithoutAssigned_userInput | ContactListUpdateManyWithWhereWithoutAssigned_userInput[]
     deleteMany?: ContactListScalarWhereInput | ContactListScalarWhereInput[]
+  }
+
+  export type SenderProfileUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SenderProfileCreateWithoutUserInput, SenderProfileUncheckedCreateWithoutUserInput> | SenderProfileCreateWithoutUserInput[] | SenderProfileUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SenderProfileCreateOrConnectWithoutUserInput | SenderProfileCreateOrConnectWithoutUserInput[]
+    upsert?: SenderProfileUpsertWithWhereUniqueWithoutUserInput | SenderProfileUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SenderProfileCreateManyUserInputEnvelope
+    set?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+    disconnect?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+    delete?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+    connect?: SenderProfileWhereUniqueInput | SenderProfileWhereUniqueInput[]
+    update?: SenderProfileUpdateWithWhereUniqueWithoutUserInput | SenderProfileUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SenderProfileUpdateManyWithWhereWithoutUserInput | SenderProfileUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SenderProfileScalarWhereInput | SenderProfileScalarWhereInput[]
   }
 
   export type OrganisationMemberCreateNestedManyWithoutOrganisationInput = {
@@ -148659,6 +148803,12 @@ export namespace Prisma {
     connect?: OrganisationWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutSender_profilesInput = {
+    create?: XOR<UserCreateWithoutSender_profilesInput, UserUncheckedCreateWithoutSender_profilesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSender_profilesInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type MarketingCampaignCreateNestedManyWithoutSender_profileInput = {
     create?: XOR<MarketingCampaignCreateWithoutSender_profileInput, MarketingCampaignUncheckedCreateWithoutSender_profileInput> | MarketingCampaignCreateWithoutSender_profileInput[] | MarketingCampaignUncheckedCreateWithoutSender_profileInput[]
     connectOrCreate?: MarketingCampaignCreateOrConnectWithoutSender_profileInput | MarketingCampaignCreateOrConnectWithoutSender_profileInput[]
@@ -148707,6 +148857,16 @@ export namespace Prisma {
     upsert?: OrganisationUpsertWithoutSender_profilesInput
     connect?: OrganisationWhereUniqueInput
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutSender_profilesInput, OrganisationUpdateWithoutSender_profilesInput>, OrganisationUncheckedUpdateWithoutSender_profilesInput>
+  }
+
+  export type UserUpdateOneWithoutSender_profilesNestedInput = {
+    create?: XOR<UserCreateWithoutSender_profilesInput, UserUncheckedCreateWithoutSender_profilesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSender_profilesInput
+    upsert?: UserUpsertWithoutSender_profilesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSender_profilesInput, UserUpdateWithoutSender_profilesInput>, UserUncheckedUpdateWithoutSender_profilesInput>
   }
 
   export type MarketingCampaignUpdateManyWithoutSender_profileNestedInput = {
@@ -155186,6 +155346,75 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SenderProfileCreateWithoutUserInput = {
+    uuid?: string
+    name: string
+    company_name?: string | null
+    title?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    phone?: string | null
+    website?: string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    country?: string | null
+    logo_url?: string | null
+    booking_url?: string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: string | null
+    signature?: string | null
+    business_description?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
+  }
+
+  export type SenderProfileUncheckedCreateWithoutUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    company_name?: string | null
+    title?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    phone?: string | null
+    website?: string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    country?: string | null
+    logo_url?: string | null
+    booking_url?: string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: string | null
+    signature?: string | null
+    business_description?: string | null
+    is_default?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutSender_profileInput
+    sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutSender_profileInput
+  }
+
+  export type SenderProfileCreateOrConnectWithoutUserInput = {
+    where: SenderProfileWhereUniqueInput
+    create: XOR<SenderProfileCreateWithoutUserInput, SenderProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type SenderProfileCreateManyUserInputEnvelope = {
+    data: SenderProfileCreateManyUserInput | SenderProfileCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganisationMemberUpsertWithWhereUniqueWithoutUserInput = {
     where: OrganisationMemberWhereUniqueInput
     update: XOR<OrganisationMemberUpdateWithoutUserInput, OrganisationMemberUncheckedUpdateWithoutUserInput>
@@ -156175,6 +156404,53 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"ContactList"> | Date | string
   }
 
+  export type SenderProfileUpsertWithWhereUniqueWithoutUserInput = {
+    where: SenderProfileWhereUniqueInput
+    update: XOR<SenderProfileUpdateWithoutUserInput, SenderProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<SenderProfileCreateWithoutUserInput, SenderProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type SenderProfileUpdateWithWhereUniqueWithoutUserInput = {
+    where: SenderProfileWhereUniqueInput
+    data: XOR<SenderProfileUpdateWithoutUserInput, SenderProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SenderProfileUpdateManyWithWhereWithoutUserInput = {
+    where: SenderProfileScalarWhereInput
+    data: XOR<SenderProfileUpdateManyMutationInput, SenderProfileUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SenderProfileScalarWhereInput = {
+    AND?: SenderProfileScalarWhereInput | SenderProfileScalarWhereInput[]
+    OR?: SenderProfileScalarWhereInput[]
+    NOT?: SenderProfileScalarWhereInput | SenderProfileScalarWhereInput[]
+    id?: IntFilter<"SenderProfile"> | number
+    uuid?: StringFilter<"SenderProfile"> | string
+    organisation_uuid?: StringFilter<"SenderProfile"> | string
+    name?: StringFilter<"SenderProfile"> | string
+    company_name?: StringNullableFilter<"SenderProfile"> | string | null
+    title?: StringNullableFilter<"SenderProfile"> | string | null
+    first_name?: StringNullableFilter<"SenderProfile"> | string | null
+    last_name?: StringNullableFilter<"SenderProfile"> | string | null
+    email?: StringNullableFilter<"SenderProfile"> | string | null
+    phone?: StringNullableFilter<"SenderProfile"> | string | null
+    website?: StringNullableFilter<"SenderProfile"> | string | null
+    website_utm?: JsonNullableFilter<"SenderProfile">
+    address?: StringNullableFilter<"SenderProfile"> | string | null
+    city?: StringNullableFilter<"SenderProfile"> | string | null
+    country?: StringNullableFilter<"SenderProfile"> | string | null
+    logo_url?: StringNullableFilter<"SenderProfile"> | string | null
+    booking_url?: StringNullableFilter<"SenderProfile"> | string | null
+    booking_utm?: JsonNullableFilter<"SenderProfile">
+    sender_id?: StringNullableFilter<"SenderProfile"> | string | null
+    signature?: StringNullableFilter<"SenderProfile"> | string | null
+    business_description?: StringNullableFilter<"SenderProfile"> | string | null
+    is_default?: BoolFilter<"SenderProfile"> | boolean
+    user_uuid?: StringNullableFilter<"SenderProfile"> | string | null
+    created_at?: DateTimeFilter<"SenderProfile"> | Date | string
+    updated_at?: DateTimeFilter<"SenderProfile"> | Date | string
+  }
+
   export type OrganisationMemberCreateWithoutOrganisationInput = {
     uuid?: string
     role?: $Enums.OrganisationRole
@@ -156662,6 +156938,7 @@ export namespace Prisma {
     is_default?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    user?: UserCreateNestedOneWithoutSender_profilesInput
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
     message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
     sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
@@ -156689,6 +156966,7 @@ export namespace Prisma {
     signature?: string | null
     business_description?: string | null
     is_default?: boolean
+    user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
@@ -158697,36 +158975,6 @@ export namespace Prisma {
     data: XOR<SenderProfileUpdateManyMutationInput, SenderProfileUncheckedUpdateManyWithoutOrganisationInput>
   }
 
-  export type SenderProfileScalarWhereInput = {
-    AND?: SenderProfileScalarWhereInput | SenderProfileScalarWhereInput[]
-    OR?: SenderProfileScalarWhereInput[]
-    NOT?: SenderProfileScalarWhereInput | SenderProfileScalarWhereInput[]
-    id?: IntFilter<"SenderProfile"> | number
-    uuid?: StringFilter<"SenderProfile"> | string
-    organisation_uuid?: StringFilter<"SenderProfile"> | string
-    name?: StringFilter<"SenderProfile"> | string
-    company_name?: StringNullableFilter<"SenderProfile"> | string | null
-    title?: StringNullableFilter<"SenderProfile"> | string | null
-    first_name?: StringNullableFilter<"SenderProfile"> | string | null
-    last_name?: StringNullableFilter<"SenderProfile"> | string | null
-    email?: StringNullableFilter<"SenderProfile"> | string | null
-    phone?: StringNullableFilter<"SenderProfile"> | string | null
-    website?: StringNullableFilter<"SenderProfile"> | string | null
-    website_utm?: JsonNullableFilter<"SenderProfile">
-    address?: StringNullableFilter<"SenderProfile"> | string | null
-    city?: StringNullableFilter<"SenderProfile"> | string | null
-    country?: StringNullableFilter<"SenderProfile"> | string | null
-    logo_url?: StringNullableFilter<"SenderProfile"> | string | null
-    booking_url?: StringNullableFilter<"SenderProfile"> | string | null
-    booking_utm?: JsonNullableFilter<"SenderProfile">
-    sender_id?: StringNullableFilter<"SenderProfile"> | string | null
-    signature?: StringNullableFilter<"SenderProfile"> | string | null
-    business_description?: StringNullableFilter<"SenderProfile"> | string | null
-    is_default?: BoolFilter<"SenderProfile"> | boolean
-    created_at?: DateTimeFilter<"SenderProfile"> | Date | string
-    updated_at?: DateTimeFilter<"SenderProfile"> | Date | string
-  }
-
   export type MarketingCampaignUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: MarketingCampaignWhereUniqueInput
     update: XOR<MarketingCampaignUpdateWithoutOrganisationInput, MarketingCampaignUncheckedUpdateWithoutOrganisationInput>
@@ -159862,6 +160110,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -159901,6 +160150,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -160079,6 +160329,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -160118,6 +160369,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutInvitationsInput = {
@@ -160274,6 +160526,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInvitations_sentInput = {
@@ -160313,6 +160566,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInvitations_sentInput = {
@@ -160491,6 +160745,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitations_sentInput = {
@@ -160530,6 +160785,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutApi_keysInput = {
@@ -160686,6 +160942,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApi_keys_createdInput = {
@@ -160725,6 +160982,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApi_keys_createdInput = {
@@ -160903,6 +161161,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApi_keys_createdInput = {
@@ -160942,6 +161201,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutFiltersInput = {
@@ -161960,6 +162220,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSidebar_favoritesInput = {
@@ -161999,6 +162260,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSidebar_favoritesInput = {
@@ -162053,6 +162315,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSidebar_favoritesInput = {
@@ -162092,6 +162355,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutScoring_instructionsInput = {
@@ -166232,6 +166496,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutContact_lists_assignedInput = {
@@ -166271,6 +166536,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutContact_lists_assignedInput = {
@@ -166704,6 +166970,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutContact_lists_assignedInput = {
@@ -166743,6 +167010,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ContactListUpsertWithoutChildrenInput = {
@@ -168609,6 +168877,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOutreach_messages_sentInput = {
@@ -168648,6 +168917,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOutreach_messages_sentInput = {
@@ -169306,6 +169576,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOutreach_messages_sentInput = {
@@ -169345,6 +169616,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type InteractionUpsertWithWhereUniqueWithoutOutreach_messageInput = {
@@ -170292,6 +170564,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
+    user?: UserCreateNestedOneWithoutSender_profilesInput
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
     message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
   }
@@ -170319,6 +170592,7 @@ export namespace Prisma {
     signature?: string | null
     business_description?: string | null
     is_default?: boolean
+    user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
@@ -170692,6 +170966,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
+    user?: UserUpdateOneWithoutSender_profilesNestedInput
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
   }
@@ -170719,6 +170994,7 @@ export namespace Prisma {
     signature?: NullableStringFieldUpdateOperationsInput | string | null
     business_description?: NullableStringFieldUpdateOperationsInput | string | null
     is_default?: BoolFieldUpdateOperationsInput | boolean
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
@@ -172345,6 +172621,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBulk_jobs_createdInput = {
@@ -172384,6 +172661,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBulk_jobs_createdInput = {
@@ -172562,6 +172840,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBulk_jobs_createdInput = {
@@ -172601,6 +172880,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutWebsite_scrape_requestsInput = {
@@ -172963,6 +173243,90 @@ export namespace Prisma {
     create: XOR<OrganisationCreateWithoutSender_profilesInput, OrganisationUncheckedCreateWithoutSender_profilesInput>
   }
 
+  export type UserCreateWithoutSender_profilesInput = {
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockCreateNestedManyWithoutCreated_byInput
+    booking_pages_created?: BookingPageCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+  }
+
+  export type UserUncheckedCreateWithoutSender_profilesInput = {
+    id?: number
+    uuid?: string
+    email: string
+    phone?: string | null
+    full_name?: string | null
+    password: string
+    role?: $Enums.AuthRole
+    created_at?: Date | string
+    updated_at?: Date | string
+    memberships?: OrganisationMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations_sent?: OrganisationInvitationUncheckedCreateNestedManyWithoutInvited_byInput
+    form_completions?: FormCompletionUncheckedCreateNestedManyWithoutCompleted_byInput
+    outreach_messages_sent?: OutreachMessageUncheckedCreateNestedManyWithoutSent_byInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutActorInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutUserInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutUserInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutUserInput
+    bulk_jobs_created?: BulkJobUncheckedCreateNestedManyWithoutCreated_byInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedCreateNestedManyWithoutUserInput
+    sidebar_favorites?: SidebarFavoriteUncheckedCreateNestedManyWithoutUserInput
+    api_keys_created?: ApiKeyUncheckedCreateNestedManyWithoutCreated_byInput
+    oauth_connections_granted?: OAuthConnectionUncheckedCreateNestedManyWithoutGranted_byInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_blocks_created?: BookingBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutUserInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_pages_created?: BookingPageUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_page_memberships?: BookingPageMemberUncheckedCreateNestedManyWithoutUserInput
+    booking_links_created?: BookingLinkUncheckedCreateNestedManyWithoutCreated_byInput
+    bookings_assigned?: BookingUncheckedCreateNestedManyWithoutAssigned_userInput
+    bookings_created?: BookingUncheckedCreateNestedManyWithoutCreated_byInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutActorInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+    reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+  }
+
+  export type UserCreateOrConnectWithoutSender_profilesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSender_profilesInput, UserUncheckedCreateWithoutSender_profilesInput>
+  }
+
   export type MarketingCampaignCreateWithoutSender_profileInput = {
     uuid?: string
     name: string
@@ -173284,6 +173648,96 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
   }
 
+  export type UserUpsertWithoutSender_profilesInput = {
+    update: XOR<UserUpdateWithoutSender_profilesInput, UserUncheckedUpdateWithoutSender_profilesInput>
+    create: XOR<UserCreateWithoutSender_profilesInput, UserUncheckedCreateWithoutSender_profilesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSender_profilesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSender_profilesInput, UserUncheckedUpdateWithoutSender_profilesInput>
+  }
+
+  export type UserUpdateWithoutSender_profilesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSender_profilesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumAuthRoleFieldUpdateOperationsInput | $Enums.AuthRole
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: OrganisationMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations_sent?: OrganisationInvitationUncheckedUpdateManyWithoutInvited_byNestedInput
+    form_completions?: FormCompletionUncheckedUpdateManyWithoutCompleted_byNestedInput
+    outreach_messages_sent?: OutreachMessageUncheckedUpdateManyWithoutSent_byNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutUserNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutUserNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutUserNestedInput
+    bulk_jobs_created?: BulkJobUncheckedUpdateManyWithoutCreated_byNestedInput
+    openai_batch_jobs_created?: OpenAiBatchJobUncheckedUpdateManyWithoutUserNestedInput
+    sidebar_favorites?: SidebarFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    api_keys_created?: ApiKeyUncheckedUpdateManyWithoutCreated_byNestedInput
+    oauth_connections_granted?: OAuthConnectionUncheckedUpdateManyWithoutGranted_byNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_blocks_created?: BookingBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutUserNestedInput
+    booking_recurring_blocks_created?: BookingRecurringBlockUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_pages_created?: BookingPageUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_page_memberships?: BookingPageMemberUncheckedUpdateManyWithoutUserNestedInput
+    booking_links_created?: BookingLinkUncheckedUpdateManyWithoutCreated_byNestedInput
+    bookings_assigned?: BookingUncheckedUpdateManyWithoutAssigned_userNestedInput
+    bookings_created?: BookingUncheckedUpdateManyWithoutCreated_byNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutActorNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+    reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+  }
+
   export type MarketingCampaignUpsertWithWhereUniqueWithoutSender_profileInput = {
     where: MarketingCampaignWhereUniqueInput
     update: XOR<MarketingCampaignUpdateWithoutSender_profileInput, MarketingCampaignUncheckedUpdateWithoutSender_profileInput>
@@ -173474,6 +173928,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
+    user?: UserCreateNestedOneWithoutSender_profilesInput
     marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutSender_profileInput
     sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
   }
@@ -173501,6 +173956,7 @@ export namespace Prisma {
     signature?: string | null
     business_description?: string | null
     is_default?: boolean
+    user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSender_profileInput
@@ -174482,6 +174938,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
+    user?: UserUpdateOneWithoutSender_profilesNestedInput
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
     sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
   }
@@ -174509,6 +174966,7 @@ export namespace Prisma {
     signature?: NullableStringFieldUpdateOperationsInput | string | null
     business_description?: NullableStringFieldUpdateOperationsInput | string | null
     is_default?: BoolFieldUpdateOperationsInput | boolean
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
@@ -174891,6 +175349,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutSender_profilesInput
+    user?: UserCreateNestedOneWithoutSender_profilesInput
     message_templates?: MessageTemplateCreateNestedManyWithoutSender_profileInput
     sequences?: OutreachSequenceCreateNestedManyWithoutSender_profileInput
   }
@@ -174918,6 +175377,7 @@ export namespace Prisma {
     signature?: string | null
     business_description?: string | null
     is_default?: boolean
+    user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutSender_profileInput
@@ -175434,6 +175894,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
+    user?: UserUpdateOneWithoutSender_profilesNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
     sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
   }
@@ -175461,6 +175922,7 @@ export namespace Prisma {
     signature?: NullableStringFieldUpdateOperationsInput | string | null
     business_description?: NullableStringFieldUpdateOperationsInput | string | null
     is_default?: BoolFieldUpdateOperationsInput | boolean
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     message_templates?: MessageTemplateUncheckedUpdateManyWithoutSender_profileNestedInput
@@ -176198,6 +176660,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOpenai_batch_jobs_createdInput = {
@@ -176237,6 +176700,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOpenai_batch_jobs_createdInput = {
@@ -176415,6 +176879,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOpenai_batch_jobs_createdInput = {
@@ -176454,6 +176919,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutIntegrationsInput = {
@@ -178829,6 +179295,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReminder_assignmentsInput = {
@@ -178868,6 +179335,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReminder_assignmentsInput = {
@@ -178976,6 +179444,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReminder_assignmentsInput = {
@@ -179015,6 +179484,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutFormsInput = {
@@ -179667,6 +180137,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutForm_completionsInput = {
@@ -179706,6 +180177,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutForm_completionsInput = {
@@ -179933,6 +180405,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForm_completionsInput = {
@@ -179972,6 +180445,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FormCompletionValueUpsertWithWhereUniqueWithoutCompletionInput = {
@@ -181388,6 +181862,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMessaging_goalsInput = {
@@ -181427,6 +181902,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMessaging_goalsInput = {
@@ -181638,6 +182114,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMessaging_goalsInput = {
@@ -181677,6 +182154,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GoalAchievementUpsertWithWhereUniqueWithoutGoalInput = {
@@ -183357,6 +183835,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGoal_achievementsInput = {
@@ -183396,6 +183875,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGoal_achievementsInput = {
@@ -183604,6 +184084,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_achievementsInput = {
@@ -183643,6 +184124,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessagingGoalUpsertWithoutAchievementsInput = {
@@ -183835,6 +184317,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGoal_personal_bestsInput = {
@@ -183874,6 +184357,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGoal_personal_bestsInput = {
@@ -184052,6 +184536,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGoal_personal_bestsInput = {
@@ -184091,6 +184576,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutActivity_logsInput = {
@@ -184247,6 +184733,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActivity_logsInput = {
@@ -184286,6 +184773,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActivity_logsInput = {
@@ -184464,6 +184952,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivity_logsInput = {
@@ -184503,6 +184992,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutOauth_connectionsInput = {
@@ -184659,6 +185149,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOauth_connections_grantedInput = {
@@ -184698,6 +185189,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOauth_connections_grantedInput = {
@@ -184876,6 +185368,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOauth_connections_grantedInput = {
@@ -184915,6 +185408,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutMcp_tool_invocation_logsInput = {
@@ -185662,6 +186156,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAvailability_schedulesInput = {
@@ -185701,6 +186196,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAvailability_schedulesInput = {
@@ -185908,6 +186404,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAvailability_schedulesInput = {
@@ -185947,6 +186444,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AvailabilityOverrideUpsertWithWhereUniqueWithoutScheduleInput = {
@@ -186191,6 +186689,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_blocksInput = {
@@ -186230,6 +186729,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_blocksInput = {
@@ -186273,6 +186773,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_blocks_createdInput = {
@@ -186312,6 +186813,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_blocks_createdInput = {
@@ -186490,6 +186992,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_blocksInput = {
@@ -186529,6 +187032,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBooking_blocks_createdInput = {
@@ -186578,6 +187082,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_blocks_createdInput = {
@@ -186617,6 +187122,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_recurring_blocksInput = {
@@ -186773,6 +187279,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_recurring_blocksInput = {
@@ -186812,6 +187319,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_recurring_blocksInput = {
@@ -186855,6 +187363,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_recurring_blocks_createdInput = {
@@ -186894,6 +187403,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_recurring_blocks_createdInput = {
@@ -187072,6 +187582,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_recurring_blocksInput = {
@@ -187111,6 +187622,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBooking_recurring_blocks_createdInput = {
@@ -187160,6 +187672,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_recurring_blocks_createdInput = {
@@ -187199,6 +187712,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_pagesInput = {
@@ -187355,6 +187869,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_pages_createdInput = {
@@ -187394,6 +187909,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_pages_createdInput = {
@@ -188090,6 +188606,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_pages_createdInput = {
@@ -188129,6 +188646,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageTemplateUpsertWithoutBooking_pages_confirmationInput = {
@@ -188627,6 +189145,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_page_membershipsInput = {
@@ -188666,6 +189185,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_page_membershipsInput = {
@@ -188874,6 +189394,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_page_membershipsInput = {
@@ -188913,6 +189434,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_linksInput = {
@@ -189325,6 +189847,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_links_createdInput = {
@@ -189364,6 +189887,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_links_createdInput = {
@@ -189983,6 +190507,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_links_createdInput = {
@@ -190022,6 +190547,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BookingUpsertWithWhereUniqueWithoutBooking_linkInput = {
@@ -190632,6 +191158,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBookings_assignedInput = {
@@ -190671,6 +191198,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBookings_assignedInput = {
@@ -190714,6 +191242,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBookings_createdInput = {
@@ -190753,6 +191282,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBookings_createdInput = {
@@ -191463,6 +191993,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookings_assignedInput = {
@@ -191502,6 +192033,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBookings_createdInput = {
@@ -191551,6 +192083,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookings_createdInput = {
@@ -191590,6 +192123,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CalendarConnectionUpsertWithoutBookingsInput = {
@@ -192054,6 +192588,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBooking_eventsInput = {
@@ -192093,6 +192628,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBooking_eventsInput = {
@@ -192371,6 +192907,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBooking_eventsInput = {
@@ -192410,6 +192947,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationCreateWithoutBooking_invite_settingsInput = {
@@ -193862,6 +194400,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCalendar_connectionsInput = {
@@ -193901,6 +194440,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCalendar_connectionsInput = {
@@ -194178,6 +194718,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCalendar_connectionsInput = {
@@ -194217,6 +194758,7 @@ export namespace Prisma {
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BookingUpsertWithWhereUniqueWithoutCalendar_connectionInput = {
@@ -194389,6 +194931,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -194428,6 +194971,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutUserInput
     reminder_assignments?: ReminderAssigneeUncheckedCreateNestedManyWithoutUserInput
     contact_lists_assigned?: ContactListUncheckedCreateNestedManyWithoutAssigned_userInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -194606,6 +195150,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -194645,6 +195190,7 @@ export namespace Prisma {
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
     reminder_assignments?: ReminderAssigneeUncheckedUpdateManyWithoutUserNestedInput
     contact_lists_assigned?: ContactListUncheckedUpdateManyWithoutAssigned_userNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrganisationMemberCreateManyUserInput = {
@@ -195153,6 +195699,33 @@ export namespace Prisma {
     parent_list_uuid?: string | null
     title: string
     description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SenderProfileCreateManyUserInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    name: string
+    company_name?: string | null
+    title?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    email?: string | null
+    phone?: string | null
+    website?: string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: string | null
+    city?: string | null
+    country?: string | null
+    logo_url?: string | null
+    booking_url?: string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: string | null
+    signature?: string | null
+    business_description?: string | null
+    is_default?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -196709,6 +197282,92 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SenderProfileUpdateWithoutUserInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    logo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    business_description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutSender_profilesNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
+  }
+
+  export type SenderProfileUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    logo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    business_description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutSender_profileNestedInput
+    sequences?: OutreachSequenceUncheckedUpdateManyWithoutSender_profileNestedInput
+  }
+
+  export type SenderProfileUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    first_name?: NullableStringFieldUpdateOperationsInput | string | null
+    last_name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    website_utm?: NullableJsonNullValueInput | InputJsonValue
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    logo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_url?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_utm?: NullableJsonNullValueInput | InputJsonValue
+    sender_id?: NullableStringFieldUpdateOperationsInput | string | null
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    business_description?: NullableStringFieldUpdateOperationsInput | string | null
+    is_default?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type OrganisationMemberCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -196898,6 +197557,7 @@ export namespace Prisma {
     signature?: string | null
     business_description?: string | null
     is_default?: boolean
+    user_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -198116,6 +198776,7 @@ export namespace Prisma {
     is_default?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutSender_profilesNestedInput
     marketing_campaigns?: MarketingCampaignUpdateManyWithoutSender_profileNestedInput
     message_templates?: MessageTemplateUpdateManyWithoutSender_profileNestedInput
     sequences?: OutreachSequenceUpdateManyWithoutSender_profileNestedInput
@@ -198143,6 +198804,7 @@ export namespace Prisma {
     signature?: NullableStringFieldUpdateOperationsInput | string | null
     business_description?: NullableStringFieldUpdateOperationsInput | string | null
     is_default?: BoolFieldUpdateOperationsInput | boolean
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSender_profileNestedInput
@@ -198172,6 +198834,7 @@ export namespace Prisma {
     signature?: NullableStringFieldUpdateOperationsInput | string | null
     business_description?: NullableStringFieldUpdateOperationsInput | string | null
     is_default?: BoolFieldUpdateOperationsInput | boolean
+    user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

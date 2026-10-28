@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Selection } from "@heroui/react";
-import { Button, Checkbox, Input, Label, ListBox, Select, Table } from "@heroui/react";
+import { Button, buttonVariants, Checkbox, Input, Label, ListBox, Select, Table } from "@heroui/react";
+import { Link } from "react-router-dom";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { Check, Plus, Search, Sparkles } from "lucide-react";
+import { ExternalLink, Plus, Search, Sparkles } from "lucide-react";
 import type { Lead, SourceType } from "@/features/leads/interfaces/lead.interface";
 import { SOURCE_OPTIONS } from "@/features/filters/constants/source-options";
 import { SourceBadge } from "@/components/ui/source-badge";
@@ -63,7 +64,8 @@ export default function LeadsDirectoryPage() {
   const addToCrm = useAddLeadToCrm();
   const enrichBulk = useEnrichLeadsBulk();
 
-  const [adoptedUuids, setAdoptedUuids] = useState<Set<string>>(new Set());
+  // lead uuid -> contact uuid (null when the contact uuid isn't known yet, e.g. after a 409)
+  const [adoptedContacts, setAdoptedContacts] = useState<Map<string, string | null>>(new Map());
 
   const columns = useMemo(
     () => [
@@ -114,44 +116,45 @@ export default function LeadsDirectoryPage() {
         header: "",
         cell: (info) => {
           const lead = info.row.original;
-          const adopted = adoptedUuids.has(lead.uuid);
+          const contactUuid = lead.contact_uuid ?? adoptedContacts.get(lead.uuid) ?? null;
           return (
             <div className="flex justify-end pr-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="presentation">
-              <Button
-                size="sm"
-                variant={adopted ? "tertiary" : "secondary"}
-                isDisabled={adopted || addToCrm.isPending}
-                onPress={() => {
-                  addToCrm.mutate(lead.uuid, {
-                    onSuccess: () => {
-                      setAdoptedUuids((prev) => new Set(prev).add(lead.uuid));
-                    },
-                    onError: (error: any) => {
-                      if (error.status === 409) {
-                        setAdoptedUuids((prev) => new Set(prev).add(lead.uuid));
-                      }
-                    },
-                  });
-                }}
-              >
-                {adopted ? (
-                  <>
-                    <Check className="size-3.5" />
-                    Added
-                  </>
-                ) : (
-                  <>
-                    <Plus className="size-3.5" />
-                    Add to CRM
-                  </>
-                )}
-              </Button>
+              {contactUuid ? (
+                <Link
+                  to={Routes.dashboard.contacts_detail.replace(":uuid", contactUuid)}
+                  className={buttonVariants({ size: "sm", variant: "tertiary" })}
+                >
+                  <ExternalLink className="size-3.5" />
+                  View contact
+                </Link>
+              ) : (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  isDisabled={adoptedContacts.has(lead.uuid) || addToCrm.isPending}
+                  onPress={() => {
+                    addToCrm.mutate(lead.uuid, {
+                      onSuccess: (contact) => {
+                        setAdoptedContacts((prev) => new Map(prev).set(lead.uuid, contact.uuid));
+                      },
+                      onError: (error: any) => {
+                        if (error.status === 409) {
+                          setAdoptedContacts((prev) => new Map(prev).set(lead.uuid, null));
+                        }
+                      },
+                    });
+                  }}
+                >
+                  <Plus className="size-3.5" />
+                  Add to CRM
+                </Button>
+              )}
             </div>
           );
         },
       }),
     ],
-    [adoptedUuids, addToCrm],
+    [adoptedContacts, addToCrm],
   );
 
   const rows = data?.data ?? [];

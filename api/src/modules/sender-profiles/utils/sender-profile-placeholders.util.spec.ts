@@ -25,6 +25,7 @@ describe('senderProfileToPlaceholders', () => {
             signature: null,
             business_description: null,
             is_default: false,
+            user_uuid: null,
             created_at: new Date(),
             updated_at: new Date(),
         });
@@ -59,6 +60,7 @@ describe('senderProfileToPlaceholders', () => {
             signature: null,
             business_description: null,
             is_default: false,
+            user_uuid: null,
             created_at: new Date(),
             updated_at: new Date(),
         });
@@ -92,6 +94,7 @@ describe('senderProfileToPlaceholders', () => {
                 signature: null,
                 business_description: null,
                 is_default: false,
+                user_uuid: null,
                 created_at: new Date(),
                 updated_at: new Date(),
             },

@@ -4,12 +4,16 @@ import {
     FieldError,
     Input,
     Label,
+    ListBox,
     Modal,
+    Select,
     Switch,
     TextArea,
 } from "@heroui/react";
 import { Save } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { memberLabel, useBookingMembers } from "@/components/bookings/hooks/use-booking-context";
+import { cn } from "@/lib/utils";
 import {
     useCreateSenderProfile,
     useUpdateSenderProfile,
@@ -138,7 +142,11 @@ type FormState = {
     signature: string;
     business_description: string;
     is_default: boolean;
+    /** Linked team member uuid, "" when none. */
+    user_uuid: string;
 } & Record<UtmFormKey, string>;
+
+const NO_MEMBER_KEY = "__none__";
 
 const emptyUtmFields = (): Record<UtmFormKey, string> =>
     Object.fromEntries(
@@ -165,6 +173,7 @@ const emptyForm = (): FormState => ({
     signature: "",
     business_description: "",
     is_default: false,
+    user_uuid: "",
     ...emptyUtmFields(),
 });
 
@@ -186,6 +195,7 @@ const fromProfile = (p: SenderProfile): FormState => ({
     signature: p.signature ?? "",
     business_description: p.business_description ?? "",
     is_default: p.is_default,
+    user_uuid: p.user_uuid ?? "",
     ...utmFromProfile(p.website_utm, "website"),
     ...utmFromProfile(p.booking_utm, "booking"),
 });
@@ -197,6 +207,7 @@ export function SenderProfileFormModal({
 }: SenderProfileFormModalProps) {
     const createProfile = useCreateSenderProfile();
     const updateProfile = useUpdateSenderProfile();
+    const { members } = useBookingMembers();
 
     const isEdit = !!profile;
     const isPending = createProfile.isPending || updateProfile.isPending;
@@ -247,6 +258,9 @@ export function SenderProfileFormModal({
             name,
             is_default: form.is_default,
         };
+        // null unlinks on edit; omitted on create when no member is chosen.
+        if (form.user_uuid) payload.user_uuid = form.user_uuid;
+        else if (isEdit) payload.user_uuid = null;
         for (const key of stringKeys) {
             const v = form[key].trim();
             if (v) {
@@ -358,6 +372,52 @@ export function SenderProfileFormModal({
                                             value={form.title}
                                             onChange={(e) => set("title", e.target.value)}
                                         />
+                                    </div>
+                                    <div className="flex flex-col gap-1.5 sm:col-span-2">
+                                        <Label>Linked team member</Label>
+                                        <Select
+                                            aria-label="Linked team member"
+                                            selectedKey={form.user_uuid || NO_MEMBER_KEY}
+                                            onSelectionChange={(key) =>
+                                                set(
+                                                    "user_uuid",
+                                                    typeof key === "string" && key !== NO_MEMBER_KEY ? key : "",
+                                                )
+                                            }
+                                            fullWidth
+                                        >
+                                            <Select.Trigger
+                                                className={cn(
+                                                    "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-md border border-border bg-surface-primary",
+                                                    "focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40",
+                                                )}
+                                            >
+                                                <Select.Value className="min-w-0 flex-1 overflow-hidden" />
+                                                <Select.Indicator className="shrink-0" />
+                                            </Select.Trigger>
+                                            <Select.Popover>
+                                                <ListBox>
+                                                    <ListBox.Item id={NO_MEMBER_KEY} textValue="None">
+                                                        None
+                                                        <ListBox.ItemIndicator />
+                                                    </ListBox.Item>
+                                                    {members.map((member) => (
+                                                        <ListBox.Item
+                                                            key={member.user_uuid}
+                                                            id={member.user_uuid}
+                                                            textValue={memberLabel(member)}
+                                                        >
+                                                            {memberLabel(member)}
+                                                            <ListBox.ItemIndicator />
+                                                        </ListBox.Item>
+                                                    ))}
+                                                </ListBox>
+                                            </Select.Popover>
+                                        </Select>
+                                        <p className="text-xs text-muted">
+                                            Booking emails use this profile's signature when the booking is
+                                            assigned to this person. Otherwise the default profile is used.
+                                        </p>
                                     </div>
                                     <div className="flex items-center justify-between gap-3 sm:col-span-2 rounded-lg border border-border bg-surface-secondary/40 px-3 py-2.5">
                                         <div>

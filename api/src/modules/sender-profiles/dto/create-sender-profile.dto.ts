@@ -6,6 +6,7 @@ import {
     IsOptional,
     IsString,
     IsUrl,
+    IsUUID,
     Matches,
     MaxLength,
     ValidateNested,
@@ -141,4 +142,14 @@ export class CreateSenderProfileDto {
     @IsOptional()
     @IsBoolean()
     is_default?: boolean;
+
+    @ApiPropertyOptional({
+        format: 'uuid',
+        nullable: true,
+        description:
+            'Organisation member this profile belongs to. Booking emails use the assigned member\'s profile (signature) when one is linked, else the default profile. Null unlinks.',
+    })
+    @IsOptional()
+    @IsUUID()
+    user_uuid?: string | null;
 }

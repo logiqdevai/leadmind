@@ -38,8 +38,11 @@ export class LeadsController {
     @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
     @ApiQuery({ name: 'limit', required: false, type: Number, example: 20 })
     @ApiResponse({ status: 200, description: 'Paginated list of public leads' })
-    findAll(@Query() query: ListLeadsDto) {
-        return this.leadsService.findAll(query);
+    findAll(
+        @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @Query() query: ListLeadsDto,
+    ) {
+        return this.leadsService.findAll(organisation_uuid, query);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.LEAD, action: ActivityAction.BULK_ENRICHED, entityUuidFrom: 'none' })

@@ -15,7 +15,8 @@ const details = `
 
 const manageLinks = `<p>Need a different time? No problem - you can <a href="{{booking.reschedule_url}}">reschedule</a> or <a href="{{booking.cancel_url}}">cancel</a> anytime.</p>`;
 
-const signOff = `<p>{{team_member.name}}<br>{{brand.name}}</p>`;
+/** The default sender profile's signature; the notification service falls back to the team member + brand when it is empty. */
+const signOff = '{{signature}}';
 
 /** Invitee-facing defaults, used when a booking page has no template selected for that email. */
 export const DEFAULT_INVITEE_TEMPLATES: Record<BookingNotificationKind, BookingEmailTemplate> = {

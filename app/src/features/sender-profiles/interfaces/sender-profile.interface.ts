@@ -8,7 +8,8 @@ export interface UtmParams {
 
 export interface SenderProfile {
     uuid: string;
-    user_uuid: string;
+    /** Team member this profile belongs to; booking emails use the assignee's profile when linked. */
+    user_uuid: string | null;
     name: string;
     company_name: string | null;
     title: string | null;
@@ -52,6 +53,8 @@ export interface CreateSenderProfilePayload {
     signature?: string | null;
     business_description?: string | null;
     is_default?: boolean;
+    /** Null unlinks the team member. */
+    user_uuid?: string | null;
 }
 
 export type UpdateSenderProfilePayload = Partial<CreateSenderProfilePayload>;

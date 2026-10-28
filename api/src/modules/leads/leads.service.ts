@@ -38,8 +38,8 @@ export class LeadsService {
         private readonly bulkJobsService: BulkJobsService,
     ) { }
 
-    async findAll(query: ListLeadsDto): Promise<{
-        data: Lead[];
+    async findAll(organisation_uuid: string, query: ListLeadsDto): Promise<{
+        data: (Lead & { contact_uuid: string | null })[];
         total: number;
         page: number;
         limit: number;
@@ -71,8 +71,14 @@ export class LeadsService {
             this.prisma.lead.count({ where }),
         ]);
 
+        const contacts = await this.prisma.contact.findMany({
+            where: { organisation_uuid, lead_uuid: { in: data.map((l) => l.uuid) } },
+            select: { uuid: true, lead_uuid: true },
+        });
+        const contactByLead = new Map(contacts.map((c) => [c.lead_uuid, c.uuid]));
+
         return {
-            data,
+            data: data.map((lead) => ({ ...lead, contact_uuid: contactByLead.get(lead.uuid) ?? null })),
             total,
             page,
             limit,
