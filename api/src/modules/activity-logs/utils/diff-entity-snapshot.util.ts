@@ -1,11 +1,11 @@
-const EXCLUDED_FIELDS = new Set(['id', 'uuid', 'created_at', 'updated_at']);
+export const EXCLUDED_FIELDS = new Set(['id', 'uuid', 'created_at', 'updated_at']);
 const SECRET_FIELD_PATTERN = /password|secret|token|api_?key|private_key/i;
 const MAX_VALUE_LENGTH = 2000;
 
 export type EntitySnapshot = Record<string, unknown>;
 export type EntityChanges = Record<string, { from: unknown; to: unknown }>;
 
-function normalize(value: unknown): string | null {
+export function normalizeValue(value: unknown): string | null {
   if (value === null || value === undefined) {
     return null;
   }
@@ -63,7 +63,7 @@ export function diffEntitySnapshots(
     const beforeValue = before ? before[key] : undefined;
     const afterValue = after ? after[key] : undefined;
 
-    if (normalize(beforeValue) === normalize(afterValue)) {
+    if (normalizeValue(beforeValue) === normalizeValue(afterValue)) {
       continue;
     }
 

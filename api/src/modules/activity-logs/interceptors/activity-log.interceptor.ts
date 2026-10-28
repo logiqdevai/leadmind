@@ -22,6 +22,11 @@ import {
   EntitySnapshot,
   toPrismaDelegateName,
 } from '../utils/diff-entity-snapshot.util';
+import {
+  SNAPSHOT_RELATIONS,
+  buildUndoPayload,
+  splitRelations,
+} from '../utils/undo-payload.util';
 
 const DELETE_ACTIONS: Set<string> = new Set([
   ActivityAction.DELETED,
@@ -54,7 +59,11 @@ export class ActivityLogInterceptor implements NestInterceptor {
     }
 
     try {
-      const record = await delegate.findUnique({ where: { uuid } });
+      const include = SNAPSHOT_RELATIONS[entityType];
+      const record = await delegate.findUnique({
+        where: { uuid },
+        ...(include && { include }),
+      });
       return (record as EntitySnapshot | null) ?? null;
     } catch {
       return null;
@@ -150,6 +159,13 @@ export class ActivityLogInterceptor implements NestInterceptor {
             ? null
             : await this.fetchEntitySnapshot(options.entityType, entity_uuid);
 
+          const undo = buildUndoPayload(
+            options.entityType,
+            options.action,
+            splitRelations(options.entityType, before),
+            splitRelations(options.entityType, after),
+          );
+
           this.activityLogsService.log({
             organisation_uuid,
             actor_user_uuid: request.user?.uuid ?? null,
@@ -161,8 +177,12 @@ export class ActivityLogInterceptor implements NestInterceptor {
               method: request.method,
               path: request.route?.path ?? request.url,
               ...(picked ? { body: picked } : {}),
+              ...(undo ? { undo } : {}),
             },
-            changes: diffEntitySnapshots(before, after),
+            changes: diffEntitySnapshots(
+              splitRelations(options.entityType, before).scalars,
+              splitRelations(options.entityType, after).scalars,
+            ),
           });
         })();
       }),

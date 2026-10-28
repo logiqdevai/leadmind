@@ -119,6 +119,7 @@ export const ActivityAction = {
   REGENERATED: 'regenerated',
   CONNECTED: 'connected',
   DISCONNECTED: 'disconnected',
+  UNDONE: 'undone',
 } as const;
 
 export type ActivityAction =
