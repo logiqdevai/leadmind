@@ -91,7 +91,7 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
                         </Alert>
                     ) : null}
 
-                    <section className="rounded-xl bg-surface-secondary/50 p-4">
+                    <section className="rounded-xl bg-surface-secondary/80 p-4">
                         <BookingSummaryList data={booking} />
                     </section>
 

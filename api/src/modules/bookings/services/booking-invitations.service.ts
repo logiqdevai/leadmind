@@ -6,7 +6,7 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { BOOKING_NOTIFICATION_QUEUE } from '@/core/queues/queues.constants';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
 import { OutreachRenderService } from '@/modules/outreach/services/outreach-render.service';
-import { BookingLinksService, bookingCtaHtml } from '@/modules/booking-links/booking-links.service';
+import { BookingLinksService, bookingLinkHtml } from '@/modules/booking-links/booking-links.service';
 import { renderPlaceholders } from '@/shared/utils/placeholder-render.util';
 import { BookingJobNames, NOTIFICATION_SEND_ATTEMPTS } from '../constants/booking.constants';
 import {
@@ -509,8 +509,9 @@ export class BookingInvitationsService {
         // The sender profile's signature is org-authored HTML, so it is not escaped; without one it falls back to a
         // plain sign-off rather than leaving a gap.
         const signature = vars.signature?.trim() || this.fallbackSignature(senderName, vars['brand.name']);
-        const button = bookingCtaHtml(url, page.cta_label, page.primary_color);
-        const raw = { signature, booking_button: button };
+        // A plain link worded in the email's language (not the page's single-language button label).
+        const linkLabel = (template?.language ?? language) === 'el' ? 'Επιλέξτε ώρα που σας βολεύει' : 'Pick a time that suits you';
+        const raw = { signature, booking_button: bookingLinkHtml(url, linkLabel) };
 
         const messageTemplate =
             template?.email_content ||
@@ -523,7 +524,7 @@ export class BookingInvitationsService {
             ? messageTemplate
             : this.plainTextToHtml(hasLink ? messageTemplate : `${messageTemplate}\n\n{{booking_button}}`);
         let html = renderPlaceholders(body, { ...escapeVars(vars), ...raw });
-        if (template?.email_content && !hasLink) html += button;
+        if (template?.email_content && !hasLink) html += raw.booking_button;
         return { subject: renderPlaceholders(subjectTemplate, vars), html };
     }
 

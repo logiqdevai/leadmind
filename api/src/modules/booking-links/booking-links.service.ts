@@ -231,6 +231,11 @@ export function bookingCtaHtml(url: string, label: string | null, color: string 
     );
 }
 
+/** Plain text link on its own line, for emails written in the recipient's language (the table button above is not). */
+export function bookingLinkHtml(url: string, label: string): string {
+    return `<p><a href="${url}" style="font-weight:600">${escapeHtml(label)}</a></p>`;
+}
+
 function escapeHtml(value: string): string {
     return value.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 }

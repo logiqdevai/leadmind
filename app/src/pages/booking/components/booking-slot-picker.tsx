@@ -113,7 +113,7 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
             )}
 
             <div className="grid gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-                <section aria-label={t("booking.slots.chooseDate")} className="relative flex flex-col gap-3 rounded-2xl border border-border/80 bg-surface-secondary/30 p-4 sm:p-5">
+                <section aria-label={t("booking.slots.chooseDate")} className="relative flex flex-col gap-3 rounded-2xl border border-border bg-surface-secondary/70 p-4 sm:p-5">
                     <Calendar
                         aria-label={t("booking.slots.availableDates")}
                         className="w-full"
@@ -130,7 +130,7 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                             <Calendar.NavButton slot="previous" aria-label={t("booking.slots.previousMonth")} />
                             <Calendar.NavButton slot="next" aria-label={t("booking.slots.nextMonth")} />
                         </Calendar.Header>
-                        <Calendar.Grid>
+                        <Calendar.Grid className="gap-1">
                             <Calendar.GridHeader>
                                 {(day) => <Calendar.HeaderCell>{day}</Calendar.HeaderCell>}
                             </Calendar.GridHeader>
@@ -161,7 +161,7 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                     ) : null}
 
                     {showMonthEmpty ? (
-                        <div className="flex flex-col items-start gap-2 rounded-xl bg-surface-secondary/60 p-3">
+                        <div className="flex flex-col items-start gap-2 rounded-xl bg-surface-secondary p-3">
                             <p className="text-sm text-muted">
                                 {t("booking.slots.noTimesInMonth", { month: formatMonthLabel(picker.visibleMonth) })}
                             </p>
@@ -176,7 +176,7 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
 
                 <section
                     aria-label={t("booking.slots.chooseTime")}
-                    className="flex min-w-0 flex-col gap-3 rounded-2xl border border-border/80 bg-surface-secondary/30 p-4 sm:p-5"
+                    className="flex min-w-0 flex-col gap-3 rounded-2xl border border-border bg-surface-secondary/70 p-4 sm:p-5"
                 >
                     {isError ? (
                         <Alert status="danger">
@@ -196,7 +196,7 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                             ))}
                         </div>
                     ) : !picker.selectedDate ? (
-                        <p className="rounded-xl bg-surface-secondary/60 p-4 text-sm text-muted">
+                        <p className="rounded-xl bg-surface-secondary p-4 text-sm text-muted">
                             {t("booking.slots.selectDate")}
                         </p>
                     ) : (
@@ -205,12 +205,12 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                                 {formatDateKey(picker.selectedDate)}
                             </h3>
                             {!daySlots.some((slot) => slot.available) ? (
-                                <p className="rounded-xl bg-surface-secondary/60 p-4 text-sm text-muted">
+                                <p className="rounded-xl bg-surface-secondary p-4 text-sm text-muted">
                                     {t("booking.slots.noTimesLeft")}
                                 </p>
                             ) : (
                                 <ul
-                                    className="grid max-h-[28rem] grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3 md:grid-cols-2"
+                                    className="grid max-h-[28rem] grid-cols-2 gap-2 overflow-y-auto p-1 sm:grid-cols-3 md:grid-cols-2"
                                     aria-label={t("booking.slots.availableOn", { date: formatDateKey(picker.selectedDate) })}
                                 >
                                     {daySlots.map((slot) => {

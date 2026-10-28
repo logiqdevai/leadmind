@@ -155,7 +155,7 @@ export const BookingPageHeader: FC<BookingPageHeaderProps> = ({
             </div>
 
             {expectations.length > 0 ? (
-                <section className="flex flex-col gap-3 border-t border-border/60 pt-6">
+                <section className="flex flex-col gap-3 border-t border-border pt-6">
                     <h2 className="text-base font-semibold text-foreground">{t("booking.header.whatToExpect")}</h2>
                     <ul className="flex flex-col gap-2.5">
                         {expectations.map((item, index) => (

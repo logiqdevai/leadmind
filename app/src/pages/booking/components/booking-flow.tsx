@@ -67,7 +67,7 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
     const [slotTaken, setSlotTaken] = useState(false);
     const [result, setResult] = useState<PublicBookingResult | null>(null);
 
-    const picker = useBookingSlotPicker({ timezone, maxAdvanceDays: page.max_advance_days });
+    const picker = useBookingSlotPicker({ timezone, maxAdvanceDays: page.max_advance_days, syncToUrl: true });
     const slotsQuery = usePublicBookingSlots(
         pageRef,
         picker.range
@@ -138,7 +138,7 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
         <BookingBrandScope color={page.primary_color}>
             <BookingCard className="overflow-hidden p-0 sm:p-0">
                 <div className="grid md:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
-                    <div className="border-b border-border/60 p-6 sm:p-8 md:border-b-0 md:border-r">
+                    <div className="border-b border-border p-6 sm:p-8 md:border-b-0 md:border-r">
                         <BookingPageHeader
                             data={data}
                             duration={duration}
@@ -184,7 +184,7 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
                         )}
 
                         {step === BookingSteps.REVIEW && selectedSlot ? (
-                            <div className="flex items-center justify-between gap-3 rounded-xl bg-surface-secondary/50 px-4 py-3">
+                            <div className="flex items-center justify-between gap-3 rounded-xl bg-surface-secondary/80 px-4 py-3">
                                 <span className="flex min-w-0 items-center gap-2 text-sm text-foreground">
                                     <CalendarDays className="size-4 shrink-0 text-muted" aria-hidden />
                                     <span className="break-words">
@@ -247,7 +247,7 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
                                 data={data}
                                 summary={
                                     selectedSlot ? (
-                                        <div className="flex flex-col gap-3 rounded-xl border border-border/60 bg-surface-secondary/60 p-3 sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface-secondary p-3 sm:flex-row sm:items-center sm:justify-between">
                                             <span className="flex min-w-0 items-center gap-3">
                                                 <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-accent">
                                                     <CalendarDays className="size-5" aria-hidden />

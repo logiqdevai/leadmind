@@ -100,7 +100,7 @@ export const ManageReschedulePanel: FC<ManageReschedulePanelProps> = ({ token, b
                 </Alert>
             ) : null}
 
-            <div className="flex flex-col gap-3 rounded-xl bg-surface-secondary/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 rounded-xl bg-surface-secondary/80 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="flex flex-wrap items-center gap-2 text-sm text-foreground" aria-live="polite">
                     {selectedSlot ? (
                         <>

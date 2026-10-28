@@ -20,9 +20,9 @@ export interface BookingVarsInput {
         status: string;
         cancellation_reason?: string | null;
     };
-    page: { name: string; title: string | null; brand_name?: string | null } | null;
+    page: { name: string; title: string | null; brand_name?: string | null; slug?: string; is_active?: boolean } | null;
     assignee: { full_name: string | null; email: string } | null;
-    organisation: { name: string; timezone: string };
+    organisation: { name: string; timezone: string; slug?: string };
     app_url: string;
     /** Timezone the times are written in; defaults to the invitee's, then the organisation's. */
     display_timezone?: string;
@@ -49,6 +49,7 @@ export const BOOKING_TEMPLATE_VARIABLES = [
     'booking.manage_url',
     'booking.notes',
     'booking.cancellation_reason',
+    'booking.book_again_url',
     'team_member.name',
     'team_member.email',
     'organisation.name',
@@ -105,6 +106,9 @@ export function buildBookingVars(input: BookingVarsInput): PlaceholderVars {
         'booking.manage_url': BookingPublicUrls.manage(app_url, booking.manage_token),
         'booking.notes': booking.invitee_notes ?? '',
         'booking.cancellation_reason': booking.cancellation_reason ?? '',
+        // Public page to book a new time (cancellation emails); empty when the booking has no active page.
+        'booking.book_again_url':
+            page?.slug && organisation.slug && page.is_active !== false ? BookingPublicUrls.slug(app_url, organisation.slug, page.slug) : '',
         'team_member.name': assignee?.full_name || assignee?.email || page?.brand_name?.trim() || '',
         'team_member.email': assignee?.email ?? '',
         'organisation.name': organisation.name,

@@ -81,7 +81,7 @@ export const BookingDetailsForm: FC<BookingDetailsFormProps> = ({ data, defaultV
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" validationBehavior="aria">
-            <div className="flex flex-col gap-5 rounded-2xl border border-border/80 bg-surface-secondary/30 p-4 sm:p-5">
+            <div className="flex flex-col gap-5 rounded-2xl border border-border bg-surface-secondary/70 p-4 sm:p-5">
                 {summary}
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div className="flex flex-col gap-1.5 sm:col-span-2">

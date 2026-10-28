@@ -51,7 +51,7 @@ export const BookingReview: FC<BookingReviewProps> = ({
 
     return (
         <div className="flex flex-col gap-6">
-            <section className="flex flex-col gap-3 rounded-xl bg-surface-secondary/50 p-4">
+            <section className="flex flex-col gap-3 rounded-xl bg-surface-secondary/80 p-4">
                 <div className="flex items-center justify-between gap-2">
                     <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{t("booking.review.when")}</h3>
                     <Button size="sm" variant="tertiary" onPress={onEditTime} isDisabled={isSubmitting}>
@@ -71,7 +71,7 @@ export const BookingReview: FC<BookingReviewProps> = ({
                 />
             </section>
 
-            <section className="flex flex-col gap-3 rounded-xl bg-surface-secondary/50 p-4">
+            <section className="flex flex-col gap-3 rounded-xl bg-surface-secondary/80 p-4">
                 <div className="flex items-center justify-between gap-2">
                     <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{t("booking.review.yourDetails")}</h3>
                     <Button size="sm" variant="tertiary" onPress={onBack} isDisabled={isSubmitting}>

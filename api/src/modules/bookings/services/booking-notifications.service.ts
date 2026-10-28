@@ -13,6 +13,7 @@ import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { BOOKING_NOTIFICATION_QUEUE } from '@/core/queues/queues.constants';
 import { MessageSendService } from '@/modules/outreach/services/message-send.service';
 import { OutreachRenderService } from '@/modules/outreach/services/outreach-render.service';
+import { bookingLinkHtml } from '@/modules/booking-links/booking-links.service';
 import { renderPlaceholders } from '@/shared/utils/placeholder-render.util';
 import { BookingEventsService, SYSTEM_ACTOR } from './booking-events.service';
 import {
@@ -39,7 +40,7 @@ const NOTIFICATION_INCLUDE = {
     },
     contact: { select: { country: true } },
     assigned_user: { select: { full_name: true, email: true } },
-    organisation: { select: { name: true, timezone: true } },
+    organisation: { select: { name: true, timezone: true, slug: true } },
 } satisfies Prisma.BookingInclude;
 
 type NotificationBooking = Prisma.BookingGetPayload<{ include: typeof NOTIFICATION_INCLUDE }>;
@@ -286,8 +287,22 @@ export class BookingNotificationsService {
         // Without one (or without a default profile) `{{signature}}` falls back to a plain team-member sign-off
         // instead of rendering as an empty gap.
         const signature = vars.signature?.trim() || this.fallbackSignature(vars);
-        let html = renderPlaceholders(bodyTemplate, { ...escapeVars(vars), signature });
-        if (kind !== BookingNotificationKind.CANCELLATION) html += this.extraBlocks(booking, vars, recipient);
+        // Cancelled meetings can't be rescheduled, so the invitee is offered the booking page to pick a new time.
+        const language = custom?.language ?? resolveRecipientLanguage({ contact_country: booking.contact?.country, invitee_language: booking.invitee_language });
+        const bookAgainUrl = vars['booking.book_again_url'];
+        const bookAgainLink = bookAgainUrl ? bookingLinkHtml(bookAgainUrl, language === 'el' ? 'Κλείστε νέα ώρα' : 'Book a new time') : '';
+        const usesBookAgain = /\{\{\s*booking\.book_again_(url|link)\s*\}\}/.test(bodyTemplate);
+        const extra =
+            kind !== BookingNotificationKind.CANCELLATION
+                ? this.extraBlocks(booking, vars, recipient)
+                : recipient.internal || usesBookAgain
+                  ? ''
+                  : bookAgainLink;
+        // The signature closes the email, so the join / calendar links go right before it; templates without
+        // {{signature}} simply get them at the end.
+        const hasSignature = /\{\{\s*signature\s*\}\}/.test(bodyTemplate);
+        let html = renderPlaceholders(bodyTemplate, { ...escapeVars(vars), 'booking.book_again_link': bookAgainLink, signature: hasSignature ? extra + signature : signature });
+        if (!hasSignature) html += extra;
         return { subject: renderPlaceholders(subjectTemplate, vars), html };
     }
 

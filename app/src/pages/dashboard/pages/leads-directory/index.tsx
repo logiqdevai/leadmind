@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Selection } from "@heroui/react";
-import { Button, buttonVariants, Checkbox, Input, Label, ListBox, Select, Table } from "@heroui/react";
-import { Link } from "react-router-dom";
+import { Button, Checkbox, Input, Label, ListBox, Select, Table } from "@heroui/react";
+import { useNavigate } from "react-router-dom";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
@@ -37,6 +37,7 @@ const PAGE_SIZE = 20;
 const columnHelper = createColumnHelper<Lead>();
 
 export default function LeadsDirectoryPage() {
+  const navigate = useNavigate();
   const canBulkEnrich = usePermission("lead_enrichment_bulk");
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -119,22 +120,24 @@ export default function LeadsDirectoryPage() {
           const contactUuid = lead.contact_uuid ?? adoptedContacts.get(lead.uuid) ?? null;
           return (
             <div className="flex items-center justify-end gap-2 pr-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="presentation">
-              <Link
-                to={Routes.dashboard.leads_directory_detail.replace(":uuid", lead.uuid)}
-                className={buttonVariants({ size: "sm", variant: "tertiary" })}
+              <Button
+                size="sm"
+                variant="tertiary"
                 aria-label={`View details for ${lead.name ?? lead.company ?? "lead"}`}
+                onPress={() => navigate(Routes.dashboard.leads_directory_detail.replace(":uuid", lead.uuid))}
               >
                 <Eye className="size-3.5" />
                 View
-              </Link>
+              </Button>
               {contactUuid ? (
-                <Link
-                  to={Routes.dashboard.contacts_detail.replace(":uuid", contactUuid)}
-                  className={buttonVariants({ size: "sm", variant: "tertiary" })}
+                <Button
+                  size="sm"
+                  variant="tertiary"
+                  onPress={() => navigate(Routes.dashboard.contacts_detail.replace(":uuid", contactUuid))}
                 >
                   <ExternalLink className="size-3.5" />
                   Contact
-                </Link>
+                </Button>
               ) : (
                 <Button
                   size="sm"
@@ -162,7 +165,7 @@ export default function LeadsDirectoryPage() {
         },
       }),
     ],
-    [adoptedContacts, addToCrm],
+    [adoptedContacts, addToCrm, navigate],
   );
 
   const rows = data?.data ?? [];

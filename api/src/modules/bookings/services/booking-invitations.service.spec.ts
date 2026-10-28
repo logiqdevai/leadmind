@@ -114,6 +114,9 @@ describe('BookingInvitationsService', () => {
             expect(email.subject).toBe("Let's find a time: 30 minute intro call");
             expect(email.html).toContain(LINK_URL);
             expect(email.html).toContain('Hi Ada,');
+            expect(email.html).toContain('Pick a time that suits you');
+            expect(email.html).not.toContain('Book a meeting');
+            expect(email.html).not.toContain('<table');
             // No sender profile signature: falls back to the sender's name and the brand.
             expect(email.html).toContain('Petros<br>logiqdev');
 
@@ -197,6 +200,9 @@ describe('BookingInvitationsService', () => {
                 expect(email.html).toContain('<p>Γεια Ada</p>');
                 expect(email.html).toContain('<p><strong>Petros</strong></p>');
                 expect(email.html).toContain(`href="${LINK_URL}"`);
+                // A plain link in the template's language, not a button.
+                expect(email.html).toContain('Επιλέξτε ώρα που σας βολεύει');
+                expect(email.html).not.toContain('<table');
             });
 
             it('falls back to the English template for other or unknown countries', async () => {
@@ -223,6 +229,7 @@ describe('BookingInvitationsService', () => {
             const email = messageSend.sendTransactionalEmail.mock.calls[0][1];
             expect(email.subject).toBe('Ας βρούμε μια ώρα: 30 minute intro call');
             expect(email.html).toContain('Γεια σας Ada,');
+            expect(email.html).toContain('Επιλέξτε ώρα που σας βολεύει');
         });
 
         it('escapes contact-provided text in the email body', async () => {

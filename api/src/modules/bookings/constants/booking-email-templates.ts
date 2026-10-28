@@ -30,7 +30,7 @@ export const DEFAULT_INVITEE_TEMPLATES: Record<BookingNotificationKind, BookingE
     },
     CANCELLATION: {
         subject: 'Your meeting on {{booking.date}} has been cancelled',
-        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting on {{booking.date}} at {{booking.start_time}} has been cancelled.</p><p>If you'd still like to talk, just reply to this email and we'll find a new time that works for you.</p><p>Hope to speak soon!</p>${signOff}`,
+        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting on {{booking.date}} at {{booking.start_time}} has been cancelled.</p><p>If you'd still like to talk, you can pick a new time whenever it suits you - or just reply to this email and we'll find one together.</p>{{booking.book_again_link}}<p>Hope to speak soon!</p>${signOff}`,
     },
     RESCHEDULE: {
         subject: 'New time for {{booking.title}}: {{booking.date}} at {{booking.start_time}}',
