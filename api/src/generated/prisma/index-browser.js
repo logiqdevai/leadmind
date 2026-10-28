@@ -816,6 +816,8 @@ exports.Prisma.ReminderScalarFieldEnum = {
   job_id: 'job_id',
   outreach_message_uuid: 'outreach_message_uuid',
   metadata: 'metadata',
+  calendar_event_id: 'calendar_event_id',
+  calendar_connection_uuid: 'calendar_connection_uuid',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -1218,6 +1220,7 @@ exports.Prisma.BookingPageScalarFieldEnum = {
   assignment_mode: 'assignment_mode',
   allow_invitee_member_choice: 'allow_invitee_member_choice',
   requires_confirmation: 'requires_confirmation',
+  auto_log_meeting: 'auto_log_meeting',
   unavailable_slots_mode: 'unavailable_slots_mode',
   location_type: 'location_type',
   location_value: 'location_value',
@@ -1269,8 +1272,18 @@ exports.Prisma.BookingLinkScalarFieldEnum = {
   created_by_user_uuid: 'created_by_user_uuid',
   deactivated_at: 'deactivated_at',
   last_used_at: 'last_used_at',
+  last_visited_at: 'last_visited_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.BookingLinkVisitScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  booking_link_uuid: 'booking_link_uuid',
+  user_agent: 'user_agent',
+  referrer: 'referrer',
+  created_at: 'created_at'
 };
 
 exports.Prisma.BookingScalarFieldEnum = {
@@ -1299,6 +1312,7 @@ exports.Prisma.BookingScalarFieldEnum = {
   location_value: 'location_value',
   meeting_url: 'meeting_url',
   reminder_uuid: 'reminder_uuid',
+  source_reminder_uuid: 'source_reminder_uuid',
   calendar_connection_uuid: 'calendar_connection_uuid',
   calendar_event_id: 'calendar_event_id',
   calendar_html_link: 'calendar_html_link',
@@ -1931,7 +1945,8 @@ exports.BookingLocationType = exports.$Enums.BookingLocationType = {
 
 exports.BookingSource = exports.$Enums.BookingSource = {
   PUBLIC: 'PUBLIC',
-  MANUAL: 'MANUAL'
+  MANUAL: 'MANUAL',
+  REMINDER: 'REMINDER'
 };
 
 exports.BookingStatus = exports.$Enums.BookingStatus = {
@@ -2091,6 +2106,7 @@ exports.Prisma.ModelName = {
   BookingPage: 'BookingPage',
   BookingPageMember: 'BookingPageMember',
   BookingLink: 'BookingLink',
+  BookingLinkVisit: 'BookingLinkVisit',
   Booking: 'Booking',
   BookingEvent: 'BookingEvent',
   BookingInviteSettings: 'BookingInviteSettings',

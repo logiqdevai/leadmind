@@ -66,8 +66,9 @@ export class PublicBookingService {
         private readonly events: BookingEventsService,
     ) {}
 
-    async getPage(ref: PublicPageRef) {
+    async getPage(ref: PublicPageRef, visitor?: { user_agent?: string; referrer?: string }) {
         const { page, organisation, link, contact } = await this.resolve(ref);
+        if (link) await this.recordVisit(link.uuid, visitor);
         const members = page.show_team_member || page.allow_invitee_member_choice
             ? await this.slotService.eligibleMembers(this.prisma, page)
             : [];
@@ -325,6 +326,25 @@ export class PublicBookingService {
             primary_color: page?.primary_color ?? null,
             logo_url: page?.logo_url ?? null,
         };
+    }
+
+    /** Visit tracking is best-effort: it must never stop an invitee from seeing the page. */
+    private async recordVisit(booking_link_uuid: string, visitor?: { user_agent?: string; referrer?: string }) {
+        try {
+            const now = new Date();
+            await this.prisma.$transaction([
+                this.prisma.bookingLinkVisit.create({
+                    data: {
+                        booking_link_uuid,
+                        user_agent: visitor?.user_agent?.slice(0, 512) || null,
+                        referrer: visitor?.referrer?.slice(0, 512) || null,
+                    },
+                }),
+                this.prisma.bookingLink.update({ where: { uuid: booking_link_uuid }, data: { last_visited_at: now } }),
+            ]);
+        } catch (error) {
+            this.logger.warn(`Failed to record visit for booking link ${booking_link_uuid}: ${(error as Error).message}`);
+        }
     }
 
     private async resolve(ref: PublicPageRef): Promise<PublicTarget> {

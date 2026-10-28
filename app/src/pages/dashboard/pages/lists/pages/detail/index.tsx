@@ -1,6 +1,6 @@
 import { startTransition, useMemo, useState, type Key } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { Button, Switch, Tabs } from "@heroui/react";
+import { Button, Tabs } from "@heroui/react";
 import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { Plus } from "lucide-react";
 import { Routes, ListDetailTabIds } from "@/routes/routes";
@@ -11,7 +11,6 @@ import {
     useExportContactListMembers,
     useRemoveListContactsBulk,
 } from "@/features/contact-lists/hooks/use-contact-lists";
-import { ExportExcelButton } from "@/pages/dashboard/components/export-excel-button";
 import {
     useBulkScrapeContactEmails,
     useDeleteContactsBulk,
@@ -366,37 +365,26 @@ export default function ListDetailPage() {
                         backLabel={backLabel}
                         actions={
                             <>
-                                {currentTab === ListDetailTabIds.CONTACTS ? (
-                                    <Switch
-                                        isSelected={callMode}
-                                        onChange={(v) =>
-                                            handleCallModeChange(typeof v === "boolean" ? v : !callMode)
-                                        }
-                                        aria-label="Call mode"
-                                    >
-                                        <Switch.Control>
-                                            <Switch.Thumb />
-                                        </Switch.Control>
-                                        <Switch.Content>
-                                            <span className="text-sm font-medium text-foreground">Call mode</span>
-                                        </Switch.Content>
-                                    </Switch>
-                                ) : null}
-                                {currentTab === ListDetailTabIds.CONTACTS ? (
-                                    <ExportExcelButton
-                                        onPress={() =>
-                                            exportListMembers.mutate({
-                                                listUuid: uuid,
-                                                listTitle: list.title,
-                                                query: membersQuery,
-                                            })
-                                        }
-                                        isPending={exportListMembers.isPending}
-                                        isDisabled={total === 0}
-                                    />
-                                ) : null}
                                 <ListActionsDropdown
                                     showContactsActions={currentTab === ListDetailTabIds.CONTACTS}
+                                    callMode={callMode}
+                                    onToggleCallMode={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () => handleCallModeChange(!callMode)
+                                            : undefined
+                                    }
+                                    onExportExcel={
+                                        currentTab === ListDetailTabIds.CONTACTS
+                                            ? () =>
+                                                  exportListMembers.mutate({
+                                                      listUuid: uuid,
+                                                      listTitle: list.title,
+                                                      query: membersQuery,
+                                                  })
+                                            : undefined
+                                    }
+                                    exportExcelDisabled={total === 0}
+                                    exportExcelPending={exportListMembers.isPending}
                                     onQuickBrowse={
                                         currentTab === ListDetailTabIds.CONTACTS
                                             ? quickBrowse.openFirst

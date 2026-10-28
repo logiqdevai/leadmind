@@ -46,7 +46,13 @@ export class CancelBookingDto {
     notify?: boolean;
 }
 
-export const SETTABLE_BOOKING_STATUSES = [BookingStatus.CONFIRMED, BookingStatus.COMPLETED, BookingStatus.NO_SHOW] as const;
+export const SETTABLE_BOOKING_STATUSES = [
+    BookingStatus.PENDING,
+    BookingStatus.CONFIRMED,
+    BookingStatus.RESCHEDULED,
+    BookingStatus.COMPLETED,
+    BookingStatus.NO_SHOW,
+] as const;
 
 export class UpdateBookingStatusDto {
     @ApiProperty({ enum: SETTABLE_BOOKING_STATUSES, description: 'Use /cancel and /reschedule for those transitions' })

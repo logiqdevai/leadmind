@@ -55,10 +55,13 @@ export class BookingCalendarInboundService {
         );
     }
 
-    /** Public URL Google can reach; push is skipped (polling only) when it isn't configured. */
+    /**
+     * Google only accepts a public HTTPS address, so push is skipped (polling only) on localhost or plain http.
+     */
     private webhookAddress(): string | null {
-        const base = this.configService.get<string>('API_PUBLIC_URL');
-        return base ? `${base.replace(/\/+$/, '')}/public/calendar/google-webhook` : null;
+        const base = this.configService.get<string>('API_URL')?.replace(/\/+$/, '');
+        if (!base || !base.startsWith('https://')) return null;
+        return `${base}/public/calendar/google-webhook`;
     }
 
     /** Webhook entry: validates the channel and queues a pull for that connection. */

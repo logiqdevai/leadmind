@@ -214,6 +214,14 @@ export class CreateBookingPageDto {
     @IsBoolean()
     requires_confirmation?: boolean;
 
+    @ApiPropertyOptional({
+        default: true,
+        description: 'When a booking is marked completed, log a meeting with outcome COMPLETED on its contact',
+    })
+    @IsOptional()
+    @IsBoolean()
+    auto_log_meeting?: boolean;
+
     @ApiPropertyOptional({ type: [BookingPageMemberDto], description: 'Eligible team members; defaults to the creator' })
     @IsOptional()
     @IsArray()

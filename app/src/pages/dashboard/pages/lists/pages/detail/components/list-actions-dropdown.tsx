@@ -1,9 +1,14 @@
 import type { FC } from "react";
-import { Button, Dropdown } from "@heroui/react";
-import { ChevronDown, ChevronsUpDown, Copy, Filter, FolderInput, Gauge, Globe, Pencil, Send, Sparkles, Trash2, UserPlus } from "lucide-react";
+import { Button, Dropdown, Spinner } from "@heroui/react";
+import { Check, ChevronDown, ChevronsUpDown, Copy, FileSpreadsheet, Filter, FolderInput, Gauge, Globe, Pencil, Phone, Send, Sparkles, Trash2, UserPlus } from "lucide-react";
 
 interface ListActionsDropdownProps {
     showContactsActions?: boolean;
+    callMode?: boolean;
+    onToggleCallMode?: () => void;
+    onExportExcel?: () => void;
+    exportExcelDisabled?: boolean;
+    exportExcelPending?: boolean;
     onQuickBrowse?: () => void;
     quickBrowseDisabled?: boolean;
     onAddContacts?: () => void;
@@ -29,6 +34,11 @@ interface ListActionsDropdownProps {
 
 export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
     showContactsActions = false,
+    callMode = false,
+    onToggleCallMode,
+    onExportExcel,
+    exportExcelDisabled = false,
+    exportExcelPending = false,
     onQuickBrowse,
     quickBrowseDisabled = false,
     onAddContacts,
@@ -65,6 +75,8 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
             <Dropdown.Menu
                 className="min-w-[11rem] bg-transparent p-0 outline-none backdrop-blur-none [backdrop-filter:none]"
                 onAction={(key) => {
+                    if (key === "call-mode") onToggleCallMode?.();
+                    if (key === "export-excel") onExportExcel?.();
                     if (key === "quick-browse") onQuickBrowse?.();
                     if (key === "add-contacts") onAddContacts?.();
                     if (key === "edit-list") onEditList();
@@ -78,6 +90,33 @@ export const ListActionsDropdown: FC<ListActionsDropdownProps> = ({
                     if (key === "delete-selected") onDeleteSelected?.();
                 }}
             >
+                {showContactsActions && onToggleCallMode ? (
+                    <Dropdown.Item id="call-mode" textValue="Call mode">
+                        <span className="flex w-full items-center gap-2.5 antialiased">
+                            <Phone className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            <span className="font-medium text-foreground">Call mode</span>
+                            {callMode ? (
+                                <Check className="ml-auto size-4 shrink-0 text-accent" strokeWidth={2} />
+                            ) : null}
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
+                {showContactsActions && onExportExcel ? (
+                    <Dropdown.Item
+                        id="export-excel"
+                        textValue="Download Excel"
+                        isDisabled={exportExcelDisabled || exportExcelPending}
+                    >
+                        <span className="flex items-center gap-2.5 antialiased">
+                            {exportExcelPending ? (
+                                <Spinner size="sm" color="current" className="size-4 shrink-0" />
+                            ) : (
+                                <FileSpreadsheet className="size-4 shrink-0 text-muted" strokeWidth={2} />
+                            )}
+                            <span className="font-medium text-foreground">Download Excel</span>
+                        </span>
+                    </Dropdown.Item>
+                ) : null}
                 {showContactsActions && onQuickBrowse ? (
                     <Dropdown.Item
                         id="quick-browse"

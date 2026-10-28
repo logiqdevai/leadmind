@@ -23,6 +23,7 @@ const SOURCE_OPTIONS = [
     { id: "", label: "All sources" },
     { id: BookingSources.PUBLIC, label: "Booked online" },
     { id: BookingSources.MANUAL, label: "Created manually" },
+    { id: BookingSources.REMINDER, label: "From a reminder" },
 ];
 
 interface CalendarFiltersProps {

@@ -40,6 +40,8 @@ export interface Reminder {
     contact: ReminderContact;
     /** Members who get this reminder; empty means every member of the organisation. */
     assignees: ReminderAssignee[];
+    /** Set while the reminder is mirrored as an event on the creator's Google Calendar. */
+    calendar_event_id?: string | null;
     created_at: string;
     updated_at: string;
 }
@@ -59,6 +61,8 @@ export interface CreateReminderPayload {
     status?: ReminderStatus;
     /** Omitted: you. Empty array: everyone in the organisation. */
     assignee_user_uuids?: string[];
+    /** Also add the reminder to your connected Google Calendar. */
+    add_to_google_calendar?: boolean;
 }
 
 export interface UpdateReminderPayload {
@@ -68,6 +72,8 @@ export interface UpdateReminderPayload {
     status?: ReminderStatus;
     /** Replaces the assignees; empty array means everyone. */
     assignee_user_uuids?: string[];
+    /** true: add to / keep on your Google Calendar; false: remove it from there. */
+    add_to_google_calendar?: boolean;
 }
 
 export interface ListRemindersQuery {

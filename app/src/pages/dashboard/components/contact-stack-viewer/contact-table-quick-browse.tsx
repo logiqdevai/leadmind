@@ -8,14 +8,17 @@ interface ContactTableNameCellProps {
     contactUuid: string;
     name: string | null | undefined;
     onOpen?: (contactUuid: string) => void;
+    wrap?: boolean;
 }
 
 export const ContactTableNameCell: FC<ContactTableNameCellProps> = ({
     contactUuid,
     name,
     onOpen,
+    wrap = false,
 }) => {
     const label = name ?? "—";
+    const textClass = wrap ? "whitespace-normal break-words" : "truncate";
 
     if (onOpen) {
         return (
@@ -27,7 +30,7 @@ export const ContactTableNameCell: FC<ContactTableNameCellProps> = ({
                     e.stopPropagation();
                     onOpen(contactUuid);
                 }}
-                className="block w-full min-w-0 truncate text-left font-medium text-foreground hover:text-accent transition-colors"
+                className={`block w-full min-w-0 ${textClass} text-left font-medium text-foreground hover:text-accent transition-colors`}
             >
                 {label}
             </button>
@@ -35,7 +38,7 @@ export const ContactTableNameCell: FC<ContactTableNameCellProps> = ({
     }
 
     return (
-        <span title={name ?? undefined} className="block w-full min-w-0 truncate font-medium text-foreground">
+        <span title={name ?? undefined} className={`block w-full min-w-0 ${textClass} font-medium text-foreground`}>
             {label}
         </span>
     );

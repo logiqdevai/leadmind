@@ -85,10 +85,11 @@ export class RemindersController {
     @ApiResponse({ status: 404, description: 'Reminder not found' })
     update(
         @CurrentUser('organisation_uuid') organisation_uuid: string,
+        @CurrentUser('uuid') user_uuid: string,
         @Param('uuid') uuid: string,
         @Body() dto: UpdateReminderDto,
     ) {
-        return this.remindersService.update(organisation_uuid, uuid, dto);
+        return this.remindersService.update(organisation_uuid, uuid, dto, user_uuid);
     }
 
     @ActivityLog({ entityType: ActivityEntityType.REMINDER, action: ActivityAction.COMPLETED, entityUuidFrom: 'params.uuid' })

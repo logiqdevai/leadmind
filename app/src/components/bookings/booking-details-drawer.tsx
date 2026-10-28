@@ -6,14 +6,15 @@ import {
     CalendarClock,
     CalendarDays,
     Check,
+    ChevronDown,
     ExternalLink,
+    Mail,
     MailPlus,
     MoreHorizontal,
     Pencil,
     RefreshCcw,
     Trash2,
     UserRoundCheck,
-    UserX,
     Video,
     XCircle,
 } from "lucide-react";
@@ -26,19 +27,23 @@ import { Routes } from "@/routes/routes";
 import {
     useBooking,
     useDeleteBooking,
+    useResendBookingConfirmation,
     useSetBookingStatus,
     useSyncBookingCalendar,
     useUpdateBooking,
 } from "@/features/bookings/hooks/use-bookings";
 import { useBookingPage } from "@/features/bookings/hooks/use-booking-pages";
-import { BOOKING_LOCATION_LABELS, CALENDAR_SYNC_LABELS } from "@/features/bookings/constants/booking-labels";
+import { cn } from "@/lib/utils";
+import { BOOKING_LOCATION_LABELS, BOOKING_STATUS_LABELS, CALENDAR_SYNC_LABELS } from "@/features/bookings/constants/booking-labels";
 import {
     BookingLocationTypes,
     BookingSources,
     BookingStatuses,
     CalendarSyncStatuses,
     type BookingDetail,
+    type BookingStatus,
     type CalendarSyncStatus,
+    type SettableBookingStatus,
 } from "@/features/bookings/interfaces/bookings.interfaces";
 import {
     formatDateLong,
@@ -126,6 +131,80 @@ const InternalNotesEditor: FC<{ booking: BookingDetail }> = ({ booking }) => {
                 </div>
             ) : null}
         </div>
+    );
+};
+
+/** Every status, in lifecycle order. Cancelled goes through the cancel dialog (emails the invitee, frees the slot). */
+const STATUS_MENU_ORDER = [
+    BookingStatuses.PENDING,
+    BookingStatuses.CONFIRMED,
+    BookingStatuses.RESCHEDULED,
+    BookingStatuses.COMPLETED,
+    BookingStatuses.NO_SHOW,
+    BookingStatuses.CANCELLED,
+] as const;
+
+/** Why a status can't be picked right now, or null when it can (mirrors BookingsService.setStatus). */
+function statusBlockedReason(booking: BookingDetail, target: BookingStatus): string | null {
+    if (target === booking.status) return "Current status";
+    if (target === BookingStatuses.COMPLETED || target === BookingStatuses.NO_SHOW) {
+        return hasBookingStarted(booking) ? null : "After the meeting starts";
+    }
+    return null;
+}
+
+const BookingStatusMenu: FC<{ booking: BookingDetail; onCancel: () => void }> = ({ booking, onCancel }) => {
+    const setStatus = useSetBookingStatus();
+    // Cancelled bookings are final: reopening one could double-book a slot that has since been taken.
+    if (booking.status === BookingStatuses.CANCELLED) return <BookingStatusChip status={booking.status} />;
+
+    return (
+        <Dropdown>
+            <Dropdown.Trigger>
+                <Button
+                    size="sm"
+                    variant="tertiary"
+                    aria-label={`Booking status: ${BOOKING_STATUS_LABELS[booking.status]}. Change status`}
+                    isDisabled={setStatus.isPending}
+                    className="h-auto min-w-0 gap-0.5 px-1 py-0.5"
+                >
+                    <BookingStatusChip status={booking.status} />
+                    <ChevronDown className="size-3.5 text-muted" />
+                </Button>
+            </Dropdown.Trigger>
+            <Dropdown.Popover
+                placement="bottom start"
+                className="rounded-xl border border-border bg-surface p-1 shadow-xl outline-none backdrop-blur-none [backdrop-filter:none]"
+            >
+                <Dropdown.Menu
+                    className="min-w-[13rem] bg-transparent p-0 outline-none"
+                    onAction={(key) => {
+                        const status = String(key) as BookingStatus;
+                        if (status === BookingStatuses.CANCELLED) onCancel();
+                        else setStatus.mutate({ uuid: booking.uuid, status: status as SettableBookingStatus });
+                    }}
+                >
+                    {STATUS_MENU_ORDER.map((status) => {
+                        const blocked = statusBlockedReason(booking, status);
+                        const danger = status === BookingStatuses.CANCELLED;
+                        return (
+                            <Dropdown.Item
+                                key={status}
+                                id={status}
+                                textValue={BOOKING_STATUS_LABELS[status]}
+                                isDisabled={!!blocked}
+                                variant={danger ? "danger" : undefined}
+                            >
+                                <span className={cn("flex w-full items-center justify-between gap-3", danger && "text-danger")}>
+                                    {BOOKING_STATUS_LABELS[status]}
+                                    {blocked ? <span className="text-xs text-muted">{blocked}</span> : null}
+                                </span>
+                            </Dropdown.Item>
+                        );
+                    })}
+                </Dropdown.Menu>
+            </Dropdown.Popover>
+        </Dropdown>
     );
 };
 
@@ -248,7 +327,11 @@ const BookingDetailsBody: FC<{ booking: BookingDetail; timezone: string }> = ({ 
                         )}
                     </DetailRow>
                     <DetailRow label="Source">
-                        {booking.source === BookingSources.PUBLIC ? "Booked online" : "Created manually"}
+                        {booking.source === BookingSources.PUBLIC
+                            ? "Booked online"
+                            : booking.source === BookingSources.REMINDER
+                              ? "From a reminder"
+                              : "Created manually"}
                         {booking.created_by ? (
                             <span className="block text-xs text-muted">by {booking.created_by.full_name ?? booking.created_by.email}</span>
                         ) : null}
@@ -354,6 +437,7 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
     const { data: booking, isLoading, isError } = useBooking(isOpen ? bookingUuid : null);
     const setStatus = useSetBookingStatus();
     const deleteBooking = useDeleteBooking();
+    const resendConfirmation = useResendBookingConfirmation();
     const navigate = useNavigate();
 
     const [tab, setTab] = useState<string>(DrawerTabs.DETAILS);
@@ -368,8 +452,6 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
     }
 
     const active = booking ? isBookingActive(booking) : false;
-    const started = booking ? hasBookingStarted(booking) : false;
-    const canMarkOutcome = !!booking && started && booking.status !== BookingStatuses.CANCELLED;
     const closeModal = (open: boolean) => {
         if (!open) setModal(null);
     };
@@ -385,7 +467,7 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
                                 <div className="flex min-w-0 flex-col gap-1 pr-8">
                                     <div className="flex min-w-0 flex-wrap items-center gap-2">
                                         <Drawer.Heading className="truncate">{bookingDisplayName(booking)}</Drawer.Heading>
-                                        <BookingStatusChip status={booking.status} />
+                                        <BookingStatusMenu booking={booking} onCancel={() => setModal(ActionModals.CANCEL)} />
                                     </div>
                                     <p className="flex items-center gap-1.5 text-xs text-muted">
                                         <CalendarDays className="size-3.5" />
@@ -468,10 +550,7 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
                                                     if (booking.contact_uuid) navigate(contactDetailHref(booking.contact_uuid));
                                                     else if (booking.invitee_email) window.location.href = `mailto:${booking.invitee_email}`;
                                                 }
-                                                if (key === "completed")
-                                                    setStatus.mutate({ uuid: booking.uuid, status: BookingStatuses.COMPLETED });
-                                                if (key === "no_show")
-                                                    setStatus.mutate({ uuid: booking.uuid, status: BookingStatuses.NO_SHOW });
+                                                if (key === "resend_confirmation") resendConfirmation.mutate(booking.uuid);
                                             }}
                                         >
                                             {booking.contact_uuid || booking.invitee_email ? (
@@ -479,6 +558,18 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
                                                     <span className="flex items-center gap-2.5">
                                                         <MailPlus className="size-4 text-muted" />
                                                         Recontact
+                                                    </span>
+                                                </Dropdown.Item>
+                                            ) : null}
+                                            {active && booking.status !== BookingStatuses.PENDING && booking.invitee_email ? (
+                                                <Dropdown.Item
+                                                    id="resend_confirmation"
+                                                    textValue="Resend confirmation email"
+                                                    isDisabled={resendConfirmation.isPending}
+                                                >
+                                                    <span className="flex items-center gap-2.5">
+                                                        <Mail className="size-4 text-muted" />
+                                                        Resend confirmation email
                                                     </span>
                                                 </Dropdown.Item>
                                             ) : null}
@@ -493,22 +584,6 @@ export const BookingDetailsDrawer: FC<BookingDetailsDrawerProps> = ({ bookingUui
                                                     <span className="flex items-center gap-2.5">
                                                         <UserRoundCheck className="size-4 text-muted" />
                                                         Reassign
-                                                    </span>
-                                                </Dropdown.Item>
-                                            ) : null}
-                                            {canMarkOutcome && booking.status !== BookingStatuses.COMPLETED ? (
-                                                <Dropdown.Item id="completed" textValue="Mark completed" isDisabled={setStatus.isPending}>
-                                                    <span className="flex items-center gap-2.5">
-                                                        <Check className="size-4 text-success" />
-                                                        Mark completed
-                                                    </span>
-                                                </Dropdown.Item>
-                                            ) : null}
-                                            {canMarkOutcome && booking.status !== BookingStatuses.NO_SHOW ? (
-                                                <Dropdown.Item id="no_show" textValue="Mark no-show" isDisabled={setStatus.isPending}>
-                                                    <span className="flex items-center gap-2.5">
-                                                        <UserX className="size-4 text-muted" />
-                                                        Mark no-show
                                                     </span>
                                                 </Dropdown.Item>
                                             ) : null}

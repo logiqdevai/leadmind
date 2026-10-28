@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Calendar, DateField, DatePicker, Input, Label, Modal, TextArea } from "@heroui/react";
+import { Button, Calendar, Checkbox, DateField, DatePicker, Input, Label, Modal, TextArea } from "@heroui/react";
 import {
     fromDate,
     getLocalTimeZone,
@@ -22,6 +22,7 @@ import { SearchSelect } from "@/components/ui/search-select";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useOrganisationMembers } from "@/features/organisations/hooks/use-organisations";
 import { useAuthStore } from "@/stores/auth";
+import { useCalendarConnections } from "@/features/bookings/hooks/use-availability";
 
 interface ReminderFormModalProps {
     contactUuid?: string;
@@ -78,6 +79,13 @@ export function ReminderFormModal({
     const memberOptions = members.map((m) => ({ value: m.user_uuid, label: m.full_name?.trim() || m.email }));
     const [assigneeUuids, setAssigneeUuids] = useState<string[]>([]);
 
+    // The event goes on the calendar of whoever saves the reminder, so it needs their own active connection.
+    const { data: calendarData } = useCalendarConnections();
+    const hasGoogleCalendar = (calendarData?.connections ?? []).some(
+        (c) => c.user_uuid === currentUserUuid && c.status === "ACTIVE",
+    );
+    const [addToGoogleCalendar, setAddToGoogleCalendar] = useState(false);
+
     const [selectedContact, setSelectedContact] = useState<ReminderContact | null>(null);
     const [selectedFilterUuid, setSelectedFilterUuid] = useState<string>("");
     const [contactSearch, setContactSearch] = useState("");
@@ -108,7 +116,9 @@ export function ReminderFormModal({
             setNotes(editing.notes ?? "");
             setRemindAt(toDateValue(new Date(editing.remind_at)));
             setAssigneeUuids((editing.assignees ?? []).map((a) => a.uuid));
+            setAddToGoogleCalendar(!!editing.calendar_event_id);
         } else {
+            setAddToGoogleCalendar(false);
             setTitle("");
             setNotes("");
             setRemindAt(defaultRemindAt());
@@ -136,6 +146,7 @@ export function ReminderFormModal({
                         notes: emptyToNullOnEdit(notes, true),
                         remind_at: dt.toISOString(),
                         assignee_user_uuids: assigneeUuids,
+                        add_to_google_calendar: addToGoogleCalendar,
                     },
                 },
                 { onSuccess: () => onOpenChange(false) },
@@ -148,6 +159,7 @@ export function ReminderFormModal({
                     notes: notes.trim() || undefined,
                     remind_at: dt.toISOString(),
                     assignee_user_uuids: assigneeUuids,
+                    add_to_google_calendar: addToGoogleCalendar,
                 },
                 { onSuccess: () => onOpenChange(false) },
             );
@@ -382,6 +394,24 @@ export function ReminderFormModal({
                                     ? "No one selected: every member of the organisation is notified."
                                     : "Only the selected members are notified."}
                             </p>
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <Checkbox
+                                isSelected={addToGoogleCalendar}
+                                onChange={(checked: boolean) => setAddToGoogleCalendar(checked)}
+                                isDisabled={(!hasGoogleCalendar && !editing?.calendar_event_id) || isPending}
+                            >
+                                <Checkbox.Control>
+                                    <Checkbox.Indicator />
+                                </Checkbox.Control>
+                                <span className="text-sm text-foreground">Add to my Google Calendar</span>
+                            </Checkbox>
+                            {!hasGoogleCalendar && !editing?.calendar_event_id && (
+                                <p className="text-xs text-muted">
+                                    Connect your Google Calendar in the booking availability settings to enable this.
+                                </p>
+                            )}
                         </div>
 
                         <div className="flex flex-col gap-1.5">

@@ -4,7 +4,7 @@ import { Alert, Button, Label, Modal } from "@heroui/react";
 import { Mail } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { SearchSelect } from "@/components/ui/search-select";
-import { useBookingPages } from "@/features/bookings/hooks/use-booking-pages";
+import { defaultBookingPageUuid, useBookingPages } from "@/features/bookings/hooks/use-booking-pages";
 import {
     useBookingInviteSettings,
     useSendBookingInvitation,
@@ -36,10 +36,12 @@ export const SendBookingLinkModal: FC<SendBookingLinkModalProps> = ({ contact, l
     const { data: pages = [] } = useBookingPages();
     const { data: settings } = useBookingInviteSettings();
     const send = useSendBookingInvitation();
-    const [pageUuid, setPageUuid] = useState("");
+    // "" = no explicit pick yet, so the default page applies.
+    const [pageChoice, setPageChoice] = useState("");
     const [remindChoice, setRemindChoice] = useState<boolean | null>(null);
 
     const activePages = pages.filter((p) => p.is_active);
+    const pageUuid = pageChoice || defaultBookingPageUuid(pages);
     const remind = remindChoice ?? settings?.reminder_enabled ?? true;
     const blocker = !contact.email
         ? "This contact has no email address."
@@ -52,7 +54,7 @@ export const SendBookingLinkModal: FC<SendBookingLinkModalProps> = ({ contact, l
 
     const handleOpenChange = (open: boolean) => {
         if (!open) {
-            setPageUuid("");
+            setPageChoice("");
             setRemindChoice(null);
         }
         onOpenChange(open);
@@ -95,9 +97,9 @@ export const SendBookingLinkModal: FC<SendBookingLinkModalProps> = ({ contact, l
                                     aria-label="Booking page"
                                     placeholder="Select a booking page"
                                     searchPlaceholder="Search booking pages…"
-                                    options={activePages.map((p) => ({ id: p.uuid, label: p.name }))}
+                                    options={activePages.map((p) => ({ id: p.uuid, label: p.is_default ? `${p.name} (default)` : p.name }))}
                                     value={pageUuid}
-                                    onChange={setPageUuid}
+                                    onChange={setPageChoice}
                                     fullWidth
                                 />
                                 {activePages.length === 0 ? (

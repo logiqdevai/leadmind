@@ -14,6 +14,7 @@ import type { PickedContact } from "@/components/bookings/contact-search-picker"
 import { useOrganisationPermission } from "@/hooks/use-organisation-permission";
 import { useBookings } from "@/features/bookings/hooks/use-bookings";
 import {
+    defaultBookingPageUuid,
     useBookingLinks,
     useBookingPages,
     useCreateBookingLink,
@@ -118,13 +119,15 @@ const CreateLinkModal: FC<{ contactUuid: string; isOpen: boolean; onOpenChange: 
 }) => {
     const { data: pages = [] } = useBookingPages();
     const create = useCreateBookingLink();
-    const [pageUuid, setPageUuid] = useState("");
+    // "" = no explicit pick yet, so the default page applies.
+    const [pageChoice, setPageChoice] = useState("");
     const [label, setLabel] = useState("");
     const activePages = pages.filter((p) => p.is_active);
+    const pageUuid = pageChoice || defaultBookingPageUuid(pages);
 
     const handleOpenChange = (open: boolean) => {
         if (!open) {
-            setPageUuid("");
+            setPageChoice("");
             setLabel("");
         }
         onOpenChange(open);
@@ -148,9 +151,9 @@ const CreateLinkModal: FC<{ contactUuid: string; isOpen: boolean; onOpenChange: 
                                 aria-label="Booking page"
                                 placeholder="Select a booking page"
                                 searchPlaceholder="Search booking pages…"
-                                options={activePages.map((p) => ({ id: p.uuid, label: p.name }))}
+                                options={activePages.map((p) => ({ id: p.uuid, label: p.is_default ? `${p.name} (default)` : p.name }))}
                                 value={pageUuid}
-                                onChange={setPageUuid}
+                                onChange={setPageChoice}
                                 fullWidth
                             />
                             {activePages.length === 0 ? (
@@ -413,6 +416,10 @@ export const BookingsTab: FC<BookingsTabProps> = ({ contact }) => {
 
     const total = (upcoming.data?.pagination.total ?? 0) + (past.data?.pagination.total ?? 0) + (cancelled.data?.pagination.total ?? 0);
     const allLoaded = !upcoming.isLoading && !past.isLoading && !cancelled.isLoading;
+    const isRefreshing = upcoming.isFetching || past.isFetching || cancelled.isFetching;
+    const refreshBookings = () => {
+        void Promise.all([upcoming.refetch(), past.refetch(), cancelled.refetch()]);
+    };
 
     return (
         <div className="flex flex-col gap-4">
@@ -420,10 +427,22 @@ export const BookingsTab: FC<BookingsTabProps> = ({ contact }) => {
                 title="Bookings"
                 icon={<CalendarDays className="size-4 text-muted" />}
                 action={
-                    <Button size="sm" variant="secondary" onPress={() => setCreateOpen(true)} className="h-6 min-h-6 px-2.5 text-[13px]">
-                        <Plus className="size-3.5" />
-                        New booking
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            size="sm"
+                            variant="tertiary"
+                            isDisabled={isRefreshing}
+                            onPress={refreshBookings}
+                            aria-label="Refresh bookings"
+                            className="h-6 min-h-6 px-2"
+                        >
+                            <RefreshCcw className={cn("size-3.5", isRefreshing && "animate-spin")} />
+                        </Button>
+                        <Button size="sm" variant="secondary" onPress={() => setCreateOpen(true)} className="h-6 min-h-6 px-2.5 text-[13px]">
+                            <Plus className="size-3.5" />
+                            New booking
+                        </Button>
+                    </div>
                 }
             >
                 {allLoaded && total === 0 ? (

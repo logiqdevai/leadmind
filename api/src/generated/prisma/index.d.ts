@@ -390,6 +390,11 @@ export type BookingPageMember = $Result.DefaultSelection<Prisma.$BookingPageMemb
  */
 export type BookingLink = $Result.DefaultSelection<Prisma.$BookingLinkPayload>
 /**
+ * Model BookingLinkVisit
+ * One row per load of a booking link's public page.
+ */
+export type BookingLinkVisit = $Result.DefaultSelection<Prisma.$BookingLinkVisitPayload>
+/**
  * Model Booking
  * 
  */
@@ -1076,7 +1081,8 @@ export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
 
 export const BookingSource: {
   PUBLIC: 'PUBLIC',
-  MANUAL: 'MANUAL'
+  MANUAL: 'MANUAL',
+  REMINDER: 'REMINDER'
 };
 
 export type BookingSource = (typeof BookingSource)[keyof typeof BookingSource]
@@ -2346,6 +2352,16 @@ export class PrismaClient<
   get bookingLink(): Prisma.BookingLinkDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.bookingLinkVisit`: Exposes CRUD operations for the **BookingLinkVisit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BookingLinkVisits
+    * const bookingLinkVisits = await prisma.bookingLinkVisit.findMany()
+    * ```
+    */
+  get bookingLinkVisit(): Prisma.BookingLinkVisitDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.booking`: Exposes CRUD operations for the **Booking** model.
     * Example usage:
     * ```ts
@@ -2921,6 +2937,7 @@ export namespace Prisma {
     BookingPage: 'BookingPage',
     BookingPageMember: 'BookingPageMember',
     BookingLink: 'BookingLink',
+    BookingLinkVisit: 'BookingLinkVisit',
     Booking: 'Booking',
     BookingEvent: 'BookingEvent',
     BookingInviteSettings: 'BookingInviteSettings',
@@ -2943,7 +2960,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingRecurringBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "booking" | "bookingEvent" | "bookingInviteSettings" | "bookingInvitation" | "bookingNotification" | "calendarConnection" | "notification"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingRecurringBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "bookingLinkVisit" | "booking" | "bookingEvent" | "bookingInviteSettings" | "bookingInvitation" | "bookingNotification" | "calendarConnection" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -8349,6 +8366,80 @@ export namespace Prisma {
           }
         }
       }
+      BookingLinkVisit: {
+        payload: Prisma.$BookingLinkVisitPayload<ExtArgs>
+        fields: Prisma.BookingLinkVisitFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BookingLinkVisitFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BookingLinkVisitFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>
+          }
+          findFirst: {
+            args: Prisma.BookingLinkVisitFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BookingLinkVisitFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>
+          }
+          findMany: {
+            args: Prisma.BookingLinkVisitFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>[]
+          }
+          create: {
+            args: Prisma.BookingLinkVisitCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>
+          }
+          createMany: {
+            args: Prisma.BookingLinkVisitCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BookingLinkVisitCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>[]
+          }
+          delete: {
+            args: Prisma.BookingLinkVisitDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>
+          }
+          update: {
+            args: Prisma.BookingLinkVisitUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>
+          }
+          deleteMany: {
+            args: Prisma.BookingLinkVisitDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BookingLinkVisitUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BookingLinkVisitUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>[]
+          }
+          upsert: {
+            args: Prisma.BookingLinkVisitUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BookingLinkVisitPayload>
+          }
+          aggregate: {
+            args: Prisma.BookingLinkVisitAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBookingLinkVisit>
+          }
+          groupBy: {
+            args: Prisma.BookingLinkVisitGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BookingLinkVisitGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BookingLinkVisitCountArgs<ExtArgs>
+            result: $Utils.Optional<BookingLinkVisitCountAggregateOutputType> | number
+          }
+        }
+      }
       Booking: {
         payload: Prisma.$BookingPayload<ExtArgs>
         fields: Prisma.BookingFieldRefs
@@ -9048,6 +9139,7 @@ export namespace Prisma {
     bookingPage?: BookingPageOmit
     bookingPageMember?: BookingPageMemberOmit
     bookingLink?: BookingLinkOmit
+    bookingLinkVisit?: BookingLinkVisitOmit
     booking?: BookingOmit
     bookingEvent?: BookingEventOmit
     bookingInviteSettings?: BookingInviteSettingsOmit
@@ -11103,11 +11195,13 @@ export namespace Prisma {
   export type BookingLinkCountOutputType = {
     bookings: number
     invitations: number
+    visits: number
   }
 
   export type BookingLinkCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bookings?: boolean | BookingLinkCountOutputTypeCountBookingsArgs
     invitations?: boolean | BookingLinkCountOutputTypeCountInvitationsArgs
+    visits?: boolean | BookingLinkCountOutputTypeCountVisitsArgs
   }
 
   // Custom InputTypes
@@ -11133,6 +11227,13 @@ export namespace Prisma {
    */
   export type BookingLinkCountOutputTypeCountInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingInvitationWhereInput
+  }
+
+  /**
+   * BookingLinkCountOutputType without action
+   */
+  export type BookingLinkCountOutputTypeCountVisitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingLinkVisitWhereInput
   }
 
 
@@ -66060,6 +66161,8 @@ export namespace Prisma {
     type: $Enums.ReminderType | null
     job_id: string | null
     outreach_message_uuid: string | null
+    calendar_event_id: string | null
+    calendar_connection_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -66077,6 +66180,8 @@ export namespace Prisma {
     type: $Enums.ReminderType | null
     job_id: string | null
     outreach_message_uuid: string | null
+    calendar_event_id: string | null
+    calendar_connection_uuid: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -66095,6 +66200,8 @@ export namespace Prisma {
     job_id: number
     outreach_message_uuid: number
     metadata: number
+    calendar_event_id: number
+    calendar_connection_uuid: number
     created_at: number
     updated_at: number
     _all: number
@@ -66122,6 +66229,8 @@ export namespace Prisma {
     type?: true
     job_id?: true
     outreach_message_uuid?: true
+    calendar_event_id?: true
+    calendar_connection_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -66139,6 +66248,8 @@ export namespace Prisma {
     type?: true
     job_id?: true
     outreach_message_uuid?: true
+    calendar_event_id?: true
+    calendar_connection_uuid?: true
     created_at?: true
     updated_at?: true
   }
@@ -66157,6 +66268,8 @@ export namespace Prisma {
     job_id?: true
     outreach_message_uuid?: true
     metadata?: true
+    calendar_event_id?: true
+    calendar_connection_uuid?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -66262,6 +66375,8 @@ export namespace Prisma {
     job_id: string | null
     outreach_message_uuid: string | null
     metadata: JsonValue | null
+    calendar_event_id: string | null
+    calendar_connection_uuid: string | null
     created_at: Date
     updated_at: Date
     _count: ReminderCountAggregateOutputType | null
@@ -66299,12 +66414,15 @@ export namespace Prisma {
     job_id?: boolean
     outreach_message_uuid?: boolean
     metadata?: boolean
+    calendar_event_id?: boolean
+    calendar_connection_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     outreach_message?: boolean | Reminder$outreach_messageArgs<ExtArgs>
     booking?: boolean | Reminder$bookingArgs<ExtArgs>
+    calendar_booking?: boolean | Reminder$calendar_bookingArgs<ExtArgs>
     assignees?: boolean | Reminder$assigneesArgs<ExtArgs>
     _count?: boolean | ReminderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reminder"]>
@@ -66323,6 +66441,8 @@ export namespace Prisma {
     job_id?: boolean
     outreach_message_uuid?: boolean
     metadata?: boolean
+    calendar_event_id?: boolean
+    calendar_connection_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -66344,6 +66464,8 @@ export namespace Prisma {
     job_id?: boolean
     outreach_message_uuid?: boolean
     metadata?: boolean
+    calendar_event_id?: boolean
+    calendar_connection_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -66365,16 +66487,19 @@ export namespace Prisma {
     job_id?: boolean
     outreach_message_uuid?: boolean
     metadata?: boolean
+    calendar_event_id?: boolean
+    calendar_connection_uuid?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type ReminderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "title" | "notes" | "remind_at" | "status" | "source" | "type" | "job_id" | "outreach_message_uuid" | "metadata" | "created_at" | "updated_at", ExtArgs["result"]["reminder"]>
+  export type ReminderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "contact_uuid" | "title" | "notes" | "remind_at" | "status" | "source" | "type" | "job_id" | "outreach_message_uuid" | "metadata" | "calendar_event_id" | "calendar_connection_uuid" | "created_at" | "updated_at", ExtArgs["result"]["reminder"]>
   export type ReminderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
     outreach_message?: boolean | Reminder$outreach_messageArgs<ExtArgs>
     booking?: boolean | Reminder$bookingArgs<ExtArgs>
+    calendar_booking?: boolean | Reminder$calendar_bookingArgs<ExtArgs>
     assignees?: boolean | Reminder$assigneesArgs<ExtArgs>
     _count?: boolean | ReminderCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -66397,6 +66522,10 @@ export namespace Prisma {
       outreach_message: Prisma.$OutreachMessagePayload<ExtArgs> | null
       booking: Prisma.$BookingPayload<ExtArgs> | null
       /**
+       * Placeholder booking holding this reminder's time on our calendar (only when added to Google Calendar).
+       */
+      calendar_booking: Prisma.$BookingPayload<ExtArgs> | null
+      /**
        * Members who get the reminder. Empty = every member of the organisation.
        */
       assignees: Prisma.$ReminderAssigneePayload<ExtArgs>[]
@@ -66415,6 +66544,11 @@ export namespace Prisma {
       job_id: string | null
       outreach_message_uuid: string | null
       metadata: Prisma.JsonValue | null
+      /**
+       * Google Calendar event mirroring this reminder, on the calendar connection that created it.
+       */
+      calendar_event_id: string | null
+      calendar_connection_uuid: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["reminder"]>
@@ -66815,6 +66949,7 @@ export namespace Prisma {
     contact<T extends ContactDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactDefaultArgs<ExtArgs>>): Prisma__ContactClient<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     outreach_message<T extends Reminder$outreach_messageArgs<ExtArgs> = {}>(args?: Subset<T, Reminder$outreach_messageArgs<ExtArgs>>): Prisma__OutreachMessageClient<$Result.GetResult<Prisma.$OutreachMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     booking<T extends Reminder$bookingArgs<ExtArgs> = {}>(args?: Subset<T, Reminder$bookingArgs<ExtArgs>>): Prisma__BookingClient<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    calendar_booking<T extends Reminder$calendar_bookingArgs<ExtArgs> = {}>(args?: Subset<T, Reminder$calendar_bookingArgs<ExtArgs>>): Prisma__BookingClient<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     assignees<T extends Reminder$assigneesArgs<ExtArgs> = {}>(args?: Subset<T, Reminder$assigneesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderAssigneePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -66858,6 +66993,8 @@ export namespace Prisma {
     readonly job_id: FieldRef<"Reminder", 'String'>
     readonly outreach_message_uuid: FieldRef<"Reminder", 'String'>
     readonly metadata: FieldRef<"Reminder", 'Json'>
+    readonly calendar_event_id: FieldRef<"Reminder", 'String'>
+    readonly calendar_connection_uuid: FieldRef<"Reminder", 'String'>
     readonly created_at: FieldRef<"Reminder", 'DateTime'>
     readonly updated_at: FieldRef<"Reminder", 'DateTime'>
   }
@@ -67278,6 +67415,25 @@ export namespace Prisma {
    * Reminder.booking
    */
   export type Reminder$bookingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Booking
+     */
+    select?: BookingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Booking
+     */
+    omit?: BookingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInclude<ExtArgs> | null
+    where?: BookingWhereInput
+  }
+
+  /**
+   * Reminder.calendar_booking
+   */
+  export type Reminder$calendar_bookingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Booking
      */
@@ -99421,6 +99577,7 @@ export namespace Prisma {
     assignment_mode: $Enums.BookingAssignmentMode | null
     allow_invitee_member_choice: boolean | null
     requires_confirmation: boolean | null
+    auto_log_meeting: boolean | null
     unavailable_slots_mode: $Enums.BookingUnavailableSlotsMode | null
     location_type: $Enums.BookingLocationType | null
     location_value: string | null
@@ -99482,6 +99639,7 @@ export namespace Prisma {
     assignment_mode: $Enums.BookingAssignmentMode | null
     allow_invitee_member_choice: boolean | null
     requires_confirmation: boolean | null
+    auto_log_meeting: boolean | null
     unavailable_slots_mode: $Enums.BookingUnavailableSlotsMode | null
     location_type: $Enums.BookingLocationType | null
     location_value: string | null
@@ -99546,6 +99704,7 @@ export namespace Prisma {
     assignment_mode: number
     allow_invitee_member_choice: number
     requires_confirmation: number
+    auto_log_meeting: number
     unavailable_slots_mode: number
     location_type: number
     location_value: number
@@ -99649,6 +99808,7 @@ export namespace Prisma {
     assignment_mode?: true
     allow_invitee_member_choice?: true
     requires_confirmation?: true
+    auto_log_meeting?: true
     unavailable_slots_mode?: true
     location_type?: true
     location_value?: true
@@ -99710,6 +99870,7 @@ export namespace Prisma {
     assignment_mode?: true
     allow_invitee_member_choice?: true
     requires_confirmation?: true
+    auto_log_meeting?: true
     unavailable_slots_mode?: true
     location_type?: true
     location_value?: true
@@ -99774,6 +99935,7 @@ export namespace Prisma {
     assignment_mode?: true
     allow_invitee_member_choice?: true
     requires_confirmation?: true
+    auto_log_meeting?: true
     unavailable_slots_mode?: true
     location_type?: true
     location_value?: true
@@ -99927,6 +100089,7 @@ export namespace Prisma {
     assignment_mode: $Enums.BookingAssignmentMode
     allow_invitee_member_choice: boolean
     requires_confirmation: boolean
+    auto_log_meeting: boolean
     unavailable_slots_mode: $Enums.BookingUnavailableSlotsMode
     location_type: $Enums.BookingLocationType
     location_value: string | null
@@ -100012,6 +100175,7 @@ export namespace Prisma {
     assignment_mode?: boolean
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: boolean
     location_type?: boolean
     location_value?: boolean
@@ -100091,6 +100255,7 @@ export namespace Prisma {
     assignment_mode?: boolean
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: boolean
     location_type?: boolean
     location_value?: boolean
@@ -100163,6 +100328,7 @@ export namespace Prisma {
     assignment_mode?: boolean
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: boolean
     location_type?: boolean
     location_value?: boolean
@@ -100235,6 +100401,7 @@ export namespace Prisma {
     assignment_mode?: boolean
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: boolean
     location_type?: boolean
     location_value?: boolean
@@ -100264,7 +100431,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type BookingPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "created_by_user_uuid" | "name" | "slug" | "is_active" | "is_default" | "title" | "description" | "intro_text" | "expectations" | "brand_name" | "logo_url" | "primary_color" | "confirmation_message" | "redirect_url" | "cta_label" | "show_team_member" | "show_timezone" | "questions" | "require_phone" | "duration_minutes" | "duration_options" | "slot_interval_minutes" | "min_notice_minutes" | "max_advance_days" | "buffer_before_minutes" | "buffer_after_minutes" | "min_gap_minutes" | "max_gap_minutes" | "max_bookings_per_day" | "seats_per_slot" | "assignment_mode" | "allow_invitee_member_choice" | "requires_confirmation" | "unavailable_slots_mode" | "location_type" | "location_value" | "allow_cancellation" | "allow_reschedule" | "cancellation_deadline_minutes" | "reschedule_deadline_minutes" | "require_cancellation_reason" | "send_confirmation_email" | "send_reminder_emails" | "reminder_offsets_minutes" | "send_cancellation_email" | "send_reschedule_email" | "notify_assignee" | "additional_recipients" | "include_meeting_link" | "include_calendar_details" | "create_team_reminder" | "team_reminder_offset_minutes" | "confirmation_template_uuid" | "reminder_template_uuid" | "cancellation_template_uuid" | "reschedule_template_uuid" | "calendar_event_title" | "calendar_event_description" | "created_at" | "updated_at", ExtArgs["result"]["bookingPage"]>
+  export type BookingPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "created_by_user_uuid" | "name" | "slug" | "is_active" | "is_default" | "title" | "description" | "intro_text" | "expectations" | "brand_name" | "logo_url" | "primary_color" | "confirmation_message" | "redirect_url" | "cta_label" | "show_team_member" | "show_timezone" | "questions" | "require_phone" | "duration_minutes" | "duration_options" | "slot_interval_minutes" | "min_notice_minutes" | "max_advance_days" | "buffer_before_minutes" | "buffer_after_minutes" | "min_gap_minutes" | "max_gap_minutes" | "max_bookings_per_day" | "seats_per_slot" | "assignment_mode" | "allow_invitee_member_choice" | "requires_confirmation" | "auto_log_meeting" | "unavailable_slots_mode" | "location_type" | "location_value" | "allow_cancellation" | "allow_reschedule" | "cancellation_deadline_minutes" | "reschedule_deadline_minutes" | "require_cancellation_reason" | "send_confirmation_email" | "send_reminder_emails" | "reminder_offsets_minutes" | "send_cancellation_email" | "send_reschedule_email" | "notify_assignee" | "additional_recipients" | "include_meeting_link" | "include_calendar_details" | "create_team_reminder" | "team_reminder_offset_minutes" | "confirmation_template_uuid" | "reminder_template_uuid" | "cancellation_template_uuid" | "reschedule_template_uuid" | "calendar_event_title" | "calendar_event_description" | "created_at" | "updated_at", ExtArgs["result"]["bookingPage"]>
   export type BookingPageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     created_by?: boolean | BookingPage$created_byArgs<ExtArgs>
@@ -100377,6 +100544,10 @@ export namespace Prisma {
        */
       allow_invitee_member_choice: boolean
       requires_confirmation: boolean
+      /**
+       * Marking a booking completed logs a MEETING (outcome COMPLETED) on its contact.
+       */
+      auto_log_meeting: boolean
       /**
        * How public pages show start times that are inside working hours but not bookable.
        */
@@ -100887,6 +101058,7 @@ export namespace Prisma {
     readonly assignment_mode: FieldRef<"BookingPage", 'BookingAssignmentMode'>
     readonly allow_invitee_member_choice: FieldRef<"BookingPage", 'Boolean'>
     readonly requires_confirmation: FieldRef<"BookingPage", 'Boolean'>
+    readonly auto_log_meeting: FieldRef<"BookingPage", 'Boolean'>
     readonly unavailable_slots_mode: FieldRef<"BookingPage", 'BookingUnavailableSlotsMode'>
     readonly location_type: FieldRef<"BookingPage", 'BookingLocationType'>
     readonly location_value: FieldRef<"BookingPage", 'String'>
@@ -102717,6 +102889,7 @@ export namespace Prisma {
     created_by_user_uuid: string | null
     deactivated_at: Date | null
     last_used_at: Date | null
+    last_visited_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -102734,6 +102907,7 @@ export namespace Prisma {
     created_by_user_uuid: string | null
     deactivated_at: Date | null
     last_used_at: Date | null
+    last_visited_at: Date | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -102751,6 +102925,7 @@ export namespace Prisma {
     created_by_user_uuid: number
     deactivated_at: number
     last_used_at: number
+    last_visited_at: number
     created_at: number
     updated_at: number
     _all: number
@@ -102778,6 +102953,7 @@ export namespace Prisma {
     created_by_user_uuid?: true
     deactivated_at?: true
     last_used_at?: true
+    last_visited_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -102795,6 +102971,7 @@ export namespace Prisma {
     created_by_user_uuid?: true
     deactivated_at?: true
     last_used_at?: true
+    last_visited_at?: true
     created_at?: true
     updated_at?: true
   }
@@ -102812,6 +102989,7 @@ export namespace Prisma {
     created_by_user_uuid?: true
     deactivated_at?: true
     last_used_at?: true
+    last_visited_at?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -102916,6 +103094,7 @@ export namespace Prisma {
     created_by_user_uuid: string | null
     deactivated_at: Date | null
     last_used_at: Date | null
+    last_visited_at: Date | null
     created_at: Date
     updated_at: Date
     _count: BookingLinkCountAggregateOutputType | null
@@ -102952,6 +103131,7 @@ export namespace Prisma {
     created_by_user_uuid?: boolean
     deactivated_at?: boolean
     last_used_at?: boolean
+    last_visited_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -102960,6 +103140,7 @@ export namespace Prisma {
     created_by?: boolean | BookingLink$created_byArgs<ExtArgs>
     bookings?: boolean | BookingLink$bookingsArgs<ExtArgs>
     invitations?: boolean | BookingLink$invitationsArgs<ExtArgs>
+    visits?: boolean | BookingLink$visitsArgs<ExtArgs>
     _count?: boolean | BookingLinkCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["bookingLink"]>
 
@@ -102976,6 +103157,7 @@ export namespace Prisma {
     created_by_user_uuid?: boolean
     deactivated_at?: boolean
     last_used_at?: boolean
+    last_visited_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -102997,6 +103179,7 @@ export namespace Prisma {
     created_by_user_uuid?: boolean
     deactivated_at?: boolean
     last_used_at?: boolean
+    last_visited_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -103018,11 +103201,12 @@ export namespace Prisma {
     created_by_user_uuid?: boolean
     deactivated_at?: boolean
     last_used_at?: boolean
+    last_visited_at?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type BookingLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "code" | "organisation_uuid" | "booking_page_uuid" | "contact_uuid" | "label" | "auto_create_contact" | "is_active" | "created_by_user_uuid" | "deactivated_at" | "last_used_at" | "created_at" | "updated_at", ExtArgs["result"]["bookingLink"]>
+  export type BookingLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "code" | "organisation_uuid" | "booking_page_uuid" | "contact_uuid" | "label" | "auto_create_contact" | "is_active" | "created_by_user_uuid" | "deactivated_at" | "last_used_at" | "last_visited_at" | "created_at" | "updated_at", ExtArgs["result"]["bookingLink"]>
   export type BookingLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     booking_page?: boolean | BookingPageDefaultArgs<ExtArgs>
@@ -103030,6 +103214,7 @@ export namespace Prisma {
     created_by?: boolean | BookingLink$created_byArgs<ExtArgs>
     bookings?: boolean | BookingLink$bookingsArgs<ExtArgs>
     invitations?: boolean | BookingLink$invitationsArgs<ExtArgs>
+    visits?: boolean | BookingLink$visitsArgs<ExtArgs>
     _count?: boolean | BookingLinkCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BookingLinkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -103054,6 +103239,7 @@ export namespace Prisma {
       created_by: Prisma.$UserPayload<ExtArgs> | null
       bookings: Prisma.$BookingPayload<ExtArgs>[]
       invitations: Prisma.$BookingInvitationPayload<ExtArgs>[]
+      visits: Prisma.$BookingLinkVisitPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -103071,6 +103257,7 @@ export namespace Prisma {
       created_by_user_uuid: string | null
       deactivated_at: Date | null
       last_used_at: Date | null
+      last_visited_at: Date | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["bookingLink"]>
@@ -103473,6 +103660,7 @@ export namespace Prisma {
     created_by<T extends BookingLink$created_byArgs<ExtArgs> = {}>(args?: Subset<T, BookingLink$created_byArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     bookings<T extends BookingLink$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, BookingLink$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invitations<T extends BookingLink$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, BookingLink$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    visits<T extends BookingLink$visitsArgs<ExtArgs> = {}>(args?: Subset<T, BookingLink$visitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -103514,6 +103702,7 @@ export namespace Prisma {
     readonly created_by_user_uuid: FieldRef<"BookingLink", 'String'>
     readonly deactivated_at: FieldRef<"BookingLink", 'DateTime'>
     readonly last_used_at: FieldRef<"BookingLink", 'DateTime'>
+    readonly last_visited_at: FieldRef<"BookingLink", 'DateTime'>
     readonly created_at: FieldRef<"BookingLink", 'DateTime'>
     readonly updated_at: FieldRef<"BookingLink", 'DateTime'>
   }
@@ -103998,6 +104187,30 @@ export namespace Prisma {
   }
 
   /**
+   * BookingLink.visits
+   */
+  export type BookingLink$visitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    where?: BookingLinkVisitWhereInput
+    orderBy?: BookingLinkVisitOrderByWithRelationInput | BookingLinkVisitOrderByWithRelationInput[]
+    cursor?: BookingLinkVisitWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BookingLinkVisitScalarFieldEnum | BookingLinkVisitScalarFieldEnum[]
+  }
+
+  /**
    * BookingLink without action
    */
   export type BookingLinkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -104013,6 +104226,1111 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: BookingLinkInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BookingLinkVisit
+   */
+
+  export type AggregateBookingLinkVisit = {
+    _count: BookingLinkVisitCountAggregateOutputType | null
+    _avg: BookingLinkVisitAvgAggregateOutputType | null
+    _sum: BookingLinkVisitSumAggregateOutputType | null
+    _min: BookingLinkVisitMinAggregateOutputType | null
+    _max: BookingLinkVisitMaxAggregateOutputType | null
+  }
+
+  export type BookingLinkVisitAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type BookingLinkVisitSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type BookingLinkVisitMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    booking_link_uuid: string | null
+    user_agent: string | null
+    referrer: string | null
+    created_at: Date | null
+  }
+
+  export type BookingLinkVisitMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    booking_link_uuid: string | null
+    user_agent: string | null
+    referrer: string | null
+    created_at: Date | null
+  }
+
+  export type BookingLinkVisitCountAggregateOutputType = {
+    id: number
+    uuid: number
+    booking_link_uuid: number
+    user_agent: number
+    referrer: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type BookingLinkVisitAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type BookingLinkVisitSumAggregateInputType = {
+    id?: true
+  }
+
+  export type BookingLinkVisitMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    booking_link_uuid?: true
+    user_agent?: true
+    referrer?: true
+    created_at?: true
+  }
+
+  export type BookingLinkVisitMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    booking_link_uuid?: true
+    user_agent?: true
+    referrer?: true
+    created_at?: true
+  }
+
+  export type BookingLinkVisitCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    booking_link_uuid?: true
+    user_agent?: true
+    referrer?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type BookingLinkVisitAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookingLinkVisit to aggregate.
+     */
+    where?: BookingLinkVisitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingLinkVisits to fetch.
+     */
+    orderBy?: BookingLinkVisitOrderByWithRelationInput | BookingLinkVisitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BookingLinkVisitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingLinkVisits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingLinkVisits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BookingLinkVisits
+    **/
+    _count?: true | BookingLinkVisitCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BookingLinkVisitAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BookingLinkVisitSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BookingLinkVisitMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BookingLinkVisitMaxAggregateInputType
+  }
+
+  export type GetBookingLinkVisitAggregateType<T extends BookingLinkVisitAggregateArgs> = {
+        [P in keyof T & keyof AggregateBookingLinkVisit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBookingLinkVisit[P]>
+      : GetScalarType<T[P], AggregateBookingLinkVisit[P]>
+  }
+
+
+
+
+  export type BookingLinkVisitGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BookingLinkVisitWhereInput
+    orderBy?: BookingLinkVisitOrderByWithAggregationInput | BookingLinkVisitOrderByWithAggregationInput[]
+    by: BookingLinkVisitScalarFieldEnum[] | BookingLinkVisitScalarFieldEnum
+    having?: BookingLinkVisitScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BookingLinkVisitCountAggregateInputType | true
+    _avg?: BookingLinkVisitAvgAggregateInputType
+    _sum?: BookingLinkVisitSumAggregateInputType
+    _min?: BookingLinkVisitMinAggregateInputType
+    _max?: BookingLinkVisitMaxAggregateInputType
+  }
+
+  export type BookingLinkVisitGroupByOutputType = {
+    id: number
+    uuid: string
+    booking_link_uuid: string
+    user_agent: string | null
+    referrer: string | null
+    created_at: Date
+    _count: BookingLinkVisitCountAggregateOutputType | null
+    _avg: BookingLinkVisitAvgAggregateOutputType | null
+    _sum: BookingLinkVisitSumAggregateOutputType | null
+    _min: BookingLinkVisitMinAggregateOutputType | null
+    _max: BookingLinkVisitMaxAggregateOutputType | null
+  }
+
+  type GetBookingLinkVisitGroupByPayload<T extends BookingLinkVisitGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BookingLinkVisitGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BookingLinkVisitGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BookingLinkVisitGroupByOutputType[P]>
+            : GetScalarType<T[P], BookingLinkVisitGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BookingLinkVisitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    booking_link_uuid?: boolean
+    user_agent?: boolean
+    referrer?: boolean
+    created_at?: boolean
+    booking_link?: boolean | BookingLinkDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingLinkVisit"]>
+
+  export type BookingLinkVisitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    booking_link_uuid?: boolean
+    user_agent?: boolean
+    referrer?: boolean
+    created_at?: boolean
+    booking_link?: boolean | BookingLinkDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingLinkVisit"]>
+
+  export type BookingLinkVisitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    booking_link_uuid?: boolean
+    user_agent?: boolean
+    referrer?: boolean
+    created_at?: boolean
+    booking_link?: boolean | BookingLinkDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bookingLinkVisit"]>
+
+  export type BookingLinkVisitSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    booking_link_uuid?: boolean
+    user_agent?: boolean
+    referrer?: boolean
+    created_at?: boolean
+  }
+
+  export type BookingLinkVisitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "booking_link_uuid" | "user_agent" | "referrer" | "created_at", ExtArgs["result"]["bookingLinkVisit"]>
+  export type BookingLinkVisitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booking_link?: boolean | BookingLinkDefaultArgs<ExtArgs>
+  }
+  export type BookingLinkVisitIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booking_link?: boolean | BookingLinkDefaultArgs<ExtArgs>
+  }
+  export type BookingLinkVisitIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booking_link?: boolean | BookingLinkDefaultArgs<ExtArgs>
+  }
+
+  export type $BookingLinkVisitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BookingLinkVisit"
+    objects: {
+      booking_link: Prisma.$BookingLinkPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      booking_link_uuid: string
+      user_agent: string | null
+      referrer: string | null
+      created_at: Date
+    }, ExtArgs["result"]["bookingLinkVisit"]>
+    composites: {}
+  }
+
+  type BookingLinkVisitGetPayload<S extends boolean | null | undefined | BookingLinkVisitDefaultArgs> = $Result.GetResult<Prisma.$BookingLinkVisitPayload, S>
+
+  type BookingLinkVisitCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BookingLinkVisitFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BookingLinkVisitCountAggregateInputType | true
+    }
+
+  export interface BookingLinkVisitDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BookingLinkVisit'], meta: { name: 'BookingLinkVisit' } }
+    /**
+     * Find zero or one BookingLinkVisit that matches the filter.
+     * @param {BookingLinkVisitFindUniqueArgs} args - Arguments to find a BookingLinkVisit
+     * @example
+     * // Get one BookingLinkVisit
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BookingLinkVisitFindUniqueArgs>(args: SelectSubset<T, BookingLinkVisitFindUniqueArgs<ExtArgs>>): Prisma__BookingLinkVisitClient<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BookingLinkVisit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BookingLinkVisitFindUniqueOrThrowArgs} args - Arguments to find a BookingLinkVisit
+     * @example
+     * // Get one BookingLinkVisit
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BookingLinkVisitFindUniqueOrThrowArgs>(args: SelectSubset<T, BookingLinkVisitFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BookingLinkVisitClient<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookingLinkVisit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingLinkVisitFindFirstArgs} args - Arguments to find a BookingLinkVisit
+     * @example
+     * // Get one BookingLinkVisit
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BookingLinkVisitFindFirstArgs>(args?: SelectSubset<T, BookingLinkVisitFindFirstArgs<ExtArgs>>): Prisma__BookingLinkVisitClient<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BookingLinkVisit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingLinkVisitFindFirstOrThrowArgs} args - Arguments to find a BookingLinkVisit
+     * @example
+     * // Get one BookingLinkVisit
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BookingLinkVisitFindFirstOrThrowArgs>(args?: SelectSubset<T, BookingLinkVisitFindFirstOrThrowArgs<ExtArgs>>): Prisma__BookingLinkVisitClient<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BookingLinkVisits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingLinkVisitFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BookingLinkVisits
+     * const bookingLinkVisits = await prisma.bookingLinkVisit.findMany()
+     * 
+     * // Get first 10 BookingLinkVisits
+     * const bookingLinkVisits = await prisma.bookingLinkVisit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bookingLinkVisitWithIdOnly = await prisma.bookingLinkVisit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BookingLinkVisitFindManyArgs>(args?: SelectSubset<T, BookingLinkVisitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BookingLinkVisit.
+     * @param {BookingLinkVisitCreateArgs} args - Arguments to create a BookingLinkVisit.
+     * @example
+     * // Create one BookingLinkVisit
+     * const BookingLinkVisit = await prisma.bookingLinkVisit.create({
+     *   data: {
+     *     // ... data to create a BookingLinkVisit
+     *   }
+     * })
+     * 
+     */
+    create<T extends BookingLinkVisitCreateArgs>(args: SelectSubset<T, BookingLinkVisitCreateArgs<ExtArgs>>): Prisma__BookingLinkVisitClient<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BookingLinkVisits.
+     * @param {BookingLinkVisitCreateManyArgs} args - Arguments to create many BookingLinkVisits.
+     * @example
+     * // Create many BookingLinkVisits
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BookingLinkVisitCreateManyArgs>(args?: SelectSubset<T, BookingLinkVisitCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BookingLinkVisits and returns the data saved in the database.
+     * @param {BookingLinkVisitCreateManyAndReturnArgs} args - Arguments to create many BookingLinkVisits.
+     * @example
+     * // Create many BookingLinkVisits
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BookingLinkVisits and only return the `id`
+     * const bookingLinkVisitWithIdOnly = await prisma.bookingLinkVisit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BookingLinkVisitCreateManyAndReturnArgs>(args?: SelectSubset<T, BookingLinkVisitCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BookingLinkVisit.
+     * @param {BookingLinkVisitDeleteArgs} args - Arguments to delete one BookingLinkVisit.
+     * @example
+     * // Delete one BookingLinkVisit
+     * const BookingLinkVisit = await prisma.bookingLinkVisit.delete({
+     *   where: {
+     *     // ... filter to delete one BookingLinkVisit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BookingLinkVisitDeleteArgs>(args: SelectSubset<T, BookingLinkVisitDeleteArgs<ExtArgs>>): Prisma__BookingLinkVisitClient<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BookingLinkVisit.
+     * @param {BookingLinkVisitUpdateArgs} args - Arguments to update one BookingLinkVisit.
+     * @example
+     * // Update one BookingLinkVisit
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BookingLinkVisitUpdateArgs>(args: SelectSubset<T, BookingLinkVisitUpdateArgs<ExtArgs>>): Prisma__BookingLinkVisitClient<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BookingLinkVisits.
+     * @param {BookingLinkVisitDeleteManyArgs} args - Arguments to filter BookingLinkVisits to delete.
+     * @example
+     * // Delete a few BookingLinkVisits
+     * const { count } = await prisma.bookingLinkVisit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BookingLinkVisitDeleteManyArgs>(args?: SelectSubset<T, BookingLinkVisitDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookingLinkVisits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingLinkVisitUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BookingLinkVisits
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BookingLinkVisitUpdateManyArgs>(args: SelectSubset<T, BookingLinkVisitUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BookingLinkVisits and returns the data updated in the database.
+     * @param {BookingLinkVisitUpdateManyAndReturnArgs} args - Arguments to update many BookingLinkVisits.
+     * @example
+     * // Update many BookingLinkVisits
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BookingLinkVisits and only return the `id`
+     * const bookingLinkVisitWithIdOnly = await prisma.bookingLinkVisit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BookingLinkVisitUpdateManyAndReturnArgs>(args: SelectSubset<T, BookingLinkVisitUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BookingLinkVisit.
+     * @param {BookingLinkVisitUpsertArgs} args - Arguments to update or create a BookingLinkVisit.
+     * @example
+     * // Update or create a BookingLinkVisit
+     * const bookingLinkVisit = await prisma.bookingLinkVisit.upsert({
+     *   create: {
+     *     // ... data to create a BookingLinkVisit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BookingLinkVisit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BookingLinkVisitUpsertArgs>(args: SelectSubset<T, BookingLinkVisitUpsertArgs<ExtArgs>>): Prisma__BookingLinkVisitClient<$Result.GetResult<Prisma.$BookingLinkVisitPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BookingLinkVisits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingLinkVisitCountArgs} args - Arguments to filter BookingLinkVisits to count.
+     * @example
+     * // Count the number of BookingLinkVisits
+     * const count = await prisma.bookingLinkVisit.count({
+     *   where: {
+     *     // ... the filter for the BookingLinkVisits we want to count
+     *   }
+     * })
+    **/
+    count<T extends BookingLinkVisitCountArgs>(
+      args?: Subset<T, BookingLinkVisitCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BookingLinkVisitCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BookingLinkVisit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingLinkVisitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BookingLinkVisitAggregateArgs>(args: Subset<T, BookingLinkVisitAggregateArgs>): Prisma.PrismaPromise<GetBookingLinkVisitAggregateType<T>>
+
+    /**
+     * Group by BookingLinkVisit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BookingLinkVisitGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BookingLinkVisitGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BookingLinkVisitGroupByArgs['orderBy'] }
+        : { orderBy?: BookingLinkVisitGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BookingLinkVisitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBookingLinkVisitGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BookingLinkVisit model
+   */
+  readonly fields: BookingLinkVisitFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BookingLinkVisit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BookingLinkVisitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    booking_link<T extends BookingLinkDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookingLinkDefaultArgs<ExtArgs>>): Prisma__BookingLinkClient<$Result.GetResult<Prisma.$BookingLinkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BookingLinkVisit model
+   */
+  interface BookingLinkVisitFieldRefs {
+    readonly id: FieldRef<"BookingLinkVisit", 'Int'>
+    readonly uuid: FieldRef<"BookingLinkVisit", 'String'>
+    readonly booking_link_uuid: FieldRef<"BookingLinkVisit", 'String'>
+    readonly user_agent: FieldRef<"BookingLinkVisit", 'String'>
+    readonly referrer: FieldRef<"BookingLinkVisit", 'String'>
+    readonly created_at: FieldRef<"BookingLinkVisit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BookingLinkVisit findUnique
+   */
+  export type BookingLinkVisitFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingLinkVisit to fetch.
+     */
+    where: BookingLinkVisitWhereUniqueInput
+  }
+
+  /**
+   * BookingLinkVisit findUniqueOrThrow
+   */
+  export type BookingLinkVisitFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingLinkVisit to fetch.
+     */
+    where: BookingLinkVisitWhereUniqueInput
+  }
+
+  /**
+   * BookingLinkVisit findFirst
+   */
+  export type BookingLinkVisitFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingLinkVisit to fetch.
+     */
+    where?: BookingLinkVisitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingLinkVisits to fetch.
+     */
+    orderBy?: BookingLinkVisitOrderByWithRelationInput | BookingLinkVisitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookingLinkVisits.
+     */
+    cursor?: BookingLinkVisitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingLinkVisits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingLinkVisits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookingLinkVisits.
+     */
+    distinct?: BookingLinkVisitScalarFieldEnum | BookingLinkVisitScalarFieldEnum[]
+  }
+
+  /**
+   * BookingLinkVisit findFirstOrThrow
+   */
+  export type BookingLinkVisitFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingLinkVisit to fetch.
+     */
+    where?: BookingLinkVisitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingLinkVisits to fetch.
+     */
+    orderBy?: BookingLinkVisitOrderByWithRelationInput | BookingLinkVisitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BookingLinkVisits.
+     */
+    cursor?: BookingLinkVisitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingLinkVisits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingLinkVisits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BookingLinkVisits.
+     */
+    distinct?: BookingLinkVisitScalarFieldEnum | BookingLinkVisitScalarFieldEnum[]
+  }
+
+  /**
+   * BookingLinkVisit findMany
+   */
+  export type BookingLinkVisitFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * Filter, which BookingLinkVisits to fetch.
+     */
+    where?: BookingLinkVisitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BookingLinkVisits to fetch.
+     */
+    orderBy?: BookingLinkVisitOrderByWithRelationInput | BookingLinkVisitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BookingLinkVisits.
+     */
+    cursor?: BookingLinkVisitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BookingLinkVisits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BookingLinkVisits.
+     */
+    skip?: number
+    distinct?: BookingLinkVisitScalarFieldEnum | BookingLinkVisitScalarFieldEnum[]
+  }
+
+  /**
+   * BookingLinkVisit create
+   */
+  export type BookingLinkVisitCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BookingLinkVisit.
+     */
+    data: XOR<BookingLinkVisitCreateInput, BookingLinkVisitUncheckedCreateInput>
+  }
+
+  /**
+   * BookingLinkVisit createMany
+   */
+  export type BookingLinkVisitCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BookingLinkVisits.
+     */
+    data: BookingLinkVisitCreateManyInput | BookingLinkVisitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BookingLinkVisit createManyAndReturn
+   */
+  export type BookingLinkVisitCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * The data used to create many BookingLinkVisits.
+     */
+    data: BookingLinkVisitCreateManyInput | BookingLinkVisitCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookingLinkVisit update
+   */
+  export type BookingLinkVisitUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BookingLinkVisit.
+     */
+    data: XOR<BookingLinkVisitUpdateInput, BookingLinkVisitUncheckedUpdateInput>
+    /**
+     * Choose, which BookingLinkVisit to update.
+     */
+    where: BookingLinkVisitWhereUniqueInput
+  }
+
+  /**
+   * BookingLinkVisit updateMany
+   */
+  export type BookingLinkVisitUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BookingLinkVisits.
+     */
+    data: XOR<BookingLinkVisitUpdateManyMutationInput, BookingLinkVisitUncheckedUpdateManyInput>
+    /**
+     * Filter which BookingLinkVisits to update
+     */
+    where?: BookingLinkVisitWhereInput
+    /**
+     * Limit how many BookingLinkVisits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookingLinkVisit updateManyAndReturn
+   */
+  export type BookingLinkVisitUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * The data used to update BookingLinkVisits.
+     */
+    data: XOR<BookingLinkVisitUpdateManyMutationInput, BookingLinkVisitUncheckedUpdateManyInput>
+    /**
+     * Filter which BookingLinkVisits to update
+     */
+    where?: BookingLinkVisitWhereInput
+    /**
+     * Limit how many BookingLinkVisits to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BookingLinkVisit upsert
+   */
+  export type BookingLinkVisitUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BookingLinkVisit to update in case it exists.
+     */
+    where: BookingLinkVisitWhereUniqueInput
+    /**
+     * In case the BookingLinkVisit found by the `where` argument doesn't exist, create a new BookingLinkVisit with this data.
+     */
+    create: XOR<BookingLinkVisitCreateInput, BookingLinkVisitUncheckedCreateInput>
+    /**
+     * In case the BookingLinkVisit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BookingLinkVisitUpdateInput, BookingLinkVisitUncheckedUpdateInput>
+  }
+
+  /**
+   * BookingLinkVisit delete
+   */
+  export type BookingLinkVisitDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
+    /**
+     * Filter which BookingLinkVisit to delete.
+     */
+    where: BookingLinkVisitWhereUniqueInput
+  }
+
+  /**
+   * BookingLinkVisit deleteMany
+   */
+  export type BookingLinkVisitDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BookingLinkVisits to delete
+     */
+    where?: BookingLinkVisitWhereInput
+    /**
+     * Limit how many BookingLinkVisits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BookingLinkVisit without action
+   */
+  export type BookingLinkVisitDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BookingLinkVisit
+     */
+    select?: BookingLinkVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BookingLinkVisit
+     */
+    omit?: BookingLinkVisitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingLinkVisitInclude<ExtArgs> | null
   }
 
 
@@ -104065,6 +105383,7 @@ export namespace Prisma {
     location_value: string | null
     meeting_url: string | null
     reminder_uuid: string | null
+    source_reminder_uuid: string | null
     calendar_connection_uuid: string | null
     calendar_event_id: string | null
     calendar_html_link: string | null
@@ -104107,6 +105426,7 @@ export namespace Prisma {
     location_value: string | null
     meeting_url: string | null
     reminder_uuid: string | null
+    source_reminder_uuid: string | null
     calendar_connection_uuid: string | null
     calendar_event_id: string | null
     calendar_html_link: string | null
@@ -104150,6 +105470,7 @@ export namespace Prisma {
     location_value: number
     meeting_url: number
     reminder_uuid: number
+    source_reminder_uuid: number
     calendar_connection_uuid: number
     calendar_event_id: number
     calendar_html_link: number
@@ -104206,6 +105527,7 @@ export namespace Prisma {
     location_value?: true
     meeting_url?: true
     reminder_uuid?: true
+    source_reminder_uuid?: true
     calendar_connection_uuid?: true
     calendar_event_id?: true
     calendar_html_link?: true
@@ -104248,6 +105570,7 @@ export namespace Prisma {
     location_value?: true
     meeting_url?: true
     reminder_uuid?: true
+    source_reminder_uuid?: true
     calendar_connection_uuid?: true
     calendar_event_id?: true
     calendar_html_link?: true
@@ -104291,6 +105614,7 @@ export namespace Prisma {
     location_value?: true
     meeting_url?: true
     reminder_uuid?: true
+    source_reminder_uuid?: true
     calendar_connection_uuid?: true
     calendar_event_id?: true
     calendar_html_link?: true
@@ -104421,6 +105745,7 @@ export namespace Prisma {
     location_value: string | null
     meeting_url: string | null
     reminder_uuid: string | null
+    source_reminder_uuid: string | null
     calendar_connection_uuid: string | null
     calendar_event_id: string | null
     calendar_html_link: string | null
@@ -104483,6 +105808,7 @@ export namespace Prisma {
     location_value?: boolean
     meeting_url?: boolean
     reminder_uuid?: boolean
+    source_reminder_uuid?: boolean
     calendar_connection_uuid?: boolean
     calendar_event_id?: boolean
     calendar_html_link?: boolean
@@ -104506,6 +105832,7 @@ export namespace Prisma {
     created_by?: boolean | Booking$created_byArgs<ExtArgs>
     calendar_connection?: boolean | Booking$calendar_connectionArgs<ExtArgs>
     reminder?: boolean | Booking$reminderArgs<ExtArgs>
+    source_reminder?: boolean | Booking$source_reminderArgs<ExtArgs>
     events?: boolean | Booking$eventsArgs<ExtArgs>
     notifications?: boolean | Booking$notificationsArgs<ExtArgs>
     _count?: boolean | BookingCountOutputTypeDefaultArgs<ExtArgs>
@@ -104537,6 +105864,7 @@ export namespace Prisma {
     location_value?: boolean
     meeting_url?: boolean
     reminder_uuid?: boolean
+    source_reminder_uuid?: boolean
     calendar_connection_uuid?: boolean
     calendar_event_id?: boolean
     calendar_html_link?: boolean
@@ -104560,6 +105888,7 @@ export namespace Prisma {
     created_by?: boolean | Booking$created_byArgs<ExtArgs>
     calendar_connection?: boolean | Booking$calendar_connectionArgs<ExtArgs>
     reminder?: boolean | Booking$reminderArgs<ExtArgs>
+    source_reminder?: boolean | Booking$source_reminderArgs<ExtArgs>
   }, ExtArgs["result"]["booking"]>
 
   export type BookingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -104588,6 +105917,7 @@ export namespace Prisma {
     location_value?: boolean
     meeting_url?: boolean
     reminder_uuid?: boolean
+    source_reminder_uuid?: boolean
     calendar_connection_uuid?: boolean
     calendar_event_id?: boolean
     calendar_html_link?: boolean
@@ -104611,6 +105941,7 @@ export namespace Prisma {
     created_by?: boolean | Booking$created_byArgs<ExtArgs>
     calendar_connection?: boolean | Booking$calendar_connectionArgs<ExtArgs>
     reminder?: boolean | Booking$reminderArgs<ExtArgs>
+    source_reminder?: boolean | Booking$source_reminderArgs<ExtArgs>
   }, ExtArgs["result"]["booking"]>
 
   export type BookingSelectScalar = {
@@ -104639,6 +105970,7 @@ export namespace Prisma {
     location_value?: boolean
     meeting_url?: boolean
     reminder_uuid?: boolean
+    source_reminder_uuid?: boolean
     calendar_connection_uuid?: boolean
     calendar_event_id?: boolean
     calendar_html_link?: boolean
@@ -104656,7 +105988,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "booking_page_uuid" | "booking_link_uuid" | "contact_uuid" | "assigned_user_uuid" | "created_by_user_uuid" | "source" | "status" | "start_at" | "end_at" | "duration_minutes" | "invitee_timezone" | "invitee_name" | "invitee_email" | "invitee_phone" | "invitee_company" | "invitee_notes" | "answers" | "internal_notes" | "location_type" | "location_value" | "meeting_url" | "reminder_uuid" | "calendar_connection_uuid" | "calendar_event_id" | "calendar_html_link" | "calendar_sync_status" | "calendar_sync_error" | "calendar_synced_at" | "manage_token" | "confirmed_at" | "cancelled_at" | "cancellation_reason" | "cancelled_by" | "reschedule_count" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "booking_page_uuid" | "booking_link_uuid" | "contact_uuid" | "assigned_user_uuid" | "created_by_user_uuid" | "source" | "status" | "start_at" | "end_at" | "duration_minutes" | "invitee_timezone" | "invitee_name" | "invitee_email" | "invitee_phone" | "invitee_company" | "invitee_notes" | "answers" | "internal_notes" | "location_type" | "location_value" | "meeting_url" | "reminder_uuid" | "source_reminder_uuid" | "calendar_connection_uuid" | "calendar_event_id" | "calendar_html_link" | "calendar_sync_status" | "calendar_sync_error" | "calendar_synced_at" | "manage_token" | "confirmed_at" | "cancelled_at" | "cancellation_reason" | "cancelled_by" | "reschedule_count" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     booking_page?: boolean | Booking$booking_pageArgs<ExtArgs>
@@ -104666,6 +105998,7 @@ export namespace Prisma {
     created_by?: boolean | Booking$created_byArgs<ExtArgs>
     calendar_connection?: boolean | Booking$calendar_connectionArgs<ExtArgs>
     reminder?: boolean | Booking$reminderArgs<ExtArgs>
+    source_reminder?: boolean | Booking$source_reminderArgs<ExtArgs>
     events?: boolean | Booking$eventsArgs<ExtArgs>
     notifications?: boolean | Booking$notificationsArgs<ExtArgs>
     _count?: boolean | BookingCountOutputTypeDefaultArgs<ExtArgs>
@@ -104679,6 +106012,7 @@ export namespace Prisma {
     created_by?: boolean | Booking$created_byArgs<ExtArgs>
     calendar_connection?: boolean | Booking$calendar_connectionArgs<ExtArgs>
     reminder?: boolean | Booking$reminderArgs<ExtArgs>
+    source_reminder?: boolean | Booking$source_reminderArgs<ExtArgs>
   }
   export type BookingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
@@ -104689,6 +106023,7 @@ export namespace Prisma {
     created_by?: boolean | Booking$created_byArgs<ExtArgs>
     calendar_connection?: boolean | Booking$calendar_connectionArgs<ExtArgs>
     reminder?: boolean | Booking$reminderArgs<ExtArgs>
+    source_reminder?: boolean | Booking$source_reminderArgs<ExtArgs>
   }
 
   export type $BookingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -104702,6 +106037,7 @@ export namespace Prisma {
       created_by: Prisma.$UserPayload<ExtArgs> | null
       calendar_connection: Prisma.$CalendarConnectionPayload<ExtArgs> | null
       reminder: Prisma.$ReminderPayload<ExtArgs> | null
+      source_reminder: Prisma.$ReminderPayload<ExtArgs> | null
       events: Prisma.$BookingEventPayload<ExtArgs>[]
       notifications: Prisma.$BookingNotificationPayload<ExtArgs>[]
     }
@@ -104737,6 +106073,10 @@ export namespace Prisma {
        * Team reminder created for this booking (see BookingPage.create_team_reminder); cleared if the reminder is deleted.
        */
       reminder_uuid: string | null
+      /**
+       * Set on source REMINDER bookings: the reminder this placeholder was made for. Deleted with it.
+       */
+      source_reminder_uuid: string | null
       calendar_connection_uuid: string | null
       calendar_event_id: string | null
       calendar_html_link: string | null
@@ -105157,6 +106497,7 @@ export namespace Prisma {
     created_by<T extends Booking$created_byArgs<ExtArgs> = {}>(args?: Subset<T, Booking$created_byArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     calendar_connection<T extends Booking$calendar_connectionArgs<ExtArgs> = {}>(args?: Subset<T, Booking$calendar_connectionArgs<ExtArgs>>): Prisma__CalendarConnectionClient<$Result.GetResult<Prisma.$CalendarConnectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     reminder<T extends Booking$reminderArgs<ExtArgs> = {}>(args?: Subset<T, Booking$reminderArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    source_reminder<T extends Booking$source_reminderArgs<ExtArgs> = {}>(args?: Subset<T, Booking$source_reminderArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     events<T extends Booking$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends Booking$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingNotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -105213,6 +106554,7 @@ export namespace Prisma {
     readonly location_value: FieldRef<"Booking", 'String'>
     readonly meeting_url: FieldRef<"Booking", 'String'>
     readonly reminder_uuid: FieldRef<"Booking", 'String'>
+    readonly source_reminder_uuid: FieldRef<"Booking", 'String'>
     readonly calendar_connection_uuid: FieldRef<"Booking", 'String'>
     readonly calendar_event_id: FieldRef<"Booking", 'String'>
     readonly calendar_html_link: FieldRef<"Booking", 'String'>
@@ -105741,6 +107083,25 @@ export namespace Prisma {
    * Booking.reminder
    */
   export type Booking$reminderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reminder
+     */
+    omit?: ReminderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    where?: ReminderWhereInput
+  }
+
+  /**
+   * Booking.source_reminder
+   */
+  export type Booking$source_reminderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Reminder
      */
@@ -114041,6 +115402,8 @@ export namespace Prisma {
     job_id: 'job_id',
     outreach_message_uuid: 'outreach_message_uuid',
     metadata: 'metadata',
+    calendar_event_id: 'calendar_event_id',
+    calendar_connection_uuid: 'calendar_connection_uuid',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -114527,6 +115890,7 @@ export namespace Prisma {
     assignment_mode: 'assignment_mode',
     allow_invitee_member_choice: 'allow_invitee_member_choice',
     requires_confirmation: 'requires_confirmation',
+    auto_log_meeting: 'auto_log_meeting',
     unavailable_slots_mode: 'unavailable_slots_mode',
     location_type: 'location_type',
     location_value: 'location_value',
@@ -114584,11 +115948,24 @@ export namespace Prisma {
     created_by_user_uuid: 'created_by_user_uuid',
     deactivated_at: 'deactivated_at',
     last_used_at: 'last_used_at',
+    last_visited_at: 'last_visited_at',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
   export type BookingLinkScalarFieldEnum = (typeof BookingLinkScalarFieldEnum)[keyof typeof BookingLinkScalarFieldEnum]
+
+
+  export const BookingLinkVisitScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    booking_link_uuid: 'booking_link_uuid',
+    user_agent: 'user_agent',
+    referrer: 'referrer',
+    created_at: 'created_at'
+  };
+
+  export type BookingLinkVisitScalarFieldEnum = (typeof BookingLinkVisitScalarFieldEnum)[keyof typeof BookingLinkVisitScalarFieldEnum]
 
 
   export const BookingScalarFieldEnum: {
@@ -114617,6 +115994,7 @@ export namespace Prisma {
     location_value: 'location_value',
     meeting_url: 'meeting_url',
     reminder_uuid: 'reminder_uuid',
+    source_reminder_uuid: 'source_reminder_uuid',
     calendar_connection_uuid: 'calendar_connection_uuid',
     calendar_event_id: 'calendar_event_id',
     calendar_html_link: 'calendar_html_link',
@@ -120550,12 +121928,15 @@ export namespace Prisma {
     job_id?: StringNullableFilter<"Reminder"> | string | null
     outreach_message_uuid?: StringNullableFilter<"Reminder"> | string | null
     metadata?: JsonNullableFilter<"Reminder">
+    calendar_event_id?: StringNullableFilter<"Reminder"> | string | null
+    calendar_connection_uuid?: StringNullableFilter<"Reminder"> | string | null
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     outreach_message?: XOR<OutreachMessageNullableScalarRelationFilter, OutreachMessageWhereInput> | null
     booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
+    calendar_booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
     assignees?: ReminderAssigneeListRelationFilter
   }
 
@@ -120573,12 +121954,15 @@ export namespace Prisma {
     job_id?: SortOrderInput | SortOrder
     outreach_message_uuid?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    calendar_event_id?: SortOrderInput | SortOrder
+    calendar_connection_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
     contact?: ContactOrderByWithRelationInput
     outreach_message?: OutreachMessageOrderByWithRelationInput
     booking?: BookingOrderByWithRelationInput
+    calendar_booking?: BookingOrderByWithRelationInput
     assignees?: ReminderAssigneeOrderByRelationAggregateInput
   }
 
@@ -120599,12 +121983,15 @@ export namespace Prisma {
     type?: EnumReminderTypeFilter<"Reminder"> | $Enums.ReminderType
     outreach_message_uuid?: StringNullableFilter<"Reminder"> | string | null
     metadata?: JsonNullableFilter<"Reminder">
+    calendar_event_id?: StringNullableFilter<"Reminder"> | string | null
+    calendar_connection_uuid?: StringNullableFilter<"Reminder"> | string | null
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
     outreach_message?: XOR<OutreachMessageNullableScalarRelationFilter, OutreachMessageWhereInput> | null
     booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
+    calendar_booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
     assignees?: ReminderAssigneeListRelationFilter
   }, "id" | "uuid" | "job_id">
 
@@ -120622,6 +122009,8 @@ export namespace Prisma {
     job_id?: SortOrderInput | SortOrder
     outreach_message_uuid?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    calendar_event_id?: SortOrderInput | SortOrder
+    calendar_connection_uuid?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: ReminderCountOrderByAggregateInput
@@ -120648,6 +122037,8 @@ export namespace Prisma {
     job_id?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
     outreach_message_uuid?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"Reminder">
+    calendar_event_id?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
+    calendar_connection_uuid?: StringNullableWithAggregatesFilter<"Reminder"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
   }
@@ -123063,6 +124454,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFilter<"BookingPage"> | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFilter<"BookingPage"> | boolean
     requires_confirmation?: BoolFilter<"BookingPage"> | boolean
+    auto_log_meeting?: BoolFilter<"BookingPage"> | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFilter<"BookingPage"> | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFilter<"BookingPage"> | $Enums.BookingLocationType
     location_value?: StringNullableFilter<"BookingPage"> | string | null
@@ -123141,6 +124533,7 @@ export namespace Prisma {
     assignment_mode?: SortOrder
     allow_invitee_member_choice?: SortOrder
     requires_confirmation?: SortOrder
+    auto_log_meeting?: SortOrder
     unavailable_slots_mode?: SortOrder
     location_type?: SortOrder
     location_value?: SortOrderInput | SortOrder
@@ -123223,6 +124616,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFilter<"BookingPage"> | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFilter<"BookingPage"> | boolean
     requires_confirmation?: BoolFilter<"BookingPage"> | boolean
+    auto_log_meeting?: BoolFilter<"BookingPage"> | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFilter<"BookingPage"> | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFilter<"BookingPage"> | $Enums.BookingLocationType
     location_value?: StringNullableFilter<"BookingPage"> | string | null
@@ -123301,6 +124695,7 @@ export namespace Prisma {
     assignment_mode?: SortOrder
     allow_invitee_member_choice?: SortOrder
     requires_confirmation?: SortOrder
+    auto_log_meeting?: SortOrder
     unavailable_slots_mode?: SortOrder
     location_type?: SortOrder
     location_value?: SortOrderInput | SortOrder
@@ -123375,6 +124770,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeWithAggregatesFilter<"BookingPage"> | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolWithAggregatesFilter<"BookingPage"> | boolean
     requires_confirmation?: BoolWithAggregatesFilter<"BookingPage"> | boolean
+    auto_log_meeting?: BoolWithAggregatesFilter<"BookingPage"> | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeWithAggregatesFilter<"BookingPage"> | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeWithAggregatesFilter<"BookingPage"> | $Enums.BookingLocationType
     location_value?: StringNullableWithAggregatesFilter<"BookingPage"> | string | null
@@ -123486,6 +124882,7 @@ export namespace Prisma {
     created_by_user_uuid?: StringNullableFilter<"BookingLink"> | string | null
     deactivated_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
     last_used_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
+    last_visited_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
     created_at?: DateTimeFilter<"BookingLink"> | Date | string
     updated_at?: DateTimeFilter<"BookingLink"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -123494,6 +124891,7 @@ export namespace Prisma {
     created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     bookings?: BookingListRelationFilter
     invitations?: BookingInvitationListRelationFilter
+    visits?: BookingLinkVisitListRelationFilter
   }
 
   export type BookingLinkOrderByWithRelationInput = {
@@ -123509,6 +124907,7 @@ export namespace Prisma {
     created_by_user_uuid?: SortOrderInput | SortOrder
     deactivated_at?: SortOrderInput | SortOrder
     last_used_at?: SortOrderInput | SortOrder
+    last_visited_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     organisation?: OrganisationOrderByWithRelationInput
@@ -123517,6 +124916,7 @@ export namespace Prisma {
     created_by?: UserOrderByWithRelationInput
     bookings?: BookingOrderByRelationAggregateInput
     invitations?: BookingInvitationOrderByRelationAggregateInput
+    visits?: BookingLinkVisitOrderByRelationAggregateInput
   }
 
   export type BookingLinkWhereUniqueInput = Prisma.AtLeast<{
@@ -123535,6 +124935,7 @@ export namespace Prisma {
     created_by_user_uuid?: StringNullableFilter<"BookingLink"> | string | null
     deactivated_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
     last_used_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
+    last_visited_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
     created_at?: DateTimeFilter<"BookingLink"> | Date | string
     updated_at?: DateTimeFilter<"BookingLink"> | Date | string
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
@@ -123543,6 +124944,7 @@ export namespace Prisma {
     created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     bookings?: BookingListRelationFilter
     invitations?: BookingInvitationListRelationFilter
+    visits?: BookingLinkVisitListRelationFilter
   }, "id" | "uuid" | "code">
 
   export type BookingLinkOrderByWithAggregationInput = {
@@ -123558,6 +124960,7 @@ export namespace Prisma {
     created_by_user_uuid?: SortOrderInput | SortOrder
     deactivated_at?: SortOrderInput | SortOrder
     last_used_at?: SortOrderInput | SortOrder
+    last_visited_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: BookingLinkCountOrderByAggregateInput
@@ -123583,8 +124986,71 @@ export namespace Prisma {
     created_by_user_uuid?: StringNullableWithAggregatesFilter<"BookingLink"> | string | null
     deactivated_at?: DateTimeNullableWithAggregatesFilter<"BookingLink"> | Date | string | null
     last_used_at?: DateTimeNullableWithAggregatesFilter<"BookingLink"> | Date | string | null
+    last_visited_at?: DateTimeNullableWithAggregatesFilter<"BookingLink"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"BookingLink"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"BookingLink"> | Date | string
+  }
+
+  export type BookingLinkVisitWhereInput = {
+    AND?: BookingLinkVisitWhereInput | BookingLinkVisitWhereInput[]
+    OR?: BookingLinkVisitWhereInput[]
+    NOT?: BookingLinkVisitWhereInput | BookingLinkVisitWhereInput[]
+    id?: IntFilter<"BookingLinkVisit"> | number
+    uuid?: StringFilter<"BookingLinkVisit"> | string
+    booking_link_uuid?: StringFilter<"BookingLinkVisit"> | string
+    user_agent?: StringNullableFilter<"BookingLinkVisit"> | string | null
+    referrer?: StringNullableFilter<"BookingLinkVisit"> | string | null
+    created_at?: DateTimeFilter<"BookingLinkVisit"> | Date | string
+    booking_link?: XOR<BookingLinkScalarRelationFilter, BookingLinkWhereInput>
+  }
+
+  export type BookingLinkVisitOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    booking_link_uuid?: SortOrder
+    user_agent?: SortOrderInput | SortOrder
+    referrer?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    booking_link?: BookingLinkOrderByWithRelationInput
+  }
+
+  export type BookingLinkVisitWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: BookingLinkVisitWhereInput | BookingLinkVisitWhereInput[]
+    OR?: BookingLinkVisitWhereInput[]
+    NOT?: BookingLinkVisitWhereInput | BookingLinkVisitWhereInput[]
+    booking_link_uuid?: StringFilter<"BookingLinkVisit"> | string
+    user_agent?: StringNullableFilter<"BookingLinkVisit"> | string | null
+    referrer?: StringNullableFilter<"BookingLinkVisit"> | string | null
+    created_at?: DateTimeFilter<"BookingLinkVisit"> | Date | string
+    booking_link?: XOR<BookingLinkScalarRelationFilter, BookingLinkWhereInput>
+  }, "id" | "uuid">
+
+  export type BookingLinkVisitOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    booking_link_uuid?: SortOrder
+    user_agent?: SortOrderInput | SortOrder
+    referrer?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    _count?: BookingLinkVisitCountOrderByAggregateInput
+    _avg?: BookingLinkVisitAvgOrderByAggregateInput
+    _max?: BookingLinkVisitMaxOrderByAggregateInput
+    _min?: BookingLinkVisitMinOrderByAggregateInput
+    _sum?: BookingLinkVisitSumOrderByAggregateInput
+  }
+
+  export type BookingLinkVisitScalarWhereWithAggregatesInput = {
+    AND?: BookingLinkVisitScalarWhereWithAggregatesInput | BookingLinkVisitScalarWhereWithAggregatesInput[]
+    OR?: BookingLinkVisitScalarWhereWithAggregatesInput[]
+    NOT?: BookingLinkVisitScalarWhereWithAggregatesInput | BookingLinkVisitScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"BookingLinkVisit"> | number
+    uuid?: StringWithAggregatesFilter<"BookingLinkVisit"> | string
+    booking_link_uuid?: StringWithAggregatesFilter<"BookingLinkVisit"> | string
+    user_agent?: StringNullableWithAggregatesFilter<"BookingLinkVisit"> | string | null
+    referrer?: StringNullableWithAggregatesFilter<"BookingLinkVisit"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"BookingLinkVisit"> | Date | string
   }
 
   export type BookingWhereInput = {
@@ -123616,6 +125082,7 @@ export namespace Prisma {
     location_value?: StringNullableFilter<"Booking"> | string | null
     meeting_url?: StringNullableFilter<"Booking"> | string | null
     reminder_uuid?: StringNullableFilter<"Booking"> | string | null
+    source_reminder_uuid?: StringNullableFilter<"Booking"> | string | null
     calendar_connection_uuid?: StringNullableFilter<"Booking"> | string | null
     calendar_event_id?: StringNullableFilter<"Booking"> | string | null
     calendar_html_link?: StringNullableFilter<"Booking"> | string | null
@@ -123639,6 +125106,7 @@ export namespace Prisma {
     created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     calendar_connection?: XOR<CalendarConnectionNullableScalarRelationFilter, CalendarConnectionWhereInput> | null
     reminder?: XOR<ReminderNullableScalarRelationFilter, ReminderWhereInput> | null
+    source_reminder?: XOR<ReminderNullableScalarRelationFilter, ReminderWhereInput> | null
     events?: BookingEventListRelationFilter
     notifications?: BookingNotificationListRelationFilter
   }
@@ -123669,6 +125137,7 @@ export namespace Prisma {
     location_value?: SortOrderInput | SortOrder
     meeting_url?: SortOrderInput | SortOrder
     reminder_uuid?: SortOrderInput | SortOrder
+    source_reminder_uuid?: SortOrderInput | SortOrder
     calendar_connection_uuid?: SortOrderInput | SortOrder
     calendar_event_id?: SortOrderInput | SortOrder
     calendar_html_link?: SortOrderInput | SortOrder
@@ -123692,6 +125161,7 @@ export namespace Prisma {
     created_by?: UserOrderByWithRelationInput
     calendar_connection?: CalendarConnectionOrderByWithRelationInput
     reminder?: ReminderOrderByWithRelationInput
+    source_reminder?: ReminderOrderByWithRelationInput
     events?: BookingEventOrderByRelationAggregateInput
     notifications?: BookingNotificationOrderByRelationAggregateInput
   }
@@ -123700,6 +125170,7 @@ export namespace Prisma {
     id?: number
     uuid?: string
     reminder_uuid?: string
+    source_reminder_uuid?: string
     manage_token?: string
     AND?: BookingWhereInput | BookingWhereInput[]
     OR?: BookingWhereInput[]
@@ -123748,9 +125219,10 @@ export namespace Prisma {
     created_by?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     calendar_connection?: XOR<CalendarConnectionNullableScalarRelationFilter, CalendarConnectionWhereInput> | null
     reminder?: XOR<ReminderNullableScalarRelationFilter, ReminderWhereInput> | null
+    source_reminder?: XOR<ReminderNullableScalarRelationFilter, ReminderWhereInput> | null
     events?: BookingEventListRelationFilter
     notifications?: BookingNotificationListRelationFilter
-  }, "id" | "uuid" | "reminder_uuid" | "manage_token">
+  }, "id" | "uuid" | "reminder_uuid" | "source_reminder_uuid" | "manage_token">
 
   export type BookingOrderByWithAggregationInput = {
     id?: SortOrder
@@ -123778,6 +125250,7 @@ export namespace Prisma {
     location_value?: SortOrderInput | SortOrder
     meeting_url?: SortOrderInput | SortOrder
     reminder_uuid?: SortOrderInput | SortOrder
+    source_reminder_uuid?: SortOrderInput | SortOrder
     calendar_connection_uuid?: SortOrderInput | SortOrder
     calendar_event_id?: SortOrderInput | SortOrder
     calendar_html_link?: SortOrderInput | SortOrder
@@ -123829,6 +125302,7 @@ export namespace Prisma {
     location_value?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     meeting_url?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     reminder_uuid?: StringNullableWithAggregatesFilter<"Booking"> | string | null
+    source_reminder_uuid?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     calendar_connection_uuid?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     calendar_event_id?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     calendar_html_link?: StringNullableWithAggregatesFilter<"Booking"> | string | null
@@ -129608,12 +131082,15 @@ export namespace Prisma {
     type?: $Enums.ReminderType
     job_id?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutRemindersInput
     contact: ContactCreateNestedOneWithoutRemindersInput
     outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
     booking?: BookingCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeCreateNestedManyWithoutReminderInput
   }
 
@@ -129631,9 +131108,12 @@ export namespace Prisma {
     job_id?: string | null
     outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     booking?: BookingUncheckedCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingUncheckedCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeUncheckedCreateNestedManyWithoutReminderInput
   }
 
@@ -129647,12 +131127,15 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
     contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
     outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
     booking?: BookingUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUpdateManyWithoutReminderNestedInput
   }
 
@@ -129670,9 +131153,12 @@ export namespace Prisma {
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking?: BookingUncheckedUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUncheckedUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUncheckedUpdateManyWithoutReminderNestedInput
   }
 
@@ -129690,6 +131176,8 @@ export namespace Prisma {
     job_id?: string | null
     outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -129704,6 +131192,8 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -129722,6 +131212,8 @@ export namespace Prisma {
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -132216,6 +133708,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -132290,6 +133783,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -132359,6 +133853,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -132433,6 +133928,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -132505,6 +134001,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -132568,6 +134065,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -132630,6 +134128,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -132725,6 +134224,7 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutBooking_linksInput
@@ -132733,6 +134233,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBooking_links_createdInput
     bookings?: BookingCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkUncheckedCreateInput = {
@@ -132748,10 +134249,12 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationUncheckedCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitUncheckedCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkUpdateInput = {
@@ -132762,6 +134265,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutBooking_linksNestedInput
@@ -132770,6 +134274,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBooking_links_createdNestedInput
     bookings?: BookingUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateInput = {
@@ -132785,10 +134290,12 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUncheckedUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkCreateManyInput = {
@@ -132804,6 +134311,7 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -132816,6 +134324,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -132833,8 +134342,68 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingLinkVisitCreateInput = {
+    uuid?: string
+    user_agent?: string | null
+    referrer?: string | null
+    created_at?: Date | string
+    booking_link: BookingLinkCreateNestedOneWithoutVisitsInput
+  }
+
+  export type BookingLinkVisitUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    booking_link_uuid: string
+    user_agent?: string | null
+    referrer?: string | null
+    created_at?: Date | string
+  }
+
+  export type BookingLinkVisitUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    booking_link?: BookingLinkUpdateOneRequiredWithoutVisitsNestedInput
+  }
+
+  export type BookingLinkVisitUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    booking_link_uuid?: StringFieldUpdateOperationsInput | string
+    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingLinkVisitCreateManyInput = {
+    id?: number
+    uuid?: string
+    booking_link_uuid: string
+    user_agent?: string | null
+    referrer?: string | null
+    created_at?: Date | string
+  }
+
+  export type BookingLinkVisitUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingLinkVisitUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    booking_link_uuid?: StringFieldUpdateOperationsInput | string
+    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BookingCreateInput = {
@@ -132877,6 +134446,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -132907,6 +134477,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -132966,6 +134537,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -132996,6 +134568,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -133041,6 +134614,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -133118,6 +134692,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -138150,6 +139725,8 @@ export namespace Prisma {
     job_id?: SortOrder
     outreach_message_uuid?: SortOrder
     metadata?: SortOrder
+    calendar_event_id?: SortOrder
+    calendar_connection_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -138171,6 +139748,8 @@ export namespace Prisma {
     type?: SortOrder
     job_id?: SortOrder
     outreach_message_uuid?: SortOrder
+    calendar_event_id?: SortOrder
+    calendar_connection_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -138188,6 +139767,8 @@ export namespace Prisma {
     type?: SortOrder
     job_id?: SortOrder
     outreach_message_uuid?: SortOrder
+    calendar_event_id?: SortOrder
+    calendar_connection_uuid?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -140068,6 +141649,7 @@ export namespace Prisma {
     assignment_mode?: SortOrder
     allow_invitee_member_choice?: SortOrder
     requires_confirmation?: SortOrder
+    auto_log_meeting?: SortOrder
     unavailable_slots_mode?: SortOrder
     location_type?: SortOrder
     location_value?: SortOrder
@@ -140150,6 +141732,7 @@ export namespace Prisma {
     assignment_mode?: SortOrder
     allow_invitee_member_choice?: SortOrder
     requires_confirmation?: SortOrder
+    auto_log_meeting?: SortOrder
     unavailable_slots_mode?: SortOrder
     location_type?: SortOrder
     location_value?: SortOrder
@@ -140211,6 +141794,7 @@ export namespace Prisma {
     assignment_mode?: SortOrder
     allow_invitee_member_choice?: SortOrder
     requires_confirmation?: SortOrder
+    auto_log_meeting?: SortOrder
     unavailable_slots_mode?: SortOrder
     location_type?: SortOrder
     location_value?: SortOrder
@@ -140339,6 +141923,16 @@ export namespace Prisma {
     isNot?: ContactWhereInput | null
   }
 
+  export type BookingLinkVisitListRelationFilter = {
+    every?: BookingLinkVisitWhereInput
+    some?: BookingLinkVisitWhereInput
+    none?: BookingLinkVisitWhereInput
+  }
+
+  export type BookingLinkVisitOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type BookingLinkCountOrderByAggregateInput = {
     id?: SortOrder
     uuid?: SortOrder
@@ -140352,6 +141946,7 @@ export namespace Prisma {
     created_by_user_uuid?: SortOrder
     deactivated_at?: SortOrder
     last_used_at?: SortOrder
+    last_visited_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -140373,6 +141968,7 @@ export namespace Prisma {
     created_by_user_uuid?: SortOrder
     deactivated_at?: SortOrder
     last_used_at?: SortOrder
+    last_visited_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -140390,11 +141986,52 @@ export namespace Prisma {
     created_by_user_uuid?: SortOrder
     deactivated_at?: SortOrder
     last_used_at?: SortOrder
+    last_visited_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type BookingLinkSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type BookingLinkScalarRelationFilter = {
+    is?: BookingLinkWhereInput
+    isNot?: BookingLinkWhereInput
+  }
+
+  export type BookingLinkVisitCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    booking_link_uuid?: SortOrder
+    user_agent?: SortOrder
+    referrer?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type BookingLinkVisitAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type BookingLinkVisitMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    booking_link_uuid?: SortOrder
+    user_agent?: SortOrder
+    referrer?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type BookingLinkVisitMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    booking_link_uuid?: SortOrder
+    user_agent?: SortOrder
+    referrer?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type BookingLinkVisitSumOrderByAggregateInput = {
     id?: SortOrder
   }
 
@@ -140477,6 +142114,7 @@ export namespace Prisma {
     location_value?: SortOrder
     meeting_url?: SortOrder
     reminder_uuid?: SortOrder
+    source_reminder_uuid?: SortOrder
     calendar_connection_uuid?: SortOrder
     calendar_event_id?: SortOrder
     calendar_html_link?: SortOrder
@@ -140525,6 +142163,7 @@ export namespace Prisma {
     location_value?: SortOrder
     meeting_url?: SortOrder
     reminder_uuid?: SortOrder
+    source_reminder_uuid?: SortOrder
     calendar_connection_uuid?: SortOrder
     calendar_event_id?: SortOrder
     calendar_html_link?: SortOrder
@@ -140567,6 +142206,7 @@ export namespace Prisma {
     location_value?: SortOrder
     meeting_url?: SortOrder
     reminder_uuid?: SortOrder
+    source_reminder_uuid?: SortOrder
     calendar_connection_uuid?: SortOrder
     calendar_event_id?: SortOrder
     calendar_html_link?: SortOrder
@@ -140793,11 +142433,6 @@ export namespace Prisma {
     in?: $Enums.BookingInvitationStatus[] | ListEnumBookingInvitationStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.BookingInvitationStatus[] | ListEnumBookingInvitationStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumBookingInvitationStatusFilter<$PrismaModel> | $Enums.BookingInvitationStatus
-  }
-
-  export type BookingLinkScalarRelationFilter = {
-    is?: BookingLinkWhereInput
-    isNot?: BookingLinkWhereInput
   }
 
   export type BookingInvitationCountOrderByAggregateInput = {
@@ -148162,6 +149797,12 @@ export namespace Prisma {
     connect?: BookingWhereUniqueInput
   }
 
+  export type BookingCreateNestedOneWithoutSource_reminderInput = {
+    create?: XOR<BookingCreateWithoutSource_reminderInput, BookingUncheckedCreateWithoutSource_reminderInput>
+    connectOrCreate?: BookingCreateOrConnectWithoutSource_reminderInput
+    connect?: BookingWhereUniqueInput
+  }
+
   export type ReminderAssigneeCreateNestedManyWithoutReminderInput = {
     create?: XOR<ReminderAssigneeCreateWithoutReminderInput, ReminderAssigneeUncheckedCreateWithoutReminderInput> | ReminderAssigneeCreateWithoutReminderInput[] | ReminderAssigneeUncheckedCreateWithoutReminderInput[]
     connectOrCreate?: ReminderAssigneeCreateOrConnectWithoutReminderInput | ReminderAssigneeCreateOrConnectWithoutReminderInput[]
@@ -148172,6 +149813,12 @@ export namespace Prisma {
   export type BookingUncheckedCreateNestedOneWithoutReminderInput = {
     create?: XOR<BookingCreateWithoutReminderInput, BookingUncheckedCreateWithoutReminderInput>
     connectOrCreate?: BookingCreateOrConnectWithoutReminderInput
+    connect?: BookingWhereUniqueInput
+  }
+
+  export type BookingUncheckedCreateNestedOneWithoutSource_reminderInput = {
+    create?: XOR<BookingCreateWithoutSource_reminderInput, BookingUncheckedCreateWithoutSource_reminderInput>
+    connectOrCreate?: BookingCreateOrConnectWithoutSource_reminderInput
     connect?: BookingWhereUniqueInput
   }
 
@@ -148230,6 +149877,16 @@ export namespace Prisma {
     update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutReminderInput, BookingUpdateWithoutReminderInput>, BookingUncheckedUpdateWithoutReminderInput>
   }
 
+  export type BookingUpdateOneWithoutSource_reminderNestedInput = {
+    create?: XOR<BookingCreateWithoutSource_reminderInput, BookingUncheckedCreateWithoutSource_reminderInput>
+    connectOrCreate?: BookingCreateOrConnectWithoutSource_reminderInput
+    upsert?: BookingUpsertWithoutSource_reminderInput
+    disconnect?: BookingWhereInput | boolean
+    delete?: BookingWhereInput | boolean
+    connect?: BookingWhereUniqueInput
+    update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutSource_reminderInput, BookingUpdateWithoutSource_reminderInput>, BookingUncheckedUpdateWithoutSource_reminderInput>
+  }
+
   export type ReminderAssigneeUpdateManyWithoutReminderNestedInput = {
     create?: XOR<ReminderAssigneeCreateWithoutReminderInput, ReminderAssigneeUncheckedCreateWithoutReminderInput> | ReminderAssigneeCreateWithoutReminderInput[] | ReminderAssigneeUncheckedCreateWithoutReminderInput[]
     connectOrCreate?: ReminderAssigneeCreateOrConnectWithoutReminderInput | ReminderAssigneeCreateOrConnectWithoutReminderInput[]
@@ -148252,6 +149909,16 @@ export namespace Prisma {
     delete?: BookingWhereInput | boolean
     connect?: BookingWhereUniqueInput
     update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutReminderInput, BookingUpdateWithoutReminderInput>, BookingUncheckedUpdateWithoutReminderInput>
+  }
+
+  export type BookingUncheckedUpdateOneWithoutSource_reminderNestedInput = {
+    create?: XOR<BookingCreateWithoutSource_reminderInput, BookingUncheckedCreateWithoutSource_reminderInput>
+    connectOrCreate?: BookingCreateOrConnectWithoutSource_reminderInput
+    upsert?: BookingUpsertWithoutSource_reminderInput
+    disconnect?: BookingWhereInput | boolean
+    delete?: BookingWhereInput | boolean
+    connect?: BookingWhereUniqueInput
+    update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutSource_reminderInput, BookingUpdateWithoutSource_reminderInput>, BookingUncheckedUpdateWithoutSource_reminderInput>
   }
 
   export type ReminderAssigneeUncheckedUpdateManyWithoutReminderNestedInput = {
@@ -149982,6 +151649,13 @@ export namespace Prisma {
     connect?: BookingInvitationWhereUniqueInput | BookingInvitationWhereUniqueInput[]
   }
 
+  export type BookingLinkVisitCreateNestedManyWithoutBooking_linkInput = {
+    create?: XOR<BookingLinkVisitCreateWithoutBooking_linkInput, BookingLinkVisitUncheckedCreateWithoutBooking_linkInput> | BookingLinkVisitCreateWithoutBooking_linkInput[] | BookingLinkVisitUncheckedCreateWithoutBooking_linkInput[]
+    connectOrCreate?: BookingLinkVisitCreateOrConnectWithoutBooking_linkInput | BookingLinkVisitCreateOrConnectWithoutBooking_linkInput[]
+    createMany?: BookingLinkVisitCreateManyBooking_linkInputEnvelope
+    connect?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+  }
+
   export type BookingUncheckedCreateNestedManyWithoutBooking_linkInput = {
     create?: XOR<BookingCreateWithoutBooking_linkInput, BookingUncheckedCreateWithoutBooking_linkInput> | BookingCreateWithoutBooking_linkInput[] | BookingUncheckedCreateWithoutBooking_linkInput[]
     connectOrCreate?: BookingCreateOrConnectWithoutBooking_linkInput | BookingCreateOrConnectWithoutBooking_linkInput[]
@@ -149994,6 +151668,13 @@ export namespace Prisma {
     connectOrCreate?: BookingInvitationCreateOrConnectWithoutBooking_linkInput | BookingInvitationCreateOrConnectWithoutBooking_linkInput[]
     createMany?: BookingInvitationCreateManyBooking_linkInputEnvelope
     connect?: BookingInvitationWhereUniqueInput | BookingInvitationWhereUniqueInput[]
+  }
+
+  export type BookingLinkVisitUncheckedCreateNestedManyWithoutBooking_linkInput = {
+    create?: XOR<BookingLinkVisitCreateWithoutBooking_linkInput, BookingLinkVisitUncheckedCreateWithoutBooking_linkInput> | BookingLinkVisitCreateWithoutBooking_linkInput[] | BookingLinkVisitUncheckedCreateWithoutBooking_linkInput[]
+    connectOrCreate?: BookingLinkVisitCreateOrConnectWithoutBooking_linkInput | BookingLinkVisitCreateOrConnectWithoutBooking_linkInput[]
+    createMany?: BookingLinkVisitCreateManyBooking_linkInputEnvelope
+    connect?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
   }
 
   export type OrganisationUpdateOneRequiredWithoutBooking_linksNestedInput = {
@@ -150060,6 +151741,20 @@ export namespace Prisma {
     deleteMany?: BookingInvitationScalarWhereInput | BookingInvitationScalarWhereInput[]
   }
 
+  export type BookingLinkVisitUpdateManyWithoutBooking_linkNestedInput = {
+    create?: XOR<BookingLinkVisitCreateWithoutBooking_linkInput, BookingLinkVisitUncheckedCreateWithoutBooking_linkInput> | BookingLinkVisitCreateWithoutBooking_linkInput[] | BookingLinkVisitUncheckedCreateWithoutBooking_linkInput[]
+    connectOrCreate?: BookingLinkVisitCreateOrConnectWithoutBooking_linkInput | BookingLinkVisitCreateOrConnectWithoutBooking_linkInput[]
+    upsert?: BookingLinkVisitUpsertWithWhereUniqueWithoutBooking_linkInput | BookingLinkVisitUpsertWithWhereUniqueWithoutBooking_linkInput[]
+    createMany?: BookingLinkVisitCreateManyBooking_linkInputEnvelope
+    set?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+    disconnect?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+    delete?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+    connect?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+    update?: BookingLinkVisitUpdateWithWhereUniqueWithoutBooking_linkInput | BookingLinkVisitUpdateWithWhereUniqueWithoutBooking_linkInput[]
+    updateMany?: BookingLinkVisitUpdateManyWithWhereWithoutBooking_linkInput | BookingLinkVisitUpdateManyWithWhereWithoutBooking_linkInput[]
+    deleteMany?: BookingLinkVisitScalarWhereInput | BookingLinkVisitScalarWhereInput[]
+  }
+
   export type BookingUncheckedUpdateManyWithoutBooking_linkNestedInput = {
     create?: XOR<BookingCreateWithoutBooking_linkInput, BookingUncheckedCreateWithoutBooking_linkInput> | BookingCreateWithoutBooking_linkInput[] | BookingUncheckedCreateWithoutBooking_linkInput[]
     connectOrCreate?: BookingCreateOrConnectWithoutBooking_linkInput | BookingCreateOrConnectWithoutBooking_linkInput[]
@@ -150086,6 +151781,34 @@ export namespace Prisma {
     update?: BookingInvitationUpdateWithWhereUniqueWithoutBooking_linkInput | BookingInvitationUpdateWithWhereUniqueWithoutBooking_linkInput[]
     updateMany?: BookingInvitationUpdateManyWithWhereWithoutBooking_linkInput | BookingInvitationUpdateManyWithWhereWithoutBooking_linkInput[]
     deleteMany?: BookingInvitationScalarWhereInput | BookingInvitationScalarWhereInput[]
+  }
+
+  export type BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkNestedInput = {
+    create?: XOR<BookingLinkVisitCreateWithoutBooking_linkInput, BookingLinkVisitUncheckedCreateWithoutBooking_linkInput> | BookingLinkVisitCreateWithoutBooking_linkInput[] | BookingLinkVisitUncheckedCreateWithoutBooking_linkInput[]
+    connectOrCreate?: BookingLinkVisitCreateOrConnectWithoutBooking_linkInput | BookingLinkVisitCreateOrConnectWithoutBooking_linkInput[]
+    upsert?: BookingLinkVisitUpsertWithWhereUniqueWithoutBooking_linkInput | BookingLinkVisitUpsertWithWhereUniqueWithoutBooking_linkInput[]
+    createMany?: BookingLinkVisitCreateManyBooking_linkInputEnvelope
+    set?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+    disconnect?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+    delete?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+    connect?: BookingLinkVisitWhereUniqueInput | BookingLinkVisitWhereUniqueInput[]
+    update?: BookingLinkVisitUpdateWithWhereUniqueWithoutBooking_linkInput | BookingLinkVisitUpdateWithWhereUniqueWithoutBooking_linkInput[]
+    updateMany?: BookingLinkVisitUpdateManyWithWhereWithoutBooking_linkInput | BookingLinkVisitUpdateManyWithWhereWithoutBooking_linkInput[]
+    deleteMany?: BookingLinkVisitScalarWhereInput | BookingLinkVisitScalarWhereInput[]
+  }
+
+  export type BookingLinkCreateNestedOneWithoutVisitsInput = {
+    create?: XOR<BookingLinkCreateWithoutVisitsInput, BookingLinkUncheckedCreateWithoutVisitsInput>
+    connectOrCreate?: BookingLinkCreateOrConnectWithoutVisitsInput
+    connect?: BookingLinkWhereUniqueInput
+  }
+
+  export type BookingLinkUpdateOneRequiredWithoutVisitsNestedInput = {
+    create?: XOR<BookingLinkCreateWithoutVisitsInput, BookingLinkUncheckedCreateWithoutVisitsInput>
+    connectOrCreate?: BookingLinkCreateOrConnectWithoutVisitsInput
+    upsert?: BookingLinkUpsertWithoutVisitsInput
+    connect?: BookingLinkWhereUniqueInput
+    update?: XOR<XOR<BookingLinkUpdateToOneWithWhereWithoutVisitsInput, BookingLinkUpdateWithoutVisitsInput>, BookingLinkUncheckedUpdateWithoutVisitsInput>
   }
 
   export type OrganisationCreateNestedOneWithoutBookingsInput = {
@@ -150133,6 +151856,12 @@ export namespace Prisma {
   export type ReminderCreateNestedOneWithoutBookingInput = {
     create?: XOR<ReminderCreateWithoutBookingInput, ReminderUncheckedCreateWithoutBookingInput>
     connectOrCreate?: ReminderCreateOrConnectWithoutBookingInput
+    connect?: ReminderWhereUniqueInput
+  }
+
+  export type ReminderCreateNestedOneWithoutCalendar_bookingInput = {
+    create?: XOR<ReminderCreateWithoutCalendar_bookingInput, ReminderUncheckedCreateWithoutCalendar_bookingInput>
+    connectOrCreate?: ReminderCreateOrConnectWithoutCalendar_bookingInput
     connect?: ReminderWhereUniqueInput
   }
 
@@ -150256,6 +151985,16 @@ export namespace Prisma {
     delete?: ReminderWhereInput | boolean
     connect?: ReminderWhereUniqueInput
     update?: XOR<XOR<ReminderUpdateToOneWithWhereWithoutBookingInput, ReminderUpdateWithoutBookingInput>, ReminderUncheckedUpdateWithoutBookingInput>
+  }
+
+  export type ReminderUpdateOneWithoutCalendar_bookingNestedInput = {
+    create?: XOR<ReminderCreateWithoutCalendar_bookingInput, ReminderUncheckedCreateWithoutCalendar_bookingInput>
+    connectOrCreate?: ReminderCreateOrConnectWithoutCalendar_bookingInput
+    upsert?: ReminderUpsertWithoutCalendar_bookingInput
+    disconnect?: ReminderWhereInput | boolean
+    delete?: ReminderWhereInput | boolean
+    connect?: ReminderWhereUniqueInput
+    update?: XOR<XOR<ReminderUpdateToOneWithWhereWithoutCalendar_bookingInput, ReminderUpdateWithoutCalendar_bookingInput>, ReminderUncheckedUpdateWithoutCalendar_bookingInput>
   }
 
   export type BookingEventUpdateManyWithoutBookingNestedInput = {
@@ -152867,6 +154606,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -152939,6 +154679,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -153017,6 +154758,7 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutBooking_linksInput
@@ -153024,6 +154766,7 @@ export namespace Prisma {
     contact?: ContactCreateNestedOneWithoutBooking_linksInput
     bookings?: BookingCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkUncheckedCreateWithoutCreated_byInput = {
@@ -153038,10 +154781,12 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationUncheckedCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitUncheckedCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkCreateOrConnectWithoutCreated_byInput = {
@@ -153093,6 +154838,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -153122,6 +154868,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -153190,6 +154937,7 @@ export namespace Prisma {
     assigned_user?: UserCreateNestedOneWithoutBookings_assignedInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -153219,6 +154967,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -154086,6 +155835,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFilter<"BookingPage"> | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFilter<"BookingPage"> | boolean
     requires_confirmation?: BoolFilter<"BookingPage"> | boolean
+    auto_log_meeting?: BoolFilter<"BookingPage"> | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFilter<"BookingPage"> | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFilter<"BookingPage"> | $Enums.BookingLocationType
     location_value?: StringNullableFilter<"BookingPage"> | string | null
@@ -154175,6 +155925,7 @@ export namespace Prisma {
     created_by_user_uuid?: StringNullableFilter<"BookingLink"> | string | null
     deactivated_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
     last_used_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
+    last_visited_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
     created_at?: DateTimeFilter<"BookingLink"> | Date | string
     updated_at?: DateTimeFilter<"BookingLink"> | Date | string
   }
@@ -154224,6 +155975,7 @@ export namespace Prisma {
     location_value?: StringNullableFilter<"Booking"> | string | null
     meeting_url?: StringNullableFilter<"Booking"> | string | null
     reminder_uuid?: StringNullableFilter<"Booking"> | string | null
+    source_reminder_uuid?: StringNullableFilter<"Booking"> | string | null
     calendar_connection_uuid?: StringNullableFilter<"Booking"> | string | null
     calendar_event_id?: StringNullableFilter<"Booking"> | string | null
     calendar_html_link?: StringNullableFilter<"Booking"> | string | null
@@ -155178,11 +156930,14 @@ export namespace Prisma {
     type?: $Enums.ReminderType
     job_id?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     contact: ContactCreateNestedOneWithoutRemindersInput
     outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
     booking?: BookingCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeCreateNestedManyWithoutReminderInput
   }
 
@@ -155199,9 +156954,12 @@ export namespace Prisma {
     job_id?: string | null
     outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     booking?: BookingUncheckedCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingUncheckedCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeUncheckedCreateNestedManyWithoutReminderInput
   }
 
@@ -156198,6 +157956,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -156270,6 +158029,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -156323,6 +158083,7 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     booking_page: BookingPageCreateNestedOneWithoutLinksInput
@@ -156330,6 +158091,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBooking_links_createdInput
     bookings?: BookingCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkUncheckedCreateWithoutOrganisationInput = {
@@ -156344,10 +158106,12 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationUncheckedCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitUncheckedCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkCreateOrConnectWithoutOrganisationInput = {
@@ -156399,6 +158163,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -156428,6 +158193,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -157129,6 +158895,8 @@ export namespace Prisma {
     job_id?: StringNullableFilter<"Reminder"> | string | null
     outreach_message_uuid?: StringNullableFilter<"Reminder"> | string | null
     metadata?: JsonNullableFilter<"Reminder">
+    calendar_event_id?: StringNullableFilter<"Reminder"> | string | null
+    calendar_connection_uuid?: StringNullableFilter<"Reminder"> | string | null
     created_at?: DateTimeFilter<"Reminder"> | Date | string
     updated_at?: DateTimeFilter<"Reminder"> | Date | string
   }
@@ -162010,11 +163778,14 @@ export namespace Prisma {
     type?: $Enums.ReminderType
     job_id?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutRemindersInput
     outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
     booking?: BookingCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeCreateNestedManyWithoutReminderInput
   }
 
@@ -162031,9 +163802,12 @@ export namespace Prisma {
     job_id?: string | null
     outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     booking?: BookingUncheckedCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingUncheckedCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeUncheckedCreateNestedManyWithoutReminderInput
   }
 
@@ -162226,6 +164000,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -162255,6 +164030,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -162292,6 +164068,7 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutBooking_linksInput
@@ -162299,6 +164076,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBooking_links_createdInput
     bookings?: BookingCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkUncheckedCreateWithoutContactInput = {
@@ -162313,10 +164091,12 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationUncheckedCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitUncheckedCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkCreateOrConnectWithoutContactInput = {
@@ -167045,11 +168825,14 @@ export namespace Prisma {
     type?: $Enums.ReminderType
     job_id?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutRemindersInput
     contact: ContactCreateNestedOneWithoutRemindersInput
     booking?: BookingCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeCreateNestedManyWithoutReminderInput
   }
 
@@ -167066,9 +168849,12 @@ export namespace Prisma {
     type?: $Enums.ReminderType
     job_id?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     booking?: BookingUncheckedCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingUncheckedCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeUncheckedCreateNestedManyWithoutReminderInput
   }
 
@@ -169128,6 +170914,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -169201,6 +170988,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -169480,6 +171268,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -169553,6 +171342,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -171755,6 +173545,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -171828,6 +173619,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -171952,6 +173744,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -172025,6 +173818,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -172103,6 +173897,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -172176,6 +173971,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -172254,6 +174050,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -172327,6 +174124,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -172405,6 +174203,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -172478,6 +174277,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -172759,6 +174559,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -172832,6 +174633,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -176219,6 +178021,7 @@ export namespace Prisma {
     assigned_user?: UserCreateNestedOneWithoutBookings_assignedInput
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -176248,6 +178051,7 @@ export namespace Prisma {
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
     meeting_url?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -176270,6 +178074,100 @@ export namespace Prisma {
   export type BookingCreateOrConnectWithoutReminderInput = {
     where: BookingWhereUniqueInput
     create: XOR<BookingCreateWithoutReminderInput, BookingUncheckedCreateWithoutReminderInput>
+  }
+
+  export type BookingCreateWithoutSource_reminderInput = {
+    uuid?: string
+    source: $Enums.BookingSource
+    status?: $Enums.BookingStatus
+    start_at: Date | string
+    end_at: Date | string
+    duration_minutes: number
+    invitee_timezone?: string | null
+    invitee_name: string
+    invitee_email: string
+    invitee_phone?: string | null
+    invitee_company?: string | null
+    invitee_notes?: string | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
+    internal_notes?: string | null
+    location_type?: $Enums.BookingLocationType
+    location_value?: string | null
+    meeting_url?: string | null
+    calendar_event_id?: string | null
+    calendar_html_link?: string | null
+    calendar_sync_status?: $Enums.CalendarSyncStatus
+    calendar_sync_error?: string | null
+    calendar_synced_at?: Date | string | null
+    manage_token: string
+    confirmed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    cancellation_reason?: string | null
+    cancelled_by?: $Enums.BookingActorType | null
+    reschedule_count?: number
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBookingsInput
+    booking_page?: BookingPageCreateNestedOneWithoutBookingsInput
+    booking_link?: BookingLinkCreateNestedOneWithoutBookingsInput
+    contact?: ContactCreateNestedOneWithoutBookingsInput
+    assigned_user?: UserCreateNestedOneWithoutBookings_assignedInput
+    created_by?: UserCreateNestedOneWithoutBookings_createdInput
+    calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
+    reminder?: ReminderCreateNestedOneWithoutBookingInput
+    events?: BookingEventCreateNestedManyWithoutBookingInput
+    notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingUncheckedCreateWithoutSource_reminderInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    booking_page_uuid?: string | null
+    booking_link_uuid?: string | null
+    contact_uuid?: string | null
+    assigned_user_uuid?: string | null
+    created_by_user_uuid?: string | null
+    source: $Enums.BookingSource
+    status?: $Enums.BookingStatus
+    start_at: Date | string
+    end_at: Date | string
+    duration_minutes: number
+    invitee_timezone?: string | null
+    invitee_name: string
+    invitee_email: string
+    invitee_phone?: string | null
+    invitee_company?: string | null
+    invitee_notes?: string | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
+    internal_notes?: string | null
+    location_type?: $Enums.BookingLocationType
+    location_value?: string | null
+    meeting_url?: string | null
+    reminder_uuid?: string | null
+    calendar_connection_uuid?: string | null
+    calendar_event_id?: string | null
+    calendar_html_link?: string | null
+    calendar_sync_status?: $Enums.CalendarSyncStatus
+    calendar_sync_error?: string | null
+    calendar_synced_at?: Date | string | null
+    manage_token: string
+    confirmed_at?: Date | string | null
+    cancelled_at?: Date | string | null
+    cancellation_reason?: string | null
+    cancelled_by?: $Enums.BookingActorType | null
+    reschedule_count?: number
+    completed_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    events?: BookingEventUncheckedCreateNestedManyWithoutBookingInput
+    notifications?: BookingNotificationUncheckedCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingCreateOrConnectWithoutSource_reminderInput = {
+    where: BookingWhereUniqueInput
+    create: XOR<BookingCreateWithoutSource_reminderInput, BookingUncheckedCreateWithoutSource_reminderInput>
   }
 
   export type ReminderAssigneeCreateWithoutReminderInput = {
@@ -176680,6 +178578,7 @@ export namespace Prisma {
     assigned_user?: UserUpdateOneWithoutBookings_assignedNestedInput
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -176709,6 +178608,107 @@ export namespace Prisma {
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_sync_status?: EnumCalendarSyncStatusFieldUpdateOperationsInput | $Enums.CalendarSyncStatus
+    calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    manage_token?: StringFieldUpdateOperationsInput | string
+    confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_by?: NullableEnumBookingActorTypeFieldUpdateOperationsInput | $Enums.BookingActorType | null
+    reschedule_count?: IntFieldUpdateOperationsInput | number
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: BookingEventUncheckedUpdateManyWithoutBookingNestedInput
+    notifications?: BookingNotificationUncheckedUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingUpsertWithoutSource_reminderInput = {
+    update: XOR<BookingUpdateWithoutSource_reminderInput, BookingUncheckedUpdateWithoutSource_reminderInput>
+    create: XOR<BookingCreateWithoutSource_reminderInput, BookingUncheckedCreateWithoutSource_reminderInput>
+    where?: BookingWhereInput
+  }
+
+  export type BookingUpdateToOneWithWhereWithoutSource_reminderInput = {
+    where?: BookingWhereInput
+    data: XOR<BookingUpdateWithoutSource_reminderInput, BookingUncheckedUpdateWithoutSource_reminderInput>
+  }
+
+  export type BookingUpdateWithoutSource_reminderInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    source?: EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+    start_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_minutes?: IntFieldUpdateOperationsInput | number
+    invitee_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_name?: StringFieldUpdateOperationsInput | string
+    invitee_email?: StringFieldUpdateOperationsInput | string
+    invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
+    internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
+    location_value?: NullableStringFieldUpdateOperationsInput | string | null
+    meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_sync_status?: EnumCalendarSyncStatusFieldUpdateOperationsInput | $Enums.CalendarSyncStatus
+    calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    manage_token?: StringFieldUpdateOperationsInput | string
+    confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_by?: NullableEnumBookingActorTypeFieldUpdateOperationsInput | $Enums.BookingActorType | null
+    reschedule_count?: IntFieldUpdateOperationsInput | number
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBookingsNestedInput
+    booking_page?: BookingPageUpdateOneWithoutBookingsNestedInput
+    booking_link?: BookingLinkUpdateOneWithoutBookingsNestedInput
+    contact?: ContactUpdateOneWithoutBookingsNestedInput
+    assigned_user?: UserUpdateOneWithoutBookings_assignedNestedInput
+    created_by?: UserUpdateOneWithoutBookings_createdNestedInput
+    calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
+    reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    events?: BookingEventUpdateManyWithoutBookingNestedInput
+    notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingUncheckedUpdateWithoutSource_reminderInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    booking_page_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    booking_link_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    assigned_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+    status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+    start_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_minutes?: IntFieldUpdateOperationsInput | number
+    invitee_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_name?: StringFieldUpdateOperationsInput | string
+    invitee_email?: StringFieldUpdateOperationsInput | string
+    invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    answers?: NullableJsonNullValueInput | InputJsonValue
+    internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
+    location_value?: NullableStringFieldUpdateOperationsInput | string | null
+    meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
+    reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -176754,12 +178754,15 @@ export namespace Prisma {
     type?: $Enums.ReminderType
     job_id?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutRemindersInput
     contact: ContactCreateNestedOneWithoutRemindersInput
     outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
     booking?: BookingCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingCreateNestedOneWithoutSource_reminderInput
   }
 
   export type ReminderUncheckedCreateWithoutAssigneesInput = {
@@ -176776,9 +178779,12 @@ export namespace Prisma {
     job_id?: string | null
     outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     booking?: BookingUncheckedCreateNestedOneWithoutReminderInput
+    calendar_booking?: BookingUncheckedCreateNestedOneWithoutSource_reminderInput
   }
 
   export type ReminderCreateOrConnectWithoutAssigneesInput = {
@@ -176889,12 +178895,15 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
     contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
     outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
     booking?: BookingUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUpdateOneWithoutSource_reminderNestedInput
   }
 
   export type ReminderUncheckedUpdateWithoutAssigneesInput = {
@@ -176911,9 +178920,12 @@ export namespace Prisma {
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking?: BookingUncheckedUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUncheckedUpdateOneWithoutSource_reminderNestedInput
   }
 
   export type UserUpsertWithoutReminder_assignmentsInput = {
@@ -185613,6 +187625,7 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutBooking_linksInput
@@ -185620,6 +187633,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBooking_links_createdInput
     bookings?: BookingCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkUncheckedCreateWithoutBooking_pageInput = {
@@ -185634,10 +187648,12 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutBooking_linkInput
     invitations?: BookingInvitationUncheckedCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitUncheckedCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkCreateOrConnectWithoutBooking_pageInput = {
@@ -185689,6 +187705,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -185718,6 +187735,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -186458,6 +188476,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -186531,6 +188550,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -186697,6 +188717,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -186770,6 +188791,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187044,6 +189066,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -187117,6 +189140,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -187385,6 +189409,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -187414,6 +189439,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -187489,6 +189515,31 @@ export namespace Prisma {
 
   export type BookingInvitationCreateManyBooking_linkInputEnvelope = {
     data: BookingInvitationCreateManyBooking_linkInput | BookingInvitationCreateManyBooking_linkInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BookingLinkVisitCreateWithoutBooking_linkInput = {
+    uuid?: string
+    user_agent?: string | null
+    referrer?: string | null
+    created_at?: Date | string
+  }
+
+  export type BookingLinkVisitUncheckedCreateWithoutBooking_linkInput = {
+    id?: number
+    uuid?: string
+    user_agent?: string | null
+    referrer?: string | null
+    created_at?: Date | string
+  }
+
+  export type BookingLinkVisitCreateOrConnectWithoutBooking_linkInput = {
+    where: BookingLinkVisitWhereUniqueInput
+    create: XOR<BookingLinkVisitCreateWithoutBooking_linkInput, BookingLinkVisitUncheckedCreateWithoutBooking_linkInput>
+  }
+
+  export type BookingLinkVisitCreateManyBooking_linkInputEnvelope = {
+    data: BookingLinkVisitCreateManyBooking_linkInput | BookingLinkVisitCreateManyBooking_linkInput[]
     skipDuplicates?: boolean
   }
 
@@ -187661,6 +189712,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187734,6 +189786,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -188002,6 +190055,128 @@ export namespace Prisma {
     data: XOR<BookingInvitationUpdateManyMutationInput, BookingInvitationUncheckedUpdateManyWithoutBooking_linkInput>
   }
 
+  export type BookingLinkVisitUpsertWithWhereUniqueWithoutBooking_linkInput = {
+    where: BookingLinkVisitWhereUniqueInput
+    update: XOR<BookingLinkVisitUpdateWithoutBooking_linkInput, BookingLinkVisitUncheckedUpdateWithoutBooking_linkInput>
+    create: XOR<BookingLinkVisitCreateWithoutBooking_linkInput, BookingLinkVisitUncheckedCreateWithoutBooking_linkInput>
+  }
+
+  export type BookingLinkVisitUpdateWithWhereUniqueWithoutBooking_linkInput = {
+    where: BookingLinkVisitWhereUniqueInput
+    data: XOR<BookingLinkVisitUpdateWithoutBooking_linkInput, BookingLinkVisitUncheckedUpdateWithoutBooking_linkInput>
+  }
+
+  export type BookingLinkVisitUpdateManyWithWhereWithoutBooking_linkInput = {
+    where: BookingLinkVisitScalarWhereInput
+    data: XOR<BookingLinkVisitUpdateManyMutationInput, BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkInput>
+  }
+
+  export type BookingLinkVisitScalarWhereInput = {
+    AND?: BookingLinkVisitScalarWhereInput | BookingLinkVisitScalarWhereInput[]
+    OR?: BookingLinkVisitScalarWhereInput[]
+    NOT?: BookingLinkVisitScalarWhereInput | BookingLinkVisitScalarWhereInput[]
+    id?: IntFilter<"BookingLinkVisit"> | number
+    uuid?: StringFilter<"BookingLinkVisit"> | string
+    booking_link_uuid?: StringFilter<"BookingLinkVisit"> | string
+    user_agent?: StringNullableFilter<"BookingLinkVisit"> | string | null
+    referrer?: StringNullableFilter<"BookingLinkVisit"> | string | null
+    created_at?: DateTimeFilter<"BookingLinkVisit"> | Date | string
+  }
+
+  export type BookingLinkCreateWithoutVisitsInput = {
+    uuid?: string
+    code: string
+    label?: string | null
+    auto_create_contact?: boolean
+    is_active?: boolean
+    deactivated_at?: Date | string | null
+    last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutBooking_linksInput
+    booking_page: BookingPageCreateNestedOneWithoutLinksInput
+    contact?: ContactCreateNestedOneWithoutBooking_linksInput
+    created_by?: UserCreateNestedOneWithoutBooking_links_createdInput
+    bookings?: BookingCreateNestedManyWithoutBooking_linkInput
+    invitations?: BookingInvitationCreateNestedManyWithoutBooking_linkInput
+  }
+
+  export type BookingLinkUncheckedCreateWithoutVisitsInput = {
+    id?: number
+    uuid?: string
+    code: string
+    organisation_uuid: string
+    booking_page_uuid: string
+    contact_uuid?: string | null
+    label?: string | null
+    auto_create_contact?: boolean
+    is_active?: boolean
+    created_by_user_uuid?: string | null
+    deactivated_at?: Date | string | null
+    last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    bookings?: BookingUncheckedCreateNestedManyWithoutBooking_linkInput
+    invitations?: BookingInvitationUncheckedCreateNestedManyWithoutBooking_linkInput
+  }
+
+  export type BookingLinkCreateOrConnectWithoutVisitsInput = {
+    where: BookingLinkWhereUniqueInput
+    create: XOR<BookingLinkCreateWithoutVisitsInput, BookingLinkUncheckedCreateWithoutVisitsInput>
+  }
+
+  export type BookingLinkUpsertWithoutVisitsInput = {
+    update: XOR<BookingLinkUpdateWithoutVisitsInput, BookingLinkUncheckedUpdateWithoutVisitsInput>
+    create: XOR<BookingLinkCreateWithoutVisitsInput, BookingLinkUncheckedCreateWithoutVisitsInput>
+    where?: BookingLinkWhereInput
+  }
+
+  export type BookingLinkUpdateToOneWithWhereWithoutVisitsInput = {
+    where?: BookingLinkWhereInput
+    data: XOR<BookingLinkUpdateWithoutVisitsInput, BookingLinkUncheckedUpdateWithoutVisitsInput>
+  }
+
+  export type BookingLinkUpdateWithoutVisitsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutBooking_linksNestedInput
+    booking_page?: BookingPageUpdateOneRequiredWithoutLinksNestedInput
+    contact?: ContactUpdateOneWithoutBooking_linksNestedInput
+    created_by?: UserUpdateOneWithoutBooking_links_createdNestedInput
+    bookings?: BookingUpdateManyWithoutBooking_linkNestedInput
+    invitations?: BookingInvitationUpdateManyWithoutBooking_linkNestedInput
+  }
+
+  export type BookingLinkUncheckedUpdateWithoutVisitsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    booking_page_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bookings?: BookingUncheckedUpdateManyWithoutBooking_linkNestedInput
+    invitations?: BookingInvitationUncheckedUpdateManyWithoutBooking_linkNestedInput
+  }
+
   export type OrganisationCreateWithoutBookingsInput = {
     uuid?: string
     name: string
@@ -188154,6 +190329,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -188227,6 +190403,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -188274,6 +190451,7 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutBooking_linksInput
@@ -188281,6 +190459,7 @@ export namespace Prisma {
     contact?: ContactCreateNestedOneWithoutBooking_linksInput
     created_by?: UserCreateNestedOneWithoutBooking_links_createdInput
     invitations?: BookingInvitationCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkUncheckedCreateWithoutBookingsInput = {
@@ -188296,9 +190475,11 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     invitations?: BookingInvitationUncheckedCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitUncheckedCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkCreateOrConnectWithoutBookingsInput = {
@@ -188640,11 +190821,14 @@ export namespace Prisma {
     type?: $Enums.ReminderType
     job_id?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutRemindersInput
     contact: ContactCreateNestedOneWithoutRemindersInput
     outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
+    calendar_booking?: BookingCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeCreateNestedManyWithoutReminderInput
   }
 
@@ -188662,14 +190846,65 @@ export namespace Prisma {
     job_id?: string | null
     outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    calendar_booking?: BookingUncheckedCreateNestedOneWithoutSource_reminderInput
     assignees?: ReminderAssigneeUncheckedCreateNestedManyWithoutReminderInput
   }
 
   export type ReminderCreateOrConnectWithoutBookingInput = {
     where: ReminderWhereUniqueInput
     create: XOR<ReminderCreateWithoutBookingInput, ReminderUncheckedCreateWithoutBookingInput>
+  }
+
+  export type ReminderCreateWithoutCalendar_bookingInput = {
+    uuid?: string
+    title?: string | null
+    notes?: string | null
+    remind_at: Date | string
+    status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
+    job_id?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutRemindersInput
+    contact: ContactCreateNestedOneWithoutRemindersInput
+    outreach_message?: OutreachMessageCreateNestedOneWithoutRemindersInput
+    booking?: BookingCreateNestedOneWithoutReminderInput
+    assignees?: ReminderAssigneeCreateNestedManyWithoutReminderInput
+  }
+
+  export type ReminderUncheckedCreateWithoutCalendar_bookingInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    contact_uuid: string
+    title?: string | null
+    notes?: string | null
+    remind_at: Date | string
+    status?: $Enums.ReminderStatus
+    source?: $Enums.ReminderSource
+    type?: $Enums.ReminderType
+    job_id?: string | null
+    outreach_message_uuid?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    booking?: BookingUncheckedCreateNestedOneWithoutReminderInput
+    assignees?: ReminderAssigneeUncheckedCreateNestedManyWithoutReminderInput
+  }
+
+  export type ReminderCreateOrConnectWithoutCalendar_bookingInput = {
+    where: ReminderWhereUniqueInput
+    create: XOR<ReminderCreateWithoutCalendar_bookingInput, ReminderUncheckedCreateWithoutCalendar_bookingInput>
   }
 
   export type BookingEventCreateWithoutBookingInput = {
@@ -188907,6 +191142,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -188980,6 +191216,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -189033,6 +191270,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutBooking_linksNestedInput
@@ -189040,6 +191278,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneWithoutBooking_linksNestedInput
     created_by?: UserUpdateOneWithoutBooking_links_createdNestedInput
     invitations?: BookingInvitationUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateWithoutBookingsInput = {
@@ -189055,9 +191294,11 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invitations?: BookingInvitationUncheckedUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type ContactUpsertWithoutBookingsInput = {
@@ -189429,11 +191670,14 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
     contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
     outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
+    calendar_booking?: BookingUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUpdateManyWithoutReminderNestedInput
   }
 
@@ -189451,8 +191695,65 @@ export namespace Prisma {
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    calendar_booking?: BookingUncheckedUpdateOneWithoutSource_reminderNestedInput
+    assignees?: ReminderAssigneeUncheckedUpdateManyWithoutReminderNestedInput
+  }
+
+  export type ReminderUpsertWithoutCalendar_bookingInput = {
+    update: XOR<ReminderUpdateWithoutCalendar_bookingInput, ReminderUncheckedUpdateWithoutCalendar_bookingInput>
+    create: XOR<ReminderCreateWithoutCalendar_bookingInput, ReminderUncheckedCreateWithoutCalendar_bookingInput>
+    where?: ReminderWhereInput
+  }
+
+  export type ReminderUpdateToOneWithWhereWithoutCalendar_bookingInput = {
+    where?: ReminderWhereInput
+    data: XOR<ReminderUpdateWithoutCalendar_bookingInput, ReminderUncheckedUpdateWithoutCalendar_bookingInput>
+  }
+
+  export type ReminderUpdateWithoutCalendar_bookingInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
+    job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
+    contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
+    outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
+    booking?: BookingUpdateOneWithoutReminderNestedInput
+    assignees?: ReminderAssigneeUpdateManyWithoutReminderNestedInput
+  }
+
+  export type ReminderUncheckedUpdateWithoutCalendar_bookingInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    contact_uuid?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
+    source?: EnumReminderSourceFieldUpdateOperationsInput | $Enums.ReminderSource
+    type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
+    job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    booking?: BookingUncheckedUpdateOneWithoutReminderNestedInput
     assignees?: ReminderAssigneeUncheckedUpdateManyWithoutReminderNestedInput
   }
 
@@ -189662,6 +191963,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
 
@@ -189691,6 +191993,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -189971,6 +192274,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
 
@@ -190000,6 +192304,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -190500,6 +192805,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -190573,6 +192879,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -190620,6 +192927,7 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     organisation: OrganisationCreateNestedOneWithoutBooking_linksInput
@@ -190627,6 +192935,7 @@ export namespace Prisma {
     contact?: ContactCreateNestedOneWithoutBooking_linksInput
     created_by?: UserCreateNestedOneWithoutBooking_links_createdInput
     bookings?: BookingCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkUncheckedCreateWithoutInvitationsInput = {
@@ -190642,9 +192951,11 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     bookings?: BookingUncheckedCreateNestedManyWithoutBooking_linkInput
+    visits?: BookingLinkVisitUncheckedCreateNestedManyWithoutBooking_linkInput
   }
 
   export type BookingLinkCreateOrConnectWithoutInvitationsInput = {
@@ -190929,6 +193240,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -191002,6 +193314,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -191055,6 +193368,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutBooking_linksNestedInput
@@ -191062,6 +193376,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneWithoutBooking_linksNestedInput
     created_by?: UserUpdateOneWithoutBooking_links_createdNestedInput
     bookings?: BookingUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateWithoutInvitationsInput = {
@@ -191077,9 +193392,11 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type ContactUpsertWithoutBooking_invitationsInput = {
@@ -191236,6 +193553,7 @@ export namespace Prisma {
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     calendar_connection?: CalendarConnectionCreateNestedOneWithoutBookingsInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
   }
 
@@ -191265,6 +193583,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -191339,6 +193658,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
   }
 
@@ -191368,6 +193688,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -191625,6 +193946,7 @@ export namespace Prisma {
     assigned_user?: UserCreateNestedOneWithoutBookings_assignedInput
     created_by?: UserCreateNestedOneWithoutBookings_createdInput
     reminder?: ReminderCreateNestedOneWithoutBookingInput
+    source_reminder?: ReminderCreateNestedOneWithoutCalendar_bookingInput
     events?: BookingEventCreateNestedManyWithoutBookingInput
     notifications?: BookingNotificationCreateNestedManyWithoutBookingInput
   }
@@ -191655,6 +193977,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
     calendar_sync_status?: $Enums.CalendarSyncStatus
@@ -192627,6 +194950,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -192676,6 +195000,7 @@ export namespace Prisma {
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -192705,6 +195030,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -192747,6 +195073,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -193660,6 +195987,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -193732,6 +196060,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -193803,6 +196132,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -193863,6 +196193,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutBooking_linksNestedInput
@@ -193870,6 +196201,7 @@ export namespace Prisma {
     contact?: ContactUpdateOneWithoutBooking_linksNestedInput
     bookings?: BookingUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateWithoutCreated_byInput = {
@@ -193884,10 +196216,12 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUncheckedUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateManyWithoutCreated_byInput = {
@@ -193902,6 +196236,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -193945,6 +196280,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -193974,6 +196310,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -194018,6 +196355,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -194074,6 +196412,7 @@ export namespace Prisma {
     assigned_user?: UserUpdateOneWithoutBookings_assignedNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -194103,6 +196442,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -194147,6 +196487,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -194652,6 +196993,8 @@ export namespace Prisma {
     job_id?: string | null
     outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -195039,6 +197382,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -195080,6 +197424,7 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -195109,6 +197454,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -196093,11 +198439,14 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
     outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
     booking?: BookingUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUpdateManyWithoutReminderNestedInput
   }
 
@@ -196114,9 +198463,12 @@ export namespace Prisma {
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking?: BookingUncheckedUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUncheckedUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUncheckedUpdateManyWithoutReminderNestedInput
   }
 
@@ -196133,6 +198485,8 @@ export namespace Prisma {
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -197227,6 +199581,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197299,6 +199654,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197370,6 +199726,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197407,6 +199764,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking_page?: BookingPageUpdateOneRequiredWithoutLinksNestedInput
@@ -197414,6 +199772,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBooking_links_createdNestedInput
     bookings?: BookingUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateWithoutOrganisationInput = {
@@ -197428,10 +199787,12 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUncheckedUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateManyWithoutOrganisationInput = {
@@ -197446,6 +199807,7 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -197489,6 +199851,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -197518,6 +199881,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197562,6 +199926,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -198584,6 +200949,8 @@ export namespace Prisma {
     job_id?: string | null
     outreach_message_uuid?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -198663,6 +201030,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -198692,6 +201060,7 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -199092,11 +201461,14 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
     outreach_message?: OutreachMessageUpdateOneWithoutRemindersNestedInput
     booking?: BookingUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUpdateManyWithoutReminderNestedInput
   }
 
@@ -199113,9 +201485,12 @@ export namespace Prisma {
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking?: BookingUncheckedUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUncheckedUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUncheckedUpdateManyWithoutReminderNestedInput
   }
 
@@ -199132,6 +201507,8 @@ export namespace Prisma {
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     outreach_message_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -199325,6 +201702,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -199354,6 +201732,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199398,6 +201777,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199423,6 +201803,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutBooking_linksNestedInput
@@ -199430,6 +201811,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBooking_links_createdNestedInput
     bookings?: BookingUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateWithoutContactInput = {
@@ -199444,10 +201826,12 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUncheckedUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateManyWithoutContactInput = {
@@ -199462,6 +201846,7 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -199893,6 +202278,8 @@ export namespace Prisma {
     type?: $Enums.ReminderType
     job_id?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: string | null
+    calendar_connection_uuid?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -199954,11 +202341,14 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutRemindersNestedInput
     contact?: ContactUpdateOneRequiredWithoutRemindersNestedInput
     booking?: BookingUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUpdateManyWithoutReminderNestedInput
   }
 
@@ -199975,9 +202365,12 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking?: BookingUncheckedUpdateOneWithoutReminderNestedInput
+    calendar_booking?: BookingUncheckedUpdateOneWithoutSource_reminderNestedInput
     assignees?: ReminderAssigneeUncheckedUpdateManyWithoutReminderNestedInput
   }
 
@@ -199994,6 +202387,8 @@ export namespace Prisma {
     type?: EnumReminderTypeFieldUpdateOperationsInput | $Enums.ReminderType
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
+    calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -201222,6 +203617,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -201287,6 +203683,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -201352,6 +203749,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -201417,6 +203815,7 @@ export namespace Prisma {
     assignment_mode?: $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: boolean
     requires_confirmation?: boolean
+    auto_log_meeting?: boolean
     unavailable_slots_mode?: $Enums.BookingUnavailableSlotsMode
     location_type?: $Enums.BookingLocationType
     location_value?: string | null
@@ -201540,6 +203939,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -201613,6 +204013,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -201684,6 +204085,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -201746,6 +204148,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -201819,6 +204222,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -201890,6 +204294,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -201952,6 +204357,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -202025,6 +204431,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -202096,6 +204503,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -202158,6 +204566,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -202231,6 +204640,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -202302,6 +204712,7 @@ export namespace Prisma {
     assignment_mode?: EnumBookingAssignmentModeFieldUpdateOperationsInput | $Enums.BookingAssignmentMode
     allow_invitee_member_choice?: BoolFieldUpdateOperationsInput | boolean
     requires_confirmation?: BoolFieldUpdateOperationsInput | boolean
+    auto_log_meeting?: BoolFieldUpdateOperationsInput | boolean
     unavailable_slots_mode?: EnumBookingUnavailableSlotsModeFieldUpdateOperationsInput | $Enums.BookingUnavailableSlotsMode
     location_type?: EnumBookingLocationTypeFieldUpdateOperationsInput | $Enums.BookingLocationType
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
@@ -203722,6 +206133,7 @@ export namespace Prisma {
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
+    last_visited_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -203751,6 +206163,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -203856,6 +206269,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     organisation?: OrganisationUpdateOneRequiredWithoutBooking_linksNestedInput
@@ -203863,6 +206277,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBooking_links_createdNestedInput
     bookings?: BookingUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateWithoutBooking_pageInput = {
@@ -203877,10 +206292,12 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bookings?: BookingUncheckedUpdateManyWithoutBooking_linkNestedInput
     invitations?: BookingInvitationUncheckedUpdateManyWithoutBooking_linkNestedInput
+    visits?: BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkNestedInput
   }
 
   export type BookingLinkUncheckedUpdateManyWithoutBooking_pageInput = {
@@ -203895,6 +206312,7 @@ export namespace Prisma {
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    last_visited_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -203938,6 +206356,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -203967,6 +206386,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -204011,6 +206431,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -204233,6 +206654,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_connection_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
@@ -204268,6 +206690,14 @@ export namespace Prisma {
     sent_at?: Date | string
     created_at?: Date | string
     updated_at?: Date | string
+  }
+
+  export type BookingLinkVisitCreateManyBooking_linkInput = {
+    id?: number
+    uuid?: string
+    user_agent?: string | null
+    referrer?: string | null
+    created_at?: Date | string
   }
 
   export type BookingUpdateWithoutBooking_linkInput = {
@@ -204309,6 +206739,7 @@ export namespace Prisma {
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     calendar_connection?: CalendarConnectionUpdateOneWithoutBookingsNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -204338,6 +206769,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -204382,6 +206814,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_connection_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
@@ -204456,6 +206889,29 @@ export namespace Prisma {
     sent_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingLinkVisitUpdateWithoutBooking_linkInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingLinkVisitUncheckedUpdateWithoutBooking_linkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BookingLinkVisitUncheckedUpdateManyWithoutBooking_linkInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    user_agent?: NullableStringFieldUpdateOperationsInput | string | null
+    referrer?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BookingEventCreateManyBookingInput = {
@@ -204578,6 +207034,7 @@ export namespace Prisma {
     location_value?: string | null
     meeting_url?: string | null
     reminder_uuid?: string | null
+    source_reminder_uuid?: string | null
     calendar_event_id?: string | null
     calendar_html_link?: string | null
     calendar_sync_status?: $Enums.CalendarSyncStatus
@@ -204633,6 +207090,7 @@ export namespace Prisma {
     assigned_user?: UserUpdateOneWithoutBookings_assignedNestedInput
     created_by?: UserUpdateOneWithoutBookings_createdNestedInput
     reminder?: ReminderUpdateOneWithoutBookingNestedInput
+    source_reminder?: ReminderUpdateOneWithoutCalendar_bookingNestedInput
     events?: BookingEventUpdateManyWithoutBookingNestedInput
     notifications?: BookingNotificationUpdateManyWithoutBookingNestedInput
   }
@@ -204663,6 +207121,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_sync_status?: EnumCalendarSyncStatusFieldUpdateOperationsInput | $Enums.CalendarSyncStatus
@@ -204707,6 +207166,7 @@ export namespace Prisma {
     location_value?: NullableStringFieldUpdateOperationsInput | string | null
     meeting_url?: NullableStringFieldUpdateOperationsInput | string | null
     reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    source_reminder_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_event_id?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_html_link?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_sync_status?: EnumCalendarSyncStatusFieldUpdateOperationsInput | $Enums.CalendarSyncStatus

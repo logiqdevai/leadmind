@@ -130,6 +130,15 @@ export const assignBooking = async (uuid: string, payload: AssignBookingDto): Pr
     }
 };
 
+export const resendBookingConfirmation = async (uuid: string): Promise<{ sent: boolean }> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.bookings.resend_confirmation(uuid));
+        return response.data;
+    } catch (error) {
+        throw new Error(bookingApiErrorMessage(error, "Failed to resend the confirmation email."), { cause: error });
+    }
+};
+
 export const syncBookingCalendar = async (uuid: string): Promise<{ queued: boolean }> => {
     try {
         const response = await axiosInstance.post(ApiRoutes.bookings.sync_calendar(uuid));

@@ -445,6 +445,7 @@ export const ApiRoutes = {
         assign: (uuid: string) => `/bookings/${uuid}/assign`,
         remove: (uuid: string) => `/bookings/${uuid}`,
         sync_calendar: (uuid: string) => `/bookings/${uuid}/sync-calendar`,
+        resend_confirmation: (uuid: string) => `/bookings/${uuid}/resend-confirmation`,
     },
     booking_pages: {
         prefix: "/booking-pages",

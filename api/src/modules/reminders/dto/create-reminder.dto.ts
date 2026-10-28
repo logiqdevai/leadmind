@@ -3,6 +3,7 @@ import {
     ArrayMaxSize,
     ArrayUnique,
     IsArray,
+    IsBoolean,
     IsDateString,
     IsEnum,
     IsOptional,
@@ -51,4 +52,11 @@ export class CreateReminderDto {
     @ArrayMaxSize(100)
     @IsUUID('4', { each: true })
     assignee_user_uuids?: string[];
+
+    @ApiPropertyOptional({
+        description: "Also add the reminder to the creating member's connected Google Calendar.",
+    })
+    @IsOptional()
+    @IsBoolean()
+    add_to_google_calendar?: boolean;
 }

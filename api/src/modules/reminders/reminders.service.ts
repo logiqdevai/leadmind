@@ -13,6 +13,7 @@ import { NotificationsGateway } from '@/gateways/notifications.gateway';
 import { CreateReminderDto } from './dto/create-reminder.dto';
 import { UpdateReminderDto } from './dto/update-reminder.dto';
 import { ListRemindersDto } from './dto/list-reminders.dto';
+import { ReminderCalendarService } from './services/reminder-calendar.service';
 
 const CONTACT_SELECT = {
     uuid: true,
@@ -42,6 +43,7 @@ export class RemindersService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly gateway: NotificationsGateway,
+        private readonly calendar: ReminderCalendarService,
         @InjectQueue(REMINDER_TRIGGER_QUEUE) private readonly reminderQueue: Queue,
     ) {}
 
@@ -72,6 +74,12 @@ export class RemindersService {
             dto.assignee_user_uuids ?? (opts?.created_by_user_uuid ? [opts.created_by_user_uuid] : []),
         );
 
+        // Checked up front so a missing calendar connection doesn't leave a half-made reminder behind.
+        const calendarConnection =
+            dto.add_to_google_calendar && opts?.created_by_user_uuid
+                ? await this.calendar.requireConnection(organisation_uuid, opts.created_by_user_uuid)
+                : null;
+
         const created = await this.prisma.reminder.create({
             data: {
                 organisation_uuid,
@@ -88,7 +96,7 @@ export class RemindersService {
             },
             include: REMINDER_INCLUDE,
         });
-        const reminder = toView(created);
+        let reminder = toView(created);
 
         const jobId = `reminder-${reminder.uuid}`;
         await this.reminderQueue.add(
@@ -107,6 +115,10 @@ export class RemindersService {
             where: { uuid: reminder.uuid },
             data: { job_id: jobId },
         });
+
+        if (calendarConnection && (await this.calendar.upsert(reminder, calendarConnection.uuid))) {
+            reminder = await this.findOne(organisation_uuid, reminder.uuid);
+        }
 
         await this.emitToRecipients(reminder, 'reminder.created');
         return reminder;
@@ -256,7 +268,13 @@ export class RemindersService {
         return unique;
     }
 
-    async update(organisation_uuid: string, uuid: string, dto: UpdateReminderDto): Promise<ReminderView> {
+    async update(
+        organisation_uuid: string,
+        uuid: string,
+        dto: UpdateReminderDto,
+        /** The member making the change; their Google Calendar is used when adding the reminder to it. */
+        actor_user_uuid?: string,
+    ): Promise<ReminderView> {
         const existing = await this.prisma.reminder.findFirst({
             where: { uuid, organisation_uuid },
         });
@@ -266,6 +284,14 @@ export class RemindersService {
         if (remindAt && remindAt <= new Date()) {
             throw new BadRequestException('Reminder date must be in the future');
         }
+
+        const addingToCalendar = dto.add_to_google_calendar === true && !existing.calendar_event_id;
+        if (addingToCalendar && !actor_user_uuid) {
+            throw new BadRequestException('Cannot add this reminder to a Google Calendar without a member');
+        }
+        const newConnection = addingToCalendar
+            ? await this.calendar.requireConnection(organisation_uuid, actor_user_uuid!)
+            : null;
 
         // Cancel job when completing/cancelling or rescheduling
         const isStatusChange = dto.status && dto.status !== ReminderStatus.PENDING;
@@ -310,7 +336,38 @@ export class RemindersService {
             },
             include: REMINDER_INCLUDE,
         });
-        const reminder = toView(updated);
+        let reminder = toView(updated);
+
+        // Keep the Google Calendar event in step: gone once the reminder is no longer pending or when
+        // switched off, otherwise created / refreshed when it is on (or was added) and something changed.
+        const hadEvent = !!existing.calendar_event_id;
+        const calendarConnectionUuid = newConnection?.uuid ?? existing.calendar_connection_uuid;
+        const calendarChanged =
+            !!remindAt || dto.title !== undefined || dto.notes !== undefined;
+        // A completed/cancelled reminder keeps its calendar connection (but not its event), which marks it
+        // as one to put back on the calendar when it is reopened.
+        const reopening =
+            !hadEvent &&
+            !!existing.calendar_connection_uuid &&
+            existing.status !== ReminderStatus.PENDING &&
+            updated.status === ReminderStatus.PENDING &&
+            dto.add_to_google_calendar !== false;
+        const switchedOff = dto.add_to_google_calendar === false;
+        let calendarTouched = false;
+        if (
+            (hadEvent || (switchedOff && !!existing.calendar_connection_uuid)) &&
+            (switchedOff || updated.status !== ReminderStatus.PENDING)
+        ) {
+            await this.calendar.remove(existing, { keep_connection: !switchedOff });
+            calendarTouched = true;
+        } else if (
+            calendarConnectionUuid &&
+            updated.status === ReminderStatus.PENDING &&
+            (addingToCalendar || reopening || (hadEvent && calendarChanged))
+        ) {
+            calendarTouched = await this.calendar.upsert(reminder, calendarConnectionUuid);
+        }
+        if (calendarTouched) reminder = await this.findOne(organisation_uuid, uuid);
 
         const event =
             dto.status === ReminderStatus.COMPLETED
@@ -334,6 +391,7 @@ export class RemindersService {
         // Resolve who to tell before the assignment rows are deleted along with the reminder.
         const recipients = await this.getRecipientUserUuids(existing);
         await this.cancelJob(existing.job_id);
+        await this.calendar.remove(existing);
         await this.prisma.reminder.delete({ where: { uuid } });
         this.gateway.emitToUsers(recipients, 'reminder.deleted', { uuid });
         return { uuid };

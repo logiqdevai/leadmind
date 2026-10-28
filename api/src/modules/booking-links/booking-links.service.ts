@@ -67,7 +67,7 @@ export class BookingLinksService {
             include: {
                 booking_page: { select: { uuid: true, name: true, slug: true, is_active: true } },
                 contact: { select: { uuid: true, name: true, email: true } },
-                _count: { select: { bookings: true } },
+                _count: { select: { bookings: true, visits: true } },
             },
             orderBy: { created_at: 'desc' },
             take: 500,

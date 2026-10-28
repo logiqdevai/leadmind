@@ -7,16 +7,19 @@ import { REMINDER_TRIGGER_QUEUE } from '@/core/queues/queues.constants';
 import { RemindersController } from './reminders.controller';
 import { RemindersService } from './reminders.service';
 import { FollowUpDraftService } from './services/follow-up-draft.service';
+import { ReminderCalendarService } from './services/reminder-calendar.service';
+import { ComposioModule } from '@/integrations/composio/composio.module';
 
 @Module({
     imports: [
         PrismaModule,
+        ComposioModule,
         GatewaysModule,
         AiIntegrationModule,
         BullModule.registerQueue({ name: REMINDER_TRIGGER_QUEUE }),
     ],
     controllers: [RemindersController],
-    providers: [RemindersService, FollowUpDraftService],
+    providers: [RemindersService, FollowUpDraftService, ReminderCalendarService],
     exports: [RemindersService, FollowUpDraftService],
 })
 export class RemindersModule {}

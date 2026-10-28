@@ -18,6 +18,7 @@ export const ACTIVE_BOOKING_STATUSES: BookingStatus[] = [
 export const BookingSources = {
     PUBLIC: "PUBLIC",
     MANUAL: "MANUAL",
+    REMINDER: "REMINDER",
 } as const;
 export type BookingSource = (typeof BookingSources)[keyof typeof BookingSources];
 
@@ -267,7 +268,9 @@ export interface CancelBookingDto {
 }
 
 export type SettableBookingStatus =
+    | typeof BookingStatuses.PENDING
     | typeof BookingStatuses.CONFIRMED
+    | typeof BookingStatuses.RESCHEDULED
     | typeof BookingStatuses.COMPLETED
     | typeof BookingStatuses.NO_SHOW;
 
@@ -330,6 +333,8 @@ export interface BookingPage {
     assignment_mode: BookingAssignmentMode;
     allow_invitee_member_choice: boolean;
     requires_confirmation: boolean;
+    /** Marking a booking completed logs a COMPLETED meeting on its contact. */
+    auto_log_meeting: boolean;
     /** How public pages show times that are inside working hours but not bookable. */
     unavailable_slots_mode: BookingUnavailableSlotsMode;
     location_type: BookingLocationType;

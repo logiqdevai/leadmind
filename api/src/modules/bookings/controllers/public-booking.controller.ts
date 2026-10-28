@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RateLimit } from '@/shared/decorators/rate-limit.decorator';
 import { RateLimitGuard } from '@/shared/guards/rate-limit.guard';
@@ -20,8 +20,8 @@ export class PublicBookingController {
     @ApiOperation({ summary: 'Public booking page content' })
     @ApiResponse({ status: 200 })
     @ApiResponse({ status: 404, description: 'Link inactive or unknown' })
-    getPage(@Param('code') code: string) {
-        return this.publicBookingService.getPage({ code });
+    getPage(@Param('code') code: string, @Headers('user-agent') user_agent?: string, @Headers('referer') referrer?: string) {
+        return this.publicBookingService.getPage({ code }, { user_agent, referrer });
     }
 
     @Get('pages/:code/slots')

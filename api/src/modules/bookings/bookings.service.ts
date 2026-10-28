@@ -307,8 +307,8 @@ export class BookingsService {
         if (booking.status === BookingStatus.CANCELLED) throw new BadRequestException('Cancelled bookings cannot change status');
         if (booking.status === dto.status) return this.findOne(actor.organisation_uuid, uuid);
 
-        if (dto.status === BookingStatus.CONFIRMED) {
-            if (booking.status !== BookingStatus.PENDING) throw new BadRequestException('Only pending bookings can be confirmed');
+        // Pending -> Confirmed is the real confirmation: it emails the invitee and syncs the calendar.
+        if (dto.status === BookingStatus.CONFIRMED && booking.status === BookingStatus.PENDING) {
             const confirmed = await this.prisma.booking.update({
                 where: { uuid },
                 data: { status: BookingStatus.CONFIRMED, confirmed_at: new Date() },
@@ -319,20 +319,25 @@ export class BookingsService {
             return this.findOne(actor.organisation_uuid, uuid);
         }
 
-        if (booking.start_at > new Date()) {
+        const isOutcome = dto.status === BookingStatus.COMPLETED || dto.status === BookingStatus.NO_SHOW;
+        if (isOutcome && booking.start_at > new Date()) {
             throw new BadRequestException('Only meetings that have started can be marked completed or no-show');
         }
+        // Any other move (back to confirmed, pending, rescheduled) is a manual correction: no emails are sent.
         await this.prisma.booking.update({
             where: { uuid },
             data: {
                 status: dto.status,
                 completed_at: dto.status === BookingStatus.COMPLETED ? new Date() : null,
+                ...(dto.status === BookingStatus.PENDING && { confirmed_at: null }),
+                ...(dto.status === BookingStatus.CONFIRMED && { confirmed_at: booking.confirmed_at ?? new Date() }),
             },
         });
         await this.events.record(booking, BookingEventType.STATUS_CHANGED, userActor(actor.uuid), `Marked ${labelForStatus(dto.status)}`, {
             from: booking.status,
             to: dto.status,
         });
+        if (dto.status === BookingStatus.COMPLETED) await this.safely(() => this.logCompletedMeeting(booking), 'meeting log');
         // The Google event stays as history but is marked with the outcome.
         await this.safely(() => this.calendarSync.enqueue({ uuid, updated_at: new Date() }), 'calendar sync');
         // A finished meeting no longer needs its pending reminder.
@@ -415,6 +420,17 @@ export class BookingsService {
         const booking = await this.findBooking(organisation_uuid, uuid);
         await this.calendarSync.enqueue({ uuid: booking.uuid, updated_at: new Date() });
         return { queued: true };
+    }
+
+    /** Re-sends the confirmation email to the invitee (e.g. they lost it or it went to spam). */
+    async resendConfirmation(organisation_uuid: string, uuid: string) {
+        const booking = await this.findBooking(organisation_uuid, uuid);
+        if (!ACTIVE_BOOKING_STATUSES.includes(booking.status) || booking.status === BookingStatus.PENDING) {
+            throw new BadRequestException('Only confirmed upcoming bookings can have their confirmation resent');
+        }
+        const sent = await this.notifications.resendConfirmation(booking.uuid);
+        if (!sent) throw new BadRequestException('The confirmation email could not be sent');
+        return { sent: true };
     }
 
     // --- Shared lifecycle core (also used by public booking pages) ---
@@ -685,6 +701,48 @@ export class BookingsService {
         await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`booking-member:${user_uuid}`}))`;
     }
 
+    /** Logs the finished meeting on the contact's timeline, once per booking, when the booking page has it enabled. */
+    private async logCompletedMeeting(booking: Booking) {
+        if (!booking.contact_uuid) return;
+        const page = booking.booking_page_uuid
+            ? await this.prisma.bookingPage.findUnique({ where: { uuid: booking.booking_page_uuid }, select: { auto_log_meeting: true } })
+            : null;
+        // One-off meetings have no page to opt out from, so they follow the default (on).
+        if (page && !page.auto_log_meeting) return;
+
+        // Completed -> back -> completed again must not log the same meeting twice.
+        const existing = await this.prisma.interaction.findFirst({
+            where: {
+                contact_uuid: booking.contact_uuid,
+                type: InteractionType.MEETING,
+                metadata: { path: ['booking_uuid'], equals: booking.uuid },
+            },
+            select: { uuid: true },
+        });
+        if (existing) return;
+
+        const location = bookingLocationText(booking);
+        await this.prisma.$transaction([
+            this.prisma.interaction.create({
+                data: {
+                    contact_uuid: booking.contact_uuid,
+                    organisation_uuid: booking.organisation_uuid,
+                    type: InteractionType.MEETING,
+                    content: null,
+                    metadata: {
+                        outcome: 'COMPLETED',
+                        occurred_at: booking.start_at.toISOString(),
+                        duration_minutes: booking.duration_minutes,
+                        ...(location && { location }),
+                        booking_uuid: booking.uuid,
+                    },
+                    created_by_user_uuid: booking.assigned_user_uuid ?? null,
+                },
+            }),
+            this.prisma.contact.update({ where: { uuid: booking.contact_uuid }, data: { last_interaction_at: new Date() } }),
+        ]);
+    }
+
     private async logContactInteraction(booking: Booking, type: InteractionType, content: string, actor: BookingEventActor) {
         const now = new Date();
         await this.prisma.$transaction([
@@ -822,6 +880,15 @@ const BOOKING_NOTIFICATION_COPY: Record<BookingNotificationKind, { type: Notific
 function creationSummary(input: PlaceBookingInput): string {
     if (input.source === BookingSource.MANUAL) return 'Booking created by a team member';
     return input.status === BookingStatus.PENDING ? 'Booking requested via booking page' : 'Booked via booking page';
+}
+
+/** Where the meeting took place, as free text for the contact's meeting log. */
+function bookingLocationText(booking: Pick<Booking, 'location_type' | 'location_value' | 'meeting_url'>): string | null {
+    const detail = booking.location_value?.trim() || booking.meeting_url?.trim();
+    if (detail) return detail;
+    if (booking.location_type === BookingLocationType.GOOGLE_MEET) return 'Google Meet';
+    if (booking.location_type === BookingLocationType.PHONE) return 'Phone call';
+    return null;
 }
 
 function labelForStatus(status: BookingStatus): string {

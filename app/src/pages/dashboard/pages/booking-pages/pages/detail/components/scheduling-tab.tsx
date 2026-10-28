@@ -247,6 +247,19 @@ export const SchedulingTab: FC<SchedulingTabProps> = ({ readOnly }) => {
                         />
                     )}
                 />
+                <Controller
+                    control={control}
+                    name="auto_log_meeting"
+                    render={({ field }) => (
+                        <SettingSwitch
+                            label="Log meeting when completed"
+                            description="Marking a booking completed adds a meeting to the contact's timeline with outcome Completed, plus the booking's date, time and location."
+                            isSelected={field.value}
+                            onChange={field.onChange}
+                            isDisabled={readOnly}
+                        />
+                    )}
+                />
             </SettingsSection>
 
             <SettingsSection

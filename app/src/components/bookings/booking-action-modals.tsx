@@ -104,17 +104,17 @@ export const EditBookingModal: FC<BookingActionModalProps> = ({ booking, isOpen,
                             <div className="grid gap-3 sm:grid-cols-2">
                                 <div className="flex flex-col gap-1.5 sm:col-span-2">
                                     <Label htmlFor="eb-name">Invitee name</Label>
-                                    <Input id="eb-name" {...form.register("invitee_name")} />
+                                    <Input id="eb-name" placeholder="e.g. Jane Smith" {...form.register("invitee_name")} />
                                     <FormError message={formState.errors.invitee_name?.message} />
                                 </div>
                                 <div className="flex flex-col gap-1.5">
                                     <Label htmlFor="eb-email">Email</Label>
-                                    <Input id="eb-email" type="email" {...form.register("invitee_email")} />
+                                    <Input id="eb-email" type="email" placeholder="name@company.com" {...form.register("invitee_email")} />
                                     <FormError message={formState.errors.invitee_email?.message} />
                                 </div>
                                 <div className="flex flex-col gap-1.5">
                                     <Label htmlFor="eb-phone">Phone</Label>
-                                    <Input id="eb-phone" type="tel" {...form.register("invitee_phone")} />
+                                    <Input id="eb-phone" type="tel" placeholder="+1 555 123 4567" {...form.register("invitee_phone")} />
                                 </div>
                                 <Controller
                                     control={control}
@@ -138,7 +138,7 @@ export const EditBookingModal: FC<BookingActionModalProps> = ({ booking, isOpen,
                             </div>
                             <div className="flex flex-col gap-1.5">
                                 <Label htmlFor="eb-notes">Invitee notes</Label>
-                                <TextArea id="eb-notes" rows={3} {...form.register("invitee_notes")} />
+                                <TextArea id="eb-notes" rows={3} placeholder="Anything the invitee shared or wants discussed…" {...form.register("invitee_notes")} />
                             </div>
                         </Modal.Body>
                         <Modal.Footer className="justify-end gap-2">

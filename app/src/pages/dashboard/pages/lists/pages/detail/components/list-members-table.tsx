@@ -21,9 +21,11 @@ import {
     ContactTableQuickViewButton,
 } from "@/pages/dashboard/components/contact-stack-viewer";
 import { ContactAlsoFoundByHint } from "@/pages/dashboard/components/contact-also-found-by-hint";
-import { ContactScoresCompact } from "@/pages/dashboard/pages/leads/components/badges";
 import { contactTableColumnClass } from "@/pages/dashboard/components/contact-table-column-classes";
 import { cn } from "@/lib/utils";
+
+const listColumnClass = (columnId: string) =>
+    columnId === "name" ? "min-w-0 sm:w-[18%] overflow-hidden" : contactTableColumnClass(columnId);
 
 interface PendingStatusSync {
     contactUuid: string;
@@ -109,6 +111,7 @@ export function ListMembersTable({
                             contactUuid={contact.uuid}
                             name={info.getValue()}
                             onOpen={onContactOpen}
+                            wrap
                         />
                     );
                 },
@@ -206,11 +209,6 @@ export function ListMembersTable({
                         </span>
                     );
                 },
-            }),
-            columnHelper.display({
-                id: "score",
-                header: "Score",
-                cell: (info) => <ContactScoresCompact contact={info.row.original} />,
             }),
             columnHelper.accessor("status", {
                 id: "status",
@@ -425,7 +423,7 @@ export function ListMembersTable({
                                         id={header.id}
                                         isRowHeader={header.id === "name"}
                                         allowsSorting={isSortable}
-                                        className={contactTableColumnClass(header.id)}
+                                        className={listColumnClass(header.id)}
                                     >
                                         {isSortable
                                             ? ({ sortDirection }) => (
@@ -491,7 +489,7 @@ export function ListMembersTable({
                                                   <Table.Cell
                                                       key={cell.id}
                                                       className={cn(
-                                                          contactTableColumnClass(cell.column.id),
+                                                          listColumnClass(cell.column.id),
                                                           isInteractive
                                                               ? tableNavInteractiveCellClassName
                                                               : undefined,

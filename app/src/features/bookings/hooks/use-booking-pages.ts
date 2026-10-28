@@ -14,6 +14,7 @@ import {
     updateBookingPage,
 } from "../services/booking-pages.services";
 import type {
+    BookingPage,
     CreateBookingLinkDto,
     CreateBookingPageDto,
     ListBookingLinksQuery,
@@ -39,6 +40,12 @@ const errorToast = (title: string) => (error: Error) =>
 
 export function useBookingPages() {
     return useQuery({ queryKey: bookingPageQueryKeys.list, queryFn: listBookingPages, staleTime: 60_000 });
+}
+
+/** The page pickers preselect: the default page, else the only active one, else nothing. */
+export function defaultBookingPageUuid(pages: BookingPage[]): string {
+    const active = pages.filter((p) => p.is_active);
+    return (active.find((p) => p.is_default) ?? (active.length === 1 ? active[0] : undefined))?.uuid ?? "";
 }
 
 export function useBookingPage(uuid: string | null | undefined) {

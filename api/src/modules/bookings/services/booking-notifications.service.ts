@@ -153,6 +153,16 @@ export class BookingNotificationsService {
         if (failures.length) throw new Error(`Booking ${kind.toLowerCase()} email failed for ${failures.join(', ')}`);
     }
 
+    /** Manual resend of the confirmation to the invitee, bypassing the page toggle and the already-sent dedupe. */
+    async resendConfirmation(booking_uuid: string): Promise<boolean> {
+        const booking = await this.prisma.booking.findUnique({
+            where: { uuid: booking_uuid },
+            include: NOTIFICATION_INCLUDE,
+        });
+        if (!booking?.invitee_email) return false;
+        return this.sendOne(booking, BookingNotificationKind.CONFIRMATION, { email: booking.invitee_email, internal: false }, undefined, true);
+    }
+
     private recipientsFor(booking: NotificationBooking, kind: BookingNotificationKind): Recipient[] {
         const page = booking.booking_page;
         const inviteeEnabled =
@@ -187,6 +197,7 @@ export class BookingNotificationsService {
         kind: BookingNotificationKind,
         recipient: Recipient,
         offset_minutes?: number,
+        force = false,
     ): Promise<boolean> {
         const dedupe_key = [
             booking.uuid,
@@ -197,7 +208,7 @@ export class BookingNotificationsService {
         ].join(':');
 
         const existing = await this.prisma.bookingNotification.findUnique({ where: { dedupe_key } });
-        if (existing?.status === BookingNotificationStatus.SENT) return true;
+        if (!force && existing?.status === BookingNotificationStatus.SENT) return true;
 
         try {
             const { subject, html } = await this.compose(booking, kind, recipient);

@@ -74,6 +74,7 @@ export const bookingPageFormSchema = z
         max_bookings_per_day: int(1, 500).nullable(),
         seats_per_slot: int(1, 500),
         requires_confirmation: z.boolean(),
+        auto_log_meeting: z.boolean(),
         unavailable_slots_mode: z.enum([BookingUnavailableSlotsModes.HIDE, BookingUnavailableSlotsModes.SHOW_DISABLED]),
         allow_cancellation: z.boolean(),
         allow_reschedule: z.boolean(),

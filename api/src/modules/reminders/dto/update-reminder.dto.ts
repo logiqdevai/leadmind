@@ -3,6 +3,7 @@ import {
     ArrayMaxSize,
     ArrayUnique,
     IsArray,
+    IsBoolean,
     IsDateString,
     IsEnum,
     IsOptional,
@@ -46,4 +47,12 @@ export class UpdateReminderDto {
     @ArrayMaxSize(100)
     @IsUUID('4', { each: true })
     assignee_user_uuids?: string[];
+
+    @ApiPropertyOptional({
+        description:
+            "true: add to (or keep on) your connected Google Calendar. false: remove it from there. Omitted: unchanged.",
+    })
+    @IsOptional()
+    @IsBoolean()
+    add_to_google_calendar?: boolean;
 }

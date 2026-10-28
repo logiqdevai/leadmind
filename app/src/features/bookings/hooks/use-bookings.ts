@@ -12,6 +12,7 @@ import {
     listBookings,
     rescheduleBooking,
     setBookingStatus,
+    resendBookingConfirmation,
     syncBookingCalendar,
     updateBooking,
 } from "../services/bookings.services";
@@ -174,6 +175,18 @@ export function useSyncBookingCalendar() {
             toast({ title: "Calendar sync queued", duration: 1500 });
         },
         onError: errorToast("Could not retry sync"),
+    });
+}
+
+export function useResendBookingConfirmation() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (uuid: string) => resendBookingConfirmation(uuid),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: bookingQueryKeys.all });
+            toast({ title: "Confirmation email sent", duration: 1500 });
+        },
+        onError: errorToast("Could not resend confirmation"),
     });
 }
 

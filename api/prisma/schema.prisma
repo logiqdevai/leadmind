@@ -1540,6 +1540,9 @@ model Reminder {
   job_id                String?        @unique
   outreach_message_uuid String?
   metadata              Json?
+  /// Google Calendar event mirroring this reminder, on the calendar connection that created it.
+  calendar_event_id        String?
+  calendar_connection_uuid String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -1547,7 +1550,9 @@ model Reminder {
   organisation     Organisation       @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   contact          Contact            @relation(fields: [contact_uuid], references: [uuid], onDelete: Cascade)
   outreach_message OutreachMessage?   @relation(fields: [outreach_message_uuid], references: [uuid], onDelete: SetNull)
-  booking          Booking?
+  booking          Booking?           @relation("BookingTeamReminder")
+  /// Placeholder booking holding this reminder's time on our calendar (only when added to Google Calendar).
+  calendar_booking Booking?           @relation("BookingSourceReminder")
   /// Members who get the reminder. Empty = every member of the organisation.
   assignees        ReminderAssignee[]
 
@@ -2221,6 +2226,8 @@ enum BookingStatus {
 enum BookingSource {
   PUBLIC
   MANUAL
+  /// Placeholder holding the time of a reminder that was added to Google Calendar (no invitee).
+  REMINDER
 }
 
 enum BookingLocationType {
@@ -2451,6 +2458,8 @@ model BookingPage {
   /// Off by default: assignment is internal. Only when enabled may invitees pick a member.
   allow_invitee_member_choice Boolean                     @default(false)
   requires_confirmation       Boolean                     @default(false)
+  /// Marking a booking completed logs a MEETING (outcome COMPLETED) on its contact.
+  auto_log_meeting            Boolean                     @default(true)
   /// How public pages show start times that are inside working hours but not bookable.
   unavailable_slots_mode      BookingUnavailableSlotsMode @default(HIDE)
 
@@ -2542,6 +2551,7 @@ model BookingLink {
   created_by_user_uuid String?
   deactivated_at       DateTime?
   last_used_at         DateTime?
+  last_visited_at      DateTime?
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
@@ -2551,11 +2561,27 @@ model BookingLink {
   created_by   User?               @relation("BookingLinkCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
   bookings     Booking[]
   invitations  BookingInvitation[]
+  visits       BookingLinkVisit[]
 
   @@index([organisation_uuid])
   @@index([booking_page_uuid, contact_uuid, is_active])
   @@index([contact_uuid])
   @@map("booking_links")
+}
+
+/// One row per load of a booking link's public page.
+model BookingLinkVisit {
+  id                Int      @id @default(autoincrement())
+  uuid              String   @unique @default(uuid())
+  booking_link_uuid String
+  user_agent        String?  @db.VarChar(512)
+  referrer          String?  @db.VarChar(512)
+  created_at        DateTime @default(now())
+
+  booking_link BookingLink @relation(fields: [booking_link_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([booking_link_uuid, created_at])
+  @@map("booking_link_visits")
 }
 
 model Booking {
@@ -2591,6 +2617,8 @@ model Booking {
 
   /// Team reminder created for this booking (see BookingPage.create_team_reminder); cleared if the reminder is deleted.
   reminder_uuid            String?            @unique
+  /// Set on source REMINDER bookings: the reminder this placeholder was made for. Deleted with it.
+  source_reminder_uuid     String?            @unique
   calendar_connection_uuid String?
   calendar_event_id        String?
   calendar_html_link       String?
@@ -2616,7 +2644,8 @@ model Booking {
   assigned_user       User?                 @relation("BookingAssignee", fields: [assigned_user_uuid], references: [uuid], onDelete: SetNull)
   created_by          User?                 @relation("BookingCreatedBy", fields: [created_by_user_uuid], references: [uuid], onDelete: SetNull)
   calendar_connection CalendarConnection?   @relation(fields: [calendar_connection_uuid], references: [uuid], onDelete: SetNull)
-  reminder            Reminder?             @relation(fields: [reminder_uuid], references: [uuid], onDelete: SetNull)
+  reminder            Reminder?             @relation("BookingTeamReminder", fields: [reminder_uuid], references: [uuid], onDelete: SetNull)
+  source_reminder     Reminder?             @relation("BookingSourceReminder", fields: [source_reminder_uuid], references: [uuid], onDelete: Cascade)
   events              BookingEvent[]
   notifications       BookingNotification[]
 

@@ -129,4 +129,11 @@ export class BookingsController {
     syncCalendar(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
         return this.bookingsService.resyncCalendar(organisation_uuid, uuid);
     }
+
+    @Post(':uuid/resend-confirmation')
+    @ApiOperation({ summary: 'Resend the confirmation email to the invitee' })
+    @ApiResponse({ status: 201 })
+    resendConfirmation(@CurrentUser('organisation_uuid') organisation_uuid: string, @Param('uuid') uuid: string) {
+        return this.bookingsService.resendConfirmation(organisation_uuid, uuid);
+    }
 }

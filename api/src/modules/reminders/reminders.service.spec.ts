@@ -17,6 +17,7 @@ function setup(members: string[] = [ME, 'user-2', 'user-3']) {
     });
     const prisma = {
         contact: { findFirst: jest.fn().mockResolvedValue({ uuid: 'c-1' }) },
+        organisation: { findUnique: jest.fn().mockResolvedValue({ timezone: 'UTC' }) },
         organisationMember: {
             count: jest.fn(({ where }) => Promise.resolve(where.user_uuid.in.filter((u: string) => members.includes(u)).length)),
             findMany: jest.fn().mockResolvedValue(members.map((user_uuid) => ({ user_uuid }))),
@@ -31,7 +32,7 @@ function setup(members: string[] = [ME, 'user-2', 'user-3']) {
     };
     const gateway = { emitToUsers: jest.fn(), emitToUser: jest.fn() };
     const queue = { add: jest.fn(), getJob: jest.fn() };
-    const service = new RemindersService(prisma as never, gateway as never, queue as never);
+    const service = new RemindersService(prisma as never, gateway as never, {} as never, queue as never);
     return { service, prisma, gateway };
 }
 
@@ -132,5 +133,108 @@ describe('RemindersService assignees', () => {
                 await service.getRecipientUserUuids({ organisation_uuid: ORG, assignees: [{ user_uuid: 'gone' }] }),
             ).toEqual([ME, 'user-2', 'user-3']);
         });
+    });
+});
+
+describe('RemindersService Google Calendar sync', () => {
+    function calendarSetup(existing: Record<string, unknown>) {
+        const row = (over: Record<string, unknown> = {}) => ({
+            uuid: 'rem-1',
+            organisation_uuid: ORG,
+            status: ReminderStatus.PENDING,
+            job_id: null,
+            calendar_event_id: null,
+            calendar_connection_uuid: null,
+            contact: { uuid: 'c-1', name: 'Ada', company: null, email: null },
+            assignees: [],
+            ...existing,
+            ...over,
+        });
+        const prisma = {
+            organisationMember: { findMany: jest.fn().mockResolvedValue([]), count: jest.fn() },
+            reminder: {
+                findFirst: jest.fn().mockResolvedValue(row()),
+                update: jest.fn(({ data }) => Promise.resolve(row(data.status ? { status: data.status } : {}))),
+            },
+        };
+        const calendar = {
+            requireConnection: jest.fn().mockResolvedValue({ uuid: 'conn-new' }),
+            upsert: jest.fn().mockResolvedValue(true),
+            remove: jest.fn().mockResolvedValue(undefined),
+        };
+        const gateway = { emitToUsers: jest.fn() };
+        const queue = { add: jest.fn(), getJob: jest.fn().mockResolvedValue(null) };
+        const service = new RemindersService(prisma as never, gateway as never, calendar as never, queue as never);
+        return { service, calendar };
+    }
+
+    const onCalendar = { calendar_event_id: 'evt-1', calendar_connection_uuid: 'conn-1' };
+    // What a reminder looks like after it was completed while on the calendar.
+    const completedOnCalendar = { status: ReminderStatus.COMPLETED, calendar_event_id: null, calendar_connection_uuid: 'conn-1' };
+
+    it('refreshes the event and booking when the time, title or notes change', async () => {
+        const { service, calendar } = calendarSetup(onCalendar);
+        await service.update(ORG, 'rem-1', { title: 'New title' });
+        expect(calendar.upsert).toHaveBeenCalledWith(expect.anything(), 'conn-1');
+        expect(calendar.remove).not.toHaveBeenCalled();
+    });
+
+    it('leaves both calendars alone when nothing calendar-relevant changed', async () => {
+        const { service, calendar } = calendarSetup(onCalendar);
+        await service.update(ORG, 'rem-1', { assignee_user_uuids: [] });
+        expect(calendar.upsert).not.toHaveBeenCalled();
+        expect(calendar.remove).not.toHaveBeenCalled();
+    });
+
+    it('removes the event and booking on completion, keeping the connection for a later reopen', async () => {
+        const { service, calendar } = calendarSetup(onCalendar);
+        await service.update(ORG, 'rem-1', { status: ReminderStatus.COMPLETED });
+        expect(calendar.remove).toHaveBeenCalledWith(expect.objectContaining(onCalendar), { keep_connection: true });
+        expect(calendar.upsert).not.toHaveBeenCalled();
+    });
+
+    it('removes everything, connection included, when switched off', async () => {
+        const { service, calendar } = calendarSetup(onCalendar);
+        await service.update(ORG, 'rem-1', { add_to_google_calendar: false });
+        expect(calendar.remove).toHaveBeenCalledWith(expect.objectContaining(onCalendar), { keep_connection: false });
+    });
+
+    it('forgets the kept connection when switched off while completed', async () => {
+        const { service, calendar } = calendarSetup(completedOnCalendar);
+        await service.update(ORG, 'rem-1', { add_to_google_calendar: false });
+        expect(calendar.remove).toHaveBeenCalledWith(expect.anything(), { keep_connection: false });
+    });
+
+    it('restores the event and booking when a completed reminder is reopened', async () => {
+        const { service, calendar } = calendarSetup(completedOnCalendar);
+        await service.update(ORG, 'rem-1', { status: ReminderStatus.PENDING });
+        expect(calendar.upsert).toHaveBeenCalledWith(expect.anything(), 'conn-1');
+        expect(calendar.remove).not.toHaveBeenCalled();
+    });
+
+    it('does not restore when reopening and switching Google Calendar off in the same edit', async () => {
+        const { service, calendar } = calendarSetup(completedOnCalendar);
+        await service.update(ORG, 'rem-1', { status: ReminderStatus.PENDING, add_to_google_calendar: false });
+        expect(calendar.upsert).not.toHaveBeenCalled();
+    });
+
+    it('does not restore a reminder that was never on the calendar', async () => {
+        const { service, calendar } = calendarSetup({ status: ReminderStatus.COMPLETED });
+        await service.update(ORG, 'rem-1', { status: ReminderStatus.PENDING });
+        expect(calendar.upsert).not.toHaveBeenCalled();
+    });
+
+    it('leaves a completed reminder alone while it stays completed', async () => {
+        const { service, calendar } = calendarSetup(completedOnCalendar);
+        await service.update(ORG, 'rem-1', { notes: 'later' });
+        expect(calendar.upsert).not.toHaveBeenCalled();
+        expect(calendar.remove).not.toHaveBeenCalled();
+    });
+
+    it('removes the event and booking when the reminder is deleted', async () => {
+        const { service, calendar } = calendarSetup(onCalendar);
+        (service as unknown as { prisma: { reminder: Record<string, jest.Mock> } }).prisma.reminder.delete = jest.fn();
+        await service.remove(ORG, 'rem-1');
+        expect(calendar.remove).toHaveBeenCalledWith(expect.objectContaining(onCalendar));
     });
 });
