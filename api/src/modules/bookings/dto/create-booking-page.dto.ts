@@ -92,6 +92,16 @@ export class CreateBookingPageDto {
     @ApiPropertyOptional({ maxLength: 160 }) @IsOptional() @IsString() @MaxLength(160) title?: string;
     @ApiPropertyOptional({ maxLength: 5000 }) @IsOptional() @IsString() @MaxLength(5000) description?: string;
     @ApiPropertyOptional({ maxLength: 5000 }) @IsOptional() @IsString() @MaxLength(5000) intro_text?: string;
+
+    @ApiPropertyOptional({ type: [String], description: '"What to expect" points shown on the public page' })
+    @IsOptional()
+    @IsArray()
+    @ArrayMaxSize(8)
+    @IsString({ each: true })
+    @MinLength(1, { each: true })
+    @MaxLength(120, { each: true })
+    expectations?: string[];
+
     @ApiPropertyOptional({ maxLength: 120 }) @IsOptional() @IsString() @MaxLength(120) brand_name?: string;
 
     @ApiPropertyOptional()

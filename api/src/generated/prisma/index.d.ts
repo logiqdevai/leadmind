@@ -99196,6 +99196,7 @@ export namespace Prisma {
     title: number
     description: number
     intro_text: number
+    expectations: number
     brand_name: number
     logo_url: number
     primary_color: number
@@ -99423,6 +99424,7 @@ export namespace Prisma {
     title?: true
     description?: true
     intro_text?: true
+    expectations?: true
     brand_name?: true
     logo_url?: true
     primary_color?: true
@@ -99575,6 +99577,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     intro_text: string | null
+    expectations: string[]
     brand_name: string | null
     logo_url: string | null
     primary_color: string | null
@@ -99659,6 +99662,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     intro_text?: boolean
+    expectations?: boolean
     brand_name?: boolean
     logo_url?: boolean
     primary_color?: boolean
@@ -99736,6 +99740,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     intro_text?: boolean
+    expectations?: boolean
     brand_name?: boolean
     logo_url?: boolean
     primary_color?: boolean
@@ -99807,6 +99812,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     intro_text?: boolean
+    expectations?: boolean
     brand_name?: boolean
     logo_url?: boolean
     primary_color?: boolean
@@ -99878,6 +99884,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     intro_text?: boolean
+    expectations?: boolean
     brand_name?: boolean
     logo_url?: boolean
     primary_color?: boolean
@@ -99931,7 +99938,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type BookingPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "created_by_user_uuid" | "name" | "slug" | "is_active" | "is_default" | "title" | "description" | "intro_text" | "brand_name" | "logo_url" | "primary_color" | "confirmation_message" | "redirect_url" | "cta_label" | "show_team_member" | "show_timezone" | "questions" | "require_phone" | "duration_minutes" | "duration_options" | "slot_interval_minutes" | "min_notice_minutes" | "max_advance_days" | "buffer_before_minutes" | "buffer_after_minutes" | "min_gap_minutes" | "max_gap_minutes" | "max_bookings_per_day" | "seats_per_slot" | "assignment_mode" | "allow_invitee_member_choice" | "requires_confirmation" | "unavailable_slots_mode" | "location_type" | "location_value" | "allow_cancellation" | "allow_reschedule" | "cancellation_deadline_minutes" | "reschedule_deadline_minutes" | "require_cancellation_reason" | "send_confirmation_email" | "send_reminder_emails" | "reminder_offsets_minutes" | "send_cancellation_email" | "send_reschedule_email" | "notify_assignee" | "additional_recipients" | "include_meeting_link" | "include_calendar_details" | "create_team_reminder" | "team_reminder_offset_minutes" | "confirmation_template_uuid" | "reminder_template_uuid" | "cancellation_template_uuid" | "reschedule_template_uuid" | "calendar_event_title" | "calendar_event_description" | "created_at" | "updated_at", ExtArgs["result"]["bookingPage"]>
+  export type BookingPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "created_by_user_uuid" | "name" | "slug" | "is_active" | "is_default" | "title" | "description" | "intro_text" | "expectations" | "brand_name" | "logo_url" | "primary_color" | "confirmation_message" | "redirect_url" | "cta_label" | "show_team_member" | "show_timezone" | "questions" | "require_phone" | "duration_minutes" | "duration_options" | "slot_interval_minutes" | "min_notice_minutes" | "max_advance_days" | "buffer_before_minutes" | "buffer_after_minutes" | "min_gap_minutes" | "max_gap_minutes" | "max_bookings_per_day" | "seats_per_slot" | "assignment_mode" | "allow_invitee_member_choice" | "requires_confirmation" | "unavailable_slots_mode" | "location_type" | "location_value" | "allow_cancellation" | "allow_reschedule" | "cancellation_deadline_minutes" | "reschedule_deadline_minutes" | "require_cancellation_reason" | "send_confirmation_email" | "send_reminder_emails" | "reminder_offsets_minutes" | "send_cancellation_email" | "send_reschedule_email" | "notify_assignee" | "additional_recipients" | "include_meeting_link" | "include_calendar_details" | "create_team_reminder" | "team_reminder_offset_minutes" | "confirmation_template_uuid" | "reminder_template_uuid" | "cancellation_template_uuid" | "reschedule_template_uuid" | "calendar_event_title" | "calendar_event_description" | "created_at" | "updated_at", ExtArgs["result"]["bookingPage"]>
   export type BookingPageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     created_by?: boolean | BookingPage$created_byArgs<ExtArgs>
@@ -99993,6 +100000,10 @@ export namespace Prisma {
       title: string | null
       description: string | null
       intro_text: string | null
+      /**
+       * "What to expect" bullet points shown on the public page (shared by every link of the page).
+       */
+      expectations: string[]
       brand_name: string | null
       logo_url: string | null
       primary_color: string | null
@@ -100522,6 +100533,7 @@ export namespace Prisma {
     readonly title: FieldRef<"BookingPage", 'String'>
     readonly description: FieldRef<"BookingPage", 'String'>
     readonly intro_text: FieldRef<"BookingPage", 'String'>
+    readonly expectations: FieldRef<"BookingPage", 'String[]'>
     readonly brand_name: FieldRef<"BookingPage", 'String'>
     readonly logo_url: FieldRef<"BookingPage", 'String'>
     readonly primary_color: FieldRef<"BookingPage", 'String'>
@@ -103665,6 +103677,7 @@ export namespace Prisma {
     invitee_name: string | null
     invitee_email: string | null
     invitee_phone: string | null
+    invitee_company: string | null
     invitee_notes: string | null
     internal_notes: string | null
     location_type: $Enums.BookingLocationType | null
@@ -103706,6 +103719,7 @@ export namespace Prisma {
     invitee_name: string | null
     invitee_email: string | null
     invitee_phone: string | null
+    invitee_company: string | null
     invitee_notes: string | null
     internal_notes: string | null
     location_type: $Enums.BookingLocationType | null
@@ -103747,6 +103761,7 @@ export namespace Prisma {
     invitee_name: number
     invitee_email: number
     invitee_phone: number
+    invitee_company: number
     invitee_notes: number
     answers: number
     internal_notes: number
@@ -103803,6 +103818,7 @@ export namespace Prisma {
     invitee_name?: true
     invitee_email?: true
     invitee_phone?: true
+    invitee_company?: true
     invitee_notes?: true
     internal_notes?: true
     location_type?: true
@@ -103844,6 +103860,7 @@ export namespace Prisma {
     invitee_name?: true
     invitee_email?: true
     invitee_phone?: true
+    invitee_company?: true
     invitee_notes?: true
     internal_notes?: true
     location_type?: true
@@ -103885,6 +103902,7 @@ export namespace Prisma {
     invitee_name?: true
     invitee_email?: true
     invitee_phone?: true
+    invitee_company?: true
     invitee_notes?: true
     answers?: true
     internal_notes?: true
@@ -104014,6 +104032,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone: string | null
+    invitee_company: string | null
     invitee_notes: string | null
     answers: JsonValue | null
     internal_notes: string | null
@@ -104075,6 +104094,7 @@ export namespace Prisma {
     invitee_name?: boolean
     invitee_email?: boolean
     invitee_phone?: boolean
+    invitee_company?: boolean
     invitee_notes?: boolean
     answers?: boolean
     internal_notes?: boolean
@@ -104128,6 +104148,7 @@ export namespace Prisma {
     invitee_name?: boolean
     invitee_email?: boolean
     invitee_phone?: boolean
+    invitee_company?: boolean
     invitee_notes?: boolean
     answers?: boolean
     internal_notes?: boolean
@@ -104178,6 +104199,7 @@ export namespace Prisma {
     invitee_name?: boolean
     invitee_email?: boolean
     invitee_phone?: boolean
+    invitee_company?: boolean
     invitee_notes?: boolean
     answers?: boolean
     internal_notes?: boolean
@@ -104228,6 +104250,7 @@ export namespace Prisma {
     invitee_name?: boolean
     invitee_email?: boolean
     invitee_phone?: boolean
+    invitee_company?: boolean
     invitee_notes?: boolean
     answers?: boolean
     internal_notes?: boolean
@@ -104252,7 +104275,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "booking_page_uuid" | "booking_link_uuid" | "contact_uuid" | "assigned_user_uuid" | "created_by_user_uuid" | "source" | "status" | "start_at" | "end_at" | "duration_minutes" | "invitee_timezone" | "invitee_name" | "invitee_email" | "invitee_phone" | "invitee_notes" | "answers" | "internal_notes" | "location_type" | "location_value" | "meeting_url" | "reminder_uuid" | "calendar_connection_uuid" | "calendar_event_id" | "calendar_html_link" | "calendar_sync_status" | "calendar_sync_error" | "calendar_synced_at" | "manage_token" | "confirmed_at" | "cancelled_at" | "cancellation_reason" | "cancelled_by" | "reschedule_count" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "booking_page_uuid" | "booking_link_uuid" | "contact_uuid" | "assigned_user_uuid" | "created_by_user_uuid" | "source" | "status" | "start_at" | "end_at" | "duration_minutes" | "invitee_timezone" | "invitee_name" | "invitee_email" | "invitee_phone" | "invitee_company" | "invitee_notes" | "answers" | "internal_notes" | "location_type" | "location_value" | "meeting_url" | "reminder_uuid" | "calendar_connection_uuid" | "calendar_event_id" | "calendar_html_link" | "calendar_sync_status" | "calendar_sync_error" | "calendar_synced_at" | "manage_token" | "confirmed_at" | "cancelled_at" | "cancellation_reason" | "cancelled_by" | "reschedule_count" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     booking_page?: boolean | Booking$booking_pageArgs<ExtArgs>
@@ -104319,6 +104342,7 @@ export namespace Prisma {
       invitee_name: string
       invitee_email: string
       invitee_phone: string | null
+      invitee_company: string | null
       invitee_notes: string | null
       /**
        * { [question_id]: answer }
@@ -104800,6 +104824,7 @@ export namespace Prisma {
     readonly invitee_name: FieldRef<"Booking", 'String'>
     readonly invitee_email: FieldRef<"Booking", 'String'>
     readonly invitee_phone: FieldRef<"Booking", 'String'>
+    readonly invitee_company: FieldRef<"Booking", 'String'>
     readonly invitee_notes: FieldRef<"Booking", 'String'>
     readonly answers: FieldRef<"Booking", 'Json'>
     readonly internal_notes: FieldRef<"Booking", 'String'>
@@ -111528,6 +111553,7 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     intro_text: 'intro_text',
+    expectations: 'expectations',
     brand_name: 'brand_name',
     logo_url: 'logo_url',
     primary_color: 'primary_color',
@@ -111634,6 +111660,7 @@ export namespace Prisma {
     invitee_name: 'invitee_name',
     invitee_email: 'invitee_email',
     invitee_phone: 'invitee_phone',
+    invitee_company: 'invitee_company',
     invitee_notes: 'invitee_notes',
     answers: 'answers',
     internal_notes: 'internal_notes',
@@ -119978,6 +120005,7 @@ export namespace Prisma {
     title?: StringNullableFilter<"BookingPage"> | string | null
     description?: StringNullableFilter<"BookingPage"> | string | null
     intro_text?: StringNullableFilter<"BookingPage"> | string | null
+    expectations?: StringNullableListFilter<"BookingPage">
     brand_name?: StringNullableFilter<"BookingPage"> | string | null
     logo_url?: StringNullableFilter<"BookingPage"> | string | null
     primary_color?: StringNullableFilter<"BookingPage"> | string | null
@@ -120054,6 +120082,7 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     intro_text?: SortOrderInput | SortOrder
+    expectations?: SortOrder
     brand_name?: SortOrderInput | SortOrder
     logo_url?: SortOrderInput | SortOrder
     primary_color?: SortOrderInput | SortOrder
@@ -120134,6 +120163,7 @@ export namespace Prisma {
     title?: StringNullableFilter<"BookingPage"> | string | null
     description?: StringNullableFilter<"BookingPage"> | string | null
     intro_text?: StringNullableFilter<"BookingPage"> | string | null
+    expectations?: StringNullableListFilter<"BookingPage">
     brand_name?: StringNullableFilter<"BookingPage"> | string | null
     logo_url?: StringNullableFilter<"BookingPage"> | string | null
     primary_color?: StringNullableFilter<"BookingPage"> | string | null
@@ -120210,6 +120240,7 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     intro_text?: SortOrderInput | SortOrder
+    expectations?: SortOrder
     brand_name?: SortOrderInput | SortOrder
     logo_url?: SortOrderInput | SortOrder
     primary_color?: SortOrderInput | SortOrder
@@ -120283,6 +120314,7 @@ export namespace Prisma {
     title?: StringNullableWithAggregatesFilter<"BookingPage"> | string | null
     description?: StringNullableWithAggregatesFilter<"BookingPage"> | string | null
     intro_text?: StringNullableWithAggregatesFilter<"BookingPage"> | string | null
+    expectations?: StringNullableListFilter<"BookingPage">
     brand_name?: StringNullableWithAggregatesFilter<"BookingPage"> | string | null
     logo_url?: StringNullableWithAggregatesFilter<"BookingPage"> | string | null
     primary_color?: StringNullableWithAggregatesFilter<"BookingPage"> | string | null
@@ -120537,6 +120569,7 @@ export namespace Prisma {
     invitee_name?: StringFilter<"Booking"> | string
     invitee_email?: StringFilter<"Booking"> | string
     invitee_phone?: StringNullableFilter<"Booking"> | string | null
+    invitee_company?: StringNullableFilter<"Booking"> | string | null
     invitee_notes?: StringNullableFilter<"Booking"> | string | null
     answers?: JsonNullableFilter<"Booking">
     internal_notes?: StringNullableFilter<"Booking"> | string | null
@@ -120589,6 +120622,7 @@ export namespace Prisma {
     invitee_name?: SortOrder
     invitee_email?: SortOrder
     invitee_phone?: SortOrderInput | SortOrder
+    invitee_company?: SortOrderInput | SortOrder
     invitee_notes?: SortOrderInput | SortOrder
     answers?: SortOrderInput | SortOrder
     internal_notes?: SortOrderInput | SortOrder
@@ -120646,6 +120680,7 @@ export namespace Prisma {
     invitee_name?: StringFilter<"Booking"> | string
     invitee_email?: StringFilter<"Booking"> | string
     invitee_phone?: StringNullableFilter<"Booking"> | string | null
+    invitee_company?: StringNullableFilter<"Booking"> | string | null
     invitee_notes?: StringNullableFilter<"Booking"> | string | null
     answers?: JsonNullableFilter<"Booking">
     internal_notes?: StringNullableFilter<"Booking"> | string | null
@@ -120696,6 +120731,7 @@ export namespace Prisma {
     invitee_name?: SortOrder
     invitee_email?: SortOrder
     invitee_phone?: SortOrderInput | SortOrder
+    invitee_company?: SortOrderInput | SortOrder
     invitee_notes?: SortOrderInput | SortOrder
     answers?: SortOrderInput | SortOrder
     internal_notes?: SortOrderInput | SortOrder
@@ -120746,6 +120782,7 @@ export namespace Prisma {
     invitee_name?: StringWithAggregatesFilter<"Booking"> | string
     invitee_email?: StringWithAggregatesFilter<"Booking"> | string
     invitee_phone?: StringNullableWithAggregatesFilter<"Booking"> | string | null
+    invitee_company?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     invitee_notes?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     answers?: JsonNullableWithAggregatesFilter<"Booking">
     internal_notes?: StringNullableWithAggregatesFilter<"Booking"> | string | null
@@ -128855,6 +128892,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -128927,6 +128965,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -128994,6 +129033,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129066,6 +129106,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129136,6 +129177,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -129198,6 +129240,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129259,6 +129302,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129497,6 +129541,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -129547,6 +129592,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -129584,6 +129630,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129634,6 +129681,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129678,6 +129726,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -129713,6 +129762,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129753,6 +129803,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -136394,6 +136445,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     intro_text?: SortOrder
+    expectations?: SortOrder
     brand_name?: SortOrder
     logo_url?: SortOrder
     primary_color?: SortOrder
@@ -136819,6 +136871,7 @@ export namespace Prisma {
     invitee_name?: SortOrder
     invitee_email?: SortOrder
     invitee_phone?: SortOrder
+    invitee_company?: SortOrder
     invitee_notes?: SortOrder
     answers?: SortOrder
     internal_notes?: SortOrder
@@ -136867,6 +136920,7 @@ export namespace Prisma {
     invitee_name?: SortOrder
     invitee_email?: SortOrder
     invitee_phone?: SortOrder
+    invitee_company?: SortOrder
     invitee_notes?: SortOrder
     internal_notes?: SortOrder
     location_type?: SortOrder
@@ -136908,6 +136962,7 @@ export namespace Prisma {
     invitee_name?: SortOrder
     invitee_email?: SortOrder
     invitee_phone?: SortOrder
+    invitee_company?: SortOrder
     invitee_notes?: SortOrder
     internal_notes?: SortOrder
     location_type?: SortOrder
@@ -145565,6 +145620,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBooking_recurring_blocks_createdInput, UserUpdateWithoutBooking_recurring_blocks_createdInput>, UserUncheckedUpdateWithoutBooking_recurring_blocks_createdInput>
   }
 
+  export type BookingPageCreateexpectationsInput = {
+    set: string[]
+  }
+
   export type BookingPageCreateduration_optionsInput = {
     set: number[]
   }
@@ -145681,6 +145740,11 @@ export namespace Prisma {
     connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutBooking_pageInput | OutreachSequenceStepCreateOrConnectWithoutBooking_pageInput[]
     createMany?: OutreachSequenceStepCreateManyBooking_pageInputEnvelope
     connect?: OutreachSequenceStepWhereUniqueInput | OutreachSequenceStepWhereUniqueInput[]
+  }
+
+  export type BookingPageUpdateexpectationsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type BookingPageUpdateduration_optionsInput = {
@@ -148680,6 +148744,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -148750,6 +148815,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -148897,6 +148963,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -148945,6 +149012,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -148992,6 +149060,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -149040,6 +149109,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -149879,6 +149949,7 @@ export namespace Prisma {
     title?: StringNullableFilter<"BookingPage"> | string | null
     description?: StringNullableFilter<"BookingPage"> | string | null
     intro_text?: StringNullableFilter<"BookingPage"> | string | null
+    expectations?: StringNullableListFilter<"BookingPage">
     brand_name?: StringNullableFilter<"BookingPage"> | string | null
     logo_url?: StringNullableFilter<"BookingPage"> | string | null
     primary_color?: StringNullableFilter<"BookingPage"> | string | null
@@ -150033,6 +150104,7 @@ export namespace Prisma {
     invitee_name?: StringFilter<"Booking"> | string
     invitee_email?: StringFilter<"Booking"> | string
     invitee_phone?: StringNullableFilter<"Booking"> | string | null
+    invitee_company?: StringNullableFilter<"Booking"> | string | null
     invitee_notes?: StringNullableFilter<"Booking"> | string | null
     answers?: JsonNullableFilter<"Booking">
     internal_notes?: StringNullableFilter<"Booking"> | string | null
@@ -151982,6 +152054,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -152052,6 +152125,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -152174,6 +152248,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -152222,6 +152297,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -157774,6 +157850,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -157822,6 +157899,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -164526,6 +164604,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -164597,6 +164676,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -164874,6 +164954,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -164945,6 +165026,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -167113,6 +167195,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167184,6 +167267,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167306,6 +167390,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167377,6 +167462,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167453,6 +167539,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167524,6 +167611,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167600,6 +167688,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167671,6 +167760,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167747,6 +167837,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -167818,6 +167909,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -168093,6 +168185,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -168164,6 +168257,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -171496,6 +171590,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -171545,6 +171640,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -171949,6 +172045,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -171998,6 +172095,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -180818,6 +180916,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -180866,6 +180965,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -181519,6 +181619,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -181590,6 +181691,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -181754,6 +181856,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181825,6 +181928,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -182093,6 +182197,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -182164,6 +182269,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -182425,6 +182531,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -182473,6 +182580,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -182649,6 +182757,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -182720,6 +182829,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -183116,6 +183226,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -183187,6 +183298,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -183847,6 +183959,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -183918,6 +184031,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -184576,6 +184690,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -184625,6 +184740,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -184879,6 +184995,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -184928,6 +185045,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -185052,6 +185170,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -185101,6 +185220,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -185153,6 +185273,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -185202,6 +185323,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -185434,6 +185556,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -185483,6 +185606,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -186425,6 +186549,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -186519,6 +186644,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -186560,6 +186686,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -187450,6 +187577,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187520,6 +187648,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187589,6 +187718,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187725,6 +187855,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187773,6 +187904,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187816,6 +187948,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187851,6 +187984,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187899,6 +188033,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -187942,6 +188077,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -188801,6 +188937,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -188887,6 +189024,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -190960,6 +191098,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -191030,6 +191169,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -191099,6 +191239,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -191212,6 +191353,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -191260,6 +191402,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -191303,6 +191446,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -192325,6 +192469,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -192946,6 +193091,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -192994,6 +193140,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -193037,6 +193184,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -194782,6 +194930,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -194846,6 +194995,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -194910,6 +195060,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -194974,6 +195125,7 @@ export namespace Prisma {
     title?: string | null
     description?: string | null
     intro_text?: string | null
+    expectations?: BookingPageCreateexpectationsInput | string[]
     brand_name?: string | null
     logo_url?: string | null
     primary_color?: string | null
@@ -195096,6 +195248,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195167,6 +195320,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195236,6 +195390,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195297,6 +195452,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195368,6 +195524,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195437,6 +195594,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195498,6 +195656,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195569,6 +195728,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195638,6 +195798,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195699,6 +195860,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195770,6 +195932,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195839,6 +196002,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     intro_text?: NullableStringFieldUpdateOperationsInput | string | null
+    expectations?: BookingPageUpdateexpectationsInput | string[]
     brand_name?: NullableStringFieldUpdateOperationsInput | string | null
     logo_url?: NullableStringFieldUpdateOperationsInput | string | null
     primary_color?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197304,6 +197468,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -197448,6 +197613,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197496,6 +197662,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197539,6 +197706,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197701,6 +197869,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -197736,6 +197905,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197784,6 +197954,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197827,6 +197998,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197963,6 +198135,7 @@ export namespace Prisma {
     invitee_name: string
     invitee_email: string
     invitee_phone?: string | null
+    invitee_company?: string | null
     invitee_notes?: string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: string | null
@@ -197997,6 +198170,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -198046,6 +198220,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -198089,6 +198264,7 @@ export namespace Prisma {
     invitee_name?: StringFieldUpdateOperationsInput | string
     invitee_email?: StringFieldUpdateOperationsInput | string
     invitee_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    invitee_company?: NullableStringFieldUpdateOperationsInput | string | null
     invitee_notes?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: NullableJsonNullValueInput | InputJsonValue
     internal_notes?: NullableStringFieldUpdateOperationsInput | string | null

@@ -101,6 +101,7 @@ export interface CreateOrganisationDto {
 
 export interface UpdateOrganisationDto {
     name?: string;
+    slug?: string;
     timezone?: string;
     reply_to_email?: string | null;
     reply_forward_email?: string | null;

@@ -21,8 +21,8 @@ export const BrandingTab: FC<BrandingTabProps> = ({ readOnly }) => {
         <div className="space-y-4">
             <SettingsSection title="Look" description="How the public booking page and emails present your brand.">
                 <div className="grid gap-4 sm:grid-cols-2">
-                    <Field label="Brand name" htmlFor="bp-brand" error={errors.brand_name?.message} description="Defaults to the organisation name.">
-                        <Input id="bp-brand" {...register("brand_name")} disabled={readOnly} fullWidth />
+                    <Field label="Brand name" htmlFor="bp-brand" error={errors.brand_name?.message} description="Shown above the title on the public page. Leave empty to show nothing.">
+                        <Input id="bp-brand" {...register("brand_name")} disabled={readOnly} fullWidth placeholder="e.g. logiqdev" />
                     </Field>
                     <Field label="Primary color" error={errors.primary_color?.message} description="Buttons and highlights on the page and in emails.">
                         <Controller
@@ -67,7 +67,14 @@ export const BrandingTab: FC<BrandingTabProps> = ({ readOnly }) => {
 
             <SettingsSection title="After booking">
                 <Field label="Confirmation message" htmlFor="bp-confirm-msg" error={errors.confirmation_message?.message} description="Shown on the page once the booking is made.">
-                    <TextArea id="bp-confirm-msg" rows={3} {...register("confirmation_message")} disabled={readOnly} fullWidth />
+                    <TextArea
+                        id="bp-confirm-msg"
+                        rows={3}
+                        {...register("confirmation_message")}
+                        disabled={readOnly}
+                        fullWidth
+                        placeholder="e.g. Thanks for booking! We will send you the details by email shortly."
+                    />
                 </Field>
                 <Field label="Redirect URL" htmlFor="bp-redirect" error={errors.redirect_url?.message} description="Optional. Send invitees to this page after booking instead of the confirmation screen.">
                     <Input id="bp-redirect" {...register("redirect_url")} disabled={readOnly} fullWidth placeholder="https://yourcompany.com/thanks" />

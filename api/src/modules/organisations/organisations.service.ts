@@ -39,9 +39,22 @@ export class OrganisationsService {
         private readonly dataCopyService: OrganisationDataCopyService,
     ) {}
 
+    /** The plain lowercase name; a random suffix is added only if another organisation already holds that slug. */
+    private async uniqueSlug(name: string, excludeOrganisationUuid?: string): Promise<string> {
+        const base = slugifyOrganisationName(name);
+        const taken = await this.prisma.organisation.findFirst({
+            where: {
+                slug: base,
+                ...(excludeOrganisationUuid && { uuid: { not: excludeOrganisationUuid } }),
+            },
+            select: { uuid: true },
+        });
+
+        return taken ? slugifyOrganisationName(name, randomBytes(4).toString('hex')) : base;
+    }
+
     async createForUser(userUuid: string, name: string) {
-        const suffix = randomBytes(4).toString('hex');
-        const slug = slugifyOrganisationName(name, suffix);
+        const slug = await this.uniqueSlug(name);
 
         return this.prisma.$transaction(async (tx) => {
             const organisation = await tx.organisation.create({
@@ -132,7 +145,16 @@ export class OrganisationsService {
         } = {};
         if (dto.name) {
             data.name = dto.name;
-            data.slug = slugifyOrganisationName(dto.name, randomBytes(4).toString('hex'));
+        }
+        if (dto.slug) {
+            const taken = await this.prisma.organisation.findFirst({
+                where: { slug: dto.slug, uuid: { not: organisationUuid } },
+                select: { uuid: true },
+            });
+            if (taken) {
+                throw new ConflictException('This slug is already used by another organisation');
+            }
+            data.slug = dto.slug;
         }
         if (dto.timezone) {
             data.timezone = dto.timezone;

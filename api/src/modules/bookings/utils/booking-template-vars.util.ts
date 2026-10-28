@@ -20,7 +20,7 @@ export interface BookingVarsInput {
         status: string;
         cancellation_reason?: string | null;
     };
-    page: { name: string; title: string | null } | null;
+    page: { name: string; title: string | null; brand_name?: string | null } | null;
     assignee: { full_name: string | null; email: string } | null;
     organisation: { name: string; timezone: string };
     app_url: string;
@@ -52,6 +52,7 @@ export const BOOKING_TEMPLATE_VARIABLES = [
     'team_member.name',
     'team_member.email',
     'organisation.name',
+    'brand.name',
 ] as const;
 
 export function formatDuration(minutes: number): string {
@@ -104,9 +105,10 @@ export function buildBookingVars(input: BookingVarsInput): PlaceholderVars {
         'booking.manage_url': BookingPublicUrls.manage(app_url, booking.manage_token),
         'booking.notes': booking.invitee_notes ?? '',
         'booking.cancellation_reason': booking.cancellation_reason ?? '',
-        'team_member.name': assignee?.full_name || assignee?.email || organisation.name,
+        'team_member.name': assignee?.full_name || assignee?.email || page?.brand_name?.trim() || '',
         'team_member.email': assignee?.email ?? '',
         'organisation.name': organisation.name,
+        'brand.name': page?.brand_name?.trim() || '',
     };
 }
 

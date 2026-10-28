@@ -74,13 +74,13 @@ export class PublicBookingService {
 
         return {
             code: link?.code ?? null,
-            organisation_name: organisation.name,
             default_timezone: organisation.timezone,
             page: {
                 title: page.title || page.name,
                 description: page.description,
                 intro_text: page.intro_text,
-                brand_name: page.brand_name || organisation.name,
+                expectations: page.expectations,
+                brand_name: page.brand_name?.trim() || '',
                 logo_url: page.logo_url,
                 primary_color: page.primary_color,
                 show_timezone: page.show_timezone,
@@ -143,6 +143,7 @@ export class PublicBookingService {
                 name: dto.name.trim(),
                 email,
                 phone: dto.phone?.trim() || null,
+                company: dto.company?.trim() || null,
                 notes: dto.notes?.trim() || null,
                 timezone: isValidTimeZone(dto.timezone) ? dto.timezone : null,
             },
@@ -154,6 +155,7 @@ export class PublicBookingService {
 
         // Contact creation happens only once the slot is secured, so failed attempts leave no contacts behind.
         const withContact = await this.attachContact(link, organisation_uuid, booking, dto);
+        await this.fillContactCompany(withContact.contact_uuid, dto.company);
         await this.bookingsService.afterCreate(withContact, { notify: true });
         const assigned_user = withContact.assigned_user_uuid
             ? await this.prisma.user.findUnique({ where: { uuid: withContact.assigned_user_uuid }, select: { full_name: true } })
@@ -233,6 +235,7 @@ export class PublicBookingService {
                 name: dto.name.trim(),
                 email: booking.invitee_email,
                 ...(dto.phone?.trim() && { phone: dto.phone.trim() }),
+                ...(dto.company?.trim() && { company: dto.company.trim() }),
             });
             const updated = await this.prisma.booking.update({ where: { uuid: booking.uuid }, data: { contact_uuid: contact.uuid } });
             await this.events.record(booking, BookingEventType.UPDATED, INVITEE_ACTOR, 'Linked to contact', { contact_uuid: contact.uuid });
@@ -241,6 +244,20 @@ export class PublicBookingService {
             // The booking stands on its own (invitee details are on it); a contact can be linked later.
             this.logger.warn(`Could not create contact for booking ${booking.uuid}: ${(error as Error).message}`);
             return booking;
+        }
+    }
+
+    /** Saves the company on the linked contact, never overwriting one that is already set. */
+    private async fillContactCompany(contact_uuid: string | null, company: string | undefined): Promise<void> {
+        const value = company?.trim();
+        if (!contact_uuid || !value) return;
+        try {
+            await this.prisma.contact.updateMany({
+                where: { uuid: contact_uuid, OR: [{ company: null }, { company: '' }] },
+                data: { company: value },
+            });
+        } catch (error) {
+            this.logger.warn(`Could not save company on contact ${contact_uuid}: ${(error as Error).message}`);
         }
     }
 
@@ -295,7 +312,7 @@ export class PublicBookingService {
         return {
             status: booking.status,
             title: page?.title || page?.name || 'Meeting',
-            organisation_name: booking.organisation?.name ?? null,
+            brand_name: page?.brand_name?.trim() || null,
             start_at: booking.start_at,
             end_at: booking.end_at,
             duration_minutes: booking.duration_minutes,

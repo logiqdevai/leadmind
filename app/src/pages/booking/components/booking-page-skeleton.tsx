@@ -1,11 +1,14 @@
 import type { FC } from "react";
 import { Skeleton } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 import { BookingCard } from "@/pages/booking/components/booking-card";
 
-export const BookingPageSkeleton: FC = () => (
+export const BookingPageSkeleton: FC = () => {
+    const { t } = useTranslation();
+    return (
     <BookingCard aria-busy>
         <span className="sr-only" role="status">
-            Loading…
+            {t("booking.loading")}
         </span>
         <div className="grid gap-8 md:grid-cols-[16rem_minmax(0,1fr)]">
             <div className="flex flex-col gap-3">
@@ -28,4 +31,5 @@ export const BookingPageSkeleton: FC = () => (
             </div>
         </div>
     </BookingCard>
-);
+    );
+};

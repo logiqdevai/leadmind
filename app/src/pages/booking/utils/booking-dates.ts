@@ -1,4 +1,5 @@
 import { addDays } from "@/features/bookings/utils/booking-time";
+import { getCurrentLanguage } from "@/lib/i18n";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -22,7 +23,7 @@ export function monthEndOf(monthStart: string): string {
 /** "November 2026" for a "YYYY-MM-01" key (timezone independent). */
 export function formatMonthLabel(monthStart: string): string {
     const [y, m] = monthStart.split("-").map(Number);
-    return new Intl.DateTimeFormat(undefined, { timeZone: "UTC", month: "long", year: "numeric" }).format(
+    return new Intl.DateTimeFormat(getCurrentLanguage(), { timeZone: "UTC", month: "long", year: "numeric" }).format(
         new Date(Date.UTC(y, m - 1, 1)),
     );
 }

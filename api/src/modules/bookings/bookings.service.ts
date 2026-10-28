@@ -71,6 +71,7 @@ export interface PlaceBookingInput {
         name: string;
         email: string;
         phone?: string | null;
+        company?: string | null;
         notes?: string | null;
         timezone?: string | null;
     };
@@ -454,6 +455,7 @@ export class BookingsService {
                                 invitee_name: input.invitee.name,
                                 invitee_email: input.invitee.email.trim().toLowerCase(),
                                 invitee_phone: input.invitee.phone || null,
+                                invitee_company: input.invitee.company || null,
                                 invitee_notes: input.invitee.notes || null,
                                 answers: (input.answers ?? undefined) as Prisma.InputJsonValue | undefined,
                                 internal_notes: input.internal_notes ?? null,

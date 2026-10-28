@@ -1,9 +1,10 @@
-import { type FC, useEffect, useState } from "react";
+import { type FC, type Key, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Building2, Plus } from "lucide-react";
-import { Button, Checkbox, Input, Label, ListBox, Modal, Select } from "@heroui/react";
+import { Button, Checkbox, Input, Label, ListBox, Modal, Select, Tabs } from "@heroui/react";
+import { ScrollableTabs, ScrollableTabsList, tabTriggerClassName } from "@/components/ui/scrollable-tabs";
 import { useAuthStore } from "@/stores/auth";
 import { Routes } from "@/routes/routes";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -45,6 +46,14 @@ const COPY_CATEGORY_ENTRIES = Object.entries(OrganisationCopyCategoryLabels) as 
     string,
 ][];
 
+const TAB_QUERY = "tab";
+
+const OrganisationTabIds = {
+    GENERAL: "general",
+    MEMBERS: "members",
+    DANGER: "danger",
+} as const;
+
 const SettingsOrganisationPage: FC = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -83,6 +92,20 @@ const SettingsOrganisationPage: FC = () => {
 
     const canDeleteOrg = canDelete && organisations.length > 1;
 
+    const tabs = [
+        { id: OrganisationTabIds.GENERAL, label: "General" },
+        { id: OrganisationTabIds.MEMBERS, label: "Members" },
+        ...(canDelete ? [{ id: OrganisationTabIds.DANGER, label: "Danger zone" }] : []),
+    ];
+    const rawTab = searchParams.get(TAB_QUERY);
+    const currentTab: string = tabs.find((t) => t.id === rawTab)?.id ?? OrganisationTabIds.GENERAL;
+
+    const setTab = (key: Key) => {
+        const next = new URLSearchParams(searchParams);
+        next.set(TAB_QUERY, String(key));
+        setSearchParams(next, { replace: true });
+    };
+
     useEffect(() => {
         if (searchParams.get("create") !== "1") return;
         setCreateOpen(true);
@@ -95,6 +118,7 @@ const SettingsOrganisationPage: FC = () => {
         resolver: zodResolver(updateOrganisationSchema),
         values: {
             name: currentOrganisation?.name ?? organisationName ?? "",
+            slug: currentOrganisation?.slug ?? "",
             timezone: currentOrganisation?.timezone ?? "UTC",
             reply_to_email: currentOrganisation?.reply_to_email ?? "",
             reply_forward_email: currentOrganisation?.reply_forward_email ?? "",
@@ -125,6 +149,7 @@ const SettingsOrganisationPage: FC = () => {
         if (!organisationUuid) return;
         updateOrganisation.mutate({
             name: data.name,
+            slug: data.slug,
             timezone: data.timezone,
             reply_to_email: data.reply_to_email?.trim() || null,
             reply_forward_email: data.reply_forward_email?.trim() || null,
@@ -214,6 +239,17 @@ const SettingsOrganisationPage: FC = () => {
                 </div>
             </div>
 
+            <ScrollableTabs selectedKey={currentTab} onSelectionChange={setTab}>
+                <ScrollableTabsList mobileColumns={3}>
+                    {tabs.map((t) => (
+                        <Tabs.Tab key={t.id} id={t.id} className={tabTriggerClassName}>
+                            {t.label}
+                        </Tabs.Tab>
+                    ))}
+                </ScrollableTabsList>
+            </ScrollableTabs>
+
+            {currentTab === OrganisationTabIds.GENERAL ? (
             <form onSubmit={onSaveSettings} className="space-y-3 max-w-lg">
                 <h2 className="text-sm font-medium text-foreground">Settings</h2>
                 <div className="space-y-1.5">
@@ -227,6 +263,23 @@ const SettingsOrganisationPage: FC = () => {
                     {settingsForm.formState.errors.name ? (
                         <p className="text-xs text-danger">
                             {settingsForm.formState.errors.name.message}
+                        </p>
+                    ) : null}
+                </div>
+                <div className="space-y-1.5">
+                    <Label>Slug</Label>
+                    <Input
+                        {...settingsForm.register("slug")}
+                        disabled={!canEdit || updateOrganisation.isPending}
+                        placeholder="your-organisation"
+                        fullWidth
+                    />
+                    <p className="text-xs text-muted">
+                        Used in your public booking links. Changing it breaks links you've already shared.
+                    </p>
+                    {settingsForm.formState.errors.slug ? (
+                        <p className="text-xs text-danger">
+                            {settingsForm.formState.errors.slug.message}
                         </p>
                     ) : null}
                 </div>
@@ -310,7 +363,10 @@ const SettingsOrganisationPage: FC = () => {
                     </p>
                 )}
             </form>
+            ) : null}
 
+            {currentTab === OrganisationTabIds.MEMBERS ? (
+            <>
             <div className="space-y-2">
                 <h2 className="text-sm font-medium text-foreground">Members</h2>
                 {membersLoading ? (
@@ -446,8 +502,10 @@ const SettingsOrganisationPage: FC = () => {
                     )}
                 </div>
             ) : null}
+            </>
+            ) : null}
 
-            {canDelete ? (
+            {currentTab === OrganisationTabIds.DANGER && canDelete ? (
                 <div className="space-y-3 rounded-xl border border-danger/30 p-4">
                     <div>
                         <h2 className="text-sm font-medium text-foreground">Danger zone</h2>

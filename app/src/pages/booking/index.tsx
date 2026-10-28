@@ -1,6 +1,7 @@
 import { useMemo, type FC } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 import { usePublicBookingPage } from "@/features/bookings/hooks/use-public-booking";
 import type { PublicPageRef } from "@/features/bookings/interfaces/bookings.interfaces";
 import { isNotFoundError } from "@/pages/booking/utils/booking-errors";
@@ -9,6 +10,7 @@ import { BookingPageSkeleton } from "@/pages/booking/components/booking-page-ske
 import { BookingStateCard } from "@/pages/booking/components/booking-state-card";
 
 const PublicBookingPage: FC = () => {
+    const { t } = useTranslation();
     // `/book/<code>` (contact links and older links) or the page's own `/book/<organisation>/<page>`.
     const { code = "", organisation = "", slug = "" } = useParams<{ code: string; organisation: string; slug: string }>();
     const pageRef = useMemo<PublicPageRef | undefined>(() => {
@@ -22,8 +24,8 @@ const PublicBookingPage: FC = () => {
     if (!pageRef || (isError && isNotFoundError(error))) {
         return (
             <BookingStateCard
-                title="This booking link is not available"
-                description="The link may have expired or been turned off. Please ask the person who shared it for a new one."
+                title={t("booking.notAvailable.title")}
+                description={t("booking.notAvailable.description")}
             />
         );
     }
@@ -31,11 +33,11 @@ const PublicBookingPage: FC = () => {
     if (isError || !data) {
         return (
             <BookingStateCard
-                title="Something went wrong"
-                description="We could not load this booking page. Please check your connection and try again."
+                title={t("booking.loadFailed.title")}
+                description={t("booking.loadFailed.description")}
                 action={
                     <Button variant="secondary" onPress={() => void refetch()}>
-                        Try again
+                        {t("common.tryAgain")}
                     </Button>
                 }
             />

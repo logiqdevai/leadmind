@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FC } from "react";
 import { Alert, Button } from "@heroui/react";
 import { CalendarDays } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type {
     BookingSlot,
     PublicBookingPage,
@@ -9,14 +10,16 @@ import type {
 } from "@/features/bookings/interfaces/bookings.interfaces";
 import { useCreatePublicBooking, usePublicBookingSlots } from "@/features/bookings/hooks/use-public-booking";
 import { isSlotUnavailableError } from "@/features/bookings/utils/booking-api-error";
-import { formatDateTime, formatDuration } from "@/features/bookings/utils/booking-time";
+import { formatDateLong, formatTimeRange } from "@/features/bookings/utils/booking-time";
 import { getBrowserTimezone } from "@/lib/timezone";
 import { useBookingSlotPicker } from "@/pages/booking/hooks/use-booking-slot-picker";
 import { resolveBrowserTimezone } from "@/pages/booking/utils/booking-dates";
+import { formatDurationLocalized } from "@/pages/booking/utils/booking-format";
 import { toBookingPayloadDetails } from "@/pages/booking/utils/booking-details";
 import type { BookingDetailsFormValues } from "@/pages/booking/validation-schemas/booking.schema";
 import { BookingBrandScope } from "@/pages/booking/components/booking-brand-scope";
 import { BookingCard } from "@/pages/booking/components/booking-card";
+import { BookingStepper } from "@/pages/booking/components/booking-stepper";
 import { BookingPageHeader } from "@/pages/booking/components/booking-page-header";
 import { BookingSlotPicker } from "@/pages/booking/components/booking-slot-picker";
 import { BookingDetailsForm } from "@/pages/booking/components/booking-details-form";
@@ -30,10 +33,10 @@ const BookingSteps = {
 } as const;
 type BookingStep = (typeof BookingSteps)[keyof typeof BookingSteps];
 
-const STEP_TITLES: Record<BookingStep, string> = {
-    [BookingSteps.PICK]: "Select a date and time",
-    [BookingSteps.DETAILS]: "Your details",
-    [BookingSteps.REVIEW]: "Review and confirm",
+const STEP_TITLE_KEYS: Record<BookingStep, string> = {
+    [BookingSteps.PICK]: "booking.steps.pick",
+    [BookingSteps.DETAILS]: "booking.steps.details",
+    [BookingSteps.REVIEW]: "booking.steps.review",
 };
 
 const STEP_NUMBERS: Record<BookingStep, number> = {
@@ -48,6 +51,7 @@ interface BookingFlowProps {
 }
 
 export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
+    const { t } = useTranslation();
     const { page } = data;
     // The organisation decides the default; visitors can still switch with the timezone selector.
     const defaultTimezone = data.default_timezone || getBrowserTimezone() || resolveBrowserTimezone() || "UTC";
@@ -121,52 +125,68 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
     if (result) {
         return (
             <BookingBrandScope color={result.booking.primary_color ?? page.primary_color}>
-                <BookingCard className="mx-auto max-w-2xl">
+                <div className="mx-auto max-w-2xl py-4 sm:py-8">
                     <BookingConfirmation result={result} />
-                </BookingCard>
+                </div>
             </BookingBrandScope>
         );
     }
 
     return (
         <BookingBrandScope color={page.primary_color}>
-            <BookingCard>
-                <div className="grid gap-8 md:grid-cols-[16rem_minmax(0,1fr)]">
-                    <BookingPageHeader
-                        data={data}
-                        duration={duration}
-                        onDurationChange={(minutes) => {
-                            setDuration(minutes);
-                            resetSlot();
-                        }}
-                        memberUuid={memberUuid}
-                        onMemberChange={(uuid) => {
-                            setMemberUuid(uuid);
-                            resetSlot();
-                        }}
-                        isLocked={step !== BookingSteps.PICK}
-                    />
+            <BookingCard className="overflow-hidden p-0 sm:p-0">
+                <div className="grid md:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
+                    <div className="border-b border-border/60 p-6 sm:p-8 md:border-b-0 md:border-r">
+                        <BookingPageHeader
+                            data={data}
+                            duration={duration}
+                            onDurationChange={(minutes) => {
+                                setDuration(minutes);
+                                resetSlot();
+                            }}
+                            memberUuid={memberUuid}
+                            onMemberChange={(uuid) => {
+                                setMemberUuid(uuid);
+                                resetSlot();
+                            }}
+                            isLocked={step !== BookingSteps.PICK}
+                        />
+                    </div>
 
-                    <section className="flex min-w-0 flex-col gap-5 md:border-l md:border-border/60 md:pl-8">
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">
-                                Step {STEP_NUMBERS[step]} of 3
-                            </span>
+                    <section className="flex min-w-0 flex-col gap-8 p-5 sm:p-8">
+                        <BookingStepper current={STEP_NUMBERS[step]} />
+
+                        {step === BookingSteps.DETAILS ? (
+                            <div className="flex flex-col gap-1">
+                                <h2
+                                    ref={headingRef}
+                                    tabIndex={-1}
+                                    className="text-2xl font-bold text-foreground outline-none"
+                                >
+                                    {t(STEP_TITLE_KEYS[step])}
+                                </h2>
+                                <p className="text-sm text-muted">{t("booking.form.detailsDescription")}</p>
+                            </div>
+                        ) : step === BookingSteps.REVIEW ? (
                             <h2
                                 ref={headingRef}
                                 tabIndex={-1}
-                                className="text-lg font-semibold text-foreground outline-none"
+                                className="text-2xl font-bold text-foreground outline-none"
                             >
-                                {STEP_TITLES[step]}
+                                {t(STEP_TITLE_KEYS[step])}
                             </h2>
-                        </div>
+                        ) : (
+                            <h2 ref={headingRef} tabIndex={-1} className="sr-only">
+                                {t(STEP_TITLE_KEYS[step])}
+                            </h2>
+                        )}
 
-                        {step !== BookingSteps.PICK && selectedSlot ? (
+                        {step === BookingSteps.REVIEW && selectedSlot ? (
                             <div className="flex items-center justify-between gap-3 rounded-xl bg-surface-secondary/50 px-4 py-3">
                                 <span className="flex min-w-0 items-center gap-2 text-sm text-foreground">
                                     <CalendarDays className="size-4 shrink-0 text-muted" aria-hidden />
                                     <span className="truncate">
-                                        {formatDateTime(selectedSlot.start, timezone)} ({formatDuration(duration)})
+                                        {formatDateLong(selectedSlot.start, timezone)} ({formatDurationLocalized(duration)})
                                     </span>
                                 </span>
                                 <Button
@@ -175,13 +195,14 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
                                     isDisabled={createBooking.isPending}
                                     onPress={() => goTo(BookingSteps.PICK)}
                                 >
-                                    Change
+                                    {t("common.change")}
                                 </Button>
                             </div>
                         ) : null}
 
                         {step === BookingSteps.PICK ? (
                             <BookingSlotPicker
+                                withHeading
                                 picker={picker}
                                 timezone={timezone}
                                 onTimezoneChange={
@@ -208,10 +229,9 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
                                         <Alert status="warning">
                                             <Alert.Indicator />
                                             <Alert.Content>
-                                                <Alert.Title>That time was just taken</Alert.Title>
+                                                <Alert.Title>{t("booking.slotTaken.title")}</Alert.Title>
                                                 <Alert.Description>
-                                                    Someone booked it a moment ago. Please choose another time; your
-                                                    details are saved.
+                                                    {t("booking.slotTaken.description")}
                                                 </Alert.Description>
                                             </Alert.Content>
                                         </Alert>
@@ -223,6 +243,34 @@ export const BookingFlow: FC<BookingFlowProps> = ({ pageRef, data }) => {
                         {step === BookingSteps.DETAILS ? (
                             <BookingDetailsForm
                                 data={data}
+                                summary={
+                                    selectedSlot ? (
+                                        <div className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-surface-secondary/60 p-3">
+                                            <span className="flex min-w-0 items-center gap-3">
+                                                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-accent">
+                                                    <CalendarDays className="size-5" aria-hidden />
+                                                </span>
+                                                <span className="flex min-w-0 flex-col">
+                                                    <span className="truncate text-sm font-semibold text-foreground">
+                                                        {formatDateLong(selectedSlot.start, timezone)}
+                                                    </span>
+                                                    <span className="truncate text-sm text-muted">
+                                                        {formatTimeRange(selectedSlot.start, selectedSlot.end, timezone)} ({formatDurationLocalized(duration)})
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            <Button
+                                                size="sm"
+                                                variant="secondary"
+                                                className="shrink-0 rounded-full"
+                                                onPress={() => goTo(BookingSteps.PICK)}
+                                            >
+                                                <CalendarDays className="size-4" aria-hidden />
+                                                {t("common.change")}
+                                            </Button>
+                                        </div>
+                                    ) : null
+                                }
                                 defaultValues={details}
                                 onBack={() => goTo(BookingSteps.PICK)}
                                 onSubmit={(values) => {

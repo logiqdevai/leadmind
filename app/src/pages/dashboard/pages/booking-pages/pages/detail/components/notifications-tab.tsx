@@ -248,7 +248,14 @@ export const NotificationsTab: FC<NotificationsTabProps> = ({ readOnly }) => {
                     />
                 </Field>
                 <Field label="Event description" htmlFor="bp-cal-desc" error={errors.calendar_event_description?.message}>
-                    <TextArea id="bp-cal-desc" rows={4} {...register("calendar_event_description")} disabled={readOnly} fullWidth />
+                    <TextArea
+                        id="bp-cal-desc"
+                        rows={4}
+                        {...register("calendar_event_description")}
+                        disabled={readOnly}
+                        fullWidth
+                        placeholder={"Name: {{contact.full_name}}\nEmail: {{contact.email}}\nNotes: {{booking.notes}}"}
+                    />
                 </Field>
             </SettingsSection>
 

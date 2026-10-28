@@ -212,6 +212,7 @@ const BookingDetailsBody: FC<{ booking: BookingDetail; timezone: string }> = ({ 
                             <span className="text-muted">Not provided</span>
                         )}
                     </DetailRow>
+                    {booking.invitee_company ? <DetailRow label="Company">{booking.invitee_company}</DetailRow> : null}
                 </div>
                 {booking.invitee_notes ? (
                     <DetailRow label="Invitee notes">

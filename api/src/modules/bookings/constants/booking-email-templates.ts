@@ -19,19 +19,19 @@ const manageLinks = `<p><a href="{{booking.reschedule_url}}">Reschedule</a> &mid
 export const DEFAULT_INVITEE_TEMPLATES: Record<BookingNotificationKind, BookingEmailTemplate> = {
     CONFIRMATION: {
         subject: 'Confirmed: {{booking.title}} on {{booking.date}}',
-        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting is booked.</p>${details}${manageLinks}<p>{{organisation.name}}</p>`,
+        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting is booked.</p>${details}${manageLinks}<p>{{brand.name}}</p>`,
     },
     REMINDER: {
         subject: 'Reminder: {{booking.title}} on {{booking.date}} at {{booking.start_time}}',
-        html: `<p>Hi {{contact.first_name}},</p><p>This is a reminder of your upcoming meeting.</p>${details}${manageLinks}<p>{{organisation.name}}</p>`,
+        html: `<p>Hi {{contact.first_name}},</p><p>This is a reminder of your upcoming meeting.</p>${details}${manageLinks}<p>{{brand.name}}</p>`,
     },
     CANCELLATION: {
         subject: 'Cancelled: {{booking.title}} on {{booking.date}}',
-        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting on {{booking.date}} at {{booking.start_time}} has been cancelled.</p><p>{{organisation.name}}</p>`,
+        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting on {{booking.date}} at {{booking.start_time}} has been cancelled.</p><p>{{brand.name}}</p>`,
     },
     RESCHEDULE: {
         subject: 'Rescheduled: {{booking.title}} is now on {{booking.date}}',
-        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting has been moved to a new time.</p>${details}${manageLinks}<p>{{organisation.name}}</p>`,
+        html: `<p>Hi {{contact.first_name}},</p><p>Your meeting has been moved to a new time.</p>${details}${manageLinks}<p>{{brand.name}}</p>`,
     },
 };
 
@@ -58,8 +58,6 @@ export const DEFAULT_INTERNAL_TEMPLATES: Record<BookingNotificationKind, Booking
 export const DEFAULT_CALENDAR_EVENT_TITLE = '{{booking.title}} with {{contact.full_name}}';
 
 export const DEFAULT_CALENDAR_EVENT_DESCRIPTION = [
-    'Booked via {{organisation.name}}',
-    '',
     'Name: {{contact.full_name}}',
     'Email: {{contact.email}}',
     'Phone: {{contact.phone}}',

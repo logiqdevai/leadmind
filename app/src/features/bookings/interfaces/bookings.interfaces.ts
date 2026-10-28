@@ -117,6 +117,7 @@ export interface Booking {
     invitee_name: string;
     invitee_email: string;
     invitee_phone: string | null;
+    invitee_company: string | null;
     invitee_notes: string | null;
     answers: Record<string, string | boolean> | null;
     internal_notes: string | null;
@@ -304,6 +305,7 @@ export interface BookingPage {
     title: string | null;
     description: string | null;
     intro_text: string | null;
+    expectations: string[];
     brand_name: string | null;
     logo_url: string | null;
     primary_color: string | null;
@@ -574,12 +576,12 @@ export type PublicPageRef = { code: string } | { organisation: string; slug: str
 export interface PublicBookingPage {
     /** Null when the page was opened by slug (no link involved). */
     code: string | null;
-    organisation_name: string;
     default_timezone: string;
     page: {
         title: string;
         description: string | null;
         intro_text: string | null;
+        expectations: string[];
         brand_name: string;
         logo_url: string | null;
         primary_color: string | null;
@@ -603,7 +605,7 @@ export interface PublicBookingPage {
 export interface PublicBookingSummary {
     status: BookingStatus;
     title: string;
-    organisation_name: string | null;
+    brand_name: string | null;
     start_at: string;
     end_at: string;
     duration_minutes: number;
@@ -624,6 +626,7 @@ export interface PublicCreateBookingDto {
     name: string;
     email?: string;
     phone?: string;
+    company?: string;
     notes?: string;
     answers?: Record<string, string | boolean>;
     member_uuid?: string;

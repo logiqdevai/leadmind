@@ -9,6 +9,7 @@ export const buildDefaultDetails = (data: PublicBookingPage): BookingDetailsForm
     name: data.invitee?.name ?? "",
     email: "",
     phone: "",
+    company: "",
     notes: "",
     answers: Object.fromEntries(
         data.page.questions.map((q) => [q.id, q.type === BookingQuestionTypes.CHECKBOX ? false : ""]),
@@ -19,7 +20,7 @@ export const buildDefaultDetails = (data: PublicBookingPage): BookingDetailsForm
 export const toBookingPayloadDetails = (
     data: PublicBookingPage,
     values: BookingDetailsFormValues,
-): Pick<PublicCreateBookingDto, "name" | "email" | "phone" | "notes" | "answers"> => {
+): Pick<PublicCreateBookingDto, "name" | "email" | "phone" | "company" | "notes" | "answers"> => {
     const answers: Record<string, string | boolean> = {};
     for (const question of data.page.questions) {
         const value = values.answers[question.id];
@@ -30,6 +31,7 @@ export const toBookingPayloadDetails = (
         name: values.name.trim(),
         email: values.email.trim() || undefined,
         phone: values.phone.trim() || undefined,
+        company: values.company.trim() || undefined,
         notes: values.notes.trim() || undefined,
         answers: Object.keys(answers).length > 0 ? answers : undefined,
     };

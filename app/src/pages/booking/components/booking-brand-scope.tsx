@@ -13,6 +13,22 @@ const isLightColor = (hex: string): boolean => {
     return luminance > 0.45;
 };
 
+// HeroUI declares the `--color-*` tokens as `var(--accent)` on :root, so they are resolved once there and
+// overriding `--accent` in a subtree alone never reaches `bg-accent` / `text-accent`. Each derived token
+// is therefore re-declared here against the brand colour.
+const BRAND_TOKENS = [
+    "[--accent:var(--booking-accent)]",
+    "[--focus:var(--booking-accent)]",
+    "[--color-accent:var(--booking-accent)]",
+    "[--color-focus:var(--booking-accent)]",
+    "[--color-accent-hover:color-mix(in_oklab,var(--booking-accent)90%,var(--color-accent-foreground)10%)]",
+    "[--color-accent-soft:color-mix(in_oklab,var(--booking-accent)15%,transparent)]",
+    "[--color-accent-soft-hover:color-mix(in_oklab,var(--booking-accent)20%,transparent)]",
+    "[--color-accent-soft-foreground:var(--booking-accent)]",
+].join(" ");
+
+const LIGHT_BRAND_FOREGROUND = "[--accent-foreground:oklch(0.2_0.01_240)] [--color-accent-foreground:oklch(0.2_0.01_240)]";
+
 interface BookingBrandScopeProps {
     color: string | null | undefined;
     className?: string;
@@ -33,8 +49,8 @@ export const BookingBrandScope: FC<BookingBrandScopeProps> = ({ color, className
         <div
             style={style}
             className={cn(
-                brand && "[--accent:var(--booking-accent)] [--focus:var(--booking-accent)]",
-                brand && isLightColor(brand) && "[--accent-foreground:oklch(0.2_0.01_240)]",
+                brand && BRAND_TOKENS,
+                brand && isLightColor(brand) && LIGHT_BRAND_FOREGROUND,
                 className,
             )}
         >

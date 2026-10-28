@@ -2,6 +2,7 @@ import { useState, type FC } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Alert, Button, Chip } from "@heroui/react";
 import { CalendarClock, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
     BookingStatuses,
     type PublicManagedBooking,
@@ -9,9 +10,9 @@ import {
 import { useManagedBooking } from "@/features/bookings/hooks/use-public-booking";
 import {
     BOOKING_STATUS_CHIP_COLORS,
-    BOOKING_STATUS_LABELS,
 } from "@/features/bookings/constants/booking-labels";
-import { formatDateTime, formatMinutesSpan } from "@/features/bookings/utils/booking-time";
+import { formatDateTime } from "@/features/bookings/utils/booking-time";
+import { formatMinutesSpanLocalized } from "@/pages/booking/utils/booking-format";
 import { Routes } from "@/routes/routes";
 import { isNotFoundError } from "@/pages/booking/utils/booking-errors";
 import { BookingBrandScope } from "@/pages/booking/components/booking-brand-scope";
@@ -38,6 +39,7 @@ interface ManageBookingViewProps {
 }
 
 const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMode }) => {
+    const { t } = useTranslation();
     const { booking, policy } = data;
     const [mode, setMode] = useState<ManageMode | null>(initialMode);
     const [success, setSuccess] = useState<string | null>(null);
@@ -60,23 +62,23 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
                                 {booking.logo_url ? (
                                     <img
                                         src={booking.logo_url}
-                                        alt={booking.organisation_name ? `${booking.organisation_name} logo` : "Logo"}
+                                        alt={booking.brand_name ? t("booking.header.logoAlt", { brand: booking.brand_name }) : t("booking.manage.logo")}
                                         className="size-10 shrink-0 rounded-xl object-contain"
                                     />
                                 ) : null}
-                                {booking.organisation_name ? (
+                                {booking.brand_name ? (
                                     <span className="truncate text-sm font-semibold text-muted">
-                                        {booking.organisation_name}
+                                        {booking.brand_name}
                                     </span>
                                 ) : null}
                             </div>
                             <Chip size="sm" variant="soft" color={BOOKING_STATUS_CHIP_COLORS[booking.status]}>
-                                <Chip.Label>{BOOKING_STATUS_LABELS[booking.status]}</Chip.Label>
+                                <Chip.Label>{t(`booking.status.${booking.status}`)}</Chip.Label>
                             </Chip>
                         </div>
                         <div className="flex flex-col gap-1">
                             <h1 className="text-2xl font-semibold leading-tight text-foreground">{booking.title}</h1>
-                            <p className="text-sm text-muted">Booked for {booking.invitee_name}</p>
+                            <p className="text-sm text-muted">{t("booking.manage.bookedFor", { name: booking.invitee_name })}</p>
                         </div>
                     </header>
 
@@ -100,7 +102,7 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
                             onClose={() => setMode(null)}
                             onDone={() => {
                                 setMode(null);
-                                setSuccess("Your booking was cancelled.");
+                                setSuccess(t("booking.manage.cancelled"));
                             }}
                         />
                     ) : null}
@@ -113,14 +115,14 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
                             onClose={() => setMode(null)}
                             onDone={(start, tz) => {
                                 setMode(null);
-                                setSuccess(`Your booking was moved to ${formatDateTime(start, tz)}.`);
+                                setSuccess(t("booking.manage.movedTo", { when: formatDateTime(start, tz) }));
                             }}
                         />
                     ) : null}
 
                     {!activeMode ? (
                         isCancelled ? (
-                            <p className="text-sm text-muted">This booking is cancelled. Nothing else to do here.</p>
+                            <p className="text-sm text-muted">{t("booking.manage.isCancelled")}</p>
                         ) : canAct ? (
                             <div className="flex flex-col gap-3">
                                 <div className="flex flex-col gap-2 sm:flex-row">
@@ -133,7 +135,7 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
                                             }}
                                         >
                                             <CalendarClock className="size-4" aria-hidden />
-                                            Reschedule
+                                            {t("booking.manage.reschedule")}
                                         </Button>
                                     ) : null}
                                     {policy.can_cancel ? (
@@ -145,7 +147,7 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
                                             }}
                                         >
                                             <XCircle className="size-4" aria-hidden />
-                                            Cancel booking
+                                            {t("booking.manage.cancel")}
                                         </Button>
                                     ) : null}
                                 </div>
@@ -158,7 +160,7 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
                             <Alert status="default">
                                 <Alert.Indicator />
                                 <Alert.Content>
-                                    <Alert.Title>Changes are not possible</Alert.Title>
+                                    <Alert.Title>{t("booking.manage.changesNotPossible")}</Alert.Title>
                                     <Alert.Description>{policy.reason}</Alert.Description>
                                 </Alert.Content>
                             </Alert>
@@ -171,9 +173,10 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
 };
 
 const PolicyHints: FC<{ cancelMinutes: number; rescheduleMinutes: number }> = ({ cancelMinutes, rescheduleMinutes }) => {
+    const { t } = useTranslation();
     const hints: string[] = [];
-    if (rescheduleMinutes > 0) hints.push(`Rescheduling is possible up to ${formatMinutesSpan(rescheduleMinutes)} before the start.`);
-    if (cancelMinutes > 0) hints.push(`Cancelling is possible up to ${formatMinutesSpan(cancelMinutes)} before the start.`);
+    if (rescheduleMinutes > 0) hints.push(t("booking.manage.rescheduleHint", { span: formatMinutesSpanLocalized(rescheduleMinutes) }));
+    if (cancelMinutes > 0) hints.push(t("booking.manage.cancelHint", { span: formatMinutesSpanLocalized(cancelMinutes) }));
     if (hints.length === 0) return null;
     return (
         <ul className="flex flex-col gap-1 text-xs text-muted">
@@ -185,6 +188,7 @@ const PolicyHints: FC<{ cancelMinutes: number; rescheduleMinutes: number }> = ({
 };
 
 const ManageBookingPage: FC = () => {
+    const { t } = useTranslation();
     const { token = "" } = useParams<{ token: string }>();
     const [searchParams] = useSearchParams();
     const initialMode = parseMode(searchParams.get(Routes.booking.manage_action_query));
@@ -195,8 +199,8 @@ const ManageBookingPage: FC = () => {
     if (!token || (isError && isNotFoundError(error))) {
         return (
             <BookingStateCard
-                title="This booking could not be found"
-                description="The link may be incomplete or no longer valid. Please use the link from your most recent confirmation email."
+                title={t("booking.manage.notFoundTitle")}
+                description={t("booking.manage.notFoundDescription")}
             />
         );
     }
@@ -204,11 +208,11 @@ const ManageBookingPage: FC = () => {
     if (isError || !data) {
         return (
             <BookingStateCard
-                title="Something went wrong"
-                description="We could not load your booking. Please check your connection and try again."
+                title={t("booking.loadFailed.title")}
+                description={t("booking.manage.loadFailedDescription")}
                 action={
                     <Button variant="secondary" onPress={() => void refetch()}>
-                        Try again
+                        {t("common.tryAgain")}
                     </Button>
                 }
             />

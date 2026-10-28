@@ -2394,19 +2394,21 @@ model BookingPage {
 
   // Public page content & branding
   title                String?
-  description          String? @db.Text
-  intro_text           String? @db.Text
+  description          String?  @db.Text
+  intro_text           String?  @db.Text
+  /// "What to expect" bullet points shown on the public page (shared by every link of the page).
+  expectations         String[] @default([])
   brand_name           String?
   logo_url             String?
-  primary_color        String? @db.VarChar(9)
-  confirmation_message String? @db.Text
+  primary_color        String?  @db.VarChar(9)
+  confirmation_message String?  @db.Text
   redirect_url         String?
   cta_label            String?
-  show_team_member     Boolean @default(true)
-  show_timezone        Boolean @default(true)
+  show_team_member     Boolean  @default(true)
+  show_timezone        Boolean  @default(true)
   /// [{ id, label, type: TEXT|TEXTAREA|SELECT|CHECKBOX, required, options? }]
   questions            Json?
-  require_phone        Boolean @default(false)
+  require_phone        Boolean  @default(false)
 
   // Scheduling rules
   duration_minutes            Int                         @default(30)
@@ -2552,13 +2554,14 @@ model Booking {
   invitee_timezone String?
 
   // Invitee details as submitted (kept even when a Contact is linked, so history survives contact edits).
-  invitee_name   String
-  invitee_email  String
-  invitee_phone  String?
-  invitee_notes  String? @db.Text
+  invitee_name    String
+  invitee_email   String
+  invitee_phone   String?
+  invitee_company String?
+  invitee_notes   String? @db.Text
   /// { [question_id]: answer }
-  answers        Json?
-  internal_notes String? @db.Text
+  answers         Json?
+  internal_notes  String? @db.Text
 
   location_type  BookingLocationType @default(NONE)
   location_value String?

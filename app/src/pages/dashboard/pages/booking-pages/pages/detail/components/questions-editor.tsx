@@ -123,6 +123,7 @@ export const QuestionsEditor: FC<QuestionsEditorProps> = ({ readOnly }) => {
                                             rows={3}
                                             value={field.value.join("\n")}
                                             onChange={(e) => field.onChange(e.target.value.split("\n"))}
+                                            placeholder={"Option one\nOption two"}
                                             disabled={readOnly}
                                             fullWidth
                                         />

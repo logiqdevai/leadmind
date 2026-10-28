@@ -90,4 +90,5 @@ export const BOOKING_TEMPLATE_VARIABLES = [
     { key: "team_member.name", label: "Team member name" },
     { key: "team_member.email", label: "Team member email" },
     { key: "organisation.name", label: "Organisation name" },
+    { key: "brand.name", label: "Brand name (booking page)" },
 ] as const;

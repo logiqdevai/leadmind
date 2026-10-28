@@ -2396,6 +2396,8 @@ model BookingPage {
   title                String?
   description          String? @db.Text
   intro_text           String? @db.Text
+  /// "What to expect" bullet points shown on the public page (shared by every link of the page).
+  expectations         String[] @default([])
   brand_name           String?
   logo_url             String?
   primary_color        String? @db.VarChar(9)
@@ -2555,6 +2557,7 @@ model Booking {
   invitee_name   String
   invitee_email  String
   invitee_phone  String?
+  invitee_company String?
   invitee_notes  String? @db.Text
   /// { [question_id]: answer }
   answers        Json?

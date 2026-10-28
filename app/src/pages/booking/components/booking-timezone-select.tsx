@@ -1,4 +1,5 @@
 import { useMemo, type FC } from "react";
+import { useTranslation } from "react-i18next";
 import { SearchSelect } from "@/components/ui/search-select";
 import { TimezoneOptions } from "@/config/constants/dropdowns/timezone.options";
 
@@ -10,6 +11,7 @@ interface BookingTimezoneSelectProps {
 
 /** Timezone dropdown; the visitor's own zone is offered even when it is not in the shared option list. */
 export const BookingTimezoneSelect: FC<BookingTimezoneSelectProps> = ({ value, onChange, isDisabled }) => {
+    const { t } = useTranslation();
     const options = useMemo(() => {
         const base = TimezoneOptions.map((o) => ({ id: o.value as string, label: o.label as string }));
         return base.some((o) => o.id === value) ? base : [{ id: value, label: value.replace(/_/g, " ") }, ...base];
@@ -17,8 +19,8 @@ export const BookingTimezoneSelect: FC<BookingTimezoneSelectProps> = ({ value, o
 
     return (
         <SearchSelect
-            aria-label="Timezone"
-            searchPlaceholder="Search timezones…"
+            aria-label={t("booking.slots.timezone")}
+            searchPlaceholder={t("booking.slots.searchTimezones")}
             options={options}
             value={value}
             onChange={onChange}

@@ -1,4 +1,5 @@
 import { CalendarDateTime, toZoned } from "@internationalized/date";
+import { getCurrentLanguage } from "@/lib/i18n";
 
 /**
  * Booking times are UTC instants from the API; they are always displayed in an explicit IANA
@@ -46,7 +47,7 @@ export function isoWeekday(date: string): number {
 }
 
 export function formatTime(instant: string | Date, timeZone: string): string {
-    return new Intl.DateTimeFormat(undefined, { timeZone, hour: "2-digit", minute: "2-digit" }).format(new Date(instant));
+    return new Intl.DateTimeFormat(getCurrentLanguage(), { timeZone, hour: "2-digit", minute: "2-digit" }).format(new Date(instant));
 }
 
 export function formatTimeRange(start: string | Date, end: string | Date, timeZone: string): string {
@@ -54,7 +55,7 @@ export function formatTimeRange(start: string | Date, end: string | Date, timeZo
 }
 
 export function formatDateLong(instant: string | Date, timeZone: string): string {
-    return new Intl.DateTimeFormat(undefined, {
+    return new Intl.DateTimeFormat(getCurrentLanguage(), {
         timeZone,
         weekday: "long",
         day: "numeric",
@@ -64,7 +65,7 @@ export function formatDateLong(instant: string | Date, timeZone: string): string
 }
 
 export function formatDateShort(instant: string | Date, timeZone: string): string {
-    return new Intl.DateTimeFormat(undefined, { timeZone, weekday: "short", day: "numeric", month: "short" }).format(
+    return new Intl.DateTimeFormat(getCurrentLanguage(), { timeZone, weekday: "short", day: "numeric", month: "short" }).format(
         new Date(instant),
     );
 }
@@ -76,7 +77,7 @@ export function formatDateTime(instant: string | Date, timeZone: string): string
 /** Long label for a "YYYY-MM-DD" key, e.g. "Monday, 2 November 2026". */
 export function formatDateKey(date: string): string {
     const [y, m, d] = date.split("-").map(Number);
-    return new Intl.DateTimeFormat(undefined, {
+    return new Intl.DateTimeFormat(getCurrentLanguage(), {
         timeZone: "UTC",
         weekday: "long",
         day: "numeric",

@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { Alert, Button } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
     BookingQuestionTypes,
     type BookingSlot,
@@ -44,6 +45,7 @@ export const BookingReview: FC<BookingReviewProps> = ({
     onEditTime,
     onConfirm,
 }) => {
+    const { t } = useTranslation();
     const { page, invitee } = data;
     const email = details.email.trim() || invitee?.email_hint || null;
 
@@ -51,9 +53,9 @@ export const BookingReview: FC<BookingReviewProps> = ({
         <div className="flex flex-col gap-6">
             <section className="flex flex-col gap-3 rounded-xl bg-surface-secondary/50 p-4">
                 <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">When</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{t("booking.review.when")}</h3>
                     <Button size="sm" variant="tertiary" onPress={onEditTime} isDisabled={isSubmitting}>
-                        Change
+                        {t("common.change")}
                     </Button>
                 </div>
                 <BookingSummaryList
@@ -71,31 +73,32 @@ export const BookingReview: FC<BookingReviewProps> = ({
 
             <section className="flex flex-col gap-3 rounded-xl bg-surface-secondary/50 p-4">
                 <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Your details</h3>
+                    <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{t("booking.review.yourDetails")}</h3>
                     <Button size="sm" variant="tertiary" onPress={onBack} isDisabled={isSubmitting}>
-                        Edit
+                        {t("common.edit")}
                     </Button>
                 </div>
                 <dl className="flex flex-col gap-2 text-sm">
-                    <DetailRow label="Name" value={details.name} />
-                    {email ? <DetailRow label="Email" value={email} /> : null}
-                    {details.phone.trim() ? <DetailRow label="Phone" value={details.phone} /> : null}
+                    <DetailRow label={t("booking.review.name")} value={details.name} />
+                    {email ? <DetailRow label={t("booking.review.email")} value={email} /> : null}
+                    {details.phone.trim() ? <DetailRow label={t("booking.review.phone")} value={details.phone} /> : null}
+                    {details.company.trim() ? <DetailRow label={t("booking.form.company")} value={details.company} /> : null}
                     {page.questions.map((question) => {
                         const value = details.answers[question.id];
                         if (question.type === BookingQuestionTypes.CHECKBOX) {
-                            return <DetailRow key={question.id} label={question.label} value={value ? "Yes" : "No"} />;
+                            return <DetailRow key={question.id} label={question.label} value={value ? t("common.yes") : t("common.no")} />;
                         }
                         return typeof value === "string" && value.trim() ? (
                             <DetailRow key={question.id} label={question.label} value={value} />
                         ) : null;
                     })}
-                    {details.notes.trim() ? <DetailRow label="Notes" value={details.notes} /> : null}
+                    {details.notes.trim() ? <DetailRow label={t("booking.review.notes")} value={details.notes} /> : null}
                 </dl>
             </section>
 
             {page.requires_confirmation ? (
                 <p className="text-sm text-muted">
-                    This booking needs to be approved. You will get an email once it is confirmed.
+                    {t("booking.review.needsApproval")}
                 </p>
             ) : null}
 
@@ -103,7 +106,7 @@ export const BookingReview: FC<BookingReviewProps> = ({
                 <Alert status="danger">
                     <Alert.Indicator />
                     <Alert.Content>
-                        <Alert.Title>Booking not completed</Alert.Title>
+                        <Alert.Title>{t("booking.review.errorTitle")}</Alert.Title>
                         <Alert.Description>{errorMessage}</Alert.Description>
                     </Alert.Content>
                 </Alert>
@@ -112,7 +115,7 @@ export const BookingReview: FC<BookingReviewProps> = ({
             <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
                 <Button type="button" variant="tertiary" onPress={onBack} isDisabled={isSubmitting}>
                     <ArrowLeft className="size-4" aria-hidden />
-                    Back
+                    {t("common.back")}
                 </Button>
                 <ActionButtonWithPending
                     variant="primary"
@@ -120,7 +123,7 @@ export const BookingReview: FC<BookingReviewProps> = ({
                     isDisabled={isSubmitting}
                     onPress={onConfirm}
                 >
-                    {page.requires_confirmation ? "Request booking" : "Confirm booking"}
+                    {page.requires_confirmation ? t("booking.review.requestBooking") : t("booking.review.confirmBooking")}
                 </ActionButtonWithPending>
             </div>
         </div>

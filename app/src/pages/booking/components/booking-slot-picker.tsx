@@ -1,7 +1,8 @@
 import { useMemo, type FC, type ReactNode } from "react";
 import { Alert, Button, Calendar, Skeleton, Spinner } from "@heroui/react";
 import { parseDate, type DateValue } from "@internationalized/date";
-import { Globe } from "lucide-react";
+import { CalendarDays, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { BookingSlot, SlotsByDate } from "@/features/bookings/interfaces/bookings.interfaces";
 import {
     formatDateKey,
@@ -27,6 +28,8 @@ interface BookingSlotPickerProps {
     onSelectSlot: (slot: BookingSlot) => void;
     /** Optional message above the picker (e.g. "that time was just taken"). */
     notice?: ReactNode;
+    /** Shows the step heading (icon, title, description, timezone) used by the public booking page. */
+    withHeading?: boolean;
 }
 
 const toCalendarDate = (key: string | null): DateValue | null => {
@@ -51,7 +54,9 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
     selectedStart,
     onSelectSlot,
     notice,
+    withHeading = false,
 }) => {
+    const { t } = useTranslation();
     // Slots are grouped by local date in the zone they were requested for; while a new zone
     // loads, the previous data stays consistent with its own zone.
     const slotZone = slots?.timezone ?? timezone;
@@ -70,25 +75,48 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
         <div className="flex flex-col gap-4">
             {notice}
 
-            <div className="flex flex-col gap-1.5">
-                <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
-                    <Globe className="size-3.5" aria-hidden />
-                    Timezone
-                </span>
-                {onTimezoneChange ? (
-                    <BookingTimezoneSelect value={timezone} onChange={onTimezoneChange} />
-                ) : (
-                    <span className="text-sm text-foreground">
-                        {timezone.replace(/_/g, " ")} ({timeZoneOffsetLabel(timezone)})
+            {withHeading ? (
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="flex min-w-0 items-start gap-4">
+                        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-secondary text-accent">
+                            <CalendarDays className="size-6" aria-hidden />
+                        </span>
+                        <div className="flex min-w-0 flex-col gap-1">
+                            <h2 className="text-xl font-semibold text-foreground">{t("booking.steps.pick")}</h2>
+                            <p className="text-sm text-muted">
+                                {t("booking.slots.headerDescription", {
+                                    timezone: `${timezone.replace(/_/g, " ")} (${timeZoneOffsetLabel(timezone)})`,
+                                })}
+                            </p>
+                        </div>
+                    </div>
+                    {onTimezoneChange ? (
+                        <div className="w-full shrink-0 lg:w-72">
+                            <BookingTimezoneSelect value={timezone} onChange={onTimezoneChange} />
+                        </div>
+                    ) : null}
+                </div>
+            ) : (
+                <div className="flex flex-col gap-1.5">
+                    <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
+                        <Globe className="size-3.5" aria-hidden />
+                        {t("booking.slots.timezone")}
                     </span>
-                )}
-            </div>
+                    {onTimezoneChange ? (
+                        <BookingTimezoneSelect value={timezone} onChange={onTimezoneChange} />
+                    ) : (
+                        <span className="text-sm text-foreground">
+                            {timezone.replace(/_/g, " ")} ({timeZoneOffsetLabel(timezone)})
+                        </span>
+                    )}
+                </div>
+            )}
 
-            <div className="grid gap-6 md:grid-cols-[minmax(0,18rem)_minmax(0,1fr)]">
-                <section aria-label="Choose a date" className="relative flex flex-col gap-3">
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+                <section aria-label={t("booking.slots.chooseDate")} className="relative flex flex-col gap-3 rounded-2xl border border-border/80 bg-surface-secondary/30 p-4 sm:p-5">
                     <Calendar
-                        aria-label="Available dates"
-                        className="w-full max-w-sm"
+                        aria-label={t("booking.slots.availableDates")}
+                        className="w-full"
                         value={toCalendarDate(picker.selectedDate)}
                         onChange={(date) => picker.setSelectedDate(date ? date.toString() : null)}
                         focusedValue={toCalendarDate(picker.focusedDate) ?? undefined}
@@ -99,8 +127,8 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                     >
                         <Calendar.Header>
                             <Calendar.Heading />
-                            <Calendar.NavButton slot="previous" aria-label="Previous month" />
-                            <Calendar.NavButton slot="next" aria-label="Next month" />
+                            <Calendar.NavButton slot="previous" aria-label={t("booking.slots.previousMonth")} />
+                            <Calendar.NavButton slot="next" aria-label={t("booking.slots.nextMonth")} />
                         </Calendar.Header>
                         <Calendar.Grid>
                             <Calendar.GridHeader>
@@ -128,34 +156,37 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                     {isFetching ? (
                         <span className="flex items-center gap-2 text-xs text-muted" role="status">
                             <Spinner size="sm" />
-                            Checking availability…
+                            {t("booking.slots.checking")}
                         </span>
                     ) : null}
 
                     {showMonthEmpty ? (
                         <div className="flex flex-col items-start gap-2 rounded-xl bg-surface-secondary/60 p-3">
                             <p className="text-sm text-muted">
-                                No available times in {formatMonthLabel(picker.visibleMonth)}.
+                                {t("booking.slots.noTimesInMonth", { month: formatMonthLabel(picker.visibleMonth) })}
                             </p>
                             {picker.canGoToNextMonth ? (
                                 <Button size="sm" variant="secondary" onPress={picker.goToNextMonth}>
-                                    Show next month
+                                    {t("booking.slots.showNextMonth")}
                                 </Button>
                             ) : null}
                         </div>
                     ) : null}
                 </section>
 
-                <section aria-label="Choose a time" className="flex min-w-0 flex-col gap-3">
+                <section
+                    aria-label={t("booking.slots.chooseTime")}
+                    className="flex min-w-0 flex-col gap-3 rounded-2xl border border-border/80 bg-surface-secondary/30 p-4 sm:p-5"
+                >
                     {isError ? (
                         <Alert status="danger">
                             <Alert.Indicator />
                             <Alert.Content>
-                                <Alert.Title>Could not load available times</Alert.Title>
-                                <Alert.Description>Please check your connection and try again.</Alert.Description>
+                                <Alert.Title>{t("booking.slots.loadErrorTitle")}</Alert.Title>
+                                <Alert.Description>{t("booking.slots.loadErrorDescription")}</Alert.Description>
                             </Alert.Content>
                             <Button size="sm" variant="secondary" onPress={onRetry}>
-                                Retry
+                                {t("common.retry")}
                             </Button>
                         </Alert>
                     ) : isLoading ? (
@@ -166,21 +197,21 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                         </div>
                     ) : !picker.selectedDate ? (
                         <p className="rounded-xl bg-surface-secondary/60 p-4 text-sm text-muted">
-                            Select a highlighted date to see available times.
+                            {t("booking.slots.selectDate")}
                         </p>
                     ) : (
                         <>
-                            <h3 className="text-sm font-semibold text-foreground">
+                            <h3 className="text-lg font-semibold text-foreground">
                                 {formatDateKey(picker.selectedDate)}
                             </h3>
                             {!daySlots.some((slot) => slot.available) ? (
                                 <p className="rounded-xl bg-surface-secondary/60 p-4 text-sm text-muted">
-                                    No times left on this day. Please pick another date.
+                                    {t("booking.slots.noTimesLeft")}
                                 </p>
                             ) : (
                                 <ul
-                                    className="grid max-h-96 grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3 md:grid-cols-2"
-                                    aria-label={`Available times on ${formatDateKey(picker.selectedDate)}`}
+                                    className="grid max-h-[28rem] grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3 md:grid-cols-2"
+                                    aria-label={t("booking.slots.availableOn", { date: formatDateKey(picker.selectedDate) })}
                                 >
                                     {daySlots.map((slot) => {
                                         const isSelected = slot.start === selectedStart;
@@ -188,15 +219,18 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                                             <li key={slot.start}>
                                                 <Button
                                                     fullWidth
-                                                    variant={isSelected ? "primary" : "outline"}
+                                                    variant="outline"
                                                     aria-pressed={isSelected}
                                                     isDisabled={!slot.available}
                                                     aria-label={
                                                         slot.available
                                                             ? undefined
-                                                            : `${formatTime(slot.start, slotZone)}, not available`
+                                                            : t("booking.slots.notAvailable", { time: formatTime(slot.start, slotZone) })
                                                     }
-                                                    className={cn(!slot.available && "line-through opacity-50")}
+                                                    className={cn(
+                                                        isSelected && "border-accent bg-accent-soft text-foreground ring-1 ring-accent",
+                                                        !slot.available && "line-through opacity-50",
+                                                    )}
                                                     onPress={() => onSelectSlot(slot)}
                                                 >
                                                     {formatTime(slot.start, slotZone)}

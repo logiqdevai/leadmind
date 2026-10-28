@@ -1,4 +1,5 @@
 import { z } from "zod";
+import i18n from "@/lib/i18n";
 import {
     BookingQuestionTypes,
     type BookingQuestion,
@@ -17,19 +18,19 @@ const answerSchema = (question: BookingQuestion): AnswerSchema => {
     const required = !!question.required;
     switch (question.type) {
         case BookingQuestionTypes.CHECKBOX:
-            return z.boolean().refine((v) => !required || v, { message: "Please check this box to continue" });
+            return z.boolean().refine((v) => !required || v, { message: i18n.t("booking.validation.checkBox") });
         case BookingQuestionTypes.SELECT: {
             const options = question.options ?? [];
             return z.string().refine((v) => (v === "" ? !required : options.includes(v)), {
-                message: required ? "Please choose an option" : "Please choose one of the listed options",
+                message: required ? i18n.t("booking.validation.chooseOption") : i18n.t("booking.validation.chooseListed"),
             });
         }
         default:
             return z
                 .string()
                 .trim()
-                .max(5000, "Please keep this under 5000 characters")
-                .refine((v) => !required || v.length > 0, { message: "This field is required" });
+                .max(5000, i18n.t("booking.validation.maxAnswer"))
+                .refine((v) => !required || v.length > 0, { message: i18n.t("booking.validation.required") });
     }
 };
 
@@ -38,26 +39,27 @@ export const createBookingDetailsSchema = ({ emailOptional, requirePhone, questi
     for (const question of questions) answers[question.id] = answerSchema(question);
 
     return z.object({
-        name: z.string().trim().min(1, "Please enter your name").max(200, "Please keep your name under 200 characters"),
+        name: z.string().trim().min(1, i18n.t("booking.validation.nameRequired")).max(200, i18n.t("booking.validation.nameMax")),
         email: z
             .string()
             .trim()
-            .max(320, "Please keep your email under 320 characters")
+            .max(320, i18n.t("booking.validation.emailMax"))
             .superRefine((value, ctx) => {
                 if (!value) {
-                    if (!emailOptional) ctx.addIssue({ code: "custom", message: "Please enter your email" });
+                    if (!emailOptional) ctx.addIssue({ code: "custom", message: i18n.t("booking.validation.emailRequired") });
                     return;
                 }
                 if (!z.email().safeParse(value).success) {
-                    ctx.addIssue({ code: "custom", message: "Please enter a valid email address" });
+                    ctx.addIssue({ code: "custom", message: i18n.t("booking.validation.emailInvalid") });
                 }
             }),
         phone: z
             .string()
             .trim()
-            .max(50, "Please keep your phone number under 50 characters")
-            .refine((v) => !requirePhone || v.length > 0, { message: "Please enter your phone number" }),
-        notes: z.string().trim().max(5000, "Please keep your notes under 5000 characters"),
+            .max(50, i18n.t("booking.validation.phoneMax"))
+            .refine((v) => !requirePhone || v.length > 0, { message: i18n.t("booking.validation.phoneRequired") }),
+        company: z.string().trim().max(200, i18n.t("booking.validation.companyMax")),
+        notes: z.string().trim().max(5000, i18n.t("booking.validation.notesMax")),
         answers: z.object(answers),
     });
 };
@@ -69,8 +71,8 @@ export const createCancelBookingSchema = (reasonRequired: boolean) =>
         reason: z
             .string()
             .trim()
-            .max(2000, "Please keep the reason under 2000 characters")
-            .refine((v) => !reasonRequired || v.length > 0, { message: "Please tell us why you are cancelling" }),
+            .max(2000, i18n.t("booking.validation.reasonMax"))
+            .refine((v) => !reasonRequired || v.length > 0, { message: i18n.t("booking.validation.reasonRequired") }),
     });
 
 export type CancelBookingFormValues = z.infer<ReturnType<typeof createCancelBookingSchema>>;

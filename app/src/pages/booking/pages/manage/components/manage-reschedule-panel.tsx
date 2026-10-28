@@ -1,6 +1,7 @@
 import { useState, type FC } from "react";
 import { Alert, Button } from "@heroui/react";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { BookingSlot, PublicBookingPolicy, PublicBookingSummary } from "@/features/bookings/interfaces/bookings.interfaces";
 import {
     useManagedBookingSlots,
@@ -21,6 +22,7 @@ interface ManageReschedulePanelProps {
 }
 
 export const ManageReschedulePanel: FC<ManageReschedulePanelProps> = ({ token, booking, policy, onDone, onClose }) => {
+    const { t } = useTranslation();
     const [timezone, setTimezone] = useState(booking.timezone);
     const [selectedSlot, setSelectedSlot] = useState<BookingSlot | null>(null);
     const [slotTaken, setSlotTaken] = useState(false);
@@ -47,9 +49,9 @@ export const ManageReschedulePanel: FC<ManageReschedulePanelProps> = ({ token, b
     return (
         <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1">
-                <h2 className="text-lg font-semibold text-foreground">Pick a new time</h2>
+                <h2 className="text-lg font-semibold text-foreground">{t("booking.manage.pickNewTime")}</h2>
                 <p className="text-sm text-muted">
-                    Currently {formatDateTime(booking.start_at, timezone)}. Choose a new slot below.
+                    {t("booking.manage.currently", { when: formatDateTime(booking.start_at, timezone) })}
                 </p>
             </div>
 
@@ -80,8 +82,8 @@ export const ManageReschedulePanel: FC<ManageReschedulePanelProps> = ({ token, b
                         <Alert status="warning">
                             <Alert.Indicator />
                             <Alert.Content>
-                                <Alert.Title>That time was just taken</Alert.Title>
-                                <Alert.Description>Please choose another time.</Alert.Description>
+                                <Alert.Title>{t("booking.slotTaken.title")}</Alert.Title>
+                                <Alert.Description>{t("booking.slotTaken.descriptionShort")}</Alert.Description>
                             </Alert.Content>
                         </Alert>
                     ) : null
@@ -92,7 +94,7 @@ export const ManageReschedulePanel: FC<ManageReschedulePanelProps> = ({ token, b
                 <Alert status="danger">
                     <Alert.Indicator />
                     <Alert.Content>
-                        <Alert.Title>Could not reschedule</Alert.Title>
+                        <Alert.Title>{t("booking.manage.rescheduleFailed")}</Alert.Title>
                         <Alert.Description>{reschedule.error.message}</Alert.Description>
                     </Alert.Content>
                 </Alert>
@@ -107,12 +109,12 @@ export const ManageReschedulePanel: FC<ManageReschedulePanelProps> = ({ token, b
                             <span className="font-semibold">{formatDateTime(selectedSlot.start, timezone)}</span>
                         </>
                     ) : (
-                        <span className="text-muted">No new time selected yet.</span>
+                        <span className="text-muted">{t("booking.manage.noNewTime")}</span>
                     )}
                 </p>
                 <div className="flex flex-col-reverse gap-2 sm:flex-row">
                     <Button variant="secondary" onPress={onClose} isDisabled={reschedule.isPending}>
-                        Back
+                        {t("common.back")}
                     </Button>
                     <ActionButtonWithPending
                         variant="primary"
@@ -120,7 +122,7 @@ export const ManageReschedulePanel: FC<ManageReschedulePanelProps> = ({ token, b
                         isDisabled={!selectedSlot || reschedule.isPending}
                         onPress={submit}
                     >
-                        Confirm new time
+                        {t("booking.manage.confirmNewTime")}
                     </ActionButtonWithPending>
                 </div>
             </div>

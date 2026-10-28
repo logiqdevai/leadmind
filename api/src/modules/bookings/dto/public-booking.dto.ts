@@ -51,6 +51,12 @@ export class PublicCreateBookingDto {
     @MaxLength(50)
     phone?: string;
 
+    @ApiPropertyOptional({ maxLength: 200, description: 'Company name; saved on the linked contact when it has none' })
+    @IsOptional()
+    @IsString()
+    @MaxLength(200)
+    company?: string;
+
     @ApiPropertyOptional({ maxLength: 5000 })
     @IsOptional()
     @IsString()

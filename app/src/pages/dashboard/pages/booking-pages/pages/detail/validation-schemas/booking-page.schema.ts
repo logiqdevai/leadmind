@@ -49,6 +49,7 @@ export const bookingPageFormSchema = z
         title: z.string().max(200),
         description: z.string().max(5000),
         intro_text: z.string().max(5000),
+        expectations: z.array(z.string().max(120)).max(8),
         is_active: z.boolean(),
         is_default: z.boolean(),
         location_type: z.enum([
