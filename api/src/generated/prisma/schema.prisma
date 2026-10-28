@@ -733,12 +733,11 @@ model OutreachSequence {
   created_at          DateTime       @default(now())
   updated_at          DateTime       @updatedAt
 
-  booking_page_templates BookingPageTemplate[]
-  organisation           Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  sender_profile         SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
-  steps                  OutreachSequenceStep[]
-  enrollments            SequenceEnrollment[]
-  campaigns              MarketingCampaign[]
+  organisation   Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  steps          OutreachSequenceStep[]
+  enrollments    SequenceEnrollment[]
+  campaigns      MarketingCampaign[]
 
   @@index([organisation_uuid])
   @@index([organisation_uuid, status])
@@ -972,11 +971,11 @@ model MessageTemplate {
   created_at           DateTime  @default(now())
   updated_at           DateTime  @updatedAt
 
-  organisation         Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
-  sender_profile       SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
-  booking_page         BookingPage?           @relation("MessageTemplateBookingPage", fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
-  sequence_steps       OutreachSequenceStep[]
-  bookingPageTemplates BookingPageTemplate[]
+  organisation           Organisation           @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  sender_profile         SenderProfile?         @relation(fields: [sender_profile_uuid], references: [uuid], onDelete: SetNull)
+  booking_page           BookingPage?           @relation("MessageTemplateBookingPage", fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)
+  sequence_steps         OutreachSequenceStep[]
+  booking_page_templates BookingPageTemplate[]
 
   @@index([organisation_uuid])
   @@index([sender_profile_uuid])
@@ -2764,10 +2763,8 @@ model BookingPageTemplate {
   kind              BookingNotificationKind
   created_at        DateTime                @default(now())
 
-  booking_page       BookingPage       @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
-  template           MessageTemplate   @relation(fields: [template_uuid], references: [uuid], onDelete: Cascade)
-  outreachSequence   OutreachSequence? @relation(fields: [outreachSequenceId], references: [id])
-  outreachSequenceId Int?
+  booking_page BookingPage     @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
+  template     MessageTemplate @relation(fields: [template_uuid], references: [uuid], onDelete: Cascade)
 
   @@unique([booking_page_uuid, kind, template_uuid])
   @@index([booking_page_uuid, kind])

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { isTableNavInteractiveCell, renderTableNavCellContent, tableNavInteractiveCellClassName, tableNavRowClassName } from "@/components/ui/table-row-link";
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { ExternalLink, Plus, Search, Sparkles } from "lucide-react";
+import { ExternalLink, Eye, Plus, Search, Sparkles } from "lucide-react";
 import type { Lead, SourceType } from "@/features/leads/interfaces/lead.interface";
 import { SOURCE_OPTIONS } from "@/features/filters/constants/source-options";
 import { SourceBadge } from "@/components/ui/source-badge";
@@ -25,7 +25,7 @@ const LEAD_DIR_COL: Record<string, string> = {
   title: "min-w-0 hidden 2xl:table-cell overflow-hidden",
   source_type: "hidden xl:table-cell w-40 overflow-hidden",
   location: "min-w-0 hidden xl:table-cell overflow-hidden",
-  actions: "w-[9.75rem] whitespace-nowrap pl-2 pr-3",
+  actions: "w-[15rem] whitespace-nowrap pl-2 pr-3",
 };
 
 function leadDirColumnClass(columnId: string): string {
@@ -118,14 +118,22 @@ export default function LeadsDirectoryPage() {
           const lead = info.row.original;
           const contactUuid = lead.contact_uuid ?? adoptedContacts.get(lead.uuid) ?? null;
           return (
-            <div className="flex justify-end pr-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="presentation">
+            <div className="flex items-center justify-end gap-2 pr-1" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="presentation">
+              <Link
+                to={Routes.dashboard.leads_directory_detail.replace(":uuid", lead.uuid)}
+                className={buttonVariants({ size: "sm", variant: "tertiary" })}
+                aria-label={`View details for ${lead.name ?? lead.company ?? "lead"}`}
+              >
+                <Eye className="size-3.5" />
+                View
+              </Link>
               {contactUuid ? (
                 <Link
                   to={Routes.dashboard.contacts_detail.replace(":uuid", contactUuid)}
                   className={buttonVariants({ size: "sm", variant: "tertiary" })}
                 >
                   <ExternalLink className="size-3.5" />
-                  View contact
+                  Contact
                 </Link>
               ) : (
                 <Button

@@ -10,7 +10,7 @@ export interface LanguageItem {
 }
 
 /** Languages whose flag should not be that of the first country speaking them. */
-const FLAG_OVERRIDES: Record<string, string> = { en: "GB" };
+const FLAG_OVERRIDES: Record<string, string> = { en: "GB", el: "GR", de: "DE", nl: "NL" };
 
 /** Every language of the countries in the shared country options, A-Z by name. */
 export const LANGUAGE_ITEMS: LanguageItem[] = (() => {

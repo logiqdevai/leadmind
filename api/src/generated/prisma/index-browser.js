@@ -1397,8 +1397,7 @@ exports.Prisma.BookingPageTemplateScalarFieldEnum = {
   booking_page_uuid: 'booking_page_uuid',
   template_uuid: 'template_uuid',
   kind: 'kind',
-  created_at: 'created_at',
-  outreachSequenceId: 'outreachSequenceId'
+  created_at: 'created_at'
 };
 
 exports.Prisma.CalendarConnectionScalarFieldEnum = {

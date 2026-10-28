@@ -10499,14 +10499,12 @@ export namespace Prisma {
    */
 
   export type OutreachSequenceCountOutputType = {
-    booking_page_templates: number
     steps: number
     enrollments: number
     campaigns: number
   }
 
   export type OutreachSequenceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    booking_page_templates?: boolean | OutreachSequenceCountOutputTypeCountBooking_page_templatesArgs
     steps?: boolean | OutreachSequenceCountOutputTypeCountStepsArgs
     enrollments?: boolean | OutreachSequenceCountOutputTypeCountEnrollmentsArgs
     campaigns?: boolean | OutreachSequenceCountOutputTypeCountCampaignsArgs
@@ -10521,13 +10519,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the OutreachSequenceCountOutputType
      */
     select?: OutreachSequenceCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * OutreachSequenceCountOutputType without action
-   */
-  export type OutreachSequenceCountOutputTypeCountBooking_page_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BookingPageTemplateWhereInput
   }
 
   /**
@@ -10669,12 +10660,12 @@ export namespace Prisma {
 
   export type MessageTemplateCountOutputType = {
     sequence_steps: number
-    bookingPageTemplates: number
+    booking_page_templates: number
   }
 
   export type MessageTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sequence_steps?: boolean | MessageTemplateCountOutputTypeCountSequence_stepsArgs
-    bookingPageTemplates?: boolean | MessageTemplateCountOutputTypeCountBookingPageTemplatesArgs
+    booking_page_templates?: boolean | MessageTemplateCountOutputTypeCountBooking_page_templatesArgs
   }
 
   // Custom InputTypes
@@ -10698,7 +10689,7 @@ export namespace Prisma {
   /**
    * MessageTemplateCountOutputType without action
    */
-  export type MessageTemplateCountOutputTypeCountBookingPageTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MessageTemplateCountOutputTypeCountBooking_page_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingPageTemplateWhereInput
   }
 
@@ -44593,7 +44584,6 @@ export namespace Prisma {
     allowed_weekdays?: boolean
     created_at?: boolean
     updated_at?: boolean
-    booking_page_templates?: boolean | OutreachSequence$booking_page_templatesArgs<ExtArgs>
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
     steps?: boolean | OutreachSequence$stepsArgs<ExtArgs>
@@ -44650,7 +44640,6 @@ export namespace Prisma {
 
   export type OutreachSequenceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "name" | "description" | "status" | "stop_on_reply" | "sender_profile_uuid" | "allowed_weekdays" | "created_at" | "updated_at", ExtArgs["result"]["outreachSequence"]>
   export type OutreachSequenceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    booking_page_templates?: boolean | OutreachSequence$booking_page_templatesArgs<ExtArgs>
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     sender_profile?: boolean | OutreachSequence$sender_profileArgs<ExtArgs>
     steps?: boolean | OutreachSequence$stepsArgs<ExtArgs>
@@ -44670,7 +44659,6 @@ export namespace Prisma {
   export type $OutreachSequencePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OutreachSequence"
     objects: {
-      booking_page_templates: Prisma.$BookingPageTemplatePayload<ExtArgs>[]
       organisation: Prisma.$OrganisationPayload<ExtArgs>
       sender_profile: Prisma.$SenderProfilePayload<ExtArgs> | null
       steps: Prisma.$OutreachSequenceStepPayload<ExtArgs>[]
@@ -45087,7 +45075,6 @@ export namespace Prisma {
    */
   export interface Prisma__OutreachSequenceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    booking_page_templates<T extends OutreachSequence$booking_page_templatesArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$booking_page_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     sender_profile<T extends OutreachSequence$sender_profileArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$sender_profileArgs<ExtArgs>>): Prisma__SenderProfileClient<$Result.GetResult<Prisma.$SenderProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     steps<T extends OutreachSequence$stepsArgs<ExtArgs> = {}>(args?: Subset<T, OutreachSequence$stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -45526,30 +45513,6 @@ export namespace Prisma {
      * Limit how many OutreachSequences to delete.
      */
     limit?: number
-  }
-
-  /**
-   * OutreachSequence.booking_page_templates
-   */
-  export type OutreachSequence$booking_page_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the BookingPageTemplate
-     */
-    select?: BookingPageTemplateSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the BookingPageTemplate
-     */
-    omit?: BookingPageTemplateOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: BookingPageTemplateInclude<ExtArgs> | null
-    where?: BookingPageTemplateWhereInput
-    orderBy?: BookingPageTemplateOrderByWithRelationInput | BookingPageTemplateOrderByWithRelationInput[]
-    cursor?: BookingPageTemplateWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: BookingPageTemplateScalarFieldEnum | BookingPageTemplateScalarFieldEnum[]
   }
 
   /**
@@ -53807,7 +53770,7 @@ export namespace Prisma {
     sender_profile?: boolean | MessageTemplate$sender_profileArgs<ExtArgs>
     booking_page?: boolean | MessageTemplate$booking_pageArgs<ExtArgs>
     sequence_steps?: boolean | MessageTemplate$sequence_stepsArgs<ExtArgs>
-    bookingPageTemplates?: boolean | MessageTemplate$bookingPageTemplatesArgs<ExtArgs>
+    booking_page_templates?: boolean | MessageTemplate$booking_page_templatesArgs<ExtArgs>
     _count?: boolean | MessageTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["messageTemplate"]>
 
@@ -53880,7 +53843,7 @@ export namespace Prisma {
     sender_profile?: boolean | MessageTemplate$sender_profileArgs<ExtArgs>
     booking_page?: boolean | MessageTemplate$booking_pageArgs<ExtArgs>
     sequence_steps?: boolean | MessageTemplate$sequence_stepsArgs<ExtArgs>
-    bookingPageTemplates?: boolean | MessageTemplate$bookingPageTemplatesArgs<ExtArgs>
+    booking_page_templates?: boolean | MessageTemplate$booking_page_templatesArgs<ExtArgs>
     _count?: boolean | MessageTemplateCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MessageTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -53901,7 +53864,7 @@ export namespace Prisma {
       sender_profile: Prisma.$SenderProfilePayload<ExtArgs> | null
       booking_page: Prisma.$BookingPagePayload<ExtArgs> | null
       sequence_steps: Prisma.$OutreachSequenceStepPayload<ExtArgs>[]
-      bookingPageTemplates: Prisma.$BookingPageTemplatePayload<ExtArgs>[]
+      booking_page_templates: Prisma.$BookingPageTemplatePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -54318,7 +54281,7 @@ export namespace Prisma {
     sender_profile<T extends MessageTemplate$sender_profileArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$sender_profileArgs<ExtArgs>>): Prisma__SenderProfileClient<$Result.GetResult<Prisma.$SenderProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     booking_page<T extends MessageTemplate$booking_pageArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$booking_pageArgs<ExtArgs>>): Prisma__BookingPageClient<$Result.GetResult<Prisma.$BookingPagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sequence_steps<T extends MessageTemplate$sequence_stepsArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$sequence_stepsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OutreachSequenceStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    bookingPageTemplates<T extends MessageTemplate$bookingPageTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$bookingPageTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    booking_page_templates<T extends MessageTemplate$booking_page_templatesArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplate$booking_page_templatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPageTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -54822,9 +54785,9 @@ export namespace Prisma {
   }
 
   /**
-   * MessageTemplate.bookingPageTemplates
+   * MessageTemplate.booking_page_templates
    */
-  export type MessageTemplate$bookingPageTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MessageTemplate$booking_page_templatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the BookingPageTemplate
      */
@@ -112052,12 +112015,10 @@ export namespace Prisma {
 
   export type BookingPageTemplateAvgAggregateOutputType = {
     id: number | null
-    outreachSequenceId: number | null
   }
 
   export type BookingPageTemplateSumAggregateOutputType = {
     id: number | null
-    outreachSequenceId: number | null
   }
 
   export type BookingPageTemplateMinAggregateOutputType = {
@@ -112066,7 +112027,6 @@ export namespace Prisma {
     template_uuid: string | null
     kind: $Enums.BookingNotificationKind | null
     created_at: Date | null
-    outreachSequenceId: number | null
   }
 
   export type BookingPageTemplateMaxAggregateOutputType = {
@@ -112075,7 +112035,6 @@ export namespace Prisma {
     template_uuid: string | null
     kind: $Enums.BookingNotificationKind | null
     created_at: Date | null
-    outreachSequenceId: number | null
   }
 
   export type BookingPageTemplateCountAggregateOutputType = {
@@ -112084,19 +112043,16 @@ export namespace Prisma {
     template_uuid: number
     kind: number
     created_at: number
-    outreachSequenceId: number
     _all: number
   }
 
 
   export type BookingPageTemplateAvgAggregateInputType = {
     id?: true
-    outreachSequenceId?: true
   }
 
   export type BookingPageTemplateSumAggregateInputType = {
     id?: true
-    outreachSequenceId?: true
   }
 
   export type BookingPageTemplateMinAggregateInputType = {
@@ -112105,7 +112061,6 @@ export namespace Prisma {
     template_uuid?: true
     kind?: true
     created_at?: true
-    outreachSequenceId?: true
   }
 
   export type BookingPageTemplateMaxAggregateInputType = {
@@ -112114,7 +112069,6 @@ export namespace Prisma {
     template_uuid?: true
     kind?: true
     created_at?: true
-    outreachSequenceId?: true
   }
 
   export type BookingPageTemplateCountAggregateInputType = {
@@ -112123,7 +112077,6 @@ export namespace Prisma {
     template_uuid?: true
     kind?: true
     created_at?: true
-    outreachSequenceId?: true
     _all?: true
   }
 
@@ -112219,7 +112172,6 @@ export namespace Prisma {
     template_uuid: string
     kind: $Enums.BookingNotificationKind
     created_at: Date
-    outreachSequenceId: number | null
     _count: BookingPageTemplateCountAggregateOutputType | null
     _avg: BookingPageTemplateAvgAggregateOutputType | null
     _sum: BookingPageTemplateSumAggregateOutputType | null
@@ -112247,10 +112199,8 @@ export namespace Prisma {
     template_uuid?: boolean
     kind?: boolean
     created_at?: boolean
-    outreachSequenceId?: boolean
     booking_page?: boolean | BookingPageDefaultArgs<ExtArgs>
     template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
-    outreachSequence?: boolean | BookingPageTemplate$outreachSequenceArgs<ExtArgs>
   }, ExtArgs["result"]["bookingPageTemplate"]>
 
   export type BookingPageTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -112259,10 +112209,8 @@ export namespace Prisma {
     template_uuid?: boolean
     kind?: boolean
     created_at?: boolean
-    outreachSequenceId?: boolean
     booking_page?: boolean | BookingPageDefaultArgs<ExtArgs>
     template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
-    outreachSequence?: boolean | BookingPageTemplate$outreachSequenceArgs<ExtArgs>
   }, ExtArgs["result"]["bookingPageTemplate"]>
 
   export type BookingPageTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -112271,10 +112219,8 @@ export namespace Prisma {
     template_uuid?: boolean
     kind?: boolean
     created_at?: boolean
-    outreachSequenceId?: boolean
     booking_page?: boolean | BookingPageDefaultArgs<ExtArgs>
     template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
-    outreachSequence?: boolean | BookingPageTemplate$outreachSequenceArgs<ExtArgs>
   }, ExtArgs["result"]["bookingPageTemplate"]>
 
   export type BookingPageTemplateSelectScalar = {
@@ -112283,24 +112229,20 @@ export namespace Prisma {
     template_uuid?: boolean
     kind?: boolean
     created_at?: boolean
-    outreachSequenceId?: boolean
   }
 
-  export type BookingPageTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "booking_page_uuid" | "template_uuid" | "kind" | "created_at" | "outreachSequenceId", ExtArgs["result"]["bookingPageTemplate"]>
+  export type BookingPageTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "booking_page_uuid" | "template_uuid" | "kind" | "created_at", ExtArgs["result"]["bookingPageTemplate"]>
   export type BookingPageTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     booking_page?: boolean | BookingPageDefaultArgs<ExtArgs>
     template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
-    outreachSequence?: boolean | BookingPageTemplate$outreachSequenceArgs<ExtArgs>
   }
   export type BookingPageTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     booking_page?: boolean | BookingPageDefaultArgs<ExtArgs>
     template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
-    outreachSequence?: boolean | BookingPageTemplate$outreachSequenceArgs<ExtArgs>
   }
   export type BookingPageTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     booking_page?: boolean | BookingPageDefaultArgs<ExtArgs>
     template?: boolean | MessageTemplateDefaultArgs<ExtArgs>
-    outreachSequence?: boolean | BookingPageTemplate$outreachSequenceArgs<ExtArgs>
   }
 
   export type $BookingPageTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -112308,7 +112250,6 @@ export namespace Prisma {
     objects: {
       booking_page: Prisma.$BookingPagePayload<ExtArgs>
       template: Prisma.$MessageTemplatePayload<ExtArgs>
-      outreachSequence: Prisma.$OutreachSequencePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -112316,7 +112257,6 @@ export namespace Prisma {
       template_uuid: string
       kind: $Enums.BookingNotificationKind
       created_at: Date
-      outreachSequenceId: number | null
     }, ExtArgs["result"]["bookingPageTemplate"]>
     composites: {}
   }
@@ -112713,7 +112653,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     booking_page<T extends BookingPageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BookingPageDefaultArgs<ExtArgs>>): Prisma__BookingPageClient<$Result.GetResult<Prisma.$BookingPagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     template<T extends MessageTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MessageTemplateDefaultArgs<ExtArgs>>): Prisma__MessageTemplateClient<$Result.GetResult<Prisma.$MessageTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    outreachSequence<T extends BookingPageTemplate$outreachSequenceArgs<ExtArgs> = {}>(args?: Subset<T, BookingPageTemplate$outreachSequenceArgs<ExtArgs>>): Prisma__OutreachSequenceClient<$Result.GetResult<Prisma.$OutreachSequencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -112748,7 +112687,6 @@ export namespace Prisma {
     readonly template_uuid: FieldRef<"BookingPageTemplate", 'String'>
     readonly kind: FieldRef<"BookingPageTemplate", 'BookingNotificationKind'>
     readonly created_at: FieldRef<"BookingPageTemplate", 'DateTime'>
-    readonly outreachSequenceId: FieldRef<"BookingPageTemplate", 'Int'>
   }
     
 
@@ -113142,25 +113080,6 @@ export namespace Prisma {
      * Limit how many BookingPageTemplates to delete.
      */
     limit?: number
-  }
-
-  /**
-   * BookingPageTemplate.outreachSequence
-   */
-  export type BookingPageTemplate$outreachSequenceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the OutreachSequence
-     */
-    select?: OutreachSequenceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the OutreachSequence
-     */
-    omit?: OutreachSequenceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: OutreachSequenceInclude<ExtArgs> | null
-    where?: OutreachSequenceWhereInput
   }
 
   /**
@@ -117250,8 +117169,7 @@ export namespace Prisma {
     booking_page_uuid: 'booking_page_uuid',
     template_uuid: 'template_uuid',
     kind: 'kind',
-    created_at: 'created_at',
-    outreachSequenceId: 'outreachSequenceId'
+    created_at: 'created_at'
   };
 
   export type BookingPageTemplateScalarFieldEnum = (typeof BookingPageTemplateScalarFieldEnum)[keyof typeof BookingPageTemplateScalarFieldEnum]
@@ -121128,7 +121046,6 @@ export namespace Prisma {
     allowed_weekdays?: IntNullableListFilter<"OutreachSequence">
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
-    booking_page_templates?: BookingPageTemplateListRelationFilter
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
     steps?: OutreachSequenceStepListRelationFilter
@@ -121148,7 +121065,6 @@ export namespace Prisma {
     allowed_weekdays?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    booking_page_templates?: BookingPageTemplateOrderByRelationAggregateInput
     organisation?: OrganisationOrderByWithRelationInput
     sender_profile?: SenderProfileOrderByWithRelationInput
     steps?: OutreachSequenceStepOrderByRelationAggregateInput
@@ -121171,7 +121087,6 @@ export namespace Prisma {
     allowed_weekdays?: IntNullableListFilter<"OutreachSequence">
     created_at?: DateTimeFilter<"OutreachSequence"> | Date | string
     updated_at?: DateTimeFilter<"OutreachSequence"> | Date | string
-    booking_page_templates?: BookingPageTemplateListRelationFilter
     organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
     sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
     steps?: OutreachSequenceStepListRelationFilter
@@ -122001,7 +121916,7 @@ export namespace Prisma {
     sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
     booking_page?: XOR<BookingPageNullableScalarRelationFilter, BookingPageWhereInput> | null
     sequence_steps?: OutreachSequenceStepListRelationFilter
-    bookingPageTemplates?: BookingPageTemplateListRelationFilter
+    booking_page_templates?: BookingPageTemplateListRelationFilter
   }
 
   export type MessageTemplateOrderByWithRelationInput = {
@@ -122025,7 +121940,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileOrderByWithRelationInput
     booking_page?: BookingPageOrderByWithRelationInput
     sequence_steps?: OutreachSequenceStepOrderByRelationAggregateInput
-    bookingPageTemplates?: BookingPageTemplateOrderByRelationAggregateInput
+    booking_page_templates?: BookingPageTemplateOrderByRelationAggregateInput
   }
 
   export type MessageTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -122052,7 +121967,7 @@ export namespace Prisma {
     sender_profile?: XOR<SenderProfileNullableScalarRelationFilter, SenderProfileWhereInput> | null
     booking_page?: XOR<BookingPageNullableScalarRelationFilter, BookingPageWhereInput> | null
     sequence_steps?: OutreachSequenceStepListRelationFilter
-    bookingPageTemplates?: BookingPageTemplateListRelationFilter
+    booking_page_templates?: BookingPageTemplateListRelationFilter
   }, "id" | "uuid">
 
   export type MessageTemplateOrderByWithAggregationInput = {
@@ -126881,10 +126796,8 @@ export namespace Prisma {
     template_uuid?: StringFilter<"BookingPageTemplate"> | string
     kind?: EnumBookingNotificationKindFilter<"BookingPageTemplate"> | $Enums.BookingNotificationKind
     created_at?: DateTimeFilter<"BookingPageTemplate"> | Date | string
-    outreachSequenceId?: IntNullableFilter<"BookingPageTemplate"> | number | null
     booking_page?: XOR<BookingPageScalarRelationFilter, BookingPageWhereInput>
     template?: XOR<MessageTemplateScalarRelationFilter, MessageTemplateWhereInput>
-    outreachSequence?: XOR<OutreachSequenceNullableScalarRelationFilter, OutreachSequenceWhereInput> | null
   }
 
   export type BookingPageTemplateOrderByWithRelationInput = {
@@ -126893,10 +126806,8 @@ export namespace Prisma {
     template_uuid?: SortOrder
     kind?: SortOrder
     created_at?: SortOrder
-    outreachSequenceId?: SortOrderInput | SortOrder
     booking_page?: BookingPageOrderByWithRelationInput
     template?: MessageTemplateOrderByWithRelationInput
-    outreachSequence?: OutreachSequenceOrderByWithRelationInput
   }
 
   export type BookingPageTemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -126909,10 +126820,8 @@ export namespace Prisma {
     template_uuid?: StringFilter<"BookingPageTemplate"> | string
     kind?: EnumBookingNotificationKindFilter<"BookingPageTemplate"> | $Enums.BookingNotificationKind
     created_at?: DateTimeFilter<"BookingPageTemplate"> | Date | string
-    outreachSequenceId?: IntNullableFilter<"BookingPageTemplate"> | number | null
     booking_page?: XOR<BookingPageScalarRelationFilter, BookingPageWhereInput>
     template?: XOR<MessageTemplateScalarRelationFilter, MessageTemplateWhereInput>
-    outreachSequence?: XOR<OutreachSequenceNullableScalarRelationFilter, OutreachSequenceWhereInput> | null
   }, "id" | "booking_page_uuid_kind_template_uuid">
 
   export type BookingPageTemplateOrderByWithAggregationInput = {
@@ -126921,7 +126830,6 @@ export namespace Prisma {
     template_uuid?: SortOrder
     kind?: SortOrder
     created_at?: SortOrder
-    outreachSequenceId?: SortOrderInput | SortOrder
     _count?: BookingPageTemplateCountOrderByAggregateInput
     _avg?: BookingPageTemplateAvgOrderByAggregateInput
     _max?: BookingPageTemplateMaxOrderByAggregateInput
@@ -126938,7 +126846,6 @@ export namespace Prisma {
     template_uuid?: StringWithAggregatesFilter<"BookingPageTemplate"> | string
     kind?: EnumBookingNotificationKindWithAggregatesFilter<"BookingPageTemplate"> | $Enums.BookingNotificationKind
     created_at?: DateTimeWithAggregatesFilter<"BookingPageTemplate"> | Date | string
-    outreachSequenceId?: IntNullableWithAggregatesFilter<"BookingPageTemplate"> | number | null
   }
 
   export type CalendarConnectionWhereInput = {
@@ -130101,7 +130008,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutOutreachSequenceInput
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
     sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
@@ -130121,7 +130027,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutOutreachSequenceInput
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
@@ -130136,7 +130041,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUpdateManyWithoutOutreachSequenceNestedInput
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
@@ -130156,7 +130060,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceNestedInput
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
@@ -131085,7 +130988,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
-    bookingPageTemplates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateInput = {
@@ -131106,7 +131009,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
-    bookingPageTemplates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUpdateInput = {
@@ -131126,7 +131029,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
-    bookingPageTemplates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateInput = {
@@ -131147,7 +131050,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
-    bookingPageTemplates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateCreateManyInput = {
@@ -136358,8 +136261,7 @@ export namespace Prisma {
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
     booking_page: BookingPageCreateNestedOneWithoutNotification_templatesInput
-    template: MessageTemplateCreateNestedOneWithoutBookingPageTemplatesInput
-    outreachSequence?: OutreachSequenceCreateNestedOneWithoutBooking_page_templatesInput
+    template: MessageTemplateCreateNestedOneWithoutBooking_page_templatesInput
   }
 
   export type BookingPageTemplateUncheckedCreateInput = {
@@ -136368,15 +136270,13 @@ export namespace Prisma {
     template_uuid: string
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
-    outreachSequenceId?: number | null
   }
 
   export type BookingPageTemplateUpdateInput = {
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking_page?: BookingPageUpdateOneRequiredWithoutNotification_templatesNestedInput
-    template?: MessageTemplateUpdateOneRequiredWithoutBookingPageTemplatesNestedInput
-    outreachSequence?: OutreachSequenceUpdateOneWithoutBooking_page_templatesNestedInput
+    template?: MessageTemplateUpdateOneRequiredWithoutBooking_page_templatesNestedInput
   }
 
   export type BookingPageTemplateUncheckedUpdateInput = {
@@ -136385,7 +136285,6 @@ export namespace Prisma {
     template_uuid?: StringFieldUpdateOperationsInput | string
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    outreachSequenceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BookingPageTemplateCreateManyInput = {
@@ -136394,7 +136293,6 @@ export namespace Prisma {
     template_uuid: string
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
-    outreachSequenceId?: number | null
   }
 
   export type BookingPageTemplateUpdateManyMutationInput = {
@@ -136408,7 +136306,6 @@ export namespace Prisma {
     template_uuid?: StringFieldUpdateOperationsInput | string
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    outreachSequenceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type CalendarConnectionCreateInput = {
@@ -139366,12 +139263,6 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
-  export type BookingPageTemplateListRelationFilter = {
-    every?: BookingPageTemplateWhereInput
-    some?: BookingPageTemplateWhereInput
-    none?: BookingPageTemplateWhereInput
-  }
-
   export type SenderProfileNullableScalarRelationFilter = {
     is?: SenderProfileWhereInput | null
     isNot?: SenderProfileWhereInput | null
@@ -139381,10 +139272,6 @@ export namespace Prisma {
     every?: OutreachSequenceStepWhereInput
     some?: OutreachSequenceStepWhereInput
     none?: OutreachSequenceStepWhereInput
-  }
-
-  export type BookingPageTemplateOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type OutreachSequenceStepOrderByRelationAggregateInput = {
@@ -140067,6 +139954,16 @@ export namespace Prisma {
 
   export type SenderProfileSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type BookingPageTemplateListRelationFilter = {
+    every?: BookingPageTemplateWhereInput
+    some?: BookingPageTemplateWhereInput
+    none?: BookingPageTemplateWhereInput
+  }
+
+  export type BookingPageTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type MessageTemplateCountOrderByAggregateInput = {
@@ -143918,12 +143815,10 @@ export namespace Prisma {
     template_uuid?: SortOrder
     kind?: SortOrder
     created_at?: SortOrder
-    outreachSequenceId?: SortOrder
   }
 
   export type BookingPageTemplateAvgOrderByAggregateInput = {
     id?: SortOrder
-    outreachSequenceId?: SortOrder
   }
 
   export type BookingPageTemplateMaxOrderByAggregateInput = {
@@ -143932,7 +143827,6 @@ export namespace Prisma {
     template_uuid?: SortOrder
     kind?: SortOrder
     created_at?: SortOrder
-    outreachSequenceId?: SortOrder
   }
 
   export type BookingPageTemplateMinOrderByAggregateInput = {
@@ -143941,12 +143835,10 @@ export namespace Prisma {
     template_uuid?: SortOrder
     kind?: SortOrder
     created_at?: SortOrder
-    outreachSequenceId?: SortOrder
   }
 
   export type BookingPageTemplateSumOrderByAggregateInput = {
     id?: SortOrder
-    outreachSequenceId?: SortOrder
   }
 
   export type EnumCalendarProviderFilter<$PrismaModel = never> = {
@@ -149587,13 +149479,6 @@ export namespace Prisma {
     set: number[]
   }
 
-  export type BookingPageTemplateCreateNestedManyWithoutOutreachSequenceInput = {
-    create?: XOR<BookingPageTemplateCreateWithoutOutreachSequenceInput, BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput> | BookingPageTemplateCreateWithoutOutreachSequenceInput[] | BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput[]
-    connectOrCreate?: BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput | BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput[]
-    createMany?: BookingPageTemplateCreateManyOutreachSequenceInputEnvelope
-    connect?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-  }
-
   export type OrganisationCreateNestedOneWithoutOutreach_sequencesInput = {
     create?: XOR<OrganisationCreateWithoutOutreach_sequencesInput, OrganisationUncheckedCreateWithoutOutreach_sequencesInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutOutreach_sequencesInput
@@ -149627,13 +149512,6 @@ export namespace Prisma {
     connect?: MarketingCampaignWhereUniqueInput | MarketingCampaignWhereUniqueInput[]
   }
 
-  export type BookingPageTemplateUncheckedCreateNestedManyWithoutOutreachSequenceInput = {
-    create?: XOR<BookingPageTemplateCreateWithoutOutreachSequenceInput, BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput> | BookingPageTemplateCreateWithoutOutreachSequenceInput[] | BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput[]
-    connectOrCreate?: BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput | BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput[]
-    createMany?: BookingPageTemplateCreateManyOutreachSequenceInputEnvelope
-    connect?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-  }
-
   export type OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput = {
     create?: XOR<OutreachSequenceStepCreateWithoutSequenceInput, OutreachSequenceStepUncheckedCreateWithoutSequenceInput> | OutreachSequenceStepCreateWithoutSequenceInput[] | OutreachSequenceStepUncheckedCreateWithoutSequenceInput[]
     connectOrCreate?: OutreachSequenceStepCreateOrConnectWithoutSequenceInput | OutreachSequenceStepCreateOrConnectWithoutSequenceInput[]
@@ -149662,20 +149540,6 @@ export namespace Prisma {
   export type OutreachSequenceUpdateallowed_weekdaysInput = {
     set?: number[]
     push?: number | number[]
-  }
-
-  export type BookingPageTemplateUpdateManyWithoutOutreachSequenceNestedInput = {
-    create?: XOR<BookingPageTemplateCreateWithoutOutreachSequenceInput, BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput> | BookingPageTemplateCreateWithoutOutreachSequenceInput[] | BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput[]
-    connectOrCreate?: BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput | BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput[]
-    upsert?: BookingPageTemplateUpsertWithWhereUniqueWithoutOutreachSequenceInput | BookingPageTemplateUpsertWithWhereUniqueWithoutOutreachSequenceInput[]
-    createMany?: BookingPageTemplateCreateManyOutreachSequenceInputEnvelope
-    set?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-    disconnect?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-    delete?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-    connect?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-    update?: BookingPageTemplateUpdateWithWhereUniqueWithoutOutreachSequenceInput | BookingPageTemplateUpdateWithWhereUniqueWithoutOutreachSequenceInput[]
-    updateMany?: BookingPageTemplateUpdateManyWithWhereWithoutOutreachSequenceInput | BookingPageTemplateUpdateManyWithWhereWithoutOutreachSequenceInput[]
-    deleteMany?: BookingPageTemplateScalarWhereInput | BookingPageTemplateScalarWhereInput[]
   }
 
   export type OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput = {
@@ -149736,20 +149600,6 @@ export namespace Prisma {
     update?: MarketingCampaignUpdateWithWhereUniqueWithoutSequenceInput | MarketingCampaignUpdateWithWhereUniqueWithoutSequenceInput[]
     updateMany?: MarketingCampaignUpdateManyWithWhereWithoutSequenceInput | MarketingCampaignUpdateManyWithWhereWithoutSequenceInput[]
     deleteMany?: MarketingCampaignScalarWhereInput | MarketingCampaignScalarWhereInput[]
-  }
-
-  export type BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceNestedInput = {
-    create?: XOR<BookingPageTemplateCreateWithoutOutreachSequenceInput, BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput> | BookingPageTemplateCreateWithoutOutreachSequenceInput[] | BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput[]
-    connectOrCreate?: BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput | BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput[]
-    upsert?: BookingPageTemplateUpsertWithWhereUniqueWithoutOutreachSequenceInput | BookingPageTemplateUpsertWithWhereUniqueWithoutOutreachSequenceInput[]
-    createMany?: BookingPageTemplateCreateManyOutreachSequenceInputEnvelope
-    set?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-    disconnect?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-    delete?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-    connect?: BookingPageTemplateWhereUniqueInput | BookingPageTemplateWhereUniqueInput[]
-    update?: BookingPageTemplateUpdateWithWhereUniqueWithoutOutreachSequenceInput | BookingPageTemplateUpdateWithWhereUniqueWithoutOutreachSequenceInput[]
-    updateMany?: BookingPageTemplateUpdateManyWithWhereWithoutOutreachSequenceInput | BookingPageTemplateUpdateManyWithWhereWithoutOutreachSequenceInput[]
-    deleteMany?: BookingPageTemplateScalarWhereInput | BookingPageTemplateScalarWhereInput[]
   }
 
   export type OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput = {
@@ -153509,16 +153359,10 @@ export namespace Prisma {
     connect?: BookingPageWhereUniqueInput
   }
 
-  export type MessageTemplateCreateNestedOneWithoutBookingPageTemplatesInput = {
-    create?: XOR<MessageTemplateCreateWithoutBookingPageTemplatesInput, MessageTemplateUncheckedCreateWithoutBookingPageTemplatesInput>
-    connectOrCreate?: MessageTemplateCreateOrConnectWithoutBookingPageTemplatesInput
+  export type MessageTemplateCreateNestedOneWithoutBooking_page_templatesInput = {
+    create?: XOR<MessageTemplateCreateWithoutBooking_page_templatesInput, MessageTemplateUncheckedCreateWithoutBooking_page_templatesInput>
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutBooking_page_templatesInput
     connect?: MessageTemplateWhereUniqueInput
-  }
-
-  export type OutreachSequenceCreateNestedOneWithoutBooking_page_templatesInput = {
-    create?: XOR<OutreachSequenceCreateWithoutBooking_page_templatesInput, OutreachSequenceUncheckedCreateWithoutBooking_page_templatesInput>
-    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutBooking_page_templatesInput
-    connect?: OutreachSequenceWhereUniqueInput
   }
 
   export type BookingPageUpdateOneRequiredWithoutNotification_templatesNestedInput = {
@@ -153529,22 +153373,12 @@ export namespace Prisma {
     update?: XOR<XOR<BookingPageUpdateToOneWithWhereWithoutNotification_templatesInput, BookingPageUpdateWithoutNotification_templatesInput>, BookingPageUncheckedUpdateWithoutNotification_templatesInput>
   }
 
-  export type MessageTemplateUpdateOneRequiredWithoutBookingPageTemplatesNestedInput = {
-    create?: XOR<MessageTemplateCreateWithoutBookingPageTemplatesInput, MessageTemplateUncheckedCreateWithoutBookingPageTemplatesInput>
-    connectOrCreate?: MessageTemplateCreateOrConnectWithoutBookingPageTemplatesInput
-    upsert?: MessageTemplateUpsertWithoutBookingPageTemplatesInput
+  export type MessageTemplateUpdateOneRequiredWithoutBooking_page_templatesNestedInput = {
+    create?: XOR<MessageTemplateCreateWithoutBooking_page_templatesInput, MessageTemplateUncheckedCreateWithoutBooking_page_templatesInput>
+    connectOrCreate?: MessageTemplateCreateOrConnectWithoutBooking_page_templatesInput
+    upsert?: MessageTemplateUpsertWithoutBooking_page_templatesInput
     connect?: MessageTemplateWhereUniqueInput
-    update?: XOR<XOR<MessageTemplateUpdateToOneWithWhereWithoutBookingPageTemplatesInput, MessageTemplateUpdateWithoutBookingPageTemplatesInput>, MessageTemplateUncheckedUpdateWithoutBookingPageTemplatesInput>
-  }
-
-  export type OutreachSequenceUpdateOneWithoutBooking_page_templatesNestedInput = {
-    create?: XOR<OutreachSequenceCreateWithoutBooking_page_templatesInput, OutreachSequenceUncheckedCreateWithoutBooking_page_templatesInput>
-    connectOrCreate?: OutreachSequenceCreateOrConnectWithoutBooking_page_templatesInput
-    upsert?: OutreachSequenceUpsertWithoutBooking_page_templatesInput
-    disconnect?: OutreachSequenceWhereInput | boolean
-    delete?: OutreachSequenceWhereInput | boolean
-    connect?: OutreachSequenceWhereUniqueInput
-    update?: XOR<XOR<OutreachSequenceUpdateToOneWithWhereWithoutBooking_page_templatesInput, OutreachSequenceUpdateWithoutBooking_page_templatesInput>, OutreachSequenceUncheckedUpdateWithoutBooking_page_templatesInput>
+    update?: XOR<XOR<MessageTemplateUpdateToOneWithWhereWithoutBooking_page_templatesInput, MessageTemplateUpdateWithoutBooking_page_templatesInput>, MessageTemplateUncheckedUpdateWithoutBooking_page_templatesInput>
   }
 
   export type OrganisationCreateNestedOneWithoutCalendar_connectionsInput = {
@@ -158020,7 +157854,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutOutreachSequenceInput
     sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
@@ -158038,7 +157871,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutOutreachSequenceInput
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
@@ -158698,7 +158530,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
-    bookingPageTemplates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutOrganisationInput = {
@@ -158718,7 +158550,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
-    bookingPageTemplates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutOrganisationInput = {
@@ -171642,31 +171474,6 @@ export namespace Prisma {
     data: XOR<OutreachMessageUpdateManyMutationInput, OutreachMessageUncheckedUpdateManyWithoutThreadInput>
   }
 
-  export type BookingPageTemplateCreateWithoutOutreachSequenceInput = {
-    kind: $Enums.BookingNotificationKind
-    created_at?: Date | string
-    booking_page: BookingPageCreateNestedOneWithoutNotification_templatesInput
-    template: MessageTemplateCreateNestedOneWithoutBookingPageTemplatesInput
-  }
-
-  export type BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput = {
-    id?: number
-    booking_page_uuid: string
-    template_uuid: string
-    kind: $Enums.BookingNotificationKind
-    created_at?: Date | string
-  }
-
-  export type BookingPageTemplateCreateOrConnectWithoutOutreachSequenceInput = {
-    where: BookingPageTemplateWhereUniqueInput
-    create: XOR<BookingPageTemplateCreateWithoutOutreachSequenceInput, BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput>
-  }
-
-  export type BookingPageTemplateCreateManyOutreachSequenceInputEnvelope = {
-    data: BookingPageTemplateCreateManyOutreachSequenceInput | BookingPageTemplateCreateManyOutreachSequenceInput[]
-    skipDuplicates?: boolean
-  }
-
   export type OrganisationCreateWithoutOutreach_sequencesInput = {
     uuid?: string
     name: string
@@ -172052,34 +171859,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type BookingPageTemplateUpsertWithWhereUniqueWithoutOutreachSequenceInput = {
-    where: BookingPageTemplateWhereUniqueInput
-    update: XOR<BookingPageTemplateUpdateWithoutOutreachSequenceInput, BookingPageTemplateUncheckedUpdateWithoutOutreachSequenceInput>
-    create: XOR<BookingPageTemplateCreateWithoutOutreachSequenceInput, BookingPageTemplateUncheckedCreateWithoutOutreachSequenceInput>
-  }
-
-  export type BookingPageTemplateUpdateWithWhereUniqueWithoutOutreachSequenceInput = {
-    where: BookingPageTemplateWhereUniqueInput
-    data: XOR<BookingPageTemplateUpdateWithoutOutreachSequenceInput, BookingPageTemplateUncheckedUpdateWithoutOutreachSequenceInput>
-  }
-
-  export type BookingPageTemplateUpdateManyWithWhereWithoutOutreachSequenceInput = {
-    where: BookingPageTemplateScalarWhereInput
-    data: XOR<BookingPageTemplateUpdateManyMutationInput, BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceInput>
-  }
-
-  export type BookingPageTemplateScalarWhereInput = {
-    AND?: BookingPageTemplateScalarWhereInput | BookingPageTemplateScalarWhereInput[]
-    OR?: BookingPageTemplateScalarWhereInput[]
-    NOT?: BookingPageTemplateScalarWhereInput | BookingPageTemplateScalarWhereInput[]
-    id?: IntFilter<"BookingPageTemplate"> | number
-    booking_page_uuid?: StringFilter<"BookingPageTemplate"> | string
-    template_uuid?: StringFilter<"BookingPageTemplate"> | string
-    kind?: EnumBookingNotificationKindFilter<"BookingPageTemplate"> | $Enums.BookingNotificationKind
-    created_at?: DateTimeFilter<"BookingPageTemplate"> | Date | string
-    outreachSequenceId?: IntNullableFilter<"BookingPageTemplate"> | number | null
-  }
-
   export type OrganisationUpsertWithoutOutreach_sequencesInput = {
     update: XOR<OrganisationUpdateWithoutOutreach_sequencesInput, OrganisationUncheckedUpdateWithoutOutreach_sequencesInput>
     create: XOR<OrganisationCreateWithoutOutreach_sequencesInput, OrganisationUncheckedCreateWithoutOutreach_sequencesInput>
@@ -172355,7 +172134,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutOutreachSequenceInput
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
     sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
@@ -172374,7 +172152,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutOutreachSequenceInput
     enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
   }
@@ -172400,7 +172177,7 @@ export namespace Prisma {
     organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
     sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
-    bookingPageTemplates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutSequence_stepsInput = {
@@ -172420,7 +172197,7 @@ export namespace Prisma {
     language?: string
     created_at?: Date | string
     updated_at?: Date | string
-    bookingPageTemplates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutSequence_stepsInput = {
@@ -172689,7 +172466,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUpdateManyWithoutOutreachSequenceNestedInput
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
@@ -172708,7 +172484,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceNestedInput
     enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
   }
@@ -172740,7 +172515,7 @@ export namespace Prisma {
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
-    bookingPageTemplates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutSequence_stepsInput = {
@@ -172760,7 +172535,7 @@ export namespace Prisma {
     language?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    bookingPageTemplates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type BookingPageUpsertWithoutSequence_stepsInput = {
@@ -172936,7 +172711,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutOutreachSequenceInput
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
     sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
@@ -172955,7 +172729,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutOutreachSequenceInput
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
   }
@@ -173328,7 +173101,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUpdateManyWithoutOutreachSequenceNestedInput
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
@@ -173347,7 +173119,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceNestedInput
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
   }
@@ -174711,7 +174482,7 @@ export namespace Prisma {
     organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
     booking_page?: BookingPageCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
-    bookingPageTemplates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutSender_profileInput = {
@@ -174731,7 +174502,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
-    bookingPageTemplates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutSender_profileInput = {
@@ -174753,7 +174524,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutOutreachSequenceInput
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
@@ -174771,7 +174541,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutOutreachSequenceInput
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
     campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
@@ -175428,7 +175197,6 @@ export namespace Prisma {
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
     booking_page: BookingPageCreateNestedOneWithoutNotification_templatesInput
-    outreachSequence?: OutreachSequenceCreateNestedOneWithoutBooking_page_templatesInput
   }
 
   export type BookingPageTemplateUncheckedCreateWithoutTemplateInput = {
@@ -175436,7 +175204,6 @@ export namespace Prisma {
     booking_page_uuid: string
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
-    outreachSequenceId?: number | null
   }
 
   export type BookingPageTemplateCreateOrConnectWithoutTemplateInput = {
@@ -175823,6 +175590,17 @@ export namespace Prisma {
     data: XOR<BookingPageTemplateUpdateManyMutationInput, BookingPageTemplateUncheckedUpdateManyWithoutTemplateInput>
   }
 
+  export type BookingPageTemplateScalarWhereInput = {
+    AND?: BookingPageTemplateScalarWhereInput | BookingPageTemplateScalarWhereInput[]
+    OR?: BookingPageTemplateScalarWhereInput[]
+    NOT?: BookingPageTemplateScalarWhereInput | BookingPageTemplateScalarWhereInput[]
+    id?: IntFilter<"BookingPageTemplate"> | number
+    booking_page_uuid?: StringFilter<"BookingPageTemplate"> | string
+    template_uuid?: StringFilter<"BookingPageTemplate"> | string
+    kind?: EnumBookingNotificationKindFilter<"BookingPageTemplate"> | $Enums.BookingNotificationKind
+    created_at?: DateTimeFilter<"BookingPageTemplate"> | Date | string
+  }
+
   export type OrganisationCreateWithoutMarketing_campaignsInput = {
     uuid?: string
     name: string
@@ -176014,7 +175792,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutOutreachSequenceInput
     organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
     sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
     steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
@@ -176033,7 +175810,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
     created_at?: Date | string
     updated_at?: Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutOutreachSequenceInput
     steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
     enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
   }
@@ -176567,7 +176343,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUpdateManyWithoutOutreachSequenceNestedInput
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
@@ -176586,7 +176361,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceNestedInput
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
   }
@@ -188585,8 +188359,7 @@ export namespace Prisma {
   export type BookingPageTemplateCreateWithoutBooking_pageInput = {
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
-    template: MessageTemplateCreateNestedOneWithoutBookingPageTemplatesInput
-    outreachSequence?: OutreachSequenceCreateNestedOneWithoutBooking_page_templatesInput
+    template: MessageTemplateCreateNestedOneWithoutBooking_page_templatesInput
   }
 
   export type BookingPageTemplateUncheckedCreateWithoutBooking_pageInput = {
@@ -188594,7 +188367,6 @@ export namespace Prisma {
     template_uuid: string
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
-    outreachSequenceId?: number | null
   }
 
   export type BookingPageTemplateCreateOrConnectWithoutBooking_pageInput = {
@@ -188822,7 +188594,7 @@ export namespace Prisma {
     organisation: OrganisationCreateNestedOneWithoutMessage_templatesInput
     sender_profile?: SenderProfileCreateNestedOneWithoutMessage_templatesInput
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
-    bookingPageTemplates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateUncheckedCreateWithoutBooking_pageInput = {
@@ -188842,7 +188614,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
-    bookingPageTemplates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
+    booking_page_templates?: BookingPageTemplateUncheckedCreateNestedManyWithoutTemplateInput
   }
 
   export type MessageTemplateCreateOrConnectWithoutBooking_pageInput = {
@@ -194633,7 +194405,7 @@ export namespace Prisma {
     create: XOR<BookingPageCreateWithoutNotification_templatesInput, BookingPageUncheckedCreateWithoutNotification_templatesInput>
   }
 
-  export type MessageTemplateCreateWithoutBookingPageTemplatesInput = {
+  export type MessageTemplateCreateWithoutBooking_page_templatesInput = {
     uuid?: string
     name: string
     channels?: MessageTemplateCreatechannelsInput | $Enums.Channel[]
@@ -194652,7 +194424,7 @@ export namespace Prisma {
     sequence_steps?: OutreachSequenceStepCreateNestedManyWithoutMessage_templateInput
   }
 
-  export type MessageTemplateUncheckedCreateWithoutBookingPageTemplatesInput = {
+  export type MessageTemplateUncheckedCreateWithoutBooking_page_templatesInput = {
     id?: number
     uuid?: string
     organisation_uuid: string
@@ -194672,47 +194444,9 @@ export namespace Prisma {
     sequence_steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutMessage_templateInput
   }
 
-  export type MessageTemplateCreateOrConnectWithoutBookingPageTemplatesInput = {
+  export type MessageTemplateCreateOrConnectWithoutBooking_page_templatesInput = {
     where: MessageTemplateWhereUniqueInput
-    create: XOR<MessageTemplateCreateWithoutBookingPageTemplatesInput, MessageTemplateUncheckedCreateWithoutBookingPageTemplatesInput>
-  }
-
-  export type OutreachSequenceCreateWithoutBooking_page_templatesInput = {
-    uuid?: string
-    name: string
-    description?: string | null
-    status?: $Enums.SequenceStatus
-    stop_on_reply?: boolean
-    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
-    created_at?: Date | string
-    updated_at?: Date | string
-    organisation: OrganisationCreateNestedOneWithoutOutreach_sequencesInput
-    sender_profile?: SenderProfileCreateNestedOneWithoutSequencesInput
-    steps?: OutreachSequenceStepCreateNestedManyWithoutSequenceInput
-    enrollments?: SequenceEnrollmentCreateNestedManyWithoutSequenceInput
-    campaigns?: MarketingCampaignCreateNestedManyWithoutSequenceInput
-  }
-
-  export type OutreachSequenceUncheckedCreateWithoutBooking_page_templatesInput = {
-    id?: number
-    uuid?: string
-    organisation_uuid: string
-    name: string
-    description?: string | null
-    status?: $Enums.SequenceStatus
-    stop_on_reply?: boolean
-    sender_profile_uuid?: string | null
-    allowed_weekdays?: OutreachSequenceCreateallowed_weekdaysInput | number[]
-    created_at?: Date | string
-    updated_at?: Date | string
-    steps?: OutreachSequenceStepUncheckedCreateNestedManyWithoutSequenceInput
-    enrollments?: SequenceEnrollmentUncheckedCreateNestedManyWithoutSequenceInput
-    campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutSequenceInput
-  }
-
-  export type OutreachSequenceCreateOrConnectWithoutBooking_page_templatesInput = {
-    where: OutreachSequenceWhereUniqueInput
-    create: XOR<OutreachSequenceCreateWithoutBooking_page_templatesInput, OutreachSequenceUncheckedCreateWithoutBooking_page_templatesInput>
+    create: XOR<MessageTemplateCreateWithoutBooking_page_templatesInput, MessageTemplateUncheckedCreateWithoutBooking_page_templatesInput>
   }
 
   export type BookingPageUpsertWithoutNotification_templatesInput = {
@@ -194863,18 +194597,18 @@ export namespace Prisma {
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutBooking_pageNestedInput
   }
 
-  export type MessageTemplateUpsertWithoutBookingPageTemplatesInput = {
-    update: XOR<MessageTemplateUpdateWithoutBookingPageTemplatesInput, MessageTemplateUncheckedUpdateWithoutBookingPageTemplatesInput>
-    create: XOR<MessageTemplateCreateWithoutBookingPageTemplatesInput, MessageTemplateUncheckedCreateWithoutBookingPageTemplatesInput>
+  export type MessageTemplateUpsertWithoutBooking_page_templatesInput = {
+    update: XOR<MessageTemplateUpdateWithoutBooking_page_templatesInput, MessageTemplateUncheckedUpdateWithoutBooking_page_templatesInput>
+    create: XOR<MessageTemplateCreateWithoutBooking_page_templatesInput, MessageTemplateUncheckedCreateWithoutBooking_page_templatesInput>
     where?: MessageTemplateWhereInput
   }
 
-  export type MessageTemplateUpdateToOneWithWhereWithoutBookingPageTemplatesInput = {
+  export type MessageTemplateUpdateToOneWithWhereWithoutBooking_page_templatesInput = {
     where?: MessageTemplateWhereInput
-    data: XOR<MessageTemplateUpdateWithoutBookingPageTemplatesInput, MessageTemplateUncheckedUpdateWithoutBookingPageTemplatesInput>
+    data: XOR<MessageTemplateUpdateWithoutBooking_page_templatesInput, MessageTemplateUncheckedUpdateWithoutBooking_page_templatesInput>
   }
 
-  export type MessageTemplateUpdateWithoutBookingPageTemplatesInput = {
+  export type MessageTemplateUpdateWithoutBooking_page_templatesInput = {
     uuid?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     channels?: MessageTemplateUpdatechannelsInput | $Enums.Channel[]
@@ -194893,7 +194627,7 @@ export namespace Prisma {
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
   }
 
-  export type MessageTemplateUncheckedUpdateWithoutBookingPageTemplatesInput = {
+  export type MessageTemplateUncheckedUpdateWithoutBooking_page_templatesInput = {
     id?: IntFieldUpdateOperationsInput | number
     uuid?: StringFieldUpdateOperationsInput | string
     organisation_uuid?: StringFieldUpdateOperationsInput | string
@@ -194911,50 +194645,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
-  }
-
-  export type OutreachSequenceUpsertWithoutBooking_page_templatesInput = {
-    update: XOR<OutreachSequenceUpdateWithoutBooking_page_templatesInput, OutreachSequenceUncheckedUpdateWithoutBooking_page_templatesInput>
-    create: XOR<OutreachSequenceCreateWithoutBooking_page_templatesInput, OutreachSequenceUncheckedCreateWithoutBooking_page_templatesInput>
-    where?: OutreachSequenceWhereInput
-  }
-
-  export type OutreachSequenceUpdateToOneWithWhereWithoutBooking_page_templatesInput = {
-    where?: OutreachSequenceWhereInput
-    data: XOR<OutreachSequenceUpdateWithoutBooking_page_templatesInput, OutreachSequenceUncheckedUpdateWithoutBooking_page_templatesInput>
-  }
-
-  export type OutreachSequenceUpdateWithoutBooking_page_templatesInput = {
-    uuid?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
-    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
-    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
-    sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
-    steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
-    enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
-    campaigns?: MarketingCampaignUpdateManyWithoutSequenceNestedInput
-  }
-
-  export type OutreachSequenceUncheckedUpdateWithoutBooking_page_templatesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    uuid?: StringFieldUpdateOperationsInput | string
-    organisation_uuid?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumSequenceStatusFieldUpdateOperationsInput | $Enums.SequenceStatus
-    stop_on_reply?: BoolFieldUpdateOperationsInput | boolean
-    sender_profile_uuid?: NullableStringFieldUpdateOperationsInput | string | null
-    allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
-    enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
-    campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
   }
 
   export type OrganisationCreateWithoutCalendar_connectionsInput = {
@@ -199380,7 +199070,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUpdateManyWithoutOutreachSequenceNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutSequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
@@ -199398,7 +199087,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceNestedInput
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
@@ -200162,7 +199850,7 @@ export namespace Prisma {
     sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
-    bookingPageTemplates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutOrganisationInput = {
@@ -200182,7 +199870,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
-    bookingPageTemplates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateManyWithoutOrganisationInput = {
@@ -203945,14 +203633,6 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type BookingPageTemplateCreateManyOutreachSequenceInput = {
-    id?: number
-    booking_page_uuid: string
-    template_uuid: string
-    kind: $Enums.BookingNotificationKind
-    created_at?: Date | string
-  }
-
   export type OutreachSequenceStepCreateManySequenceInput = {
     id?: number
     uuid?: string
@@ -204031,29 +203711,6 @@ export namespace Prisma {
     unsubscribed_count?: number
     created_at?: Date | string
     updated_at?: Date | string
-  }
-
-  export type BookingPageTemplateUpdateWithoutOutreachSequenceInput = {
-    kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page?: BookingPageUpdateOneRequiredWithoutNotification_templatesNestedInput
-    template?: MessageTemplateUpdateOneRequiredWithoutBookingPageTemplatesNestedInput
-  }
-
-  export type BookingPageTemplateUncheckedUpdateWithoutOutreachSequenceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    booking_page_uuid?: StringFieldUpdateOperationsInput | string
-    template_uuid?: StringFieldUpdateOperationsInput | string
-    kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    booking_page_uuid?: StringFieldUpdateOperationsInput | string
-    template_uuid?: StringFieldUpdateOperationsInput | string
-    kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OutreachSequenceStepUpdateWithoutSequenceInput = {
@@ -204881,7 +204538,7 @@ export namespace Prisma {
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
     booking_page?: BookingPageUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
-    bookingPageTemplates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutSender_profileInput = {
@@ -204901,7 +204558,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
-    bookingPageTemplates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateManyWithoutSender_profileInput = {
@@ -204931,7 +204588,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUpdateManyWithoutOutreachSequenceNestedInput
     organisation?: OrganisationUpdateOneRequiredWithoutOutreach_sequencesNestedInput
     steps?: OutreachSequenceStepUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUpdateManyWithoutSequenceNestedInput
@@ -204949,7 +204605,6 @@ export namespace Prisma {
     allowed_weekdays?: OutreachSequenceUpdateallowed_weekdaysInput | number[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutOutreachSequenceNestedInput
     steps?: OutreachSequenceStepUncheckedUpdateManyWithoutSequenceNestedInput
     enrollments?: SequenceEnrollmentUncheckedUpdateManyWithoutSequenceNestedInput
     campaigns?: MarketingCampaignUncheckedUpdateManyWithoutSequenceNestedInput
@@ -204993,7 +204648,6 @@ export namespace Prisma {
     booking_page_uuid: string
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
-    outreachSequenceId?: number | null
   }
 
   export type OutreachSequenceStepUpdateWithoutMessage_templateInput = {
@@ -205061,7 +204715,6 @@ export namespace Prisma {
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     booking_page?: BookingPageUpdateOneRequiredWithoutNotification_templatesNestedInput
-    outreachSequence?: OutreachSequenceUpdateOneWithoutBooking_page_templatesNestedInput
   }
 
   export type BookingPageTemplateUncheckedUpdateWithoutTemplateInput = {
@@ -205069,7 +204722,6 @@ export namespace Prisma {
     booking_page_uuid?: StringFieldUpdateOperationsInput | string
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    outreachSequenceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BookingPageTemplateUncheckedUpdateManyWithoutTemplateInput = {
@@ -205077,7 +204729,6 @@ export namespace Prisma {
     booking_page_uuid?: StringFieldUpdateOperationsInput | string
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    outreachSequenceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MarketingCampaignContactCreateManyCampaignInput = {
@@ -206465,7 +206116,6 @@ export namespace Prisma {
     template_uuid: string
     kind: $Enums.BookingNotificationKind
     created_at?: Date | string
-    outreachSequenceId?: number | null
   }
 
   export type BookingLinkCreateManyBooking_pageInput = {
@@ -206613,8 +206263,7 @@ export namespace Prisma {
   export type BookingPageTemplateUpdateWithoutBooking_pageInput = {
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    template?: MessageTemplateUpdateOneRequiredWithoutBookingPageTemplatesNestedInput
-    outreachSequence?: OutreachSequenceUpdateOneWithoutBooking_page_templatesNestedInput
+    template?: MessageTemplateUpdateOneRequiredWithoutBooking_page_templatesNestedInput
   }
 
   export type BookingPageTemplateUncheckedUpdateWithoutBooking_pageInput = {
@@ -206622,7 +206271,6 @@ export namespace Prisma {
     template_uuid?: StringFieldUpdateOperationsInput | string
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    outreachSequenceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BookingPageTemplateUncheckedUpdateManyWithoutBooking_pageInput = {
@@ -206630,7 +206278,6 @@ export namespace Prisma {
     template_uuid?: StringFieldUpdateOperationsInput | string
     kind?: EnumBookingNotificationKindFieldUpdateOperationsInput | $Enums.BookingNotificationKind
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    outreachSequenceId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BookingLinkUpdateWithoutBooking_pageInput = {
@@ -206899,7 +206546,7 @@ export namespace Prisma {
     organisation?: OrganisationUpdateOneRequiredWithoutMessage_templatesNestedInput
     sender_profile?: SenderProfileUpdateOneWithoutMessage_templatesNestedInput
     sequence_steps?: OutreachSequenceStepUpdateManyWithoutMessage_templateNestedInput
-    bookingPageTemplates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateWithoutBooking_pageInput = {
@@ -206919,7 +206566,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sequence_steps?: OutreachSequenceStepUncheckedUpdateManyWithoutMessage_templateNestedInput
-    bookingPageTemplates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
+    booking_page_templates?: BookingPageTemplateUncheckedUpdateManyWithoutTemplateNestedInput
   }
 
   export type MessageTemplateUncheckedUpdateManyWithoutBooking_pageInput = {
