@@ -347,7 +347,7 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
                                                     control={control}
                                                     name="date"
                                                     render={({ field }) => (
-                                                        <DateKeyPicker label="Date" isRequired value={field.value} onChange={field.onChange} />
+                                                        <DateKeyPicker label="Date" isRequired showDayStepper value={field.value} onChange={field.onChange} />
                                                     )}
                                                 />
                                                 <FormError message={errors.date?.message} />

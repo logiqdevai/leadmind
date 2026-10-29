@@ -87,7 +87,7 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
 
     return (
         <div className="flex flex-col gap-3">
-            <DateKeyPicker label="Date" value={dateKey} onChange={onDateChange} minValue={today} isRequired />
+            <DateKeyPicker label="Date" value={dateKey} onChange={onDateChange} minValue={today} isRequired showDayStepper />
             <div className="rounded-xl border border-border/80 bg-surface-secondary/30 p-3">
                 {isLoading ? (
                     <div className="flex items-center justify-center py-6">

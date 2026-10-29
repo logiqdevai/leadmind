@@ -1,5 +1,6 @@
 import { useMemo, type FC } from "react";
-import { Calendar, DateField, DatePicker, Label } from "@heroui/react";
+import { Button, Calendar, DateField, DatePicker, Label } from "@heroui/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { parseDate, Time, type DateValue } from "@internationalized/date";
 import { cn } from "@/lib/utils";
 import { OptionSelect } from "./booking-shared";
@@ -29,6 +30,8 @@ interface DateKeyPickerProps {
     isRequired?: boolean;
     isDisabled?: boolean;
     minValue?: string;
+    /** Adds previous/next day arrows around the field and shows the weekday. */
+    showDayStepper?: boolean;
     className?: string;
     "aria-label"?: string;
 }
@@ -41,12 +44,93 @@ export const DateKeyPicker: FC<DateKeyPickerProps> = ({
     isRequired,
     isDisabled,
     minValue,
+    showDayStepper,
     className,
     "aria-label": ariaLabel,
 }) => {
     const min = useMemo(() => (minValue ? safeParseDate(minValue) : null), [minValue]);
     // Stable identity: a fresh object on every render makes the field discard what the user is typing.
     const dateValue = useMemo(() => safeParseDate(value), [value]);
+
+    const picker = <DateKeyPickerField
+        value={value}
+        dateValue={dateValue}
+        onChange={onChange}
+        label={label}
+        isRequired={isRequired}
+        isDisabled={isDisabled}
+        min={min}
+        className={showDayStepper ? "min-w-0 flex-1" : className}
+        ariaLabel={ariaLabel}
+    />;
+    if (!showDayStepper) return picker;
+
+    const weekday = dateValue
+        ? new Date(Date.UTC(dateValue.year, dateValue.month - 1, dateValue.day)).toLocaleDateString(undefined, {
+              weekday: "long",
+              timeZone: "UTC",
+          })
+        : null;
+    const step = (days: number) => {
+        if (!dateValue) return;
+        const next = dateValue.add({ days });
+        if (min && next.compare(min) < 0) return;
+        onChange(`${next.year}-${pad(next.month)}-${pad(next.day)}`);
+    };
+    const atMin = !!dateValue && !!min && dateValue.add({ days: -1 }).compare(min) < 0;
+
+    return (
+        <div className={cn("flex w-full flex-col gap-1.5", className)}>
+            <div className="flex items-end gap-1.5">
+                <Button
+                    isIconOnly
+                    size="md"
+                    variant="tertiary"
+                    aria-label="Previous day"
+                    isDisabled={isDisabled || !dateValue || atMin}
+                    onPress={() => step(-1)}
+                >
+                    <ChevronLeft className="size-4" />
+                </Button>
+                {picker}
+                <Button
+                    isIconOnly
+                    size="md"
+                    variant="tertiary"
+                    aria-label="Next day"
+                    isDisabled={isDisabled || !dateValue}
+                    onPress={() => step(1)}
+                >
+                    <ChevronRight className="size-4" />
+                </Button>
+            </div>
+            {weekday ? <p className="text-center text-xs font-medium text-muted">{weekday}</p> : null}
+        </div>
+    );
+};
+
+interface DateKeyPickerFieldProps {
+    value: string;
+    dateValue: DateValue | null;
+    onChange: (value: string) => void;
+    label?: string;
+    isRequired?: boolean;
+    isDisabled?: boolean;
+    min: DateValue | null;
+    className?: string;
+    ariaLabel?: string;
+}
+
+const DateKeyPickerField: FC<DateKeyPickerFieldProps> = ({
+    dateValue,
+    onChange,
+    label,
+    isRequired,
+    isDisabled,
+    min,
+    className,
+    ariaLabel,
+}) => {
     return (
         <DatePicker
             className={cn("w-full", className)}

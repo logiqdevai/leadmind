@@ -7,10 +7,10 @@ export interface BookingEmailTemplate {
 
 const details = `
 <table cellpadding="0" cellspacing="0" border="0"><tbody>
-<tr><td style="padding:2px 12px 2px 0;color:#6b7280">What</td><td>{{booking.title}}</td></tr>
-<tr><td style="padding:2px 12px 2px 0;color:#6b7280">When</td><td>{{booking.date}}, {{booking.time}}</td></tr>
-<tr><td style="padding:2px 12px 2px 0;color:#6b7280">Duration</td><td>{{booking.duration}}</td></tr>
-<tr><td style="padding:2px 12px 2px 0;color:#6b7280">With</td><td>{{team_member.name}}</td></tr>
+<tr><td style="padding:4px 32px 4px 0;color:#6b7280;min-width:90px">What</td><td style="padding:4px 0">{{booking.title}}</td></tr>
+<tr><td style="padding:4px 32px 4px 0;color:#6b7280;min-width:90px">When</td><td style="padding:4px 0">{{booking.date}}, {{booking.time}}</td></tr>
+<tr><td style="padding:4px 32px 4px 0;color:#6b7280;min-width:90px">Duration</td><td style="padding:4px 0">{{booking.duration}}</td></tr>
+<tr><td style="padding:4px 32px 4px 0;color:#6b7280;min-width:90px">With</td><td style="padding:4px 0">{{team_member.name}}</td></tr>
 </tbody></table>`;
 
 const manageLinks = `<p>Need a different time? No problem - you can <a href="{{booking.reschedule_url}}">reschedule</a> or <a href="{{booking.cancel_url}}">cancel</a> anytime.</p>`;
