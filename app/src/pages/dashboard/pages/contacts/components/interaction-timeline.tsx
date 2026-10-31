@@ -218,6 +218,7 @@ function parseCallMetadata(raw: Interaction["metadata"]): CallMetadata | null {
     const o = raw as Record<string, unknown>;
     if (!isCallOutcome(o.outcome) || !isCallDirection(o.direction)) return null;
     const meta: CallMetadata = { outcome: o.outcome, direction: o.direction };
+    if (typeof o.reached_owner === "boolean") meta.reached_owner = o.reached_owner;
     if (typeof o.duration_minutes === "number") meta.duration_minutes = o.duration_minutes;
     if (typeof o.occurred_at === "string") meta.occurred_at = o.occurred_at;
     return meta;
@@ -440,6 +441,11 @@ export function InteractionTimeline({ contactUuid, onNavigateToOutreach }: Inter
                                         <Chip size="sm" variant="soft" color="default">
                                             <Chip.Label>{CALL_DIRECTION_LABEL[callMeta.direction]}</Chip.Label>
                                         </Chip>
+                                        {callMeta.reached_owner !== undefined ? (
+                                            <Chip size="sm" variant="soft" color={callMeta.reached_owner ? "success" : "default"}>
+                                                <Chip.Label>{callMeta.reached_owner ? "Spoke with owner" : "Didn't reach owner"}</Chip.Label>
+                                            </Chip>
+                                        ) : null}
                                         {callMeta.duration_minutes !== undefined ? (
                                             <span>· {callMeta.duration_minutes} min</span>
                                         ) : null}

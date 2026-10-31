@@ -16,10 +16,12 @@ import { LogEmailModal } from "@/pages/dashboard/pages/contacts/pages/detail/com
 import { LogMeetingModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-meeting-modal";
 import { LogSmsModal } from "@/pages/dashboard/pages/contacts/pages/detail/components/log-sms-modal";
 import { BookingsTab, RemindersTab } from "@/pages/dashboard/pages/contacts/pages/detail/components";
+import { ComposeMessageModal } from "@/features/messaging/components/compose-message-modal";
 import { ContactCallInfo } from "./contact-call-info";
 
 const CALL_TABS = [
     { id: "activity", label: "Notes & Activity" },
+    { id: "email", label: "Email" },
     { id: "reminders", label: "Reminders" },
     { id: "bookings", label: "Bookings" },
 ] as const;
@@ -119,6 +121,39 @@ const NotesAndActivity: FC<{ contact: Contact }> = ({ contact }) => {
     );
 };
 
+/** Same composer as the Outreach tab, which includes the template picker. */
+const SendEmail: FC<{ contact: Contact }> = ({ contact }) => {
+    const [composeOpen, setComposeOpen] = useState(false);
+    const email = contact.email?.trim();
+
+    return (
+        <div className="flex flex-col items-start gap-3">
+            <p className="text-sm text-muted">
+                {email ? (
+                    <>
+                        Send an email to <span className="font-medium text-foreground">{email}</span>, optionally from a
+                        template.
+                    </>
+                ) : (
+                    "This contact has no email address."
+                )}
+            </p>
+            <Button size="sm" variant="secondary" isDisabled={!email} onPress={() => setComposeOpen(true)}>
+                <Mail className="size-4" />
+                Compose email
+            </Button>
+            <ComposeMessageModal
+                isOpen={composeOpen}
+                onOpenChange={setComposeOpen}
+                contactUuid={contact.uuid}
+                recipientEmail={contact.email}
+                recipientEmailValidationStatus={contact.email_validation_status}
+                recipientEmailValidationReason={contact.email_validation_reason}
+            />
+        </div>
+    );
+};
+
 interface ContactCallViewProps {
     contactUuid: string;
 }
@@ -198,7 +233,9 @@ export const ContactCallView: FC<ContactCallViewProps> = ({ contactUuid }) => {
             </ScrollableTabs>
 
             <div>
-                {activeTab === "reminders" ? (
+                {activeTab === "email" ? (
+                    <SendEmail contact={contact} />
+                ) : activeTab === "reminders" ? (
                     <RemindersTab contactUuid={contact.uuid} />
                 ) : activeTab === "bookings" ? (
                     <BookingsTab contact={contact} />

@@ -161,6 +161,9 @@ export class ContactsService {
             }
         }
 
+        // Validate up front so a bad value can't leave the contact half created.
+        const openingHours = dto.opening_hours !== undefined ? normalizeOpeningHours(dto.opening_hours) : undefined;
+
         const emailFields = await resolveEmailFieldsForWrite(dto.email);
         const websiteFields = await resolveWebsiteFieldsForWrite(dto.website);
 
@@ -172,6 +175,9 @@ export class ContactsService {
                 }
                 await this.applyManualCreateExtras(organisation_uuid, existing.uuid, dto);
                 await this.addContactListMemberships(organisation_uuid, existing.uuid, dto.list_uuids ?? []);
+                if (openingHours !== undefined) {
+                    await replaceContactOpeningHours(this.prisma, existing.uuid, openingHours);
+                }
                 await this.reindexContact(existing.uuid);
                 return this.findOne(organisation_uuid, existing.uuid);
             }
@@ -226,6 +232,10 @@ export class ContactsService {
         }
 
         await this.addContactListMemberships(organisation_uuid, contact.uuid, dto.list_uuids ?? []);
+
+        if (openingHours !== undefined) {
+            await replaceContactOpeningHours(this.prisma, contact.uuid, openingHours);
+        }
 
         if (dto.notes) {
             await this.prisma.interaction.create({
@@ -1140,6 +1150,7 @@ export class ContactsService {
         const metadata: Prisma.InputJsonValue = {
             outcome: dto.outcome,
             direction: dto.direction,
+            ...(dto.reached_owner !== undefined && { reached_owner: dto.reached_owner }),
             ...(dto.duration_minutes !== undefined && { duration_minutes: dto.duration_minutes }),
             ...(dto.occurred_at && { occurred_at: dto.occurred_at }),
         };
@@ -1259,7 +1270,7 @@ export class ContactsService {
         const type = interaction.type;
 
         const allowed: Record<string, (keyof UpdateInteractionDto)[]> = {
-            [InteractionType.CALL]: ['outcome', 'direction', 'duration_minutes', 'occurred_at', 'content', 'note_status'],
+            [InteractionType.CALL]: ['outcome', 'direction', 'reached_owner', 'duration_minutes', 'occurred_at', 'content', 'note_status'],
             [InteractionType.MEETING]: ['outcome', 'duration_minutes', 'occurred_at', 'location', 'content'],
             [InteractionType.EMAIL]: ['direction', 'subject', 'occurred_at', 'content'],
             [InteractionType.SMS]: ['direction', 'occurred_at', 'content'],
@@ -1282,6 +1293,7 @@ export class ContactsService {
         const metadata: Record<string, unknown> = { ...current };
         if (dto.outcome !== undefined) metadata.outcome = dto.outcome;
         if (dto.direction !== undefined) metadata.direction = dto.direction;
+        if (dto.reached_owner !== undefined) metadata.reached_owner = dto.reached_owner;
         if (dto.duration_minutes !== undefined) metadata.duration_minutes = dto.duration_minutes;
         if (dto.occurred_at !== undefined) metadata.occurred_at = dto.occurred_at;
         for (const key of ['location', 'subject'] as const) {

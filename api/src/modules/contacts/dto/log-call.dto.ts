@@ -1,6 +1,7 @@
 import { CallNoteStatus } from '@/generated/prisma';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+    IsBoolean,
     IsEnum,
     IsISO8601,
     IsInt,
@@ -39,6 +40,11 @@ export class LogCallDto {
     @ApiProperty({ enum: CallDirection, default: CallDirection.OUTBOUND })
     @IsEnum(CallDirection)
     direction: CallDirection;
+
+    @ApiPropertyOptional({ description: 'Whether we got past the gatekeeper and spoke with the owner' })
+    @IsOptional()
+    @IsBoolean()
+    reached_owner?: boolean;
 
     @ApiPropertyOptional({ minimum: 0, maximum: 1440 })
     @IsOptional()

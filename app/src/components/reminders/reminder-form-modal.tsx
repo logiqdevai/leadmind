@@ -41,7 +41,12 @@ const QUICK_ACTIONS: { label: string; resolve: (from: ZonedDateTime) => ZonedDat
     { label: "In 1 hour", resolve: (t) => t.add({ hours: 1 }) },
     { label: "In 3 hours", resolve: (t) => t.add({ hours: 3 }) },
     { label: "Tomorrow 9:00", resolve: (t) => t.add({ days: 1 }).set({ hour: 9, minute: 0 }) },
-    { label: "Next week", resolve: (t) => t.add({ weeks: 1 }) },
+    { label: "In 1 week", resolve: (t) => t.add({ weeks: 1 }) },
+    {
+        label: "Start of next week",
+        // Always the Monday that follows, so on a Monday it means a week from today.
+        resolve: (t) => t.add({ days: ((8 - t.toDate().getDay()) % 7) || 7 }).set({ hour: 9, minute: 0 }),
+    },
     { label: "Next month", resolve: (t) => t.add({ months: 1 }) },
 ];
 

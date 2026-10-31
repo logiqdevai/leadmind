@@ -101,6 +101,8 @@ export type CallDirection = (typeof CallDirection)[keyof typeof CallDirection];
 export interface CallMetadata {
     outcome: CallOutcome;
     direction: CallDirection;
+    /** Got past the gatekeeper and spoke with the owner. */
+    reached_owner?: boolean;
     duration_minutes?: number;
     occurred_at?: string;
 }
@@ -132,6 +134,8 @@ export interface LogCallPayload {
     direction: CallDirection;
     /** The Quick note choice, stored so calls can be counted by outcome. */
     note_status?: CallNoteStatus;
+    /** Got past the gatekeeper and spoke with the owner. */
+    reached_owner?: boolean;
     duration_minutes?: number;
     occurred_at?: string;
     content?: string;
@@ -141,6 +145,8 @@ export interface LogCallPayload {
 export interface UpdateInteractionPayload {
     outcome?: CallOutcome | MeetingOutcome;
     direction?: CallDirection;
+    /** Calls only. */
+    reached_owner?: boolean;
     duration_minutes?: number;
     occurred_at?: string;
     location?: string;

@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsISO8601, IsInt, IsOptional, IsString, Max, MaxLength, Min, ValidateIf } from 'class-validator';
+import { IsBoolean, IsEnum, IsISO8601, IsInt, IsOptional, IsString, Max, MaxLength, Min, ValidateIf } from 'class-validator';
 import { CallNoteStatus } from '@/generated/prisma';
 import { CallDirection, CallOutcome } from './log-call.dto';
 import { MeetingOutcome } from './log-meeting.dto';
@@ -18,6 +18,11 @@ export class UpdateInteractionDto {
     @IsOptional()
     @IsEnum(CallDirection)
     direction?: CallDirection;
+
+    @ApiPropertyOptional({ description: 'Calls only; whether we got past the gatekeeper and spoke with the owner' })
+    @IsOptional()
+    @IsBoolean()
+    reached_owner?: boolean;
 
     @ApiPropertyOptional({ minimum: 0, maximum: 1440 })
     @IsOptional()

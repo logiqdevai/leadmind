@@ -51,6 +51,7 @@ export function LogCallModal({ contactUuid, interaction, isOpen, onOpenChange }:
   const logCall = useLogCall();
   const [outcome, setOutcome] = useState<CallOutcome>(CallOutcome.CONNECTED);
   const [direction, setDirection] = useState<CallDirection>(CallDirection.OUTBOUND);
+  const [reachedOwner, setReachedOwner] = useState(false);
   const [duration, setDuration] = useState<string>("");
   const [occurredAt, setOccurredAt] = useState<string>(() => toLocalDatetimeValue(new Date()));
   const [notes, setNotes] = useState<string>("");
@@ -74,6 +75,7 @@ export function LogCallModal({ contactUuid, interaction, isOpen, onOpenChange }:
       setQuickNote(isCallNoteStatus(interaction?.call_note_status) ? interaction.call_note_status : null);
       setOutcome((meta.outcome as CallOutcome) ?? CallOutcome.CONNECTED);
       setDirection((meta.direction as CallDirection) ?? CallDirection.OUTBOUND);
+      setReachedOwner(meta.reached_owner === true);
       setDuration(typeof meta.duration_minutes === "number" ? String(meta.duration_minutes) : "");
       setOccurredAt(toLocalDatetimeValue(new Date((meta.occurred_at as string) ?? interaction?.created_at ?? Date.now())));
       setNotes(interaction?.content ?? "");
@@ -85,6 +87,7 @@ export function LogCallModal({ contactUuid, interaction, isOpen, onOpenChange }:
     const payload: LogCallPayload = {
       outcome,
       direction,
+      reached_owner: reachedOwner,
       ...(quickNote ? { note_status: quickNote } : {}),
     };
     const durNum = duration === "" ? undefined : Number(duration);
@@ -163,6 +166,30 @@ export function LogCallModal({ contactUuid, interaction, isOpen, onOpenChange }:
                     )}
                   >
                     {d.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label>Spoke with the owner (got past the gatekeeper)?</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { value: true, label: "Yes" },
+                  { value: false, label: "No" },
+                ].map((o) => (
+                  <button
+                    key={o.label}
+                    type="button"
+                    onClick={() => setReachedOwner(o.value)}
+                    className={cn(
+                      "rounded-md border px-3 py-2 text-sm font-medium transition-colors",
+                      reachedOwner === o.value
+                        ? "border-accent bg-accent/10 text-accent"
+                        : "border-border bg-surface text-foreground hover:bg-surface-secondary",
+                    )}
+                  >
+                    {o.label}
                   </button>
                 ))}
               </div>

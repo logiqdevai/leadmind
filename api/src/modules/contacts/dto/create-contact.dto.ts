@@ -5,6 +5,7 @@ import {
     IsArray,
     IsEmail,
     IsISO31661Alpha2,
+    IsObject,
     IsOptional,
     IsString,
     IsUrl,
@@ -12,6 +13,8 @@ import {
     MaxLength,
     ValidateIf,
 } from 'class-validator';
+import { OPENING_HOURS_API_SCHEMA } from './opening-hours.schema';
+import type { OpeningHours } from '../utils/opening-hours.utils';
 
 export class CreateContactDto {
     @ApiPropertyOptional({ format: 'uuid' })
@@ -119,4 +122,10 @@ export class CreateContactDto {
     @ArrayUnique()
     @IsUUID('4', { each: true })
     list_uuids?: string[];
+
+    @ApiPropertyOptional(OPENING_HOURS_API_SCHEMA as Record<string, unknown>)
+    @IsOptional()
+    @ValidateIf((_, value) => value !== null)
+    @IsObject()
+    opening_hours?: OpeningHours | null;
 }
