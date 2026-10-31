@@ -502,6 +502,7 @@ export const ApiRoutes = {
         book: (code: string) => `/public/bookings/pages/${encodeURIComponent(code)}/book`,
         manage: (token: string) => `/public/bookings/manage/${encodeURIComponent(token)}`,
         manage_slots: (token: string) => `/public/bookings/manage/${encodeURIComponent(token)}/slots`,
+        confirm: (token: string) => `/public/bookings/manage/${encodeURIComponent(token)}/confirm`,
         cancel: (token: string) => `/public/bookings/manage/${encodeURIComponent(token)}/cancel`,
         reschedule: (token: string) => `/public/bookings/manage/${encodeURIComponent(token)}/reschedule`,
     },

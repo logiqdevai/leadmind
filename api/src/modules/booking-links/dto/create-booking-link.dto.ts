@@ -21,4 +21,9 @@ export class CreateBookingLinkDto {
     @IsOptional()
     @IsBoolean()
     auto_create_contact?: boolean;
+
+    @ApiPropertyOptional({ description: 'Bookings made through this link get a "confirm my booking" link in their emails' })
+    @IsOptional()
+    @IsBoolean()
+    require_attendance_confirmation?: boolean;
 }

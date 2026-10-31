@@ -85,6 +85,15 @@ export const getManagedBookingSlots = async (
     }
 };
 
+export const confirmManagedBookingAttendance = async (token: string): Promise<PublicManagedBooking> => {
+    try {
+        const response = await axios.post(publicUrl(ApiRoutes.public_bookings.confirm(token)));
+        return response.data;
+    } catch (error) {
+        throw withCause(error, "Could not confirm this booking.");
+    }
+};
+
 export const cancelManagedBooking = async (token: string, reason?: string): Promise<PublicManagedBooking> => {
     try {
         const response = await axios.post(publicUrl(ApiRoutes.public_bookings.cancel(token)), { reason });

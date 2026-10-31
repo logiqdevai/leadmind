@@ -94,6 +94,14 @@ export class PublicBookingController {
         return this.publicBookingService.getManageSlots(token, query);
     }
 
+    @Post('manage/:token/confirm')
+    @RateLimit(BookingRateLimits.manage)
+    @ApiOperation({ summary: 'The invitee confirms they will attend (idempotent)' })
+    @ApiResponse({ status: 201 })
+    confirm(@Param('token') token: string) {
+        return this.publicBookingService.confirmAttendance(token);
+    }
+
     @Post('manage/:token/cancel')
     @RateLimit(BookingRateLimits.manage)
     @ApiOperation({ summary: 'Cancel the booking (within the page deadline)' })

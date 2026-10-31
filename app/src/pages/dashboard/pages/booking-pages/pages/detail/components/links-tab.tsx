@@ -30,15 +30,21 @@ const LinkFormModal: FC<LinkFormModalProps> = ({ isOpen, onOpenChange, bookingPa
     // The parent remounts this modal (key) for every open, so initial state is enough.
     const [label, setLabel] = useState(editing?.label ?? "");
     const [autoCreate, setAutoCreate] = useState(editing?.auto_create_contact ?? true);
+    const [requireConfirmation, setRequireConfirmation] = useState(editing?.require_attendance_confirmation ?? false);
     const isPending = createLink.isPending || updateLink.isPending;
 
     const submit = () => {
         const done = { onSuccess: () => onOpenChange(false) };
         if (editing) {
-            updateLink.mutate({ uuid: editing.uuid, payload: { label: label.trim(), auto_create_contact: autoCreate } }, done);
+            updateLink.mutate({ uuid: editing.uuid, payload: { label: label.trim(), auto_create_contact: autoCreate, require_attendance_confirmation: requireConfirmation } }, done);
         } else {
             createLink.mutate(
-                { booking_page_uuid: bookingPageUuid, label: label.trim() || undefined, auto_create_contact: autoCreate },
+                {
+                    booking_page_uuid: bookingPageUuid,
+                    label: label.trim() || undefined,
+                    auto_create_contact: autoCreate,
+                    require_attendance_confirmation: requireConfirmation,
+                },
                 done,
             );
         }
@@ -69,6 +75,12 @@ const LinkFormModal: FC<LinkFormModalProps> = ({ isOpen, onOpenChange, bookingPa
                             description="Finds the contact by the invitee's email, or creates one from their booking details."
                             isSelected={autoCreate}
                             onChange={setAutoCreate}
+                        />
+                        <SettingSwitch
+                            label="Ask invitees to confirm attendance"
+                            description="Confirmation emails for bookings from this link include a button to confirm the details and that they will attend. Applies to new bookings."
+                            isSelected={requireConfirmation}
+                            onChange={setRequireConfirmation}
                         />
                     </Modal.Body>
                     <Modal.Footer className="gap-2 justify-end">
@@ -146,6 +158,11 @@ export const LinksTab: FC<LinksTabProps> = ({ bookingPageUuid, canManage }) => {
                                             <Chip.Label>Creates contacts</Chip.Label>
                                         </Chip>
                                     ) : null}
+                                    {link.require_attendance_confirmation ? (
+                                        <Chip size="sm" variant="soft" color="warning">
+                                            <Chip.Label>Asks to confirm</Chip.Label>
+                                        </Chip>
+                                    ) : null}
                                     <span className="ml-auto text-xs text-muted">
                                         {link._count?.bookings ?? 0} booking{(link._count?.bookings ?? 0) === 1 ? "" : "s"}
                                         {link.last_used_at ? ` · last used ${formatDateTime(link.last_used_at, timeZone)}` : ""}
@@ -179,6 +196,12 @@ export const LinksTab: FC<LinksTabProps> = ({ bookingPageUuid, canManage }) => {
                                                 label="Create or match contact"
                                                 isSelected={link.auto_create_contact}
                                                 onChange={(v) => updateLink.mutate({ uuid: link.uuid, payload: { auto_create_contact: v } })}
+                                                isDisabled={updateLink.isPending}
+                                            />
+                                            <SettingSwitch
+                                                label="Ask to confirm attendance"
+                                                isSelected={link.require_attendance_confirmation}
+                                                onChange={(v) => updateLink.mutate({ uuid: link.uuid, payload: { require_attendance_confirmation: v } })}
                                                 isDisabled={updateLink.isPending}
                                             />
                                         </div>

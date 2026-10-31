@@ -301,7 +301,16 @@ export class BookingNotificationsService {
         // The signature closes the email, so the join / calendar links go right before it; templates without
         // {{signature}} simply get them at the end.
         const hasSignature = /\{\{\s*signature\s*\}\}/.test(bodyTemplate);
-        let html = renderPlaceholders(bodyTemplate, { ...escapeVars(vars), 'booking.book_again_link': bookAgainLink, signature: hasSignature ? extra + signature : signature });
+        // Only invitees get it, and only while the booking's link asks for it and they have not confirmed yet.
+        const confirmUrl = recipient.internal ? '' : vars['booking.confirm_url'];
+        const confirmLink = confirmUrl ? bookingLinkHtml(confirmUrl, language === 'el' ? 'Επιβεβαιώνω την κράτηση' : 'Confirm my booking') : '';
+        let html = renderPlaceholders(bodyTemplate, {
+            ...escapeVars(vars),
+            'booking.confirm_url': confirmUrl,
+            'booking.confirm_link': confirmLink,
+            'booking.book_again_link': bookAgainLink,
+            signature: hasSignature ? extra + signature : signature,
+        });
         if (!hasSignature) html += extra;
         return { subject: renderPlaceholders(subjectTemplate, vars), html };
     }

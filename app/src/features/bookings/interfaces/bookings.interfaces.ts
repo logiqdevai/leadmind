@@ -131,6 +131,9 @@ export interface Booking {
     calendar_sync_error: string | null;
     calendar_synced_at: string | null;
     confirmed_at: string | null;
+    /** The booking's link asked the invitee to confirm they will attend. */
+    attendance_confirmation_required: boolean;
+    attendance_confirmed_at: string | null;
     cancelled_at: string | null;
     cancellation_reason: string | null;
     cancelled_by: "USER" | "INVITEE" | "SYSTEM" | null;
@@ -423,6 +426,7 @@ export interface BookingLink {
     contact_uuid: string | null;
     label: string | null;
     auto_create_contact: boolean;
+    require_attendance_confirmation: boolean;
     is_active: boolean;
     deactivated_at: string | null;
     last_used_at: string | null;
@@ -444,11 +448,13 @@ export interface CreateBookingLinkDto {
     contact_uuid?: string;
     label?: string;
     auto_create_contact?: boolean;
+    require_attendance_confirmation?: boolean;
 }
 
 export interface UpdateBookingLinkDto {
     label?: string;
     auto_create_contact?: boolean;
+    require_attendance_confirmation?: boolean;
     is_active?: boolean;
 }
 
@@ -610,6 +616,8 @@ export interface PublicBookingPage {
 
 export interface PublicBookingSummary {
     status: BookingStatus;
+    attendance_confirmation_required: boolean;
+    attendance_confirmed_at: string | null;
     title: string;
     brand_name: string | null;
     start_at: string;

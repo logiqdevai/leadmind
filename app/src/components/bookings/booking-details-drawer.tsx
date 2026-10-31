@@ -243,6 +243,15 @@ const BookingDetailsBody: FC<{ booking: BookingDetail; timezone: string }> = ({ 
                         </p>
                     ) : null}
                 </div>
+                {booking.attendance_confirmation_required && booking.status !== BookingStatuses.CANCELLED ? (
+                    <div
+                        className={`rounded-lg px-3 py-2 text-sm text-foreground ${booking.attendance_confirmed_at ? "bg-success/10" : "bg-warning/10"}`}
+                    >
+                        {booking.attendance_confirmed_at
+                            ? `Attendance confirmed by the invitee on ${formatDateTime(booking.attendance_confirmed_at, timezone)}`
+                            : "Awaiting the invitee's attendance confirmation"}
+                    </div>
+                ) : null}
                 {booking.status === BookingStatuses.CANCELLED ? (
                     <div className="rounded-lg bg-danger/10 px-3 py-2 text-sm text-foreground">
                         Cancelled

@@ -13,6 +13,11 @@ export class UpdateBookingLinkDto {
     @IsBoolean()
     auto_create_contact?: boolean;
 
+    @ApiPropertyOptional({ description: 'Applies to bookings made from now on' })
+    @IsOptional()
+    @IsBoolean()
+    require_attendance_confirmation?: boolean;
+
     @ApiPropertyOptional({ description: 'false deactivates the link; its URL stops accepting bookings' })
     @IsOptional()
     @IsBoolean()

@@ -86,6 +86,8 @@ export const BOOKING_TEMPLATE_VARIABLES = [
     { key: "booking.meeting_url", label: "Google Meet link" },
     { key: "booking.reschedule_url", label: "Reschedule link" },
     { key: "booking.cancel_url", label: "Cancel link" },
+    { key: "booking.confirm_url", label: "Confirm attendance link (URL)" },
+    { key: "booking.confirm_link", label: "Confirm attendance link (empty unless the booking link asks for confirmation)" },
     { key: "booking.notes", label: "Invitee notes" },
     { key: "booking.book_again_url", label: "Book a new time link (booking page)" },
     { key: "booking.book_again_link", label: "Book a new time link" },

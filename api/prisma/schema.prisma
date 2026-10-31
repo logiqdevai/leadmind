@@ -2544,22 +2544,24 @@ model BookingPageMember {
 
 /// Public entry point to a booking page, addressed by a short random code. contact_uuid set = contact-specific link.
 model BookingLink {
-  id                   Int       @id @default(autoincrement())
-  uuid                 String    @unique @default(uuid())
-  code                 String    @unique @db.VarChar(16)
-  organisation_uuid    String
-  booking_page_uuid    String
-  contact_uuid         String?
-  label                String?
+  id                              Int       @id @default(autoincrement())
+  uuid                            String    @unique @default(uuid())
+  code                            String    @unique @db.VarChar(16)
+  organisation_uuid               String
+  booking_page_uuid               String
+  contact_uuid                    String?
+  label                           String?
   /// Generic links only: create (or match) a Contact from the invitee's details.
-  auto_create_contact  Boolean   @default(false)
-  is_active            Boolean   @default(true)
-  created_by_user_uuid String?
-  deactivated_at       DateTime?
-  last_used_at         DateTime?
-  last_visited_at      DateTime?
-  created_at           DateTime  @default(now())
-  updated_at           DateTime  @updatedAt
+  auto_create_contact             Boolean   @default(false)
+  /// Bookings made through this link get an attendance-confirmation link in their emails.
+  require_attendance_confirmation Boolean   @default(false)
+  is_active                       Boolean   @default(true)
+  created_by_user_uuid            String?
+  deactivated_at                  DateTime?
+  last_used_at                    DateTime?
+  last_visited_at                 DateTime?
+  created_at                      DateTime  @default(now())
+  updated_at                      DateTime  @updatedAt
 
   organisation Organisation        @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   booking_page BookingPage         @relation(fields: [booking_page_uuid], references: [uuid], onDelete: Cascade)
@@ -2635,15 +2637,19 @@ model Booking {
   calendar_synced_at       DateTime?
 
   /// Secret for the invitee's cancel/reschedule links.
-  manage_token        String            @unique
-  confirmed_at        DateTime?
-  cancelled_at        DateTime?
-  cancellation_reason String?           @db.Text
-  cancelled_by        BookingActorType?
-  reschedule_count    Int               @default(0)
-  completed_at        DateTime?
-  created_at          DateTime          @default(now())
-  updated_at          DateTime          @updatedAt
+  manage_token                     String            @unique
+  /// Copied from the booking link at creation: the invitee is asked to confirm they will attend.
+  attendance_confirmation_required Boolean           @default(false)
+  /// Set when the invitee pressed the confirmation link in their email.
+  attendance_confirmed_at          DateTime?
+  confirmed_at                     DateTime?
+  cancelled_at                     DateTime?
+  cancellation_reason              String?           @db.Text
+  cancelled_by                     BookingActorType?
+  reschedule_count                 Int               @default(0)
+  completed_at                     DateTime?
+  created_at                       DateTime          @default(now())
+  updated_at                       DateTime          @updatedAt
 
   organisation        Organisation          @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
   booking_page        BookingPage?          @relation(fields: [booking_page_uuid], references: [uuid], onDelete: SetNull)

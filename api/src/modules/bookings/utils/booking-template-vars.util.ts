@@ -17,6 +17,8 @@ export interface BookingVarsInput {
         location_value: string | null;
         meeting_url: string | null;
         manage_token: string;
+        attendance_confirmation_required?: boolean;
+        attendance_confirmed_at?: Date | null;
         status: string;
         cancellation_reason?: string | null;
     };
@@ -47,6 +49,8 @@ export const BOOKING_TEMPLATE_VARIABLES = [
     'booking.reschedule_url',
     'booking.cancel_url',
     'booking.manage_url',
+    'booking.confirm_url',
+    'booking.confirm_link',
     'booking.notes',
     'booking.cancellation_reason',
     'booking.book_again_url',
@@ -104,6 +108,11 @@ export function buildBookingVars(input: BookingVarsInput): PlaceholderVars {
         'booking.reschedule_url': BookingPublicUrls.reschedule(app_url, booking.manage_token),
         'booking.cancel_url': BookingPublicUrls.cancel(app_url, booking.manage_token),
         'booking.manage_url': BookingPublicUrls.manage(app_url, booking.manage_token),
+        // Empty unless the booking's link asked for confirmation and the invitee has not given it yet.
+        'booking.confirm_url':
+            booking.attendance_confirmation_required && !booking.attendance_confirmed_at
+                ? BookingPublicUrls.confirm(app_url, booking.manage_token)
+                : '',
         'booking.notes': booking.invitee_notes ?? '',
         'booking.cancellation_reason': booking.cancellation_reason ?? '',
         // Public page to book a new time (cancellation emails); empty when the booking has no active page.

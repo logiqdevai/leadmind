@@ -103025,6 +103025,7 @@ export namespace Prisma {
     contact_uuid: string | null
     label: string | null
     auto_create_contact: boolean | null
+    require_attendance_confirmation: boolean | null
     is_active: boolean | null
     created_by_user_uuid: string | null
     deactivated_at: Date | null
@@ -103043,6 +103044,7 @@ export namespace Prisma {
     contact_uuid: string | null
     label: string | null
     auto_create_contact: boolean | null
+    require_attendance_confirmation: boolean | null
     is_active: boolean | null
     created_by_user_uuid: string | null
     deactivated_at: Date | null
@@ -103061,6 +103063,7 @@ export namespace Prisma {
     contact_uuid: number
     label: number
     auto_create_contact: number
+    require_attendance_confirmation: number
     is_active: number
     created_by_user_uuid: number
     deactivated_at: number
@@ -103089,6 +103092,7 @@ export namespace Prisma {
     contact_uuid?: true
     label?: true
     auto_create_contact?: true
+    require_attendance_confirmation?: true
     is_active?: true
     created_by_user_uuid?: true
     deactivated_at?: true
@@ -103107,6 +103111,7 @@ export namespace Prisma {
     contact_uuid?: true
     label?: true
     auto_create_contact?: true
+    require_attendance_confirmation?: true
     is_active?: true
     created_by_user_uuid?: true
     deactivated_at?: true
@@ -103125,6 +103130,7 @@ export namespace Prisma {
     contact_uuid?: true
     label?: true
     auto_create_contact?: true
+    require_attendance_confirmation?: true
     is_active?: true
     created_by_user_uuid?: true
     deactivated_at?: true
@@ -103230,6 +103236,7 @@ export namespace Prisma {
     contact_uuid: string | null
     label: string | null
     auto_create_contact: boolean
+    require_attendance_confirmation: boolean
     is_active: boolean
     created_by_user_uuid: string | null
     deactivated_at: Date | null
@@ -103267,6 +103274,7 @@ export namespace Prisma {
     contact_uuid?: boolean
     label?: boolean
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: boolean
     deactivated_at?: boolean
@@ -103293,6 +103301,7 @@ export namespace Prisma {
     contact_uuid?: boolean
     label?: boolean
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: boolean
     deactivated_at?: boolean
@@ -103315,6 +103324,7 @@ export namespace Prisma {
     contact_uuid?: boolean
     label?: boolean
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: boolean
     deactivated_at?: boolean
@@ -103337,6 +103347,7 @@ export namespace Prisma {
     contact_uuid?: boolean
     label?: boolean
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: boolean
     deactivated_at?: boolean
@@ -103346,7 +103357,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type BookingLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "code" | "organisation_uuid" | "booking_page_uuid" | "contact_uuid" | "label" | "auto_create_contact" | "is_active" | "created_by_user_uuid" | "deactivated_at" | "last_used_at" | "last_visited_at" | "created_at" | "updated_at", ExtArgs["result"]["bookingLink"]>
+  export type BookingLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "code" | "organisation_uuid" | "booking_page_uuid" | "contact_uuid" | "label" | "auto_create_contact" | "require_attendance_confirmation" | "is_active" | "created_by_user_uuid" | "deactivated_at" | "last_used_at" | "last_visited_at" | "created_at" | "updated_at", ExtArgs["result"]["bookingLink"]>
   export type BookingLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     booking_page?: boolean | BookingPageDefaultArgs<ExtArgs>
@@ -103393,6 +103404,10 @@ export namespace Prisma {
        * Generic links only: create (or match) a Contact from the invitee's details.
        */
       auto_create_contact: boolean
+      /**
+       * Bookings made through this link get an attendance-confirmation link in their emails.
+       */
+      require_attendance_confirmation: boolean
       is_active: boolean
       created_by_user_uuid: string | null
       deactivated_at: Date | null
@@ -103838,6 +103853,7 @@ export namespace Prisma {
     readonly contact_uuid: FieldRef<"BookingLink", 'String'>
     readonly label: FieldRef<"BookingLink", 'String'>
     readonly auto_create_contact: FieldRef<"BookingLink", 'Boolean'>
+    readonly require_attendance_confirmation: FieldRef<"BookingLink", 'Boolean'>
     readonly is_active: FieldRef<"BookingLink", 'Boolean'>
     readonly created_by_user_uuid: FieldRef<"BookingLink", 'String'>
     readonly deactivated_at: FieldRef<"BookingLink", 'DateTime'>
@@ -105532,6 +105548,8 @@ export namespace Prisma {
     calendar_sync_error: string | null
     calendar_synced_at: Date | null
     manage_token: string | null
+    attendance_confirmation_required: boolean | null
+    attendance_confirmed_at: Date | null
     confirmed_at: Date | null
     cancelled_at: Date | null
     cancellation_reason: string | null
@@ -105576,6 +105594,8 @@ export namespace Prisma {
     calendar_sync_error: string | null
     calendar_synced_at: Date | null
     manage_token: string | null
+    attendance_confirmation_required: boolean | null
+    attendance_confirmed_at: Date | null
     confirmed_at: Date | null
     cancelled_at: Date | null
     cancellation_reason: string | null
@@ -105621,6 +105641,8 @@ export namespace Prisma {
     calendar_sync_error: number
     calendar_synced_at: number
     manage_token: number
+    attendance_confirmation_required: number
+    attendance_confirmed_at: number
     confirmed_at: number
     cancelled_at: number
     cancellation_reason: number
@@ -105679,6 +105701,8 @@ export namespace Prisma {
     calendar_sync_error?: true
     calendar_synced_at?: true
     manage_token?: true
+    attendance_confirmation_required?: true
+    attendance_confirmed_at?: true
     confirmed_at?: true
     cancelled_at?: true
     cancellation_reason?: true
@@ -105723,6 +105747,8 @@ export namespace Prisma {
     calendar_sync_error?: true
     calendar_synced_at?: true
     manage_token?: true
+    attendance_confirmation_required?: true
+    attendance_confirmed_at?: true
     confirmed_at?: true
     cancelled_at?: true
     cancellation_reason?: true
@@ -105768,6 +105794,8 @@ export namespace Prisma {
     calendar_sync_error?: true
     calendar_synced_at?: true
     manage_token?: true
+    attendance_confirmation_required?: true
+    attendance_confirmed_at?: true
     confirmed_at?: true
     cancelled_at?: true
     cancellation_reason?: true
@@ -105900,6 +105928,8 @@ export namespace Prisma {
     calendar_sync_error: string | null
     calendar_synced_at: Date | null
     manage_token: string
+    attendance_confirmation_required: boolean
+    attendance_confirmed_at: Date | null
     confirmed_at: Date | null
     cancelled_at: Date | null
     cancellation_reason: string | null
@@ -105964,6 +105994,8 @@ export namespace Prisma {
     calendar_sync_error?: boolean
     calendar_synced_at?: boolean
     manage_token?: boolean
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: boolean
     confirmed_at?: boolean
     cancelled_at?: boolean
     cancellation_reason?: boolean
@@ -106021,6 +106053,8 @@ export namespace Prisma {
     calendar_sync_error?: boolean
     calendar_synced_at?: boolean
     manage_token?: boolean
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: boolean
     confirmed_at?: boolean
     cancelled_at?: boolean
     cancellation_reason?: boolean
@@ -106075,6 +106109,8 @@ export namespace Prisma {
     calendar_sync_error?: boolean
     calendar_synced_at?: boolean
     manage_token?: boolean
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: boolean
     confirmed_at?: boolean
     cancelled_at?: boolean
     cancellation_reason?: boolean
@@ -106129,6 +106165,8 @@ export namespace Prisma {
     calendar_sync_error?: boolean
     calendar_synced_at?: boolean
     manage_token?: boolean
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: boolean
     confirmed_at?: boolean
     cancelled_at?: boolean
     cancellation_reason?: boolean
@@ -106139,7 +106177,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "booking_page_uuid" | "booking_link_uuid" | "contact_uuid" | "assigned_user_uuid" | "created_by_user_uuid" | "source" | "status" | "start_at" | "end_at" | "duration_minutes" | "invitee_timezone" | "invitee_language" | "invitee_name" | "invitee_email" | "invitee_phone" | "invitee_company" | "invitee_notes" | "answers" | "internal_notes" | "location_type" | "location_value" | "meeting_url" | "reminder_uuid" | "source_reminder_uuid" | "calendar_connection_uuid" | "calendar_event_id" | "calendar_html_link" | "calendar_sync_status" | "calendar_sync_error" | "calendar_synced_at" | "manage_token" | "confirmed_at" | "cancelled_at" | "cancellation_reason" | "cancelled_by" | "reschedule_count" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "booking_page_uuid" | "booking_link_uuid" | "contact_uuid" | "assigned_user_uuid" | "created_by_user_uuid" | "source" | "status" | "start_at" | "end_at" | "duration_minutes" | "invitee_timezone" | "invitee_language" | "invitee_name" | "invitee_email" | "invitee_phone" | "invitee_company" | "invitee_notes" | "answers" | "internal_notes" | "location_type" | "location_value" | "meeting_url" | "reminder_uuid" | "source_reminder_uuid" | "calendar_connection_uuid" | "calendar_event_id" | "calendar_html_link" | "calendar_sync_status" | "calendar_sync_error" | "calendar_synced_at" | "manage_token" | "attendance_confirmation_required" | "attendance_confirmed_at" | "confirmed_at" | "cancelled_at" | "cancellation_reason" | "cancelled_by" | "reschedule_count" | "completed_at" | "created_at" | "updated_at", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
     booking_page?: boolean | Booking$booking_pageArgs<ExtArgs>
@@ -106239,6 +106277,14 @@ export namespace Prisma {
        * Secret for the invitee's cancel/reschedule links.
        */
       manage_token: string
+      /**
+       * Copied from the booking link at creation: the invitee is asked to confirm they will attend.
+       */
+      attendance_confirmation_required: boolean
+      /**
+       * Set when the invitee pressed the confirmation link in their email.
+       */
+      attendance_confirmed_at: Date | null
       confirmed_at: Date | null
       cancelled_at: Date | null
       cancellation_reason: string | null
@@ -106715,6 +106761,8 @@ export namespace Prisma {
     readonly calendar_sync_error: FieldRef<"Booking", 'String'>
     readonly calendar_synced_at: FieldRef<"Booking", 'DateTime'>
     readonly manage_token: FieldRef<"Booking", 'String'>
+    readonly attendance_confirmation_required: FieldRef<"Booking", 'Boolean'>
+    readonly attendance_confirmed_at: FieldRef<"Booking", 'DateTime'>
     readonly confirmed_at: FieldRef<"Booking", 'DateTime'>
     readonly cancelled_at: FieldRef<"Booking", 'DateTime'>
     readonly cancellation_reason: FieldRef<"Booking", 'String'>
@@ -118296,6 +118344,7 @@ export namespace Prisma {
     contact_uuid: 'contact_uuid',
     label: 'label',
     auto_create_contact: 'auto_create_contact',
+    require_attendance_confirmation: 'require_attendance_confirmation',
     is_active: 'is_active',
     created_by_user_uuid: 'created_by_user_uuid',
     deactivated_at: 'deactivated_at',
@@ -118355,6 +118404,8 @@ export namespace Prisma {
     calendar_sync_error: 'calendar_sync_error',
     calendar_synced_at: 'calendar_synced_at',
     manage_token: 'manage_token',
+    attendance_confirmation_required: 'attendance_confirmation_required',
+    attendance_confirmed_at: 'attendance_confirmed_at',
     confirmed_at: 'confirmed_at',
     cancelled_at: 'cancelled_at',
     cancellation_reason: 'cancellation_reason',
@@ -127256,6 +127307,7 @@ export namespace Prisma {
     contact_uuid?: StringNullableFilter<"BookingLink"> | string | null
     label?: StringNullableFilter<"BookingLink"> | string | null
     auto_create_contact?: BoolFilter<"BookingLink"> | boolean
+    require_attendance_confirmation?: BoolFilter<"BookingLink"> | boolean
     is_active?: BoolFilter<"BookingLink"> | boolean
     created_by_user_uuid?: StringNullableFilter<"BookingLink"> | string | null
     deactivated_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
@@ -127281,6 +127333,7 @@ export namespace Prisma {
     contact_uuid?: SortOrderInput | SortOrder
     label?: SortOrderInput | SortOrder
     auto_create_contact?: SortOrder
+    require_attendance_confirmation?: SortOrder
     is_active?: SortOrder
     created_by_user_uuid?: SortOrderInput | SortOrder
     deactivated_at?: SortOrderInput | SortOrder
@@ -127309,6 +127362,7 @@ export namespace Prisma {
     contact_uuid?: StringNullableFilter<"BookingLink"> | string | null
     label?: StringNullableFilter<"BookingLink"> | string | null
     auto_create_contact?: BoolFilter<"BookingLink"> | boolean
+    require_attendance_confirmation?: BoolFilter<"BookingLink"> | boolean
     is_active?: BoolFilter<"BookingLink"> | boolean
     created_by_user_uuid?: StringNullableFilter<"BookingLink"> | string | null
     deactivated_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
@@ -127334,6 +127388,7 @@ export namespace Prisma {
     contact_uuid?: SortOrderInput | SortOrder
     label?: SortOrderInput | SortOrder
     auto_create_contact?: SortOrder
+    require_attendance_confirmation?: SortOrder
     is_active?: SortOrder
     created_by_user_uuid?: SortOrderInput | SortOrder
     deactivated_at?: SortOrderInput | SortOrder
@@ -127360,6 +127415,7 @@ export namespace Prisma {
     contact_uuid?: StringNullableWithAggregatesFilter<"BookingLink"> | string | null
     label?: StringNullableWithAggregatesFilter<"BookingLink"> | string | null
     auto_create_contact?: BoolWithAggregatesFilter<"BookingLink"> | boolean
+    require_attendance_confirmation?: BoolWithAggregatesFilter<"BookingLink"> | boolean
     is_active?: BoolWithAggregatesFilter<"BookingLink"> | boolean
     created_by_user_uuid?: StringNullableWithAggregatesFilter<"BookingLink"> | string | null
     deactivated_at?: DateTimeNullableWithAggregatesFilter<"BookingLink"> | Date | string | null
@@ -127469,6 +127525,8 @@ export namespace Prisma {
     calendar_sync_error?: StringNullableFilter<"Booking"> | string | null
     calendar_synced_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     manage_token?: StringFilter<"Booking"> | string
+    attendance_confirmation_required?: BoolFilter<"Booking"> | boolean
+    attendance_confirmed_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     confirmed_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     cancellation_reason?: StringNullableFilter<"Booking"> | string | null
@@ -127525,6 +127583,8 @@ export namespace Prisma {
     calendar_sync_error?: SortOrderInput | SortOrder
     calendar_synced_at?: SortOrderInput | SortOrder
     manage_token?: SortOrder
+    attendance_confirmation_required?: SortOrder
+    attendance_confirmed_at?: SortOrderInput | SortOrder
     confirmed_at?: SortOrderInput | SortOrder
     cancelled_at?: SortOrderInput | SortOrder
     cancellation_reason?: SortOrderInput | SortOrder
@@ -127584,6 +127644,8 @@ export namespace Prisma {
     calendar_sync_status?: EnumCalendarSyncStatusFilter<"Booking"> | $Enums.CalendarSyncStatus
     calendar_sync_error?: StringNullableFilter<"Booking"> | string | null
     calendar_synced_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
+    attendance_confirmation_required?: BoolFilter<"Booking"> | boolean
+    attendance_confirmed_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     confirmed_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     cancellation_reason?: StringNullableFilter<"Booking"> | string | null
@@ -127640,6 +127702,8 @@ export namespace Prisma {
     calendar_sync_error?: SortOrderInput | SortOrder
     calendar_synced_at?: SortOrderInput | SortOrder
     manage_token?: SortOrder
+    attendance_confirmation_required?: SortOrder
+    attendance_confirmed_at?: SortOrderInput | SortOrder
     confirmed_at?: SortOrderInput | SortOrder
     cancelled_at?: SortOrderInput | SortOrder
     cancellation_reason?: SortOrderInput | SortOrder
@@ -127693,6 +127757,8 @@ export namespace Prisma {
     calendar_sync_error?: StringNullableWithAggregatesFilter<"Booking"> | string | null
     calendar_synced_at?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
     manage_token?: StringWithAggregatesFilter<"Booking"> | string
+    attendance_confirmation_required?: BoolWithAggregatesFilter<"Booking"> | boolean
+    attendance_confirmed_at?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
     confirmed_at?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
     cancelled_at?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
     cancellation_reason?: StringNullableWithAggregatesFilter<"Booking"> | string | null
@@ -136726,6 +136792,7 @@ export namespace Prisma {
     code: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -136750,6 +136817,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -136767,6 +136835,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -136791,6 +136860,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -136812,6 +136882,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -136826,6 +136897,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -136843,6 +136915,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -136936,6 +137009,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -136992,6 +137067,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -137029,6 +137106,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -137085,6 +137164,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -137132,6 +137213,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -137167,6 +137250,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -137212,6 +137297,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144573,6 +144660,7 @@ export namespace Prisma {
     contact_uuid?: SortOrder
     label?: SortOrder
     auto_create_contact?: SortOrder
+    require_attendance_confirmation?: SortOrder
     is_active?: SortOrder
     created_by_user_uuid?: SortOrder
     deactivated_at?: SortOrder
@@ -144595,6 +144683,7 @@ export namespace Prisma {
     contact_uuid?: SortOrder
     label?: SortOrder
     auto_create_contact?: SortOrder
+    require_attendance_confirmation?: SortOrder
     is_active?: SortOrder
     created_by_user_uuid?: SortOrder
     deactivated_at?: SortOrder
@@ -144613,6 +144702,7 @@ export namespace Prisma {
     contact_uuid?: SortOrder
     label?: SortOrder
     auto_create_contact?: SortOrder
+    require_attendance_confirmation?: SortOrder
     is_active?: SortOrder
     created_by_user_uuid?: SortOrder
     deactivated_at?: SortOrder
@@ -144754,6 +144844,8 @@ export namespace Prisma {
     calendar_sync_error?: SortOrder
     calendar_synced_at?: SortOrder
     manage_token?: SortOrder
+    attendance_confirmation_required?: SortOrder
+    attendance_confirmed_at?: SortOrder
     confirmed_at?: SortOrder
     cancelled_at?: SortOrder
     cancellation_reason?: SortOrder
@@ -144804,6 +144896,8 @@ export namespace Prisma {
     calendar_sync_error?: SortOrder
     calendar_synced_at?: SortOrder
     manage_token?: SortOrder
+    attendance_confirmation_required?: SortOrder
+    attendance_confirmed_at?: SortOrder
     confirmed_at?: SortOrder
     cancelled_at?: SortOrder
     cancellation_reason?: SortOrder
@@ -144848,6 +144942,8 @@ export namespace Prisma {
     calendar_sync_error?: SortOrder
     calendar_synced_at?: SortOrder
     manage_token?: SortOrder
+    attendance_confirmation_required?: SortOrder
+    attendance_confirmed_at?: SortOrder
     confirmed_at?: SortOrder
     cancelled_at?: SortOrder
     cancellation_reason?: SortOrder
@@ -157552,6 +157648,7 @@ export namespace Prisma {
     code: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -157575,6 +157672,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -157621,6 +157719,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -157675,6 +157775,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -157722,6 +157824,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -157776,6 +157880,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -158787,6 +158893,7 @@ export namespace Prisma {
     contact_uuid?: StringNullableFilter<"BookingLink"> | string | null
     label?: StringNullableFilter<"BookingLink"> | string | null
     auto_create_contact?: BoolFilter<"BookingLink"> | boolean
+    require_attendance_confirmation?: BoolFilter<"BookingLink"> | boolean
     is_active?: BoolFilter<"BookingLink"> | boolean
     created_by_user_uuid?: StringNullableFilter<"BookingLink"> | string | null
     deactivated_at?: DateTimeNullableFilter<"BookingLink"> | Date | string | null
@@ -158850,6 +158957,8 @@ export namespace Prisma {
     calendar_sync_error?: StringNullableFilter<"Booking"> | string | null
     calendar_synced_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     manage_token?: StringFilter<"Booking"> | string
+    attendance_confirmation_required?: BoolFilter<"Booking"> | boolean
+    attendance_confirmed_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     confirmed_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     cancelled_at?: DateTimeNullableFilter<"Booking"> | Date | string | null
     cancellation_reason?: StringNullableFilter<"Booking"> | string | null
@@ -160990,6 +161099,7 @@ export namespace Prisma {
     code: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -161012,6 +161122,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -161059,6 +161170,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -161113,6 +161226,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -166966,6 +167081,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -167020,6 +167137,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -167047,6 +167166,7 @@ export namespace Prisma {
     code: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -167069,6 +167189,7 @@ export namespace Prisma {
     booking_page_uuid: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -180684,6 +180805,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -180738,6 +180861,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -180780,6 +180905,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -180834,6 +180961,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -181249,6 +181378,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181303,6 +181434,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181351,6 +181484,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -181405,6 +181540,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -190262,6 +190399,7 @@ export namespace Prisma {
     code: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -190284,6 +190422,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -190331,6 +190470,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -190385,6 +190526,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -191831,6 +191974,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -191885,6 +192030,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -192526,6 +192673,7 @@ export namespace Prisma {
     code: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -192549,6 +192697,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -192581,6 +192730,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -192604,6 +192754,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -192882,6 +193033,7 @@ export namespace Prisma {
     code: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -192905,6 +193057,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -193703,6 +193856,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -193726,6 +193880,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -194392,6 +194547,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -194447,6 +194604,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -194709,6 +194868,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -194764,6 +194925,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -195722,6 +195885,7 @@ export namespace Prisma {
     code: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -195745,6 +195909,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -196161,6 +196326,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -196184,6 +196350,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -196336,6 +196503,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -196391,6 +196560,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -196443,6 +196614,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -196498,6 +196671,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197126,6 +197301,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -197180,6 +197357,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -198201,6 +198380,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     deactivated_at?: Date | string | null
     last_used_at?: Date | string | null
@@ -198243,6 +198423,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -198287,6 +198469,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -199413,6 +199597,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199436,6 +199621,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199456,6 +199642,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199489,6 +199676,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199543,6 +199732,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199589,6 +199780,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199624,6 +199817,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199678,6 +199873,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199724,6 +199921,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -200734,6 +200933,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -200777,6 +200977,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -203078,6 +203280,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -203100,6 +203303,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -203120,6 +203324,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -203154,6 +203359,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -203208,6 +203415,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -203254,6 +203463,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -204387,6 +204598,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -204405,6 +204618,7 @@ export namespace Prisma {
     booking_page_uuid: string
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -205037,6 +205251,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -205091,6 +205307,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -205137,6 +205355,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -205152,6 +205372,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -205174,6 +205395,7 @@ export namespace Prisma {
     booking_page_uuid?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -205194,6 +205416,7 @@ export namespace Prisma {
     booking_page_uuid?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -208442,6 +208665,7 @@ export namespace Prisma {
     contact_uuid?: string | null
     label?: string | null
     auto_create_contact?: boolean
+    require_attendance_confirmation?: boolean
     is_active?: boolean
     created_by_user_uuid?: string | null
     deactivated_at?: Date | string | null
@@ -208485,6 +208709,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -208601,6 +208827,7 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     last_used_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -208623,6 +208850,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -208643,6 +208871,7 @@ export namespace Prisma {
     contact_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     label?: NullableStringFieldUpdateOperationsInput | string | null
     auto_create_contact?: BoolFieldUpdateOperationsInput | boolean
+    require_attendance_confirmation?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_by_user_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     deactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -208677,6 +208906,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -208731,6 +208962,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -208777,6 +209010,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -209000,6 +209235,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -209063,6 +209300,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -209117,6 +209356,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -209163,6 +209404,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -209383,6 +209626,8 @@ export namespace Prisma {
     calendar_sync_error?: string | null
     calendar_synced_at?: Date | string | null
     manage_token: string
+    attendance_confirmation_required?: boolean
+    attendance_confirmed_at?: Date | string | null
     confirmed_at?: Date | string | null
     cancelled_at?: Date | string | null
     cancellation_reason?: string | null
@@ -209418,6 +209663,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -209472,6 +209719,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -209518,6 +209767,8 @@ export namespace Prisma {
     calendar_sync_error?: NullableStringFieldUpdateOperationsInput | string | null
     calendar_synced_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     manage_token?: StringFieldUpdateOperationsInput | string
+    attendance_confirmation_required?: BoolFieldUpdateOperationsInput | boolean
+    attendance_confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancelled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancellation_reason?: NullableStringFieldUpdateOperationsInput | string | null

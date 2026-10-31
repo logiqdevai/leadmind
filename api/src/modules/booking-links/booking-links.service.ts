@@ -50,6 +50,7 @@ export class BookingLinksService {
             label: dto.label ?? null,
             // Contact links already know who the invitee is.
             auto_create_contact: dto.contact_uuid ? false : !!dto.auto_create_contact,
+            require_attendance_confirmation: !!dto.require_attendance_confirmation,
             created_by_user_uuid: user_uuid,
         });
         return this.withUrl(link);
@@ -82,6 +83,9 @@ export class BookingLinksService {
             data: {
                 ...(dto.label !== undefined && { label: dto.label }),
                 ...(dto.auto_create_contact !== undefined && !link.contact_uuid && { auto_create_contact: dto.auto_create_contact }),
+                ...(dto.require_attendance_confirmation !== undefined && {
+                    require_attendance_confirmation: dto.require_attendance_confirmation,
+                }),
                 ...(dto.is_active !== undefined && {
                     is_active: dto.is_active,
                     deactivated_at: dto.is_active ? null : new Date(),
@@ -104,6 +108,7 @@ export class BookingLinksService {
             contact_uuid: link.contact_uuid,
             label: link.label,
             auto_create_contact: link.auto_create_contact,
+            require_attendance_confirmation: link.require_attendance_confirmation,
             created_by_user_uuid: user_uuid,
         });
         return this.withUrl(fresh);

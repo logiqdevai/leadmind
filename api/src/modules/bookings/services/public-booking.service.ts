@@ -129,7 +129,7 @@ export class PublicBookingService {
             candidates = await this.slotService.rankCandidates(page, eligible, start);
         }
 
-        const booking = await this.bookingsService.placeBooking({
+        const placed = await this.bookingsService.placeBooking({
             organisation_uuid,
             page,
             start,
@@ -154,6 +154,10 @@ export class PublicBookingService {
             answers,
             actor: INVITEE_ACTOR,
         });
+        // Snapshot of the link's setting, so later changes to the link don't alter bookings already made.
+        const booking = link?.require_attendance_confirmation
+            ? await this.prisma.booking.update({ where: { uuid: placed.uuid }, data: { attendance_confirmation_required: true } })
+            : placed;
 
         // Contact creation happens only once the slot is secured, so failed attempts leave no contacts behind.
         const withContact = await this.attachContact(link, organisation_uuid, booking, dto);
@@ -173,6 +177,17 @@ export class PublicBookingService {
     async getManage(token: string) {
         const booking = await this.findByToken(token);
         return { booking: this.publicSummary(booking), policy: this.policy(booking) };
+    }
+
+    /** Records the invitee's "I will attend" click; repeat clicks and bookings that ask for no confirmation change nothing. */
+    async confirmAttendance(token: string) {
+        const booking = await this.findByToken(token);
+        const open = booking.status !== BookingStatus.CANCELLED && booking.start_at > new Date();
+        if (booking.attendance_confirmation_required && !booking.attendance_confirmed_at && open) {
+            await this.prisma.booking.update({ where: { uuid: booking.uuid }, data: { attendance_confirmed_at: new Date() } });
+            await this.events.record(booking, BookingEventType.UPDATED, INVITEE_ACTOR, 'Invitee confirmed attendance');
+        }
+        return this.getManage(token);
     }
 
     async getManageSlots(token: string, query: BookingSlotsQueryDto) {
@@ -313,6 +328,8 @@ export class PublicBookingService {
         const revealLocation = booking.status !== BookingStatus.CANCELLED;
         return {
             status: booking.status,
+            attendance_confirmation_required: booking.attendance_confirmation_required,
+            attendance_confirmed_at: booking.attendance_confirmed_at,
             title: page?.title || page?.name || 'Meeting',
             brand_name: page?.brand_name?.trim() || null,
             start_at: booking.start_at,

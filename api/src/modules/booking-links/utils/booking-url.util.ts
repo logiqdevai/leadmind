@@ -26,5 +26,7 @@ export const BookingPublicUrls = {
         `${trimSlash(appUrl)}/book/${organisationSlug}/${pageSlug}`,
     manage: (appUrl: string, token: string) => `${trimSlash(appUrl)}/book/manage/${token}`,
     cancel: (appUrl: string, token: string) => `${trimSlash(appUrl)}/book/manage/${token}?action=cancel`,
+    /** Opens the manage page, which records the invitee's attendance confirmation. */
+    confirm: (appUrl: string, token: string) => `${trimSlash(appUrl)}/book/manage/${token}?action=confirm`,
     reschedule: (appUrl: string, token: string) => `${trimSlash(appUrl)}/book/manage/${token}?action=reschedule`,
 };

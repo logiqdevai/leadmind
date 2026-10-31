@@ -1,4 +1,4 @@
-import { useState, type FC } from "react";
+import { useEffect, useRef, useState, type FC } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Alert, Button, Chip } from "@heroui/react";
 import { CalendarClock, XCircle } from "lucide-react";
@@ -7,7 +7,7 @@ import {
     BookingStatuses,
     type PublicManagedBooking,
 } from "@/features/bookings/interfaces/bookings.interfaces";
-import { useManagedBooking } from "@/features/bookings/hooks/use-public-booking";
+import { useConfirmManagedAttendance, useManagedBooking } from "@/features/bookings/hooks/use-public-booking";
 import {
     BOOKING_STATUS_CHIP_COLORS,
 } from "@/features/bookings/constants/booking-labels";
@@ -36,9 +36,11 @@ interface ManageBookingViewProps {
     token: string;
     data: PublicManagedBooking;
     initialMode: ManageMode | null;
+    /** Progress of the attendance confirmation opened from the email's button. */
+    confirmation: { isPending: boolean; isError: boolean };
 }
 
-const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMode }) => {
+const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMode, confirmation }) => {
     const { t } = useTranslation();
     const { booking, policy } = data;
     const [mode, setMode] = useState<ManageMode | null>(initialMode);
@@ -81,6 +83,29 @@ const ManageBookingView: FC<ManageBookingViewProps> = ({ token, data, initialMod
                             <p className="text-sm text-muted">{t("booking.manage.bookedFor", { name: booking.invitee_name })}</p>
                         </div>
                     </header>
+
+                    {booking.attendance_confirmed_at && !isCancelled ? (
+                        <Alert status="success">
+                            <Alert.Indicator />
+                            <Alert.Content>
+                                <Alert.Title>{t("booking.manage.attendanceConfirmed")}</Alert.Title>
+                            </Alert.Content>
+                        </Alert>
+                    ) : confirmation.isPending ? (
+                        <Alert status="default">
+                            <Alert.Indicator />
+                            <Alert.Content>
+                                <Alert.Title>{t("booking.manage.confirming")}</Alert.Title>
+                            </Alert.Content>
+                        </Alert>
+                    ) : confirmation.isError ? (
+                        <Alert status="danger">
+                            <Alert.Indicator />
+                            <Alert.Content>
+                                <Alert.Title>{t("booking.manage.confirmFailed")}</Alert.Title>
+                            </Alert.Content>
+                        </Alert>
+                    ) : null}
 
                     {success ? (
                         <Alert status="success">
@@ -193,6 +218,19 @@ const ManageBookingPage: FC = () => {
     const [searchParams] = useSearchParams();
     const initialMode = parseMode(searchParams.get(Routes.booking.manage_action_query));
     const { data, isLoading, isError, error, refetch } = useManagedBooking(token);
+    const confirmAttendance = useConfirmManagedAttendance(token);
+    const confirmRequested = useRef(false);
+    const wantsConfirmation = searchParams.get(Routes.booking.manage_action_query) === "confirm";
+
+    // The email button lands here; record the confirmation once the booking has loaded. Repeat visits are harmless
+    // because the API ignores a booking that is already confirmed (or doesn't ask for confirmation).
+    useEffect(() => {
+        if (!wantsConfirmation || !data || confirmRequested.current) return;
+        confirmRequested.current = true;
+        const { attendance_confirmation_required, attendance_confirmed_at } = data.booking;
+        if (attendance_confirmation_required && !attendance_confirmed_at) confirmAttendance.mutate();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [wantsConfirmation, data]);
 
     if (isLoading) return <BookingPageSkeleton />;
 
@@ -219,7 +257,14 @@ const ManageBookingPage: FC = () => {
         );
     }
 
-    return <ManageBookingView token={token} data={data} initialMode={initialMode} />;
+    return (
+        <ManageBookingView
+            token={token}
+            data={data}
+            initialMode={initialMode}
+            confirmation={{ isPending: confirmAttendance.isPending, isError: confirmAttendance.isError }}
+        />
+    );
 };
 
 export default ManageBookingPage;

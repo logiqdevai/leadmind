@@ -22,7 +22,7 @@ const signOff = '{{signature}}';
 export const DEFAULT_INVITEE_TEMPLATES: Record<BookingNotificationKind, BookingEmailTemplate> = {
     CONFIRMATION: {
         subject: "You're all set: {{booking.title}} on {{booking.date}}",
-        html: `<p>Hi {{contact.first_name}},</p><p>Thanks for booking a call with us - we're really looking forward to speaking with you! Here are the details:</p>${details}<p>Your meeting link is just below, and you can add the call to your calendar with one click.</p>${manageLinks}<p>See you soon!</p>${signOff}`,
+        html: `<p>Hi {{contact.first_name}},</p><p>Thanks for booking a call with us - we're really looking forward to speaking with you! Here are the details:</p>${details}<p>Your meeting link is just below, and you can add the call to your calendar with one click.</p>{{booking.confirm_link}}${manageLinks}<p>See you soon!</p>${signOff}`,
     },
     REMINDER: {
         subject: 'See you soon: {{booking.title}} on {{booking.date}} at {{booking.start_time}}',

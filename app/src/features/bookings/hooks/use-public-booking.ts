@@ -2,6 +2,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tansta
 import { toast } from "@/hooks/use-toast";
 import {
     cancelManagedBooking,
+    confirmManagedBookingAttendance,
     createPublicBooking,
     getManagedBooking,
     getManagedBookingSlots,
@@ -78,6 +79,14 @@ export function useManagedBookingSlots(token: string | undefined, query: PublicS
         placeholderData: keepPreviousData,
         staleTime: 15_000,
         retry: false,
+    });
+}
+
+export function useConfirmManagedAttendance(token: string) {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: () => confirmManagedBookingAttendance(token),
+        onSuccess: () => qc.invalidateQueries({ queryKey: publicBookingQueryKeys.all }),
     });
 }
 
