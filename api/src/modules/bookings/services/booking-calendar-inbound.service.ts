@@ -4,7 +4,16 @@ import { RemindersService } from '@/modules/reminders/reminders.service';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { Booking, BookingEventType, BookingLocationType, CalendarConnection, CalendarConnectionStatus, CalendarSyncStatus } from '@/generated/prisma';
+import {
+    Booking,
+    BookingEventType,
+    BookingLocationType,
+    BookingSource,
+    BookingStatus,
+    CalendarConnection,
+    CalendarConnectionStatus,
+    CalendarSyncStatus,
+} from '@/generated/prisma';
 import { PrismaService } from '@/core/databases/prisma/prisma.service';
 import { BOOKING_CALENDAR_SYNC_QUEUE } from '@/core/queues/queues.constants';
 import { GoogleCalendarService } from '@/integrations/composio/services/google-calendar.service';
@@ -23,6 +32,10 @@ import {
 import { CalendarPullJobData } from '../interfaces/booking.interface';
 
 const PULL_JOB_ID = 'booking-calendar-pull';
+/** Furthest-out Google event we import; recurring events expand into many instances. */
+const IMPORT_HORIZON_MS = 365 * 24 * 60 * 60 * 1000;
+/** Event ids this app generates itself: bookings (lm + uuid) and reminders (lr + uuid). */
+const OWN_EVENT_ID = /^l[mr][0-9a-f]{32}$/;
 
 /**
  * Google -> app half of the calendar sync.
@@ -105,12 +118,29 @@ export class BookingCalendarInboundService {
         }
     }
 
-    private async pull(connection: CalendarConnection) {
-        if (connection.status !== CalendarConnectionStatus.ACTIVE || !connection.composio_connected_account_id) return;
+    /**
+     * Manual "sync now": ignores the saved sync cursor and re-reads every upcoming event of the calendar, importing
+     * the ones we don't have yet. Errors surface to the caller instead of only being logged.
+     */
+    async resync(connection: CalendarConnection): Promise<{ imported: number }> {
+        try {
+            return await this.pull(connection, true);
+        } catch (error) {
+            await this.calendarConnections.handleProviderError(connection.uuid, error);
+            throw error;
+        }
+    }
+
+    private async pull(connection: CalendarConnection, full = false): Promise<{ imported: number }> {
+        let imported = 0;
+        if (connection.status !== CalendarConnectionStatus.ACTIVE || !connection.composio_connected_account_id) return { imported };
         const account = connection.composio_connected_account_id;
         const since = new Date(Date.now() - CALENDAR_INITIAL_LOOKBACK_MS);
 
-        let result = await this.googleCalendar.listChangedEvents(account, connection.calendar_id, { sync_token: connection.sync_token, since });
+        let result = await this.googleCalendar.listChangedEvents(account, connection.calendar_id, {
+            sync_token: full ? null : connection.sync_token,
+            since: full ? new Date() : since,
+        });
         if (result.token_expired) {
             result = await this.googleCalendar.listChangedEvents(account, connection.calendar_id, { since });
         }
@@ -145,10 +175,26 @@ export class BookingCalendarInboundService {
                 this.logger.warn(`Could not remove reminder ${reminder.uuid} after its Google event was deleted: ${(error as Error).message}`);
             }
         }
+        const reminderEventIds = new Set(
+            (
+                await this.prisma.reminder.findMany({
+                    where: { calendar_connection_uuid: connection.uuid, calendar_event_id: { in: result.events.map((e) => e.id) } },
+                    select: { calendar_event_id: true },
+                })
+            ).map((r) => r.calendar_event_id!),
+        );
         for (const event of result.events) {
             const booking = byEventId.get(event.id);
-            if (!booking || this.isEcho(booking, event)) continue;
             try {
+                if (!booking) {
+                    if (!reminderEventIds.has(event.id) && !OWN_EVENT_ID.test(event.id) && (await this.importForeignEvent(connection, event))) imported += 1;
+                    continue;
+                }
+                if (booking.source === BookingSource.GOOGLE) {
+                    await this.refreshImported(booking, event);
+                    continue;
+                }
+                if (this.isEcho(booking, event)) continue;
                 await this.apply(booking.uuid, event);
             } catch (error) {
                 allApplied = false;
@@ -160,6 +206,74 @@ export class BookingCalendarInboundService {
         if (allApplied && result.next_sync_token && result.next_sync_token !== connection.sync_token) {
             await this.prisma.calendarConnection.update({ where: { uuid: connection.uuid }, data: { sync_token: result.next_sync_token } });
         }
+        return { imported };
+    }
+
+    /**
+     * An event created directly in Google: keep a booking (source GOOGLE, no invitee) for it so it appears on our
+     * calendar and blocks the time here. Only busy, timed, upcoming events count; free and all-day ones don't block.
+     */
+    private async importForeignEvent(connection: CalendarConnection, event: GoogleChangedEvent): Promise<boolean> {
+        if (event.cancelled || event.transparent || !event.start || !event.end) return false;
+        const duration = Math.round((event.end.getTime() - event.start.getTime()) / 60_000);
+        const now = Date.now();
+        if (duration <= 0 || event.end.getTime() <= now || event.start.getTime() > now + IMPORT_HORIZON_MS) return false;
+
+        const existing = await this.prisma.booking.findFirst({
+            where: { calendar_connection_uuid: connection.uuid, calendar_event_id: event.id },
+            select: { uuid: true },
+        });
+        if (existing) return false;
+
+        await this.prisma.booking.create({
+            data: {
+                organisation_uuid: connection.organisation_uuid,
+                source: BookingSource.GOOGLE,
+                status: BookingStatus.CONFIRMED,
+                confirmed_at: new Date(),
+                start_at: event.start,
+                end_at: event.end,
+                duration_minutes: duration,
+                invitee_name: event.summary?.trim() || 'Busy (Google Calendar)',
+                invitee_email: '',
+                location_value: event.location?.trim() || null,
+                assigned_user_uuid: connection.user_uuid,
+                created_by_user_uuid: connection.user_uuid,
+                calendar_connection_uuid: connection.uuid,
+                calendar_event_id: event.id,
+                calendar_html_link: event.html_link,
+                calendar_sync_status: CalendarSyncStatus.SYNCED,
+                calendar_synced_at: new Date(),
+                manage_token: randomBytes(24).toString('hex'),
+            },
+        });
+        return true;
+    }
+
+    /** Mirrors later Google edits of an imported event onto its booking (no emails: it has no invitee). */
+    private async refreshImported(booking: Booking, event: GoogleChangedEvent) {
+        // Deleted, or turned into a free / all-day event: it no longer blocks anything.
+        if (event.cancelled || event.transparent || !event.start || !event.end) {
+            await this.prisma.booking.update({
+                where: { uuid: booking.uuid },
+                data: { status: BookingStatus.CANCELLED, cancelled_at: new Date(), cancellation_reason: 'Event was removed from Google Calendar' },
+            });
+            return;
+        }
+        const duration = Math.round((event.end.getTime() - event.start.getTime()) / 60_000);
+        if (duration <= 0) return;
+        await this.prisma.booking.update({
+            where: { uuid: booking.uuid },
+            data: {
+                start_at: event.start,
+                end_at: event.end,
+                duration_minutes: duration,
+                invitee_name: event.summary?.trim() || booking.invitee_name,
+                location_value: event.location?.trim() || null,
+                calendar_html_link: event.html_link ?? booking.calendar_html_link,
+                calendar_synced_at: new Date(),
+            },
+        });
     }
 
     /** Our own write (or one still in flight) shows up in Google as a change too; those must not be applied back. */

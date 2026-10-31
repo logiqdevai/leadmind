@@ -487,6 +487,7 @@ export const ApiRoutes = {
         connect: "/calendar-connections/connect",
         verify: (uuid: string) => `/calendar-connections/${uuid}/verify`,
         calendars: (uuid: string) => `/calendar-connections/${uuid}/calendars`,
+        resync: (uuid: string) => `/calendar-connections/${uuid}/resync`,
         update: (uuid: string) => `/calendar-connections/${uuid}`,
         disconnect: (uuid: string) => `/calendar-connections/${uuid}`,
     },

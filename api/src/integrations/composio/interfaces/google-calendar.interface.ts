@@ -31,6 +31,10 @@ export interface GoogleCalendarEventResult {
 export interface GoogleChangedEvent {
     id: string;
     cancelled: boolean;
+    summary: string | null;
+    html_link: string | null;
+    /** Marked free in Google: it doesn't block time. */
+    transparent: boolean;
     updated: Date | null;
     start: Date | null;
     end: Date | null;

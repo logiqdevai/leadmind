@@ -53,14 +53,23 @@ export class ReminderCalendarService {
             where: { uuid: reminder.uuid },
             select: {
                 organisation_uuid: true,
-                contact: { select: { uuid: true, email: true } },
+                contact: { select: { uuid: true, email: true, phone: true, notes: true } },
                 organisation: { select: { timezone: true } },
             },
         });
         const eventId = reminder.calendar_event_id ?? googleEventIdFor(reminder.uuid);
         const who = reminder.contact.name ?? reminder.contact.company;
         const summary = `Reminder: ${reminder.title?.trim() || (who ? `Follow up with ${who}` : 'Follow up')}`;
-        const description = [who ? `Contact: ${who}` : null, reminder.notes].filter(Boolean).join('\n\n');
+        const contactLines = [who ? `Contact: ${who}` : null, org?.contact.phone ? `Phone: ${org.contact.phone}` : null]
+            .filter(Boolean)
+            .join('\n');
+        const description = [
+            contactLines,
+            reminder.notes,
+            org?.contact.notes ? `Contact notes: ${org.contact.notes}` : null,
+        ]
+            .filter(Boolean)
+            .join('\n\n');
 
         try {
             const result = await this.googleCalendar.upsertEvent(

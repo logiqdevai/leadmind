@@ -174,6 +174,15 @@ export const updateCalendarConnection = async (uuid: string, payload: UpdateCale
     }
 };
 
+export const resyncCalendar = async (uuid: string): Promise<{ imported: number }> => {
+    try {
+        const response = await axiosInstance.post(ApiRoutes.calendar_connections.resync(uuid));
+        return response.data;
+    } catch (error) {
+        throw new Error(bookingApiErrorMessage(error, "Failed to sync Google Calendar."), { cause: error });
+    }
+};
+
 export const disconnectCalendar = async (uuid: string): Promise<CalendarConnection> => {
     try {
         const response = await axiosInstance.delete(ApiRoutes.calendar_connections.disconnect(uuid));

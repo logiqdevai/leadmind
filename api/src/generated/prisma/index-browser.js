@@ -1966,7 +1966,8 @@ exports.BookingLocationType = exports.$Enums.BookingLocationType = {
 exports.BookingSource = exports.$Enums.BookingSource = {
   PUBLIC: 'PUBLIC',
   MANUAL: 'MANUAL',
-  REMINDER: 'REMINDER'
+  REMINDER: 'REMINDER',
+  GOOGLE: 'GOOGLE'
 };
 
 exports.BookingStatus = exports.$Enums.BookingStatus = {

@@ -48,6 +48,8 @@ interface CreateBookingModalProps {
     /** Prefills the booking page. */
     initialPageUuid?: string | null;
     onCreated?: (bookingUuid: string) => void;
+    /** Lets a taken slot in the picker open the booking that occupies it. */
+    onOpenBooking?: (bookingUuid: string) => void;
 }
 
 const FormError: FC<{ message?: string }> = ({ message }) =>
@@ -96,6 +98,7 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
     initialStart,
     initialPageUuid,
     onCreated,
+    onOpenBooking,
 }) => {
     const timezone = useBookingTimezone();
     const isAdmin = useOrganisationPermission("org_manage_bookings");
@@ -330,6 +333,7 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
                                             }}
                                             memberName={memberName}
                                             restrictToUserUuid={assignedUserUuid || (isAdmin ? null : currentUserUuid)}
+                                            onOpenBooking={onOpenBooking}
                                         />
                                         {slotStart ? (
                                             <p className="text-xs text-muted">

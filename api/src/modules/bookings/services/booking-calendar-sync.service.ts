@@ -20,6 +20,7 @@ const SYNC_INCLUDE = {
     assigned_user: { select: { full_name: true, email: true } },
     organisation: { select: { name: true, timezone: true } },
     calendar_connection: true,
+    contact: { select: { phone: true, notes: true } },
 } satisfies Prisma.BookingInclude;
 
 type SyncBooking = Prisma.BookingGetPayload<{ include: typeof SYNC_INCLUDE }>;
@@ -68,8 +69,9 @@ export class BookingCalendarSyncService {
         const booking = await this.prisma.booking.findUnique({ where: { uuid: job.booking_uuid }, include: SYNC_INCLUDE });
         if (!booking) return;
 
-        // A reminder's placeholder booking shares the reminder's own Google event; syncing it would add a second one.
-        if (booking.source === BookingSource.REMINDER) {
+        // A reminder's placeholder shares the reminder's own Google event, and an imported Google event is owned by
+        // Google; syncing either would add a second event or overwrite the original.
+        if (booking.source === BookingSource.REMINDER || booking.source === BookingSource.GOOGLE) {
             await this.prisma.booking.update({
                 where: { uuid: booking.uuid },
                 data: {
@@ -164,8 +166,15 @@ export class BookingCalendarSyncService {
         });
         const page = booking.booking_page;
         const withMeet = booking.location_type === BookingLocationType.GOOGLE_MEET;
-        // Internal notes stay out of the event: the invitee is a guest on it and can read the description.
-        const description = renderPlaceholders(page?.calendar_event_description || DEFAULT_CALENDAR_EVENT_DESCRIPTION, vars);
+        // Booking internal notes stay out of the event, but the contact's phone and notes are added for the member.
+        const contactPhone = booking.contact?.phone && booking.contact.phone !== booking.invitee_phone ? booking.contact.phone : null;
+        const description = [
+            renderPlaceholders(page?.calendar_event_description || DEFAULT_CALENDAR_EVENT_DESCRIPTION, vars),
+            contactPhone ? `Contact phone: ${contactPhone}` : null,
+            booking.contact?.notes ? `Contact notes: ${booking.contact.notes}` : null,
+        ]
+            .filter(Boolean)
+            .join('\n\n');
 
         const result = await this.googleCalendar.upsertEvent(target.composio_connected_account_id, target.calendar_id, eventId, {
             summary: this.outcomePrefix(booking.status) + renderPlaceholders(page?.calendar_event_title || DEFAULT_CALENDAR_EVENT_TITLE, vars),

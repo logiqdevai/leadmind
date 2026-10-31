@@ -158,6 +158,13 @@ export class CalendarConnectionsService {
         }
     }
 
+    /** The member's (or, for admins, any member's) connection, once it is active and ready to be read from. */
+    async findForResync(actor: BookingActor, uuid: string) {
+        const connection = await this.findOwnOrAdmin(actor, uuid);
+        this.requireActive(connection);
+        return connection;
+    }
+
     async update(actor: BookingActor, uuid: string, dto: UpdateCalendarConnectionDto) {
         const connection = await this.findOwnOrAdmin(actor, uuid);
         let calendar_name: string | undefined;

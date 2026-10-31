@@ -1,6 +1,6 @@
 import { useMemo, useState, type FC } from "react";
 import { Button, Spinner } from "@heroui/react";
-import { AlertTriangle, CalendarDays, Unplug } from "lucide-react";
+import { AlertTriangle, CalendarDays, RefreshCw, Unplug } from "lucide-react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { SearchSelect } from "@/components/ui/search-select";
@@ -8,6 +8,7 @@ import {
     useConnectGoogleCalendar,
     useDisconnectCalendar,
     useGoogleCalendars,
+    useResyncCalendar,
     useUpdateCalendarConnection,
 } from "@/features/bookings/hooks/use-availability";
 import {
@@ -26,6 +27,7 @@ export const MyCalendarCard: FC<MyCalendarCardProps> = ({ connection, configured
     const connect = useConnectGoogleCalendar();
     const update = useUpdateCalendarConnection();
     const disconnect = useDisconnectCalendar();
+    const resync = useResyncCalendar();
     const [confirmOpen, setConfirmOpen] = useState(false);
 
     const status = connection?.status ?? null;
@@ -75,6 +77,18 @@ export const MyCalendarCard: FC<MyCalendarCardProps> = ({ connection, configured
                     >
                         {connectLabel}
                     </ActionButtonWithPending>
+                    {isActive && connection ? (
+                        <ActionButtonWithPending
+                            size="sm"
+                            variant="secondary"
+                            isPending={resync.isPending}
+                            isDisabled={resync.isPending}
+                            onPress={() => resync.mutate(connection.uuid)}
+                        >
+                            <RefreshCw className="size-4" />
+                            Sync now
+                        </ActionButtonWithPending>
+                    ) : null}
                     {isConnected && connection ? (
                         <Button size="sm" variant="tertiary" className="text-danger" onPress={() => setConfirmOpen(true)}>
                             <Unplug className="size-4" />

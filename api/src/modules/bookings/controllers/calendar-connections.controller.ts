@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@/shared/decorators/current-user.decorator';
 import { JwtGuard } from '@/shared/guards/jwt.guard';
 import { ActivityLog } from '@/modules/activity-logs/decorators/activity-log.decorator';
 import { ActivityAction, ActivityEntityType } from '@/modules/activity-logs/constants/activity-log.constants';
 import { CalendarConnectionsService } from '../services/calendar-connections.service';
+import { BookingCalendarInboundService } from '../services/booking-calendar-inbound.service';
 import { BookingActor } from '../interfaces/booking.interface';
 import { UpdateCalendarConnectionDto, VerifyCalendarConnectionDto } from '../dto/calendar-connection.dto';
 
@@ -13,7 +14,10 @@ import { UpdateCalendarConnectionDto, VerifyCalendarConnectionDto } from '../dto
 @UseGuards(JwtGuard)
 @Controller('calendar-connections')
 export class CalendarConnectionsController {
-    constructor(private readonly calendarConnectionsService: CalendarConnectionsService) {}
+    constructor(
+        private readonly calendarConnectionsService: CalendarConnectionsService,
+        private readonly calendarInbound: BookingCalendarInboundService,
+    ) {}
 
     @Get()
     @ApiOperation({ summary: 'Google Calendar connections (own; admins see every member)' })
@@ -44,6 +48,18 @@ export class CalendarConnectionsController {
     @ApiResponse({ status: 200 })
     listCalendars(@CurrentUser() actor: BookingActor, @Param('uuid') uuid: string) {
         return this.calendarConnectionsService.listCalendars(actor, uuid);
+    }
+
+    @Post(':uuid/resync')
+    @ApiOperation({ summary: 'Re-read every upcoming Google Calendar event and import the ones missing here' })
+    @ApiResponse({ status: 201, description: 'Number of events newly imported' })
+    async resync(@CurrentUser() actor: BookingActor, @Param('uuid') uuid: string) {
+        const connection = await this.calendarConnectionsService.findForResync(actor, uuid);
+        try {
+            return await this.calendarInbound.resync(connection);
+        } catch (error) {
+            throw new BadRequestException(`Could not sync Google Calendar: ${(error as Error).message}`);
+        }
     }
 
     @ActivityLog({ entityType: ActivityEntityType.CALENDAR_CONNECTION, action: ActivityAction.UPDATED, entityUuidFrom: 'params.uuid' })

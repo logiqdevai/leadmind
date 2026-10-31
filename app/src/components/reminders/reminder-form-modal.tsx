@@ -48,6 +48,7 @@ const QUICK_ACTIONS: { label: string; resolve: (from: ZonedDateTime) => ZonedDat
         resolve: (t) => t.add({ days: ((8 - t.toDate().getDay()) % 7) || 7 }).set({ hour: 9, minute: 0 }),
     },
     { label: "Next month", resolve: (t) => t.add({ months: 1 }) },
+    { label: "In 1 year", resolve: (t) => t.add({ years: 1 }) },
 ];
 
 const pad2 = (n: number) => String(n).padStart(2, "0");

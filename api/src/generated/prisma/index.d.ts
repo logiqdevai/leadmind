@@ -1095,7 +1095,8 @@ export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
 export const BookingSource: {
   PUBLIC: 'PUBLIC',
   MANUAL: 'MANUAL',
-  REMINDER: 'REMINDER'
+  REMINDER: 'REMINDER',
+  GOOGLE: 'GOOGLE'
 };
 
 export type BookingSource = (typeof BookingSource)[keyof typeof BookingSource]

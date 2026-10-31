@@ -538,6 +538,7 @@ export const BookingsTab: FC<BookingsTabProps> = ({ contact }) => {
                 onOpenChange={setCreateOpen}
                 contact={prefilledContact}
                 onCreated={setSelectedUuid}
+                onOpenBooking={setSelectedUuid}
             />
             <CreateLinkModal contactUuid={contact.uuid} isOpen={linkOpen} onOpenChange={setLinkOpen} />
             {emailOpen ? (

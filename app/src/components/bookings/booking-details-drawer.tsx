@@ -340,7 +340,9 @@ const BookingDetailsBody: FC<{ booking: BookingDetail; timezone: string }> = ({ 
                             ? "Booked online"
                             : booking.source === BookingSources.REMINDER
                               ? "From a reminder"
-                              : "Created manually"}
+                              : booking.source === BookingSources.GOOGLE
+                                ? "Imported from Google Calendar"
+                                : "Created manually"}
                         {booking.created_by ? (
                             <span className="block text-xs text-muted">by {booking.created_by.full_name ?? booking.created_by.email}</span>
                         ) : null}

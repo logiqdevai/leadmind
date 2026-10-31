@@ -2236,6 +2236,8 @@ enum BookingSource {
   MANUAL
   /// Placeholder holding the time of a reminder that was added to Google Calendar (no invitee).
   REMINDER
+  /// Busy event created directly in Google Calendar and imported so it blocks time here (no invitee).
+  GOOGLE
 }
 
 enum BookingLocationType {

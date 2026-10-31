@@ -1,11 +1,13 @@
 import { useMemo, type FC } from "react";
-import { Spinner } from "@heroui/react";
+import { Spinner, Tooltip } from "@heroui/react";
 import { CalendarX2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBookingPageSlots } from "@/features/bookings/hooks/use-booking-pages";
-import type { BookingSlot } from "@/features/bookings/interfaces/bookings.interfaces";
+import { useBookingCalendar } from "@/features/bookings/hooks/use-bookings";
+import { ACTIVE_BOOKING_STATUSES, type BookingSlot } from "@/features/bookings/interfaces/bookings.interfaces";
 import { dateKeyInZone, formatTime, zonedDayRange } from "@/features/bookings/utils/booking-time";
 import { DateKeyPicker } from "./booking-date-time-fields";
+import { bookingDisplayName } from "./utils/booking-display";
 
 export interface SelectedSlot {
     start: string;
@@ -25,6 +27,8 @@ interface BookingSlotPickerProps {
     memberName: (uuid: string) => string;
     /** When set, only this member's slots can be picked (plus "any available"). */
     restrictToUserUuid?: string | null;
+    /** Called when a taken slot that is occupied by a booking is clicked. */
+    onOpenBooking?: (bookingUuid: string) => void;
 }
 
 interface SlotGroup {
@@ -46,6 +50,7 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
     onSelect,
     memberName,
     restrictToUserUuid,
+    onOpenBooking,
 }) => {
     const query = useMemo(() => {
         const range = zonedDayRange(dateKey, dateKey, timezone);
@@ -55,13 +60,32 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
             timezone,
             duration: durationMinutes || undefined,
             exclude_booking_uuid: excludeBookingUuid,
+            include_unavailable: true,
         };
     }, [dateKey, timezone, durationMinutes, excludeBookingUuid]);
 
     const { data, isLoading, isFetching } = useBookingPageSlots(pageUuid, query);
 
+    // Existing bookings of the day, so a taken slot can name (and open) the booking that occupies it.
+    const dayRange = useMemo(() => zonedDayRange(dateKey, dateKey, timezone), [dateKey, timezone]);
+    const { data: calendar } = useBookingCalendar({ from: dayRange.from, to: dayRange.to });
+    const dayBookings = useMemo(
+        () => (calendar?.bookings ?? []).filter((b) => ACTIVE_BOOKING_STATUSES.includes(b.status)),
+        [calendar],
+    );
+    const bookingAt = (slot: BookingSlot) =>
+        dayBookings.find(
+            (b) =>
+                new Date(b.start_at).getTime() < new Date(slot.end).getTime() &&
+                new Date(b.end_at).getTime() > new Date(slot.start).getTime(),
+        );
+
     const groups = useMemo<SlotGroup[]>(() => {
-        const slots = data?.days?.[dateKey] ?? [];
+        const all = data?.days?.[dateKey] ?? [];
+        const slots = all.filter((slot) => slot.available);
+        const taken = all.filter((slot) => !slot.available);
+        const withTaken = (list: BookingSlot[]) =>
+            [...list, ...taken].sort((a, b) => a.start.localeCompare(b.start));
         const byMember = new Map<string, BookingSlot[]>();
         for (const slot of slots) {
             for (const uuid of slot.user_uuids ?? []) {
@@ -74,12 +98,12 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
         const result: SlotGroup[] = [];
         // "Any available" lets the page's assignment rules pick; skip it when only one member is free all day.
         if (slots.length && (byMember.size !== 1 || restrictToUserUuid)) {
-            result.push({ key: "any", title: "Any available member", slots });
+            result.push({ key: "any", title: "Any available member", slots: withTaken(slots) });
         }
         for (const [uuid, list] of byMember) {
-            result.push({ key: uuid, userUuid: uuid, title: memberName(uuid), slots: list });
+            result.push({ key: uuid, userUuid: uuid, title: memberName(uuid), slots: withTaken(list) });
         }
-        if (!result.length && slots.length) result.push({ key: "any", title: "Available times", slots });
+        if (!result.length && slots.length) result.push({ key: "any", title: "Available times", slots: withTaken(slots) });
         return result;
     }, [data, dateKey, memberName, restrictToUserUuid]);
 
@@ -108,6 +132,31 @@ export const BookingSlotPicker: FC<BookingSlotPickerProps> = ({
                                 </p>
                                 <div className="flex flex-wrap gap-1.5">
                                     {group.slots.map((slot) => {
+                                        if (!slot.available) {
+                                            const booking = bookingAt(slot);
+                                            const title = booking
+                                                ? [booking.booking_page?.name, bookingDisplayName(booking)].filter(Boolean).join(" · ")
+                                                : "Unavailable";
+                                            return (
+                                                <Tooltip key={`${group.key}-${slot.start}`}>
+                                                    <Tooltip.Trigger>
+                                                        <button
+                                                            type="button"
+                                                            aria-disabled
+                                                            onClick={() => booking && onOpenBooking?.(booking.uuid)}
+                                                            className={cn(
+                                                                "h-8 rounded-lg border border-border/60 bg-surface-secondary/60 px-2.5 text-xs font-medium tabular-nums text-muted line-through opacity-60",
+                                                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                                                                booking && onOpenBooking ? "cursor-pointer hover:opacity-80" : "cursor-not-allowed",
+                                                            )}
+                                                        >
+                                                            {formatTime(slot.start, timezone)}
+                                                        </button>
+                                                    </Tooltip.Trigger>
+                                                    <Tooltip.Content className="max-w-xs text-xs">{title}</Tooltip.Content>
+                                                </Tooltip>
+                                            );
+                                        }
                                         const isSelected =
                                             selected?.start === slot.start && selected?.userUuid === group.userUuid;
                                         return (

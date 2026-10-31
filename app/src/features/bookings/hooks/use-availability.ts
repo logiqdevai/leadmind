@@ -11,6 +11,7 @@ import {
     deleteAvailabilityOverride,
     deleteBookingBlock,
     disconnectCalendar,
+    resyncCalendar,
     getAvailabilitySchedule,
     listBookingBlocks,
     listCalendarConnections,
@@ -241,6 +242,23 @@ export function useUpdateCalendarConnection() {
             toast({ title: "Calendar settings saved", duration: 1500 });
         },
         onError: errorToast("Could not save calendar settings"),
+    });
+}
+
+export function useResyncCalendar() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (uuid: string) => resyncCalendar(uuid),
+        onSuccess: ({ imported }) => {
+            qc.invalidateQueries({ queryKey: ["bookings"] });
+            qc.invalidateQueries({ queryKey: ["booking-pages"] });
+            qc.invalidateQueries({ queryKey: calendarConnectionQueryKeys.all });
+            toast({
+                title: imported ? `Imported ${imported} event${imported === 1 ? "" : "s"} from Google Calendar` : "Google Calendar is up to date",
+                duration: 2000,
+            });
+        },
+        onError: errorToast("Could not sync Google Calendar"),
     });
 }
 

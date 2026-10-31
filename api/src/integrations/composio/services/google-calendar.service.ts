@@ -13,6 +13,9 @@ interface GoogleEventsPage {
     items?: {
         id: string;
         status?: string;
+        summary?: string;
+        htmlLink?: string;
+        transparency?: string;
         updated?: string;
         location?: string;
         start?: { dateTime?: string };
@@ -164,6 +167,9 @@ export class GoogleCalendarService {
                 events.push({
                     id: item.id,
                     cancelled: item.status === 'cancelled',
+                    summary: item.summary ?? null,
+                    html_link: item.htmlLink ?? null,
+                    transparent: item.transparency === 'transparent',
                     updated: item.updated ? new Date(item.updated) : null,
                     start: item.start?.dateTime ? new Date(item.start.dateTime) : null,
                     end: item.end?.dateTime ? new Date(item.end.dateTime) : null,

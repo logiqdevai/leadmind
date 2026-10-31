@@ -19,6 +19,7 @@ export const BookingSources = {
     PUBLIC: "PUBLIC",
     MANUAL: "MANUAL",
     REMINDER: "REMINDER",
+    GOOGLE: "GOOGLE",
 } as const;
 export type BookingSource = (typeof BookingSources)[keyof typeof BookingSources];
 
