@@ -50,6 +50,7 @@ export const Routes = {
         send_history: "/dashboard/send-history",
         mail_tester: "/dashboard/mail-tester",
         mxtoolbox: "/dashboard/domain-health",
+        deliverability_monitor: "/dashboard/deliverability-monitor",
         message_templates: "/dashboard/message-templates",
         sequences: "/dashboard/sequences",
         sequences_new: "/dashboard/sequences/new",

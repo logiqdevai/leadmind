@@ -226,6 +226,23 @@ export type MailTesterTest = $Result.DefaultSelection<Prisma.$MailTesterTestPayl
  */
 export type MxToolboxCheck = $Result.DefaultSelection<Prisma.$MxToolboxCheckPayload>
 /**
+ * Model DeliverabilitySchedule
+ * A recurring domain deliverability check. `checks` holds DeliverabilityCheckType values
+ * so new check types can be added without a migration.
+ */
+export type DeliverabilitySchedule = $Result.DefaultSelection<Prisma.$DeliverabilitySchedulePayload>
+/**
+ * Model DeliverabilityRun
+ * 
+ */
+export type DeliverabilityRun = $Result.DefaultSelection<Prisma.$DeliverabilityRunPayload>
+/**
+ * Model DomainSendingGuard
+ * Sending restriction derived from the latest deliverability run of one schedule. Kept apart
+ * from IntegrationAccount limits so the user's own limits are never overwritten.
+ */
+export type DomainSendingGuard = $Result.DefaultSelection<Prisma.$DomainSendingGuardPayload>
+/**
  * Model Reminder
  * 
  */
@@ -880,6 +897,44 @@ export const MxToolboxCheckStatus: {
 export type MxToolboxCheckStatus = (typeof MxToolboxCheckStatus)[keyof typeof MxToolboxCheckStatus]
 
 
+export const DeliverabilityFrequency: {
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  EVERY_N_DAYS: 'EVERY_N_DAYS',
+  MONTHLY: 'MONTHLY'
+};
+
+export type DeliverabilityFrequency = (typeof DeliverabilityFrequency)[keyof typeof DeliverabilityFrequency]
+
+
+export const DeliverabilityActionMode: {
+  RECOMMEND: 'RECOMMEND',
+  THROTTLE: 'THROTTLE',
+  PAUSE: 'PAUSE'
+};
+
+export type DeliverabilityActionMode = (typeof DeliverabilityActionMode)[keyof typeof DeliverabilityActionMode]
+
+
+export const DeliverabilityRunStatus: {
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type DeliverabilityRunStatus = (typeof DeliverabilityRunStatus)[keyof typeof DeliverabilityRunStatus]
+
+
+export const DeliverabilityRiskLevel: {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+export type DeliverabilityRiskLevel = (typeof DeliverabilityRiskLevel)[keyof typeof DeliverabilityRiskLevel]
+
+
 export const ReminderStatus: {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
@@ -1055,7 +1110,8 @@ export type CampaignIntegrationStatus = (typeof CampaignIntegrationStatus)[keyof
 export const SendingUsageScopeType: {
   PROVIDER: 'PROVIDER',
   INTEGRATION_ACCOUNT: 'INTEGRATION_ACCOUNT',
-  CAMPAIGN_INTEGRATION: 'CAMPAIGN_INTEGRATION'
+  CAMPAIGN_INTEGRATION: 'CAMPAIGN_INTEGRATION',
+  DELIVERABILITY_GUARD: 'DELIVERABILITY_GUARD'
 };
 
 export type SendingUsageScopeType = (typeof SendingUsageScopeType)[keyof typeof SendingUsageScopeType]
@@ -1389,6 +1445,22 @@ export const MailTesterTestStatus: typeof $Enums.MailTesterTestStatus
 export type MxToolboxCheckStatus = $Enums.MxToolboxCheckStatus
 
 export const MxToolboxCheckStatus: typeof $Enums.MxToolboxCheckStatus
+
+export type DeliverabilityFrequency = $Enums.DeliverabilityFrequency
+
+export const DeliverabilityFrequency: typeof $Enums.DeliverabilityFrequency
+
+export type DeliverabilityActionMode = $Enums.DeliverabilityActionMode
+
+export const DeliverabilityActionMode: typeof $Enums.DeliverabilityActionMode
+
+export type DeliverabilityRunStatus = $Enums.DeliverabilityRunStatus
+
+export const DeliverabilityRunStatus: typeof $Enums.DeliverabilityRunStatus
+
+export type DeliverabilityRiskLevel = $Enums.DeliverabilityRiskLevel
+
+export const DeliverabilityRiskLevel: typeof $Enums.DeliverabilityRiskLevel
 
 export type ReminderStatus = $Enums.ReminderStatus
 
@@ -2066,6 +2138,36 @@ export class PrismaClient<
     * ```
     */
   get mxToolboxCheck(): Prisma.MxToolboxCheckDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.deliverabilitySchedule`: Exposes CRUD operations for the **DeliverabilitySchedule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DeliverabilitySchedules
+    * const deliverabilitySchedules = await prisma.deliverabilitySchedule.findMany()
+    * ```
+    */
+  get deliverabilitySchedule(): Prisma.DeliverabilityScheduleDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.deliverabilityRun`: Exposes CRUD operations for the **DeliverabilityRun** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DeliverabilityRuns
+    * const deliverabilityRuns = await prisma.deliverabilityRun.findMany()
+    * ```
+    */
+  get deliverabilityRun(): Prisma.DeliverabilityRunDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.domainSendingGuard`: Exposes CRUD operations for the **DomainSendingGuard** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DomainSendingGuards
+    * const domainSendingGuards = await prisma.domainSendingGuard.findMany()
+    * ```
+    */
+  get domainSendingGuard(): Prisma.DomainSendingGuardDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.reminder`: Exposes CRUD operations for the **Reminder** model.
@@ -2952,6 +3054,9 @@ export namespace Prisma {
     IntegrationAccountDomain: 'IntegrationAccountDomain',
     MailTesterTest: 'MailTesterTest',
     MxToolboxCheck: 'MxToolboxCheck',
+    DeliverabilitySchedule: 'DeliverabilitySchedule',
+    DeliverabilityRun: 'DeliverabilityRun',
+    DomainSendingGuard: 'DomainSendingGuard',
     Reminder: 'Reminder',
     ReminderAssignee: 'ReminderAssignee',
     Form: 'Form',
@@ -3008,7 +3113,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingRecurringBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "bookingLinkVisit" | "booking" | "bookingEvent" | "bookingInviteSettings" | "bookingInviteTemplate" | "bookingInvitation" | "bookingNotification" | "bookingPageTemplate" | "calendarConnection" | "notification"
+      modelProps: "user" | "organisation" | "organisationMember" | "organisationInvitation" | "apiKey" | "filter" | "savedContactFilter" | "sidebarFavorite" | "scoringInstruction" | "filterScoringInstruction" | "rawLead" | "lead" | "leadEnrichment" | "contact" | "contactOpeningHour" | "contactInfo" | "contactFilter" | "contactEnrichment" | "contactScore" | "contactList" | "contactListMember" | "contactTag" | "interaction" | "outreachMessage" | "messageThread" | "outreachSequence" | "outreachSequenceStep" | "sequenceEnrollment" | "filterJob" | "bulkJob" | "websiteScrapeRequest" | "senderProfile" | "messageTemplate" | "marketingCampaign" | "marketingCampaignContact" | "openAiBatchJob" | "integration" | "integrationAccount" | "integrationKey" | "integrationAccountDomain" | "mailTesterTest" | "mxToolboxCheck" | "deliverabilitySchedule" | "deliverabilityRun" | "domainSendingGuard" | "reminder" | "reminderAssignee" | "form" | "formField" | "formCompletion" | "formCompletionValue" | "contactAudienceAnalysis" | "aiUsageLog" | "apifyUsageLog" | "messagingGoal" | "emailSendLimit" | "sendingPolicy" | "sendingPolicyStage" | "campaignIntegration" | "campaignIntegrationState" | "sendingUsageCounter" | "goalAchievement" | "goalPersonalBest" | "activityLog" | "oAuthModel" | "oAuthConnection" | "mcpToolInvocationLog" | "orgTag" | "orgTagAssignment" | "availabilitySchedule" | "availabilityOverride" | "bookingBlock" | "bookingRecurringBlock" | "bookingPage" | "bookingPageMember" | "bookingLink" | "bookingLinkVisit" | "booking" | "bookingEvent" | "bookingInviteSettings" | "bookingInviteTemplate" | "bookingInvitation" | "bookingNotification" | "bookingPageTemplate" | "calendarConnection" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6117,6 +6222,228 @@ export namespace Prisma {
           count: {
             args: Prisma.MxToolboxCheckCountArgs<ExtArgs>
             result: $Utils.Optional<MxToolboxCheckCountAggregateOutputType> | number
+          }
+        }
+      }
+      DeliverabilitySchedule: {
+        payload: Prisma.$DeliverabilitySchedulePayload<ExtArgs>
+        fields: Prisma.DeliverabilityScheduleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DeliverabilityScheduleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DeliverabilityScheduleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>
+          }
+          findFirst: {
+            args: Prisma.DeliverabilityScheduleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DeliverabilityScheduleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>
+          }
+          findMany: {
+            args: Prisma.DeliverabilityScheduleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>[]
+          }
+          create: {
+            args: Prisma.DeliverabilityScheduleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>
+          }
+          createMany: {
+            args: Prisma.DeliverabilityScheduleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DeliverabilityScheduleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>[]
+          }
+          delete: {
+            args: Prisma.DeliverabilityScheduleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>
+          }
+          update: {
+            args: Prisma.DeliverabilityScheduleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>
+          }
+          deleteMany: {
+            args: Prisma.DeliverabilityScheduleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DeliverabilityScheduleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DeliverabilityScheduleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>[]
+          }
+          upsert: {
+            args: Prisma.DeliverabilityScheduleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilitySchedulePayload>
+          }
+          aggregate: {
+            args: Prisma.DeliverabilityScheduleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDeliverabilitySchedule>
+          }
+          groupBy: {
+            args: Prisma.DeliverabilityScheduleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DeliverabilityScheduleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DeliverabilityScheduleCountArgs<ExtArgs>
+            result: $Utils.Optional<DeliverabilityScheduleCountAggregateOutputType> | number
+          }
+        }
+      }
+      DeliverabilityRun: {
+        payload: Prisma.$DeliverabilityRunPayload<ExtArgs>
+        fields: Prisma.DeliverabilityRunFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DeliverabilityRunFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DeliverabilityRunFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>
+          }
+          findFirst: {
+            args: Prisma.DeliverabilityRunFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DeliverabilityRunFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>
+          }
+          findMany: {
+            args: Prisma.DeliverabilityRunFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>[]
+          }
+          create: {
+            args: Prisma.DeliverabilityRunCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>
+          }
+          createMany: {
+            args: Prisma.DeliverabilityRunCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DeliverabilityRunCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>[]
+          }
+          delete: {
+            args: Prisma.DeliverabilityRunDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>
+          }
+          update: {
+            args: Prisma.DeliverabilityRunUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>
+          }
+          deleteMany: {
+            args: Prisma.DeliverabilityRunDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DeliverabilityRunUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DeliverabilityRunUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>[]
+          }
+          upsert: {
+            args: Prisma.DeliverabilityRunUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeliverabilityRunPayload>
+          }
+          aggregate: {
+            args: Prisma.DeliverabilityRunAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDeliverabilityRun>
+          }
+          groupBy: {
+            args: Prisma.DeliverabilityRunGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DeliverabilityRunGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DeliverabilityRunCountArgs<ExtArgs>
+            result: $Utils.Optional<DeliverabilityRunCountAggregateOutputType> | number
+          }
+        }
+      }
+      DomainSendingGuard: {
+        payload: Prisma.$DomainSendingGuardPayload<ExtArgs>
+        fields: Prisma.DomainSendingGuardFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DomainSendingGuardFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DomainSendingGuardFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>
+          }
+          findFirst: {
+            args: Prisma.DomainSendingGuardFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DomainSendingGuardFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>
+          }
+          findMany: {
+            args: Prisma.DomainSendingGuardFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>[]
+          }
+          create: {
+            args: Prisma.DomainSendingGuardCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>
+          }
+          createMany: {
+            args: Prisma.DomainSendingGuardCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DomainSendingGuardCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>[]
+          }
+          delete: {
+            args: Prisma.DomainSendingGuardDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>
+          }
+          update: {
+            args: Prisma.DomainSendingGuardUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>
+          }
+          deleteMany: {
+            args: Prisma.DomainSendingGuardDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DomainSendingGuardUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DomainSendingGuardUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>[]
+          }
+          upsert: {
+            args: Prisma.DomainSendingGuardUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DomainSendingGuardPayload>
+          }
+          aggregate: {
+            args: Prisma.DomainSendingGuardAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDomainSendingGuard>
+          }
+          groupBy: {
+            args: Prisma.DomainSendingGuardGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DomainSendingGuardGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DomainSendingGuardCountArgs<ExtArgs>
+            result: $Utils.Optional<DomainSendingGuardCountAggregateOutputType> | number
           }
         }
       }
@@ -9304,6 +9631,9 @@ export namespace Prisma {
     integrationAccountDomain?: IntegrationAccountDomainOmit
     mailTesterTest?: MailTesterTestOmit
     mxToolboxCheck?: MxToolboxCheckOmit
+    deliverabilitySchedule?: DeliverabilityScheduleOmit
+    deliverabilityRun?: DeliverabilityRunOmit
+    domainSendingGuard?: DomainSendingGuardOmit
     reminder?: ReminderOmit
     reminderAssignee?: ReminderAssigneeOmit
     form?: FormOmit
@@ -9740,6 +10070,7 @@ export namespace Prisma {
     sending_policies: number
     mail_tester_tests: number
     mxtoolbox_checks: number
+    deliverability_schedules: number
     api_keys: number
     oauth_connections: number
     mcp_tool_invocation_logs: number
@@ -9789,6 +10120,7 @@ export namespace Prisma {
     sending_policies?: boolean | OrganisationCountOutputTypeCountSending_policiesArgs
     mail_tester_tests?: boolean | OrganisationCountOutputTypeCountMail_tester_testsArgs
     mxtoolbox_checks?: boolean | OrganisationCountOutputTypeCountMxtoolbox_checksArgs
+    deliverability_schedules?: boolean | OrganisationCountOutputTypeCountDeliverability_schedulesArgs
     api_keys?: boolean | OrganisationCountOutputTypeCountApi_keysArgs
     oauth_connections?: boolean | OrganisationCountOutputTypeCountOauth_connectionsArgs
     mcp_tool_invocation_logs?: boolean | OrganisationCountOutputTypeCountMcp_tool_invocation_logsArgs
@@ -10038,6 +10370,13 @@ export namespace Prisma {
    */
   export type OrganisationCountOutputTypeCountMxtoolbox_checksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MxToolboxCheckWhereInput
+  }
+
+  /**
+   * OrganisationCountOutputType without action
+   */
+  export type OrganisationCountOutputTypeCountDeliverability_schedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DeliverabilityScheduleWhereInput
   }
 
   /**
@@ -11001,6 +11340,37 @@ export namespace Prisma {
    */
   export type IntegrationAccountDomainCountOutputTypeCountCampaign_integrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CampaignIntegrationWhereInput
+  }
+
+
+  /**
+   * Count Type DeliverabilityScheduleCountOutputType
+   */
+
+  export type DeliverabilityScheduleCountOutputType = {
+    runs: number
+  }
+
+  export type DeliverabilityScheduleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    runs?: boolean | DeliverabilityScheduleCountOutputTypeCountRunsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DeliverabilityScheduleCountOutputType without action
+   */
+  export type DeliverabilityScheduleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityScheduleCountOutputType
+     */
+    select?: DeliverabilityScheduleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DeliverabilityScheduleCountOutputType without action
+   */
+  export type DeliverabilityScheduleCountOutputTypeCountRunsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DeliverabilityRunWhereInput
   }
 
 
@@ -13721,6 +14091,7 @@ export namespace Prisma {
     sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
     mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
     mxtoolbox_checks?: boolean | Organisation$mxtoolbox_checksArgs<ExtArgs>
+    deliverability_schedules?: boolean | Organisation$deliverability_schedulesArgs<ExtArgs>
     api_keys?: boolean | Organisation$api_keysArgs<ExtArgs>
     oauth_connections?: boolean | Organisation$oauth_connectionsArgs<ExtArgs>
     mcp_tool_invocation_logs?: boolean | Organisation$mcp_tool_invocation_logsArgs<ExtArgs>
@@ -13809,6 +14180,7 @@ export namespace Prisma {
     sending_policies?: boolean | Organisation$sending_policiesArgs<ExtArgs>
     mail_tester_tests?: boolean | Organisation$mail_tester_testsArgs<ExtArgs>
     mxtoolbox_checks?: boolean | Organisation$mxtoolbox_checksArgs<ExtArgs>
+    deliverability_schedules?: boolean | Organisation$deliverability_schedulesArgs<ExtArgs>
     api_keys?: boolean | Organisation$api_keysArgs<ExtArgs>
     oauth_connections?: boolean | Organisation$oauth_connectionsArgs<ExtArgs>
     mcp_tool_invocation_logs?: boolean | Organisation$mcp_tool_invocation_logsArgs<ExtArgs>
@@ -13864,6 +14236,7 @@ export namespace Prisma {
       sending_policies: Prisma.$SendingPolicyPayload<ExtArgs>[]
       mail_tester_tests: Prisma.$MailTesterTestPayload<ExtArgs>[]
       mxtoolbox_checks: Prisma.$MxToolboxCheckPayload<ExtArgs>[]
+      deliverability_schedules: Prisma.$DeliverabilitySchedulePayload<ExtArgs>[]
       api_keys: Prisma.$ApiKeyPayload<ExtArgs>[]
       oauth_connections: Prisma.$OAuthConnectionPayload<ExtArgs>[]
       mcp_tool_invocation_logs: Prisma.$McpToolInvocationLogPayload<ExtArgs>[]
@@ -14316,6 +14689,7 @@ export namespace Prisma {
     sending_policies<T extends Organisation$sending_policiesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$sending_policiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SendingPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mail_tester_tests<T extends Organisation$mail_tester_testsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mail_tester_testsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MailTesterTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mxtoolbox_checks<T extends Organisation$mxtoolbox_checksArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mxtoolbox_checksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MxToolboxCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    deliverability_schedules<T extends Organisation$deliverability_schedulesArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$deliverability_schedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     api_keys<T extends Organisation$api_keysArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$api_keysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     oauth_connections<T extends Organisation$oauth_connectionsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$oauth_connectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OAuthConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mcp_tool_invocation_logs<T extends Organisation$mcp_tool_invocation_logsArgs<ExtArgs> = {}>(args?: Subset<T, Organisation$mcp_tool_invocation_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$McpToolInvocationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -15522,6 +15896,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MxToolboxCheckScalarFieldEnum | MxToolboxCheckScalarFieldEnum[]
+  }
+
+  /**
+   * Organisation.deliverability_schedules
+   */
+  export type Organisation$deliverability_schedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    where?: DeliverabilityScheduleWhereInput
+    orderBy?: DeliverabilityScheduleOrderByWithRelationInput | DeliverabilityScheduleOrderByWithRelationInput[]
+    cursor?: DeliverabilityScheduleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DeliverabilityScheduleScalarFieldEnum | DeliverabilityScheduleScalarFieldEnum[]
   }
 
   /**
@@ -66398,6 +66796,3874 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MxToolboxCheckInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DeliverabilitySchedule
+   */
+
+  export type AggregateDeliverabilitySchedule = {
+    _count: DeliverabilityScheduleCountAggregateOutputType | null
+    _avg: DeliverabilityScheduleAvgAggregateOutputType | null
+    _sum: DeliverabilityScheduleSumAggregateOutputType | null
+    _min: DeliverabilityScheduleMinAggregateOutputType | null
+    _max: DeliverabilityScheduleMaxAggregateOutputType | null
+  }
+
+  export type DeliverabilityScheduleAvgAggregateOutputType = {
+    id: number | null
+    weekday: number | null
+    day_of_month: number | null
+    interval_days: number | null
+    warn_threshold: number | null
+    critical_threshold: number | null
+  }
+
+  export type DeliverabilityScheduleSumAggregateOutputType = {
+    id: number | null
+    weekday: number | null
+    day_of_month: number | null
+    interval_days: number | null
+    warn_threshold: number | null
+    critical_threshold: number | null
+  }
+
+  export type DeliverabilityScheduleMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    label: string | null
+    domain: string | null
+    integration_account_uuid: string | null
+    integration_account_domain_uuid: string | null
+    from_provider: $Enums.ExternalIntegrationProvider | null
+    from_account: string | null
+    dkim_selector: string | null
+    frequency: $Enums.DeliverabilityFrequency | null
+    time_of_day: string | null
+    weekday: number | null
+    day_of_month: number | null
+    interval_days: number | null
+    timezone: string | null
+    action_mode: $Enums.DeliverabilityActionMode | null
+    warn_threshold: number | null
+    critical_threshold: number | null
+    is_active: boolean | null
+    last_run_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type DeliverabilityScheduleMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    organisation_uuid: string | null
+    label: string | null
+    domain: string | null
+    integration_account_uuid: string | null
+    integration_account_domain_uuid: string | null
+    from_provider: $Enums.ExternalIntegrationProvider | null
+    from_account: string | null
+    dkim_selector: string | null
+    frequency: $Enums.DeliverabilityFrequency | null
+    time_of_day: string | null
+    weekday: number | null
+    day_of_month: number | null
+    interval_days: number | null
+    timezone: string | null
+    action_mode: $Enums.DeliverabilityActionMode | null
+    warn_threshold: number | null
+    critical_threshold: number | null
+    is_active: boolean | null
+    last_run_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type DeliverabilityScheduleCountAggregateOutputType = {
+    id: number
+    uuid: number
+    organisation_uuid: number
+    label: number
+    domain: number
+    integration_account_uuid: number
+    integration_account_domain_uuid: number
+    from_provider: number
+    from_account: number
+    dkim_selector: number
+    frequency: number
+    time_of_day: number
+    weekday: number
+    day_of_month: number
+    interval_days: number
+    timezone: number
+    checks: number
+    action_mode: number
+    warn_threshold: number
+    critical_threshold: number
+    is_active: number
+    last_run_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type DeliverabilityScheduleAvgAggregateInputType = {
+    id?: true
+    weekday?: true
+    day_of_month?: true
+    interval_days?: true
+    warn_threshold?: true
+    critical_threshold?: true
+  }
+
+  export type DeliverabilityScheduleSumAggregateInputType = {
+    id?: true
+    weekday?: true
+    day_of_month?: true
+    interval_days?: true
+    warn_threshold?: true
+    critical_threshold?: true
+  }
+
+  export type DeliverabilityScheduleMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    domain?: true
+    integration_account_uuid?: true
+    integration_account_domain_uuid?: true
+    from_provider?: true
+    from_account?: true
+    dkim_selector?: true
+    frequency?: true
+    time_of_day?: true
+    weekday?: true
+    day_of_month?: true
+    interval_days?: true
+    timezone?: true
+    action_mode?: true
+    warn_threshold?: true
+    critical_threshold?: true
+    is_active?: true
+    last_run_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type DeliverabilityScheduleMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    domain?: true
+    integration_account_uuid?: true
+    integration_account_domain_uuid?: true
+    from_provider?: true
+    from_account?: true
+    dkim_selector?: true
+    frequency?: true
+    time_of_day?: true
+    weekday?: true
+    day_of_month?: true
+    interval_days?: true
+    timezone?: true
+    action_mode?: true
+    warn_threshold?: true
+    critical_threshold?: true
+    is_active?: true
+    last_run_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type DeliverabilityScheduleCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    organisation_uuid?: true
+    label?: true
+    domain?: true
+    integration_account_uuid?: true
+    integration_account_domain_uuid?: true
+    from_provider?: true
+    from_account?: true
+    dkim_selector?: true
+    frequency?: true
+    time_of_day?: true
+    weekday?: true
+    day_of_month?: true
+    interval_days?: true
+    timezone?: true
+    checks?: true
+    action_mode?: true
+    warn_threshold?: true
+    critical_threshold?: true
+    is_active?: true
+    last_run_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type DeliverabilityScheduleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DeliverabilitySchedule to aggregate.
+     */
+    where?: DeliverabilityScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeliverabilitySchedules to fetch.
+     */
+    orderBy?: DeliverabilityScheduleOrderByWithRelationInput | DeliverabilityScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DeliverabilityScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeliverabilitySchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeliverabilitySchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DeliverabilitySchedules
+    **/
+    _count?: true | DeliverabilityScheduleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DeliverabilityScheduleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DeliverabilityScheduleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DeliverabilityScheduleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DeliverabilityScheduleMaxAggregateInputType
+  }
+
+  export type GetDeliverabilityScheduleAggregateType<T extends DeliverabilityScheduleAggregateArgs> = {
+        [P in keyof T & keyof AggregateDeliverabilitySchedule]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDeliverabilitySchedule[P]>
+      : GetScalarType<T[P], AggregateDeliverabilitySchedule[P]>
+  }
+
+
+
+
+  export type DeliverabilityScheduleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DeliverabilityScheduleWhereInput
+    orderBy?: DeliverabilityScheduleOrderByWithAggregationInput | DeliverabilityScheduleOrderByWithAggregationInput[]
+    by: DeliverabilityScheduleScalarFieldEnum[] | DeliverabilityScheduleScalarFieldEnum
+    having?: DeliverabilityScheduleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DeliverabilityScheduleCountAggregateInputType | true
+    _avg?: DeliverabilityScheduleAvgAggregateInputType
+    _sum?: DeliverabilityScheduleSumAggregateInputType
+    _min?: DeliverabilityScheduleMinAggregateInputType
+    _max?: DeliverabilityScheduleMaxAggregateInputType
+  }
+
+  export type DeliverabilityScheduleGroupByOutputType = {
+    id: number
+    uuid: string
+    organisation_uuid: string
+    label: string | null
+    domain: string
+    integration_account_uuid: string | null
+    integration_account_domain_uuid: string | null
+    from_provider: $Enums.ExternalIntegrationProvider | null
+    from_account: string | null
+    dkim_selector: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday: number | null
+    day_of_month: number | null
+    interval_days: number | null
+    timezone: string
+    checks: string[]
+    action_mode: $Enums.DeliverabilityActionMode
+    warn_threshold: number
+    critical_threshold: number
+    is_active: boolean
+    last_run_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: DeliverabilityScheduleCountAggregateOutputType | null
+    _avg: DeliverabilityScheduleAvgAggregateOutputType | null
+    _sum: DeliverabilityScheduleSumAggregateOutputType | null
+    _min: DeliverabilityScheduleMinAggregateOutputType | null
+    _max: DeliverabilityScheduleMaxAggregateOutputType | null
+  }
+
+  type GetDeliverabilityScheduleGroupByPayload<T extends DeliverabilityScheduleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DeliverabilityScheduleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DeliverabilityScheduleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DeliverabilityScheduleGroupByOutputType[P]>
+            : GetScalarType<T[P], DeliverabilityScheduleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DeliverabilityScheduleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    domain?: boolean
+    integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
+    from_provider?: boolean
+    from_account?: boolean
+    dkim_selector?: boolean
+    frequency?: boolean
+    time_of_day?: boolean
+    weekday?: boolean
+    day_of_month?: boolean
+    interval_days?: boolean
+    timezone?: boolean
+    checks?: boolean
+    action_mode?: boolean
+    warn_threshold?: boolean
+    critical_threshold?: boolean
+    is_active?: boolean
+    last_run_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    runs?: boolean | DeliverabilitySchedule$runsArgs<ExtArgs>
+    guard?: boolean | DeliverabilitySchedule$guardArgs<ExtArgs>
+    _count?: boolean | DeliverabilityScheduleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deliverabilitySchedule"]>
+
+  export type DeliverabilityScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    domain?: boolean
+    integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
+    from_provider?: boolean
+    from_account?: boolean
+    dkim_selector?: boolean
+    frequency?: boolean
+    time_of_day?: boolean
+    weekday?: boolean
+    day_of_month?: boolean
+    interval_days?: boolean
+    timezone?: boolean
+    checks?: boolean
+    action_mode?: boolean
+    warn_threshold?: boolean
+    critical_threshold?: boolean
+    is_active?: boolean
+    last_run_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deliverabilitySchedule"]>
+
+  export type DeliverabilityScheduleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    domain?: boolean
+    integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
+    from_provider?: boolean
+    from_account?: boolean
+    dkim_selector?: boolean
+    frequency?: boolean
+    time_of_day?: boolean
+    weekday?: boolean
+    day_of_month?: boolean
+    interval_days?: boolean
+    timezone?: boolean
+    checks?: boolean
+    action_mode?: boolean
+    warn_threshold?: boolean
+    critical_threshold?: boolean
+    is_active?: boolean
+    last_run_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deliverabilitySchedule"]>
+
+  export type DeliverabilityScheduleSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    organisation_uuid?: boolean
+    label?: boolean
+    domain?: boolean
+    integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
+    from_provider?: boolean
+    from_account?: boolean
+    dkim_selector?: boolean
+    frequency?: boolean
+    time_of_day?: boolean
+    weekday?: boolean
+    day_of_month?: boolean
+    interval_days?: boolean
+    timezone?: boolean
+    checks?: boolean
+    action_mode?: boolean
+    warn_threshold?: boolean
+    critical_threshold?: boolean
+    is_active?: boolean
+    last_run_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type DeliverabilityScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "organisation_uuid" | "label" | "domain" | "integration_account_uuid" | "integration_account_domain_uuid" | "from_provider" | "from_account" | "dkim_selector" | "frequency" | "time_of_day" | "weekday" | "day_of_month" | "interval_days" | "timezone" | "checks" | "action_mode" | "warn_threshold" | "critical_threshold" | "is_active" | "last_run_at" | "created_at" | "updated_at", ExtArgs["result"]["deliverabilitySchedule"]>
+  export type DeliverabilityScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+    runs?: boolean | DeliverabilitySchedule$runsArgs<ExtArgs>
+    guard?: boolean | DeliverabilitySchedule$guardArgs<ExtArgs>
+    _count?: boolean | DeliverabilityScheduleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DeliverabilityScheduleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+  export type DeliverabilityScheduleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organisation?: boolean | OrganisationDefaultArgs<ExtArgs>
+  }
+
+  export type $DeliverabilitySchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DeliverabilitySchedule"
+    objects: {
+      organisation: Prisma.$OrganisationPayload<ExtArgs>
+      runs: Prisma.$DeliverabilityRunPayload<ExtArgs>[]
+      guard: Prisma.$DomainSendingGuardPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      organisation_uuid: string
+      label: string | null
+      domain: string
+      integration_account_uuid: string | null
+      integration_account_domain_uuid: string | null
+      from_provider: $Enums.ExternalIntegrationProvider | null
+      from_account: string | null
+      dkim_selector: string | null
+      frequency: $Enums.DeliverabilityFrequency
+      /**
+       * "HH:mm" in `timezone`.
+       */
+      time_of_day: string
+      /**
+       * ISO weekday 1-7, WEEKLY only.
+       */
+      weekday: number | null
+      /**
+       * 1-28, MONTHLY only.
+       */
+      day_of_month: number | null
+      /**
+       * EVERY_N_DAYS only.
+       */
+      interval_days: number | null
+      timezone: string
+      checks: string[]
+      action_mode: $Enums.DeliverabilityActionMode
+      warn_threshold: number
+      critical_threshold: number
+      is_active: boolean
+      last_run_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["deliverabilitySchedule"]>
+    composites: {}
+  }
+
+  type DeliverabilityScheduleGetPayload<S extends boolean | null | undefined | DeliverabilityScheduleDefaultArgs> = $Result.GetResult<Prisma.$DeliverabilitySchedulePayload, S>
+
+  type DeliverabilityScheduleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DeliverabilityScheduleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DeliverabilityScheduleCountAggregateInputType | true
+    }
+
+  export interface DeliverabilityScheduleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DeliverabilitySchedule'], meta: { name: 'DeliverabilitySchedule' } }
+    /**
+     * Find zero or one DeliverabilitySchedule that matches the filter.
+     * @param {DeliverabilityScheduleFindUniqueArgs} args - Arguments to find a DeliverabilitySchedule
+     * @example
+     * // Get one DeliverabilitySchedule
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DeliverabilityScheduleFindUniqueArgs>(args: SelectSubset<T, DeliverabilityScheduleFindUniqueArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DeliverabilitySchedule that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DeliverabilityScheduleFindUniqueOrThrowArgs} args - Arguments to find a DeliverabilitySchedule
+     * @example
+     * // Get one DeliverabilitySchedule
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DeliverabilityScheduleFindUniqueOrThrowArgs>(args: SelectSubset<T, DeliverabilityScheduleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DeliverabilitySchedule that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityScheduleFindFirstArgs} args - Arguments to find a DeliverabilitySchedule
+     * @example
+     * // Get one DeliverabilitySchedule
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DeliverabilityScheduleFindFirstArgs>(args?: SelectSubset<T, DeliverabilityScheduleFindFirstArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DeliverabilitySchedule that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityScheduleFindFirstOrThrowArgs} args - Arguments to find a DeliverabilitySchedule
+     * @example
+     * // Get one DeliverabilitySchedule
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DeliverabilityScheduleFindFirstOrThrowArgs>(args?: SelectSubset<T, DeliverabilityScheduleFindFirstOrThrowArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DeliverabilitySchedules that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityScheduleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DeliverabilitySchedules
+     * const deliverabilitySchedules = await prisma.deliverabilitySchedule.findMany()
+     * 
+     * // Get first 10 DeliverabilitySchedules
+     * const deliverabilitySchedules = await prisma.deliverabilitySchedule.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const deliverabilityScheduleWithIdOnly = await prisma.deliverabilitySchedule.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DeliverabilityScheduleFindManyArgs>(args?: SelectSubset<T, DeliverabilityScheduleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DeliverabilitySchedule.
+     * @param {DeliverabilityScheduleCreateArgs} args - Arguments to create a DeliverabilitySchedule.
+     * @example
+     * // Create one DeliverabilitySchedule
+     * const DeliverabilitySchedule = await prisma.deliverabilitySchedule.create({
+     *   data: {
+     *     // ... data to create a DeliverabilitySchedule
+     *   }
+     * })
+     * 
+     */
+    create<T extends DeliverabilityScheduleCreateArgs>(args: SelectSubset<T, DeliverabilityScheduleCreateArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DeliverabilitySchedules.
+     * @param {DeliverabilityScheduleCreateManyArgs} args - Arguments to create many DeliverabilitySchedules.
+     * @example
+     * // Create many DeliverabilitySchedules
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DeliverabilityScheduleCreateManyArgs>(args?: SelectSubset<T, DeliverabilityScheduleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DeliverabilitySchedules and returns the data saved in the database.
+     * @param {DeliverabilityScheduleCreateManyAndReturnArgs} args - Arguments to create many DeliverabilitySchedules.
+     * @example
+     * // Create many DeliverabilitySchedules
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DeliverabilitySchedules and only return the `id`
+     * const deliverabilityScheduleWithIdOnly = await prisma.deliverabilitySchedule.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DeliverabilityScheduleCreateManyAndReturnArgs>(args?: SelectSubset<T, DeliverabilityScheduleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DeliverabilitySchedule.
+     * @param {DeliverabilityScheduleDeleteArgs} args - Arguments to delete one DeliverabilitySchedule.
+     * @example
+     * // Delete one DeliverabilitySchedule
+     * const DeliverabilitySchedule = await prisma.deliverabilitySchedule.delete({
+     *   where: {
+     *     // ... filter to delete one DeliverabilitySchedule
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DeliverabilityScheduleDeleteArgs>(args: SelectSubset<T, DeliverabilityScheduleDeleteArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DeliverabilitySchedule.
+     * @param {DeliverabilityScheduleUpdateArgs} args - Arguments to update one DeliverabilitySchedule.
+     * @example
+     * // Update one DeliverabilitySchedule
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DeliverabilityScheduleUpdateArgs>(args: SelectSubset<T, DeliverabilityScheduleUpdateArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DeliverabilitySchedules.
+     * @param {DeliverabilityScheduleDeleteManyArgs} args - Arguments to filter DeliverabilitySchedules to delete.
+     * @example
+     * // Delete a few DeliverabilitySchedules
+     * const { count } = await prisma.deliverabilitySchedule.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DeliverabilityScheduleDeleteManyArgs>(args?: SelectSubset<T, DeliverabilityScheduleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DeliverabilitySchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityScheduleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DeliverabilitySchedules
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DeliverabilityScheduleUpdateManyArgs>(args: SelectSubset<T, DeliverabilityScheduleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DeliverabilitySchedules and returns the data updated in the database.
+     * @param {DeliverabilityScheduleUpdateManyAndReturnArgs} args - Arguments to update many DeliverabilitySchedules.
+     * @example
+     * // Update many DeliverabilitySchedules
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DeliverabilitySchedules and only return the `id`
+     * const deliverabilityScheduleWithIdOnly = await prisma.deliverabilitySchedule.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DeliverabilityScheduleUpdateManyAndReturnArgs>(args: SelectSubset<T, DeliverabilityScheduleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DeliverabilitySchedule.
+     * @param {DeliverabilityScheduleUpsertArgs} args - Arguments to update or create a DeliverabilitySchedule.
+     * @example
+     * // Update or create a DeliverabilitySchedule
+     * const deliverabilitySchedule = await prisma.deliverabilitySchedule.upsert({
+     *   create: {
+     *     // ... data to create a DeliverabilitySchedule
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DeliverabilitySchedule we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DeliverabilityScheduleUpsertArgs>(args: SelectSubset<T, DeliverabilityScheduleUpsertArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DeliverabilitySchedules.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityScheduleCountArgs} args - Arguments to filter DeliverabilitySchedules to count.
+     * @example
+     * // Count the number of DeliverabilitySchedules
+     * const count = await prisma.deliverabilitySchedule.count({
+     *   where: {
+     *     // ... the filter for the DeliverabilitySchedules we want to count
+     *   }
+     * })
+    **/
+    count<T extends DeliverabilityScheduleCountArgs>(
+      args?: Subset<T, DeliverabilityScheduleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DeliverabilityScheduleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DeliverabilitySchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityScheduleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DeliverabilityScheduleAggregateArgs>(args: Subset<T, DeliverabilityScheduleAggregateArgs>): Prisma.PrismaPromise<GetDeliverabilityScheduleAggregateType<T>>
+
+    /**
+     * Group by DeliverabilitySchedule.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityScheduleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DeliverabilityScheduleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DeliverabilityScheduleGroupByArgs['orderBy'] }
+        : { orderBy?: DeliverabilityScheduleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DeliverabilityScheduleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDeliverabilityScheduleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DeliverabilitySchedule model
+   */
+  readonly fields: DeliverabilityScheduleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DeliverabilitySchedule.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DeliverabilityScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organisation<T extends OrganisationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganisationDefaultArgs<ExtArgs>>): Prisma__OrganisationClient<$Result.GetResult<Prisma.$OrganisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    runs<T extends DeliverabilitySchedule$runsArgs<ExtArgs> = {}>(args?: Subset<T, DeliverabilitySchedule$runsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    guard<T extends DeliverabilitySchedule$guardArgs<ExtArgs> = {}>(args?: Subset<T, DeliverabilitySchedule$guardArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DeliverabilitySchedule model
+   */
+  interface DeliverabilityScheduleFieldRefs {
+    readonly id: FieldRef<"DeliverabilitySchedule", 'Int'>
+    readonly uuid: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly organisation_uuid: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly label: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly domain: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly integration_account_uuid: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly integration_account_domain_uuid: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly from_provider: FieldRef<"DeliverabilitySchedule", 'ExternalIntegrationProvider'>
+    readonly from_account: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly dkim_selector: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly frequency: FieldRef<"DeliverabilitySchedule", 'DeliverabilityFrequency'>
+    readonly time_of_day: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly weekday: FieldRef<"DeliverabilitySchedule", 'Int'>
+    readonly day_of_month: FieldRef<"DeliverabilitySchedule", 'Int'>
+    readonly interval_days: FieldRef<"DeliverabilitySchedule", 'Int'>
+    readonly timezone: FieldRef<"DeliverabilitySchedule", 'String'>
+    readonly checks: FieldRef<"DeliverabilitySchedule", 'String[]'>
+    readonly action_mode: FieldRef<"DeliverabilitySchedule", 'DeliverabilityActionMode'>
+    readonly warn_threshold: FieldRef<"DeliverabilitySchedule", 'Int'>
+    readonly critical_threshold: FieldRef<"DeliverabilitySchedule", 'Int'>
+    readonly is_active: FieldRef<"DeliverabilitySchedule", 'Boolean'>
+    readonly last_run_at: FieldRef<"DeliverabilitySchedule", 'DateTime'>
+    readonly created_at: FieldRef<"DeliverabilitySchedule", 'DateTime'>
+    readonly updated_at: FieldRef<"DeliverabilitySchedule", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DeliverabilitySchedule findUnique
+   */
+  export type DeliverabilityScheduleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilitySchedule to fetch.
+     */
+    where: DeliverabilityScheduleWhereUniqueInput
+  }
+
+  /**
+   * DeliverabilitySchedule findUniqueOrThrow
+   */
+  export type DeliverabilityScheduleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilitySchedule to fetch.
+     */
+    where: DeliverabilityScheduleWhereUniqueInput
+  }
+
+  /**
+   * DeliverabilitySchedule findFirst
+   */
+  export type DeliverabilityScheduleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilitySchedule to fetch.
+     */
+    where?: DeliverabilityScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeliverabilitySchedules to fetch.
+     */
+    orderBy?: DeliverabilityScheduleOrderByWithRelationInput | DeliverabilityScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DeliverabilitySchedules.
+     */
+    cursor?: DeliverabilityScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeliverabilitySchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeliverabilitySchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DeliverabilitySchedules.
+     */
+    distinct?: DeliverabilityScheduleScalarFieldEnum | DeliverabilityScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * DeliverabilitySchedule findFirstOrThrow
+   */
+  export type DeliverabilityScheduleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilitySchedule to fetch.
+     */
+    where?: DeliverabilityScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeliverabilitySchedules to fetch.
+     */
+    orderBy?: DeliverabilityScheduleOrderByWithRelationInput | DeliverabilityScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DeliverabilitySchedules.
+     */
+    cursor?: DeliverabilityScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeliverabilitySchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeliverabilitySchedules.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DeliverabilitySchedules.
+     */
+    distinct?: DeliverabilityScheduleScalarFieldEnum | DeliverabilityScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * DeliverabilitySchedule findMany
+   */
+  export type DeliverabilityScheduleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilitySchedules to fetch.
+     */
+    where?: DeliverabilityScheduleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeliverabilitySchedules to fetch.
+     */
+    orderBy?: DeliverabilityScheduleOrderByWithRelationInput | DeliverabilityScheduleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DeliverabilitySchedules.
+     */
+    cursor?: DeliverabilityScheduleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeliverabilitySchedules from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeliverabilitySchedules.
+     */
+    skip?: number
+    distinct?: DeliverabilityScheduleScalarFieldEnum | DeliverabilityScheduleScalarFieldEnum[]
+  }
+
+  /**
+   * DeliverabilitySchedule create
+   */
+  export type DeliverabilityScheduleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DeliverabilitySchedule.
+     */
+    data: XOR<DeliverabilityScheduleCreateInput, DeliverabilityScheduleUncheckedCreateInput>
+  }
+
+  /**
+   * DeliverabilitySchedule createMany
+   */
+  export type DeliverabilityScheduleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DeliverabilitySchedules.
+     */
+    data: DeliverabilityScheduleCreateManyInput | DeliverabilityScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DeliverabilitySchedule createManyAndReturn
+   */
+  export type DeliverabilityScheduleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * The data used to create many DeliverabilitySchedules.
+     */
+    data: DeliverabilityScheduleCreateManyInput | DeliverabilityScheduleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DeliverabilitySchedule update
+   */
+  export type DeliverabilityScheduleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DeliverabilitySchedule.
+     */
+    data: XOR<DeliverabilityScheduleUpdateInput, DeliverabilityScheduleUncheckedUpdateInput>
+    /**
+     * Choose, which DeliverabilitySchedule to update.
+     */
+    where: DeliverabilityScheduleWhereUniqueInput
+  }
+
+  /**
+   * DeliverabilitySchedule updateMany
+   */
+  export type DeliverabilityScheduleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DeliverabilitySchedules.
+     */
+    data: XOR<DeliverabilityScheduleUpdateManyMutationInput, DeliverabilityScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which DeliverabilitySchedules to update
+     */
+    where?: DeliverabilityScheduleWhereInput
+    /**
+     * Limit how many DeliverabilitySchedules to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DeliverabilitySchedule updateManyAndReturn
+   */
+  export type DeliverabilityScheduleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * The data used to update DeliverabilitySchedules.
+     */
+    data: XOR<DeliverabilityScheduleUpdateManyMutationInput, DeliverabilityScheduleUncheckedUpdateManyInput>
+    /**
+     * Filter which DeliverabilitySchedules to update
+     */
+    where?: DeliverabilityScheduleWhereInput
+    /**
+     * Limit how many DeliverabilitySchedules to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DeliverabilitySchedule upsert
+   */
+  export type DeliverabilityScheduleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DeliverabilitySchedule to update in case it exists.
+     */
+    where: DeliverabilityScheduleWhereUniqueInput
+    /**
+     * In case the DeliverabilitySchedule found by the `where` argument doesn't exist, create a new DeliverabilitySchedule with this data.
+     */
+    create: XOR<DeliverabilityScheduleCreateInput, DeliverabilityScheduleUncheckedCreateInput>
+    /**
+     * In case the DeliverabilitySchedule was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DeliverabilityScheduleUpdateInput, DeliverabilityScheduleUncheckedUpdateInput>
+  }
+
+  /**
+   * DeliverabilitySchedule delete
+   */
+  export type DeliverabilityScheduleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+    /**
+     * Filter which DeliverabilitySchedule to delete.
+     */
+    where: DeliverabilityScheduleWhereUniqueInput
+  }
+
+  /**
+   * DeliverabilitySchedule deleteMany
+   */
+  export type DeliverabilityScheduleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DeliverabilitySchedules to delete
+     */
+    where?: DeliverabilityScheduleWhereInput
+    /**
+     * Limit how many DeliverabilitySchedules to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DeliverabilitySchedule.runs
+   */
+  export type DeliverabilitySchedule$runsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    where?: DeliverabilityRunWhereInput
+    orderBy?: DeliverabilityRunOrderByWithRelationInput | DeliverabilityRunOrderByWithRelationInput[]
+    cursor?: DeliverabilityRunWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DeliverabilityRunScalarFieldEnum | DeliverabilityRunScalarFieldEnum[]
+  }
+
+  /**
+   * DeliverabilitySchedule.guard
+   */
+  export type DeliverabilitySchedule$guardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    where?: DomainSendingGuardWhereInput
+  }
+
+  /**
+   * DeliverabilitySchedule without action
+   */
+  export type DeliverabilityScheduleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilitySchedule
+     */
+    select?: DeliverabilityScheduleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilitySchedule
+     */
+    omit?: DeliverabilityScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityScheduleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DeliverabilityRun
+   */
+
+  export type AggregateDeliverabilityRun = {
+    _count: DeliverabilityRunCountAggregateOutputType | null
+    _avg: DeliverabilityRunAvgAggregateOutputType | null
+    _sum: DeliverabilityRunSumAggregateOutputType | null
+    _min: DeliverabilityRunMinAggregateOutputType | null
+    _max: DeliverabilityRunMaxAggregateOutputType | null
+  }
+
+  export type DeliverabilityRunAvgAggregateOutputType = {
+    id: number | null
+    score: number | null
+    jev_confidence: number | null
+    recommended_daily_cap: number | null
+  }
+
+  export type DeliverabilityRunSumAggregateOutputType = {
+    id: number | null
+    score: number | null
+    jev_confidence: number | null
+    recommended_daily_cap: number | null
+  }
+
+  export type DeliverabilityRunMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    schedule_uuid: string | null
+    status: $Enums.DeliverabilityRunStatus | null
+    score: number | null
+    risk_level: $Enums.DeliverabilityRiskLevel | null
+    scored_by: string | null
+    jev_confidence: number | null
+    summary: string | null
+    mxtoolbox_check_uuid: string | null
+    mail_tester_test_uuid: string | null
+    recommended_daily_cap: number | null
+    action_taken: string | null
+    error_message: string | null
+    created_at: Date | null
+    finished_at: Date | null
+  }
+
+  export type DeliverabilityRunMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    schedule_uuid: string | null
+    status: $Enums.DeliverabilityRunStatus | null
+    score: number | null
+    risk_level: $Enums.DeliverabilityRiskLevel | null
+    scored_by: string | null
+    jev_confidence: number | null
+    summary: string | null
+    mxtoolbox_check_uuid: string | null
+    mail_tester_test_uuid: string | null
+    recommended_daily_cap: number | null
+    action_taken: string | null
+    error_message: string | null
+    created_at: Date | null
+    finished_at: Date | null
+  }
+
+  export type DeliverabilityRunCountAggregateOutputType = {
+    id: number
+    uuid: number
+    schedule_uuid: number
+    status: number
+    score: number
+    risk_level: number
+    scored_by: number
+    jev_confidence: number
+    summary: number
+    mxtoolbox_check_uuid: number
+    mail_tester_test_uuid: number
+    recommended_daily_cap: number
+    action_taken: number
+    error_message: number
+    created_at: number
+    finished_at: number
+    _all: number
+  }
+
+
+  export type DeliverabilityRunAvgAggregateInputType = {
+    id?: true
+    score?: true
+    jev_confidence?: true
+    recommended_daily_cap?: true
+  }
+
+  export type DeliverabilityRunSumAggregateInputType = {
+    id?: true
+    score?: true
+    jev_confidence?: true
+    recommended_daily_cap?: true
+  }
+
+  export type DeliverabilityRunMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    schedule_uuid?: true
+    status?: true
+    score?: true
+    risk_level?: true
+    scored_by?: true
+    jev_confidence?: true
+    summary?: true
+    mxtoolbox_check_uuid?: true
+    mail_tester_test_uuid?: true
+    recommended_daily_cap?: true
+    action_taken?: true
+    error_message?: true
+    created_at?: true
+    finished_at?: true
+  }
+
+  export type DeliverabilityRunMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    schedule_uuid?: true
+    status?: true
+    score?: true
+    risk_level?: true
+    scored_by?: true
+    jev_confidence?: true
+    summary?: true
+    mxtoolbox_check_uuid?: true
+    mail_tester_test_uuid?: true
+    recommended_daily_cap?: true
+    action_taken?: true
+    error_message?: true
+    created_at?: true
+    finished_at?: true
+  }
+
+  export type DeliverabilityRunCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    schedule_uuid?: true
+    status?: true
+    score?: true
+    risk_level?: true
+    scored_by?: true
+    jev_confidence?: true
+    summary?: true
+    mxtoolbox_check_uuid?: true
+    mail_tester_test_uuid?: true
+    recommended_daily_cap?: true
+    action_taken?: true
+    error_message?: true
+    created_at?: true
+    finished_at?: true
+    _all?: true
+  }
+
+  export type DeliverabilityRunAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DeliverabilityRun to aggregate.
+     */
+    where?: DeliverabilityRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeliverabilityRuns to fetch.
+     */
+    orderBy?: DeliverabilityRunOrderByWithRelationInput | DeliverabilityRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DeliverabilityRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeliverabilityRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeliverabilityRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DeliverabilityRuns
+    **/
+    _count?: true | DeliverabilityRunCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DeliverabilityRunAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DeliverabilityRunSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DeliverabilityRunMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DeliverabilityRunMaxAggregateInputType
+  }
+
+  export type GetDeliverabilityRunAggregateType<T extends DeliverabilityRunAggregateArgs> = {
+        [P in keyof T & keyof AggregateDeliverabilityRun]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDeliverabilityRun[P]>
+      : GetScalarType<T[P], AggregateDeliverabilityRun[P]>
+  }
+
+
+
+
+  export type DeliverabilityRunGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DeliverabilityRunWhereInput
+    orderBy?: DeliverabilityRunOrderByWithAggregationInput | DeliverabilityRunOrderByWithAggregationInput[]
+    by: DeliverabilityRunScalarFieldEnum[] | DeliverabilityRunScalarFieldEnum
+    having?: DeliverabilityRunScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DeliverabilityRunCountAggregateInputType | true
+    _avg?: DeliverabilityRunAvgAggregateInputType
+    _sum?: DeliverabilityRunSumAggregateInputType
+    _min?: DeliverabilityRunMinAggregateInputType
+    _max?: DeliverabilityRunMaxAggregateInputType
+  }
+
+  export type DeliverabilityRunGroupByOutputType = {
+    id: number
+    uuid: string
+    schedule_uuid: string
+    status: $Enums.DeliverabilityRunStatus
+    score: number | null
+    risk_level: $Enums.DeliverabilityRiskLevel | null
+    scored_by: string | null
+    jev_confidence: number | null
+    summary: string | null
+    mxtoolbox_check_uuid: string | null
+    mail_tester_test_uuid: string | null
+    recommended_daily_cap: number | null
+    action_taken: string | null
+    error_message: string | null
+    created_at: Date
+    finished_at: Date | null
+    _count: DeliverabilityRunCountAggregateOutputType | null
+    _avg: DeliverabilityRunAvgAggregateOutputType | null
+    _sum: DeliverabilityRunSumAggregateOutputType | null
+    _min: DeliverabilityRunMinAggregateOutputType | null
+    _max: DeliverabilityRunMaxAggregateOutputType | null
+  }
+
+  type GetDeliverabilityRunGroupByPayload<T extends DeliverabilityRunGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DeliverabilityRunGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DeliverabilityRunGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DeliverabilityRunGroupByOutputType[P]>
+            : GetScalarType<T[P], DeliverabilityRunGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DeliverabilityRunSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    schedule_uuid?: boolean
+    status?: boolean
+    score?: boolean
+    risk_level?: boolean
+    scored_by?: boolean
+    jev_confidence?: boolean
+    summary?: boolean
+    mxtoolbox_check_uuid?: boolean
+    mail_tester_test_uuid?: boolean
+    recommended_daily_cap?: boolean
+    action_taken?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    finished_at?: boolean
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deliverabilityRun"]>
+
+  export type DeliverabilityRunSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    schedule_uuid?: boolean
+    status?: boolean
+    score?: boolean
+    risk_level?: boolean
+    scored_by?: boolean
+    jev_confidence?: boolean
+    summary?: boolean
+    mxtoolbox_check_uuid?: boolean
+    mail_tester_test_uuid?: boolean
+    recommended_daily_cap?: boolean
+    action_taken?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    finished_at?: boolean
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deliverabilityRun"]>
+
+  export type DeliverabilityRunSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    schedule_uuid?: boolean
+    status?: boolean
+    score?: boolean
+    risk_level?: boolean
+    scored_by?: boolean
+    jev_confidence?: boolean
+    summary?: boolean
+    mxtoolbox_check_uuid?: boolean
+    mail_tester_test_uuid?: boolean
+    recommended_daily_cap?: boolean
+    action_taken?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    finished_at?: boolean
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deliverabilityRun"]>
+
+  export type DeliverabilityRunSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    schedule_uuid?: boolean
+    status?: boolean
+    score?: boolean
+    risk_level?: boolean
+    scored_by?: boolean
+    jev_confidence?: boolean
+    summary?: boolean
+    mxtoolbox_check_uuid?: boolean
+    mail_tester_test_uuid?: boolean
+    recommended_daily_cap?: boolean
+    action_taken?: boolean
+    error_message?: boolean
+    created_at?: boolean
+    finished_at?: boolean
+  }
+
+  export type DeliverabilityRunOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "schedule_uuid" | "status" | "score" | "risk_level" | "scored_by" | "jev_confidence" | "summary" | "mxtoolbox_check_uuid" | "mail_tester_test_uuid" | "recommended_daily_cap" | "action_taken" | "error_message" | "created_at" | "finished_at", ExtArgs["result"]["deliverabilityRun"]>
+  export type DeliverabilityRunInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }
+  export type DeliverabilityRunIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }
+  export type DeliverabilityRunIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }
+
+  export type $DeliverabilityRunPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DeliverabilityRun"
+    objects: {
+      schedule: Prisma.$DeliverabilitySchedulePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      schedule_uuid: string
+      status: $Enums.DeliverabilityRunStatus
+      score: number | null
+      risk_level: $Enums.DeliverabilityRiskLevel | null
+      /**
+       * "jev" when scored by Jev, "rules" for the deterministic fallback.
+       */
+      scored_by: string | null
+      jev_confidence: number | null
+      summary: string | null
+      mxtoolbox_check_uuid: string | null
+      mail_tester_test_uuid: string | null
+      recommended_daily_cap: number | null
+      action_taken: string | null
+      error_message: string | null
+      created_at: Date
+      finished_at: Date | null
+    }, ExtArgs["result"]["deliverabilityRun"]>
+    composites: {}
+  }
+
+  type DeliverabilityRunGetPayload<S extends boolean | null | undefined | DeliverabilityRunDefaultArgs> = $Result.GetResult<Prisma.$DeliverabilityRunPayload, S>
+
+  type DeliverabilityRunCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DeliverabilityRunFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DeliverabilityRunCountAggregateInputType | true
+    }
+
+  export interface DeliverabilityRunDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DeliverabilityRun'], meta: { name: 'DeliverabilityRun' } }
+    /**
+     * Find zero or one DeliverabilityRun that matches the filter.
+     * @param {DeliverabilityRunFindUniqueArgs} args - Arguments to find a DeliverabilityRun
+     * @example
+     * // Get one DeliverabilityRun
+     * const deliverabilityRun = await prisma.deliverabilityRun.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DeliverabilityRunFindUniqueArgs>(args: SelectSubset<T, DeliverabilityRunFindUniqueArgs<ExtArgs>>): Prisma__DeliverabilityRunClient<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DeliverabilityRun that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DeliverabilityRunFindUniqueOrThrowArgs} args - Arguments to find a DeliverabilityRun
+     * @example
+     * // Get one DeliverabilityRun
+     * const deliverabilityRun = await prisma.deliverabilityRun.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DeliverabilityRunFindUniqueOrThrowArgs>(args: SelectSubset<T, DeliverabilityRunFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DeliverabilityRunClient<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DeliverabilityRun that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityRunFindFirstArgs} args - Arguments to find a DeliverabilityRun
+     * @example
+     * // Get one DeliverabilityRun
+     * const deliverabilityRun = await prisma.deliverabilityRun.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DeliverabilityRunFindFirstArgs>(args?: SelectSubset<T, DeliverabilityRunFindFirstArgs<ExtArgs>>): Prisma__DeliverabilityRunClient<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DeliverabilityRun that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityRunFindFirstOrThrowArgs} args - Arguments to find a DeliverabilityRun
+     * @example
+     * // Get one DeliverabilityRun
+     * const deliverabilityRun = await prisma.deliverabilityRun.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DeliverabilityRunFindFirstOrThrowArgs>(args?: SelectSubset<T, DeliverabilityRunFindFirstOrThrowArgs<ExtArgs>>): Prisma__DeliverabilityRunClient<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DeliverabilityRuns that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityRunFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DeliverabilityRuns
+     * const deliverabilityRuns = await prisma.deliverabilityRun.findMany()
+     * 
+     * // Get first 10 DeliverabilityRuns
+     * const deliverabilityRuns = await prisma.deliverabilityRun.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const deliverabilityRunWithIdOnly = await prisma.deliverabilityRun.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DeliverabilityRunFindManyArgs>(args?: SelectSubset<T, DeliverabilityRunFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DeliverabilityRun.
+     * @param {DeliverabilityRunCreateArgs} args - Arguments to create a DeliverabilityRun.
+     * @example
+     * // Create one DeliverabilityRun
+     * const DeliverabilityRun = await prisma.deliverabilityRun.create({
+     *   data: {
+     *     // ... data to create a DeliverabilityRun
+     *   }
+     * })
+     * 
+     */
+    create<T extends DeliverabilityRunCreateArgs>(args: SelectSubset<T, DeliverabilityRunCreateArgs<ExtArgs>>): Prisma__DeliverabilityRunClient<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DeliverabilityRuns.
+     * @param {DeliverabilityRunCreateManyArgs} args - Arguments to create many DeliverabilityRuns.
+     * @example
+     * // Create many DeliverabilityRuns
+     * const deliverabilityRun = await prisma.deliverabilityRun.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DeliverabilityRunCreateManyArgs>(args?: SelectSubset<T, DeliverabilityRunCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DeliverabilityRuns and returns the data saved in the database.
+     * @param {DeliverabilityRunCreateManyAndReturnArgs} args - Arguments to create many DeliverabilityRuns.
+     * @example
+     * // Create many DeliverabilityRuns
+     * const deliverabilityRun = await prisma.deliverabilityRun.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DeliverabilityRuns and only return the `id`
+     * const deliverabilityRunWithIdOnly = await prisma.deliverabilityRun.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DeliverabilityRunCreateManyAndReturnArgs>(args?: SelectSubset<T, DeliverabilityRunCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DeliverabilityRun.
+     * @param {DeliverabilityRunDeleteArgs} args - Arguments to delete one DeliverabilityRun.
+     * @example
+     * // Delete one DeliverabilityRun
+     * const DeliverabilityRun = await prisma.deliverabilityRun.delete({
+     *   where: {
+     *     // ... filter to delete one DeliverabilityRun
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DeliverabilityRunDeleteArgs>(args: SelectSubset<T, DeliverabilityRunDeleteArgs<ExtArgs>>): Prisma__DeliverabilityRunClient<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DeliverabilityRun.
+     * @param {DeliverabilityRunUpdateArgs} args - Arguments to update one DeliverabilityRun.
+     * @example
+     * // Update one DeliverabilityRun
+     * const deliverabilityRun = await prisma.deliverabilityRun.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DeliverabilityRunUpdateArgs>(args: SelectSubset<T, DeliverabilityRunUpdateArgs<ExtArgs>>): Prisma__DeliverabilityRunClient<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DeliverabilityRuns.
+     * @param {DeliverabilityRunDeleteManyArgs} args - Arguments to filter DeliverabilityRuns to delete.
+     * @example
+     * // Delete a few DeliverabilityRuns
+     * const { count } = await prisma.deliverabilityRun.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DeliverabilityRunDeleteManyArgs>(args?: SelectSubset<T, DeliverabilityRunDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DeliverabilityRuns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityRunUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DeliverabilityRuns
+     * const deliverabilityRun = await prisma.deliverabilityRun.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DeliverabilityRunUpdateManyArgs>(args: SelectSubset<T, DeliverabilityRunUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DeliverabilityRuns and returns the data updated in the database.
+     * @param {DeliverabilityRunUpdateManyAndReturnArgs} args - Arguments to update many DeliverabilityRuns.
+     * @example
+     * // Update many DeliverabilityRuns
+     * const deliverabilityRun = await prisma.deliverabilityRun.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DeliverabilityRuns and only return the `id`
+     * const deliverabilityRunWithIdOnly = await prisma.deliverabilityRun.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DeliverabilityRunUpdateManyAndReturnArgs>(args: SelectSubset<T, DeliverabilityRunUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DeliverabilityRun.
+     * @param {DeliverabilityRunUpsertArgs} args - Arguments to update or create a DeliverabilityRun.
+     * @example
+     * // Update or create a DeliverabilityRun
+     * const deliverabilityRun = await prisma.deliverabilityRun.upsert({
+     *   create: {
+     *     // ... data to create a DeliverabilityRun
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DeliverabilityRun we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DeliverabilityRunUpsertArgs>(args: SelectSubset<T, DeliverabilityRunUpsertArgs<ExtArgs>>): Prisma__DeliverabilityRunClient<$Result.GetResult<Prisma.$DeliverabilityRunPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DeliverabilityRuns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityRunCountArgs} args - Arguments to filter DeliverabilityRuns to count.
+     * @example
+     * // Count the number of DeliverabilityRuns
+     * const count = await prisma.deliverabilityRun.count({
+     *   where: {
+     *     // ... the filter for the DeliverabilityRuns we want to count
+     *   }
+     * })
+    **/
+    count<T extends DeliverabilityRunCountArgs>(
+      args?: Subset<T, DeliverabilityRunCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DeliverabilityRunCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DeliverabilityRun.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityRunAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DeliverabilityRunAggregateArgs>(args: Subset<T, DeliverabilityRunAggregateArgs>): Prisma.PrismaPromise<GetDeliverabilityRunAggregateType<T>>
+
+    /**
+     * Group by DeliverabilityRun.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeliverabilityRunGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DeliverabilityRunGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DeliverabilityRunGroupByArgs['orderBy'] }
+        : { orderBy?: DeliverabilityRunGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DeliverabilityRunGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDeliverabilityRunGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DeliverabilityRun model
+   */
+  readonly fields: DeliverabilityRunFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DeliverabilityRun.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DeliverabilityRunClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    schedule<T extends DeliverabilityScheduleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DeliverabilityScheduleDefaultArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DeliverabilityRun model
+   */
+  interface DeliverabilityRunFieldRefs {
+    readonly id: FieldRef<"DeliverabilityRun", 'Int'>
+    readonly uuid: FieldRef<"DeliverabilityRun", 'String'>
+    readonly schedule_uuid: FieldRef<"DeliverabilityRun", 'String'>
+    readonly status: FieldRef<"DeliverabilityRun", 'DeliverabilityRunStatus'>
+    readonly score: FieldRef<"DeliverabilityRun", 'Int'>
+    readonly risk_level: FieldRef<"DeliverabilityRun", 'DeliverabilityRiskLevel'>
+    readonly scored_by: FieldRef<"DeliverabilityRun", 'String'>
+    readonly jev_confidence: FieldRef<"DeliverabilityRun", 'Float'>
+    readonly summary: FieldRef<"DeliverabilityRun", 'String'>
+    readonly mxtoolbox_check_uuid: FieldRef<"DeliverabilityRun", 'String'>
+    readonly mail_tester_test_uuid: FieldRef<"DeliverabilityRun", 'String'>
+    readonly recommended_daily_cap: FieldRef<"DeliverabilityRun", 'Int'>
+    readonly action_taken: FieldRef<"DeliverabilityRun", 'String'>
+    readonly error_message: FieldRef<"DeliverabilityRun", 'String'>
+    readonly created_at: FieldRef<"DeliverabilityRun", 'DateTime'>
+    readonly finished_at: FieldRef<"DeliverabilityRun", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DeliverabilityRun findUnique
+   */
+  export type DeliverabilityRunFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilityRun to fetch.
+     */
+    where: DeliverabilityRunWhereUniqueInput
+  }
+
+  /**
+   * DeliverabilityRun findUniqueOrThrow
+   */
+  export type DeliverabilityRunFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilityRun to fetch.
+     */
+    where: DeliverabilityRunWhereUniqueInput
+  }
+
+  /**
+   * DeliverabilityRun findFirst
+   */
+  export type DeliverabilityRunFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilityRun to fetch.
+     */
+    where?: DeliverabilityRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeliverabilityRuns to fetch.
+     */
+    orderBy?: DeliverabilityRunOrderByWithRelationInput | DeliverabilityRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DeliverabilityRuns.
+     */
+    cursor?: DeliverabilityRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeliverabilityRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeliverabilityRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DeliverabilityRuns.
+     */
+    distinct?: DeliverabilityRunScalarFieldEnum | DeliverabilityRunScalarFieldEnum[]
+  }
+
+  /**
+   * DeliverabilityRun findFirstOrThrow
+   */
+  export type DeliverabilityRunFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilityRun to fetch.
+     */
+    where?: DeliverabilityRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeliverabilityRuns to fetch.
+     */
+    orderBy?: DeliverabilityRunOrderByWithRelationInput | DeliverabilityRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DeliverabilityRuns.
+     */
+    cursor?: DeliverabilityRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeliverabilityRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeliverabilityRuns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DeliverabilityRuns.
+     */
+    distinct?: DeliverabilityRunScalarFieldEnum | DeliverabilityRunScalarFieldEnum[]
+  }
+
+  /**
+   * DeliverabilityRun findMany
+   */
+  export type DeliverabilityRunFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * Filter, which DeliverabilityRuns to fetch.
+     */
+    where?: DeliverabilityRunWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeliverabilityRuns to fetch.
+     */
+    orderBy?: DeliverabilityRunOrderByWithRelationInput | DeliverabilityRunOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DeliverabilityRuns.
+     */
+    cursor?: DeliverabilityRunWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeliverabilityRuns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeliverabilityRuns.
+     */
+    skip?: number
+    distinct?: DeliverabilityRunScalarFieldEnum | DeliverabilityRunScalarFieldEnum[]
+  }
+
+  /**
+   * DeliverabilityRun create
+   */
+  export type DeliverabilityRunCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DeliverabilityRun.
+     */
+    data: XOR<DeliverabilityRunCreateInput, DeliverabilityRunUncheckedCreateInput>
+  }
+
+  /**
+   * DeliverabilityRun createMany
+   */
+  export type DeliverabilityRunCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DeliverabilityRuns.
+     */
+    data: DeliverabilityRunCreateManyInput | DeliverabilityRunCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DeliverabilityRun createManyAndReturn
+   */
+  export type DeliverabilityRunCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * The data used to create many DeliverabilityRuns.
+     */
+    data: DeliverabilityRunCreateManyInput | DeliverabilityRunCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DeliverabilityRun update
+   */
+  export type DeliverabilityRunUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DeliverabilityRun.
+     */
+    data: XOR<DeliverabilityRunUpdateInput, DeliverabilityRunUncheckedUpdateInput>
+    /**
+     * Choose, which DeliverabilityRun to update.
+     */
+    where: DeliverabilityRunWhereUniqueInput
+  }
+
+  /**
+   * DeliverabilityRun updateMany
+   */
+  export type DeliverabilityRunUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DeliverabilityRuns.
+     */
+    data: XOR<DeliverabilityRunUpdateManyMutationInput, DeliverabilityRunUncheckedUpdateManyInput>
+    /**
+     * Filter which DeliverabilityRuns to update
+     */
+    where?: DeliverabilityRunWhereInput
+    /**
+     * Limit how many DeliverabilityRuns to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DeliverabilityRun updateManyAndReturn
+   */
+  export type DeliverabilityRunUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * The data used to update DeliverabilityRuns.
+     */
+    data: XOR<DeliverabilityRunUpdateManyMutationInput, DeliverabilityRunUncheckedUpdateManyInput>
+    /**
+     * Filter which DeliverabilityRuns to update
+     */
+    where?: DeliverabilityRunWhereInput
+    /**
+     * Limit how many DeliverabilityRuns to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DeliverabilityRun upsert
+   */
+  export type DeliverabilityRunUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DeliverabilityRun to update in case it exists.
+     */
+    where: DeliverabilityRunWhereUniqueInput
+    /**
+     * In case the DeliverabilityRun found by the `where` argument doesn't exist, create a new DeliverabilityRun with this data.
+     */
+    create: XOR<DeliverabilityRunCreateInput, DeliverabilityRunUncheckedCreateInput>
+    /**
+     * In case the DeliverabilityRun was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DeliverabilityRunUpdateInput, DeliverabilityRunUncheckedUpdateInput>
+  }
+
+  /**
+   * DeliverabilityRun delete
+   */
+  export type DeliverabilityRunDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+    /**
+     * Filter which DeliverabilityRun to delete.
+     */
+    where: DeliverabilityRunWhereUniqueInput
+  }
+
+  /**
+   * DeliverabilityRun deleteMany
+   */
+  export type DeliverabilityRunDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DeliverabilityRuns to delete
+     */
+    where?: DeliverabilityRunWhereInput
+    /**
+     * Limit how many DeliverabilityRuns to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DeliverabilityRun without action
+   */
+  export type DeliverabilityRunDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeliverabilityRun
+     */
+    select?: DeliverabilityRunSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeliverabilityRun
+     */
+    omit?: DeliverabilityRunOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeliverabilityRunInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DomainSendingGuard
+   */
+
+  export type AggregateDomainSendingGuard = {
+    _count: DomainSendingGuardCountAggregateOutputType | null
+    _avg: DomainSendingGuardAvgAggregateOutputType | null
+    _sum: DomainSendingGuardSumAggregateOutputType | null
+    _min: DomainSendingGuardMinAggregateOutputType | null
+    _max: DomainSendingGuardMaxAggregateOutputType | null
+  }
+
+  export type DomainSendingGuardAvgAggregateOutputType = {
+    id: number | null
+    daily_cap: number | null
+    baseline_daily_volume: number | null
+  }
+
+  export type DomainSendingGuardSumAggregateOutputType = {
+    id: number | null
+    daily_cap: number | null
+    baseline_daily_volume: number | null
+  }
+
+  export type DomainSendingGuardMinAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    schedule_uuid: string | null
+    organisation_uuid: string | null
+    integration_account_uuid: string | null
+    integration_account_domain_uuid: string | null
+    daily_cap: number | null
+    baseline_daily_volume: number | null
+    paused: boolean | null
+    source_run_uuid: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type DomainSendingGuardMaxAggregateOutputType = {
+    id: number | null
+    uuid: string | null
+    schedule_uuid: string | null
+    organisation_uuid: string | null
+    integration_account_uuid: string | null
+    integration_account_domain_uuid: string | null
+    daily_cap: number | null
+    baseline_daily_volume: number | null
+    paused: boolean | null
+    source_run_uuid: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type DomainSendingGuardCountAggregateOutputType = {
+    id: number
+    uuid: number
+    schedule_uuid: number
+    organisation_uuid: number
+    integration_account_uuid: number
+    integration_account_domain_uuid: number
+    daily_cap: number
+    baseline_daily_volume: number
+    paused: number
+    source_run_uuid: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type DomainSendingGuardAvgAggregateInputType = {
+    id?: true
+    daily_cap?: true
+    baseline_daily_volume?: true
+  }
+
+  export type DomainSendingGuardSumAggregateInputType = {
+    id?: true
+    daily_cap?: true
+    baseline_daily_volume?: true
+  }
+
+  export type DomainSendingGuardMinAggregateInputType = {
+    id?: true
+    uuid?: true
+    schedule_uuid?: true
+    organisation_uuid?: true
+    integration_account_uuid?: true
+    integration_account_domain_uuid?: true
+    daily_cap?: true
+    baseline_daily_volume?: true
+    paused?: true
+    source_run_uuid?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type DomainSendingGuardMaxAggregateInputType = {
+    id?: true
+    uuid?: true
+    schedule_uuid?: true
+    organisation_uuid?: true
+    integration_account_uuid?: true
+    integration_account_domain_uuid?: true
+    daily_cap?: true
+    baseline_daily_volume?: true
+    paused?: true
+    source_run_uuid?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type DomainSendingGuardCountAggregateInputType = {
+    id?: true
+    uuid?: true
+    schedule_uuid?: true
+    organisation_uuid?: true
+    integration_account_uuid?: true
+    integration_account_domain_uuid?: true
+    daily_cap?: true
+    baseline_daily_volume?: true
+    paused?: true
+    source_run_uuid?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type DomainSendingGuardAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DomainSendingGuard to aggregate.
+     */
+    where?: DomainSendingGuardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DomainSendingGuards to fetch.
+     */
+    orderBy?: DomainSendingGuardOrderByWithRelationInput | DomainSendingGuardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DomainSendingGuardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DomainSendingGuards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DomainSendingGuards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DomainSendingGuards
+    **/
+    _count?: true | DomainSendingGuardCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DomainSendingGuardAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DomainSendingGuardSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DomainSendingGuardMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DomainSendingGuardMaxAggregateInputType
+  }
+
+  export type GetDomainSendingGuardAggregateType<T extends DomainSendingGuardAggregateArgs> = {
+        [P in keyof T & keyof AggregateDomainSendingGuard]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDomainSendingGuard[P]>
+      : GetScalarType<T[P], AggregateDomainSendingGuard[P]>
+  }
+
+
+
+
+  export type DomainSendingGuardGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DomainSendingGuardWhereInput
+    orderBy?: DomainSendingGuardOrderByWithAggregationInput | DomainSendingGuardOrderByWithAggregationInput[]
+    by: DomainSendingGuardScalarFieldEnum[] | DomainSendingGuardScalarFieldEnum
+    having?: DomainSendingGuardScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DomainSendingGuardCountAggregateInputType | true
+    _avg?: DomainSendingGuardAvgAggregateInputType
+    _sum?: DomainSendingGuardSumAggregateInputType
+    _min?: DomainSendingGuardMinAggregateInputType
+    _max?: DomainSendingGuardMaxAggregateInputType
+  }
+
+  export type DomainSendingGuardGroupByOutputType = {
+    id: number
+    uuid: string
+    schedule_uuid: string
+    organisation_uuid: string
+    integration_account_uuid: string
+    integration_account_domain_uuid: string | null
+    daily_cap: number | null
+    baseline_daily_volume: number | null
+    paused: boolean
+    source_run_uuid: string | null
+    created_at: Date
+    updated_at: Date
+    _count: DomainSendingGuardCountAggregateOutputType | null
+    _avg: DomainSendingGuardAvgAggregateOutputType | null
+    _sum: DomainSendingGuardSumAggregateOutputType | null
+    _min: DomainSendingGuardMinAggregateOutputType | null
+    _max: DomainSendingGuardMaxAggregateOutputType | null
+  }
+
+  type GetDomainSendingGuardGroupByPayload<T extends DomainSendingGuardGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DomainSendingGuardGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DomainSendingGuardGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DomainSendingGuardGroupByOutputType[P]>
+            : GetScalarType<T[P], DomainSendingGuardGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DomainSendingGuardSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    schedule_uuid?: boolean
+    organisation_uuid?: boolean
+    integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
+    daily_cap?: boolean
+    baseline_daily_volume?: boolean
+    paused?: boolean
+    source_run_uuid?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["domainSendingGuard"]>
+
+  export type DomainSendingGuardSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    schedule_uuid?: boolean
+    organisation_uuid?: boolean
+    integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
+    daily_cap?: boolean
+    baseline_daily_volume?: boolean
+    paused?: boolean
+    source_run_uuid?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["domainSendingGuard"]>
+
+  export type DomainSendingGuardSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    uuid?: boolean
+    schedule_uuid?: boolean
+    organisation_uuid?: boolean
+    integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
+    daily_cap?: boolean
+    baseline_daily_volume?: boolean
+    paused?: boolean
+    source_run_uuid?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["domainSendingGuard"]>
+
+  export type DomainSendingGuardSelectScalar = {
+    id?: boolean
+    uuid?: boolean
+    schedule_uuid?: boolean
+    organisation_uuid?: boolean
+    integration_account_uuid?: boolean
+    integration_account_domain_uuid?: boolean
+    daily_cap?: boolean
+    baseline_daily_volume?: boolean
+    paused?: boolean
+    source_run_uuid?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type DomainSendingGuardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "uuid" | "schedule_uuid" | "organisation_uuid" | "integration_account_uuid" | "integration_account_domain_uuid" | "daily_cap" | "baseline_daily_volume" | "paused" | "source_run_uuid" | "created_at" | "updated_at", ExtArgs["result"]["domainSendingGuard"]>
+  export type DomainSendingGuardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }
+  export type DomainSendingGuardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }
+  export type DomainSendingGuardIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | DeliverabilityScheduleDefaultArgs<ExtArgs>
+  }
+
+  export type $DomainSendingGuardPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DomainSendingGuard"
+    objects: {
+      schedule: Prisma.$DeliverabilitySchedulePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      uuid: string
+      schedule_uuid: string
+      organisation_uuid: string
+      integration_account_uuid: string
+      integration_account_domain_uuid: string | null
+      /**
+       * Max messages per day while throttled; null = no cap.
+       */
+      daily_cap: number | null
+      /**
+       * Daily volume the cap was derived from. Frozen while throttled so the cap can't spiral down
+       * as the throttled volume itself shrinks; cleared once the domain recovers.
+       */
+      baseline_daily_volume: number | null
+      paused: boolean
+      source_run_uuid: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["domainSendingGuard"]>
+    composites: {}
+  }
+
+  type DomainSendingGuardGetPayload<S extends boolean | null | undefined | DomainSendingGuardDefaultArgs> = $Result.GetResult<Prisma.$DomainSendingGuardPayload, S>
+
+  type DomainSendingGuardCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DomainSendingGuardFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DomainSendingGuardCountAggregateInputType | true
+    }
+
+  export interface DomainSendingGuardDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DomainSendingGuard'], meta: { name: 'DomainSendingGuard' } }
+    /**
+     * Find zero or one DomainSendingGuard that matches the filter.
+     * @param {DomainSendingGuardFindUniqueArgs} args - Arguments to find a DomainSendingGuard
+     * @example
+     * // Get one DomainSendingGuard
+     * const domainSendingGuard = await prisma.domainSendingGuard.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DomainSendingGuardFindUniqueArgs>(args: SelectSubset<T, DomainSendingGuardFindUniqueArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DomainSendingGuard that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DomainSendingGuardFindUniqueOrThrowArgs} args - Arguments to find a DomainSendingGuard
+     * @example
+     * // Get one DomainSendingGuard
+     * const domainSendingGuard = await prisma.domainSendingGuard.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DomainSendingGuardFindUniqueOrThrowArgs>(args: SelectSubset<T, DomainSendingGuardFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DomainSendingGuard that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DomainSendingGuardFindFirstArgs} args - Arguments to find a DomainSendingGuard
+     * @example
+     * // Get one DomainSendingGuard
+     * const domainSendingGuard = await prisma.domainSendingGuard.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DomainSendingGuardFindFirstArgs>(args?: SelectSubset<T, DomainSendingGuardFindFirstArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DomainSendingGuard that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DomainSendingGuardFindFirstOrThrowArgs} args - Arguments to find a DomainSendingGuard
+     * @example
+     * // Get one DomainSendingGuard
+     * const domainSendingGuard = await prisma.domainSendingGuard.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DomainSendingGuardFindFirstOrThrowArgs>(args?: SelectSubset<T, DomainSendingGuardFindFirstOrThrowArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DomainSendingGuards that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DomainSendingGuardFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DomainSendingGuards
+     * const domainSendingGuards = await prisma.domainSendingGuard.findMany()
+     * 
+     * // Get first 10 DomainSendingGuards
+     * const domainSendingGuards = await prisma.domainSendingGuard.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const domainSendingGuardWithIdOnly = await prisma.domainSendingGuard.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DomainSendingGuardFindManyArgs>(args?: SelectSubset<T, DomainSendingGuardFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DomainSendingGuard.
+     * @param {DomainSendingGuardCreateArgs} args - Arguments to create a DomainSendingGuard.
+     * @example
+     * // Create one DomainSendingGuard
+     * const DomainSendingGuard = await prisma.domainSendingGuard.create({
+     *   data: {
+     *     // ... data to create a DomainSendingGuard
+     *   }
+     * })
+     * 
+     */
+    create<T extends DomainSendingGuardCreateArgs>(args: SelectSubset<T, DomainSendingGuardCreateArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DomainSendingGuards.
+     * @param {DomainSendingGuardCreateManyArgs} args - Arguments to create many DomainSendingGuards.
+     * @example
+     * // Create many DomainSendingGuards
+     * const domainSendingGuard = await prisma.domainSendingGuard.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DomainSendingGuardCreateManyArgs>(args?: SelectSubset<T, DomainSendingGuardCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DomainSendingGuards and returns the data saved in the database.
+     * @param {DomainSendingGuardCreateManyAndReturnArgs} args - Arguments to create many DomainSendingGuards.
+     * @example
+     * // Create many DomainSendingGuards
+     * const domainSendingGuard = await prisma.domainSendingGuard.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DomainSendingGuards and only return the `id`
+     * const domainSendingGuardWithIdOnly = await prisma.domainSendingGuard.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DomainSendingGuardCreateManyAndReturnArgs>(args?: SelectSubset<T, DomainSendingGuardCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DomainSendingGuard.
+     * @param {DomainSendingGuardDeleteArgs} args - Arguments to delete one DomainSendingGuard.
+     * @example
+     * // Delete one DomainSendingGuard
+     * const DomainSendingGuard = await prisma.domainSendingGuard.delete({
+     *   where: {
+     *     // ... filter to delete one DomainSendingGuard
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DomainSendingGuardDeleteArgs>(args: SelectSubset<T, DomainSendingGuardDeleteArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DomainSendingGuard.
+     * @param {DomainSendingGuardUpdateArgs} args - Arguments to update one DomainSendingGuard.
+     * @example
+     * // Update one DomainSendingGuard
+     * const domainSendingGuard = await prisma.domainSendingGuard.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DomainSendingGuardUpdateArgs>(args: SelectSubset<T, DomainSendingGuardUpdateArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DomainSendingGuards.
+     * @param {DomainSendingGuardDeleteManyArgs} args - Arguments to filter DomainSendingGuards to delete.
+     * @example
+     * // Delete a few DomainSendingGuards
+     * const { count } = await prisma.domainSendingGuard.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DomainSendingGuardDeleteManyArgs>(args?: SelectSubset<T, DomainSendingGuardDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DomainSendingGuards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DomainSendingGuardUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DomainSendingGuards
+     * const domainSendingGuard = await prisma.domainSendingGuard.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DomainSendingGuardUpdateManyArgs>(args: SelectSubset<T, DomainSendingGuardUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DomainSendingGuards and returns the data updated in the database.
+     * @param {DomainSendingGuardUpdateManyAndReturnArgs} args - Arguments to update many DomainSendingGuards.
+     * @example
+     * // Update many DomainSendingGuards
+     * const domainSendingGuard = await prisma.domainSendingGuard.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DomainSendingGuards and only return the `id`
+     * const domainSendingGuardWithIdOnly = await prisma.domainSendingGuard.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DomainSendingGuardUpdateManyAndReturnArgs>(args: SelectSubset<T, DomainSendingGuardUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DomainSendingGuard.
+     * @param {DomainSendingGuardUpsertArgs} args - Arguments to update or create a DomainSendingGuard.
+     * @example
+     * // Update or create a DomainSendingGuard
+     * const domainSendingGuard = await prisma.domainSendingGuard.upsert({
+     *   create: {
+     *     // ... data to create a DomainSendingGuard
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DomainSendingGuard we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DomainSendingGuardUpsertArgs>(args: SelectSubset<T, DomainSendingGuardUpsertArgs<ExtArgs>>): Prisma__DomainSendingGuardClient<$Result.GetResult<Prisma.$DomainSendingGuardPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DomainSendingGuards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DomainSendingGuardCountArgs} args - Arguments to filter DomainSendingGuards to count.
+     * @example
+     * // Count the number of DomainSendingGuards
+     * const count = await prisma.domainSendingGuard.count({
+     *   where: {
+     *     // ... the filter for the DomainSendingGuards we want to count
+     *   }
+     * })
+    **/
+    count<T extends DomainSendingGuardCountArgs>(
+      args?: Subset<T, DomainSendingGuardCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DomainSendingGuardCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DomainSendingGuard.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DomainSendingGuardAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DomainSendingGuardAggregateArgs>(args: Subset<T, DomainSendingGuardAggregateArgs>): Prisma.PrismaPromise<GetDomainSendingGuardAggregateType<T>>
+
+    /**
+     * Group by DomainSendingGuard.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DomainSendingGuardGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DomainSendingGuardGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DomainSendingGuardGroupByArgs['orderBy'] }
+        : { orderBy?: DomainSendingGuardGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DomainSendingGuardGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDomainSendingGuardGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DomainSendingGuard model
+   */
+  readonly fields: DomainSendingGuardFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DomainSendingGuard.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DomainSendingGuardClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    schedule<T extends DeliverabilityScheduleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DeliverabilityScheduleDefaultArgs<ExtArgs>>): Prisma__DeliverabilityScheduleClient<$Result.GetResult<Prisma.$DeliverabilitySchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DomainSendingGuard model
+   */
+  interface DomainSendingGuardFieldRefs {
+    readonly id: FieldRef<"DomainSendingGuard", 'Int'>
+    readonly uuid: FieldRef<"DomainSendingGuard", 'String'>
+    readonly schedule_uuid: FieldRef<"DomainSendingGuard", 'String'>
+    readonly organisation_uuid: FieldRef<"DomainSendingGuard", 'String'>
+    readonly integration_account_uuid: FieldRef<"DomainSendingGuard", 'String'>
+    readonly integration_account_domain_uuid: FieldRef<"DomainSendingGuard", 'String'>
+    readonly daily_cap: FieldRef<"DomainSendingGuard", 'Int'>
+    readonly baseline_daily_volume: FieldRef<"DomainSendingGuard", 'Int'>
+    readonly paused: FieldRef<"DomainSendingGuard", 'Boolean'>
+    readonly source_run_uuid: FieldRef<"DomainSendingGuard", 'String'>
+    readonly created_at: FieldRef<"DomainSendingGuard", 'DateTime'>
+    readonly updated_at: FieldRef<"DomainSendingGuard", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DomainSendingGuard findUnique
+   */
+  export type DomainSendingGuardFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * Filter, which DomainSendingGuard to fetch.
+     */
+    where: DomainSendingGuardWhereUniqueInput
+  }
+
+  /**
+   * DomainSendingGuard findUniqueOrThrow
+   */
+  export type DomainSendingGuardFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * Filter, which DomainSendingGuard to fetch.
+     */
+    where: DomainSendingGuardWhereUniqueInput
+  }
+
+  /**
+   * DomainSendingGuard findFirst
+   */
+  export type DomainSendingGuardFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * Filter, which DomainSendingGuard to fetch.
+     */
+    where?: DomainSendingGuardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DomainSendingGuards to fetch.
+     */
+    orderBy?: DomainSendingGuardOrderByWithRelationInput | DomainSendingGuardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DomainSendingGuards.
+     */
+    cursor?: DomainSendingGuardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DomainSendingGuards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DomainSendingGuards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DomainSendingGuards.
+     */
+    distinct?: DomainSendingGuardScalarFieldEnum | DomainSendingGuardScalarFieldEnum[]
+  }
+
+  /**
+   * DomainSendingGuard findFirstOrThrow
+   */
+  export type DomainSendingGuardFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * Filter, which DomainSendingGuard to fetch.
+     */
+    where?: DomainSendingGuardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DomainSendingGuards to fetch.
+     */
+    orderBy?: DomainSendingGuardOrderByWithRelationInput | DomainSendingGuardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DomainSendingGuards.
+     */
+    cursor?: DomainSendingGuardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DomainSendingGuards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DomainSendingGuards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DomainSendingGuards.
+     */
+    distinct?: DomainSendingGuardScalarFieldEnum | DomainSendingGuardScalarFieldEnum[]
+  }
+
+  /**
+   * DomainSendingGuard findMany
+   */
+  export type DomainSendingGuardFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * Filter, which DomainSendingGuards to fetch.
+     */
+    where?: DomainSendingGuardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DomainSendingGuards to fetch.
+     */
+    orderBy?: DomainSendingGuardOrderByWithRelationInput | DomainSendingGuardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DomainSendingGuards.
+     */
+    cursor?: DomainSendingGuardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DomainSendingGuards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DomainSendingGuards.
+     */
+    skip?: number
+    distinct?: DomainSendingGuardScalarFieldEnum | DomainSendingGuardScalarFieldEnum[]
+  }
+
+  /**
+   * DomainSendingGuard create
+   */
+  export type DomainSendingGuardCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DomainSendingGuard.
+     */
+    data: XOR<DomainSendingGuardCreateInput, DomainSendingGuardUncheckedCreateInput>
+  }
+
+  /**
+   * DomainSendingGuard createMany
+   */
+  export type DomainSendingGuardCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DomainSendingGuards.
+     */
+    data: DomainSendingGuardCreateManyInput | DomainSendingGuardCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DomainSendingGuard createManyAndReturn
+   */
+  export type DomainSendingGuardCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * The data used to create many DomainSendingGuards.
+     */
+    data: DomainSendingGuardCreateManyInput | DomainSendingGuardCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DomainSendingGuard update
+   */
+  export type DomainSendingGuardUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DomainSendingGuard.
+     */
+    data: XOR<DomainSendingGuardUpdateInput, DomainSendingGuardUncheckedUpdateInput>
+    /**
+     * Choose, which DomainSendingGuard to update.
+     */
+    where: DomainSendingGuardWhereUniqueInput
+  }
+
+  /**
+   * DomainSendingGuard updateMany
+   */
+  export type DomainSendingGuardUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DomainSendingGuards.
+     */
+    data: XOR<DomainSendingGuardUpdateManyMutationInput, DomainSendingGuardUncheckedUpdateManyInput>
+    /**
+     * Filter which DomainSendingGuards to update
+     */
+    where?: DomainSendingGuardWhereInput
+    /**
+     * Limit how many DomainSendingGuards to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DomainSendingGuard updateManyAndReturn
+   */
+  export type DomainSendingGuardUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * The data used to update DomainSendingGuards.
+     */
+    data: XOR<DomainSendingGuardUpdateManyMutationInput, DomainSendingGuardUncheckedUpdateManyInput>
+    /**
+     * Filter which DomainSendingGuards to update
+     */
+    where?: DomainSendingGuardWhereInput
+    /**
+     * Limit how many DomainSendingGuards to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DomainSendingGuard upsert
+   */
+  export type DomainSendingGuardUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DomainSendingGuard to update in case it exists.
+     */
+    where: DomainSendingGuardWhereUniqueInput
+    /**
+     * In case the DomainSendingGuard found by the `where` argument doesn't exist, create a new DomainSendingGuard with this data.
+     */
+    create: XOR<DomainSendingGuardCreateInput, DomainSendingGuardUncheckedCreateInput>
+    /**
+     * In case the DomainSendingGuard was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DomainSendingGuardUpdateInput, DomainSendingGuardUncheckedUpdateInput>
+  }
+
+  /**
+   * DomainSendingGuard delete
+   */
+  export type DomainSendingGuardDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
+    /**
+     * Filter which DomainSendingGuard to delete.
+     */
+    where: DomainSendingGuardWhereUniqueInput
+  }
+
+  /**
+   * DomainSendingGuard deleteMany
+   */
+  export type DomainSendingGuardDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DomainSendingGuards to delete
+     */
+    where?: DomainSendingGuardWhereInput
+    /**
+     * Limit how many DomainSendingGuards to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DomainSendingGuard without action
+   */
+  export type DomainSendingGuardDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DomainSendingGuard
+     */
+    select?: DomainSendingGuardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DomainSendingGuard
+     */
+    omit?: DomainSendingGuardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DomainSendingGuardInclude<ExtArgs> | null
   }
 
 
@@ -117793,6 +122059,76 @@ export namespace Prisma {
   export type MxToolboxCheckScalarFieldEnum = (typeof MxToolboxCheckScalarFieldEnum)[keyof typeof MxToolboxCheckScalarFieldEnum]
 
 
+  export const DeliverabilityScheduleScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    organisation_uuid: 'organisation_uuid',
+    label: 'label',
+    domain: 'domain',
+    integration_account_uuid: 'integration_account_uuid',
+    integration_account_domain_uuid: 'integration_account_domain_uuid',
+    from_provider: 'from_provider',
+    from_account: 'from_account',
+    dkim_selector: 'dkim_selector',
+    frequency: 'frequency',
+    time_of_day: 'time_of_day',
+    weekday: 'weekday',
+    day_of_month: 'day_of_month',
+    interval_days: 'interval_days',
+    timezone: 'timezone',
+    checks: 'checks',
+    action_mode: 'action_mode',
+    warn_threshold: 'warn_threshold',
+    critical_threshold: 'critical_threshold',
+    is_active: 'is_active',
+    last_run_at: 'last_run_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type DeliverabilityScheduleScalarFieldEnum = (typeof DeliverabilityScheduleScalarFieldEnum)[keyof typeof DeliverabilityScheduleScalarFieldEnum]
+
+
+  export const DeliverabilityRunScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    schedule_uuid: 'schedule_uuid',
+    status: 'status',
+    score: 'score',
+    risk_level: 'risk_level',
+    scored_by: 'scored_by',
+    jev_confidence: 'jev_confidence',
+    summary: 'summary',
+    mxtoolbox_check_uuid: 'mxtoolbox_check_uuid',
+    mail_tester_test_uuid: 'mail_tester_test_uuid',
+    recommended_daily_cap: 'recommended_daily_cap',
+    action_taken: 'action_taken',
+    error_message: 'error_message',
+    created_at: 'created_at',
+    finished_at: 'finished_at'
+  };
+
+  export type DeliverabilityRunScalarFieldEnum = (typeof DeliverabilityRunScalarFieldEnum)[keyof typeof DeliverabilityRunScalarFieldEnum]
+
+
+  export const DomainSendingGuardScalarFieldEnum: {
+    id: 'id',
+    uuid: 'uuid',
+    schedule_uuid: 'schedule_uuid',
+    organisation_uuid: 'organisation_uuid',
+    integration_account_uuid: 'integration_account_uuid',
+    integration_account_domain_uuid: 'integration_account_domain_uuid',
+    daily_cap: 'daily_cap',
+    baseline_daily_volume: 'baseline_daily_volume',
+    paused: 'paused',
+    source_run_uuid: 'source_run_uuid',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type DomainSendingGuardScalarFieldEnum = (typeof DomainSendingGuardScalarFieldEnum)[keyof typeof DomainSendingGuardScalarFieldEnum]
+
+
   export const ReminderScalarFieldEnum: {
     id: 'id',
     uuid: 'uuid',
@@ -119238,6 +123574,62 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DeliverabilityFrequency'
+   */
+  export type EnumDeliverabilityFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeliverabilityFrequency'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeliverabilityFrequency[]'
+   */
+  export type ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeliverabilityFrequency[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeliverabilityActionMode'
+   */
+  export type EnumDeliverabilityActionModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeliverabilityActionMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeliverabilityActionMode[]'
+   */
+  export type ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeliverabilityActionMode[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeliverabilityRunStatus'
+   */
+  export type EnumDeliverabilityRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeliverabilityRunStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeliverabilityRunStatus[]'
+   */
+  export type ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeliverabilityRunStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeliverabilityRiskLevel'
+   */
+  export type EnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeliverabilityRiskLevel'>
+    
+
+
+  /**
+   * Reference to a field of type 'DeliverabilityRiskLevel[]'
+   */
+  export type ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeliverabilityRiskLevel[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ReminderStatus'
    */
   export type EnumReminderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReminderStatus'>
@@ -119922,6 +124314,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyListRelationFilter
     mail_tester_tests?: MailTesterTestListRelationFilter
     mxtoolbox_checks?: MxToolboxCheckListRelationFilter
+    deliverability_schedules?: DeliverabilityScheduleListRelationFilter
     api_keys?: ApiKeyListRelationFilter
     oauth_connections?: OAuthConnectionListRelationFilter
     mcp_tool_invocation_logs?: McpToolInvocationLogListRelationFilter
@@ -119981,6 +124374,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyOrderByRelationAggregateInput
     mail_tester_tests?: MailTesterTestOrderByRelationAggregateInput
     mxtoolbox_checks?: MxToolboxCheckOrderByRelationAggregateInput
+    deliverability_schedules?: DeliverabilityScheduleOrderByRelationAggregateInput
     api_keys?: ApiKeyOrderByRelationAggregateInput
     oauth_connections?: OAuthConnectionOrderByRelationAggregateInput
     mcp_tool_invocation_logs?: McpToolInvocationLogOrderByRelationAggregateInput
@@ -120043,6 +124437,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyListRelationFilter
     mail_tester_tests?: MailTesterTestListRelationFilter
     mxtoolbox_checks?: MxToolboxCheckListRelationFilter
+    deliverability_schedules?: DeliverabilityScheduleListRelationFilter
     api_keys?: ApiKeyListRelationFilter
     oauth_connections?: OAuthConnectionListRelationFilter
     mcp_tool_invocation_logs?: McpToolInvocationLogListRelationFilter
@@ -124368,6 +128763,368 @@ export namespace Prisma {
     ai_audit_generated_at?: DateTimeNullableWithAggregatesFilter<"MxToolboxCheck"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"MxToolboxCheck"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"MxToolboxCheck"> | Date | string
+  }
+
+  export type DeliverabilityScheduleWhereInput = {
+    AND?: DeliverabilityScheduleWhereInput | DeliverabilityScheduleWhereInput[]
+    OR?: DeliverabilityScheduleWhereInput[]
+    NOT?: DeliverabilityScheduleWhereInput | DeliverabilityScheduleWhereInput[]
+    id?: IntFilter<"DeliverabilitySchedule"> | number
+    uuid?: StringFilter<"DeliverabilitySchedule"> | string
+    organisation_uuid?: StringFilter<"DeliverabilitySchedule"> | string
+    label?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    domain?: StringFilter<"DeliverabilitySchedule"> | string
+    integration_account_uuid?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    integration_account_domain_uuid?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    from_provider?: EnumExternalIntegrationProviderNullableFilter<"DeliverabilitySchedule"> | $Enums.ExternalIntegrationProvider | null
+    from_account?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    dkim_selector?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    frequency?: EnumDeliverabilityFrequencyFilter<"DeliverabilitySchedule"> | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFilter<"DeliverabilitySchedule"> | string
+    weekday?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    day_of_month?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    interval_days?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    timezone?: StringFilter<"DeliverabilitySchedule"> | string
+    checks?: StringNullableListFilter<"DeliverabilitySchedule">
+    action_mode?: EnumDeliverabilityActionModeFilter<"DeliverabilitySchedule"> | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFilter<"DeliverabilitySchedule"> | number
+    critical_threshold?: IntFilter<"DeliverabilitySchedule"> | number
+    is_active?: BoolFilter<"DeliverabilitySchedule"> | boolean
+    last_run_at?: DateTimeNullableFilter<"DeliverabilitySchedule"> | Date | string | null
+    created_at?: DateTimeFilter<"DeliverabilitySchedule"> | Date | string
+    updated_at?: DateTimeFilter<"DeliverabilitySchedule"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    runs?: DeliverabilityRunListRelationFilter
+    guard?: XOR<DomainSendingGuardNullableScalarRelationFilter, DomainSendingGuardWhereInput> | null
+  }
+
+  export type DeliverabilityScheduleOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrderInput | SortOrder
+    domain?: SortOrder
+    integration_account_uuid?: SortOrderInput | SortOrder
+    integration_account_domain_uuid?: SortOrderInput | SortOrder
+    from_provider?: SortOrderInput | SortOrder
+    from_account?: SortOrderInput | SortOrder
+    dkim_selector?: SortOrderInput | SortOrder
+    frequency?: SortOrder
+    time_of_day?: SortOrder
+    weekday?: SortOrderInput | SortOrder
+    day_of_month?: SortOrderInput | SortOrder
+    interval_days?: SortOrderInput | SortOrder
+    timezone?: SortOrder
+    checks?: SortOrder
+    action_mode?: SortOrder
+    warn_threshold?: SortOrder
+    critical_threshold?: SortOrder
+    is_active?: SortOrder
+    last_run_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    organisation?: OrganisationOrderByWithRelationInput
+    runs?: DeliverabilityRunOrderByRelationAggregateInput
+    guard?: DomainSendingGuardOrderByWithRelationInput
+  }
+
+  export type DeliverabilityScheduleWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: DeliverabilityScheduleWhereInput | DeliverabilityScheduleWhereInput[]
+    OR?: DeliverabilityScheduleWhereInput[]
+    NOT?: DeliverabilityScheduleWhereInput | DeliverabilityScheduleWhereInput[]
+    organisation_uuid?: StringFilter<"DeliverabilitySchedule"> | string
+    label?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    domain?: StringFilter<"DeliverabilitySchedule"> | string
+    integration_account_uuid?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    integration_account_domain_uuid?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    from_provider?: EnumExternalIntegrationProviderNullableFilter<"DeliverabilitySchedule"> | $Enums.ExternalIntegrationProvider | null
+    from_account?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    dkim_selector?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    frequency?: EnumDeliverabilityFrequencyFilter<"DeliverabilitySchedule"> | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFilter<"DeliverabilitySchedule"> | string
+    weekday?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    day_of_month?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    interval_days?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    timezone?: StringFilter<"DeliverabilitySchedule"> | string
+    checks?: StringNullableListFilter<"DeliverabilitySchedule">
+    action_mode?: EnumDeliverabilityActionModeFilter<"DeliverabilitySchedule"> | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFilter<"DeliverabilitySchedule"> | number
+    critical_threshold?: IntFilter<"DeliverabilitySchedule"> | number
+    is_active?: BoolFilter<"DeliverabilitySchedule"> | boolean
+    last_run_at?: DateTimeNullableFilter<"DeliverabilitySchedule"> | Date | string | null
+    created_at?: DateTimeFilter<"DeliverabilitySchedule"> | Date | string
+    updated_at?: DateTimeFilter<"DeliverabilitySchedule"> | Date | string
+    organisation?: XOR<OrganisationScalarRelationFilter, OrganisationWhereInput>
+    runs?: DeliverabilityRunListRelationFilter
+    guard?: XOR<DomainSendingGuardNullableScalarRelationFilter, DomainSendingGuardWhereInput> | null
+  }, "id" | "uuid">
+
+  export type DeliverabilityScheduleOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrderInput | SortOrder
+    domain?: SortOrder
+    integration_account_uuid?: SortOrderInput | SortOrder
+    integration_account_domain_uuid?: SortOrderInput | SortOrder
+    from_provider?: SortOrderInput | SortOrder
+    from_account?: SortOrderInput | SortOrder
+    dkim_selector?: SortOrderInput | SortOrder
+    frequency?: SortOrder
+    time_of_day?: SortOrder
+    weekday?: SortOrderInput | SortOrder
+    day_of_month?: SortOrderInput | SortOrder
+    interval_days?: SortOrderInput | SortOrder
+    timezone?: SortOrder
+    checks?: SortOrder
+    action_mode?: SortOrder
+    warn_threshold?: SortOrder
+    critical_threshold?: SortOrder
+    is_active?: SortOrder
+    last_run_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: DeliverabilityScheduleCountOrderByAggregateInput
+    _avg?: DeliverabilityScheduleAvgOrderByAggregateInput
+    _max?: DeliverabilityScheduleMaxOrderByAggregateInput
+    _min?: DeliverabilityScheduleMinOrderByAggregateInput
+    _sum?: DeliverabilityScheduleSumOrderByAggregateInput
+  }
+
+  export type DeliverabilityScheduleScalarWhereWithAggregatesInput = {
+    AND?: DeliverabilityScheduleScalarWhereWithAggregatesInput | DeliverabilityScheduleScalarWhereWithAggregatesInput[]
+    OR?: DeliverabilityScheduleScalarWhereWithAggregatesInput[]
+    NOT?: DeliverabilityScheduleScalarWhereWithAggregatesInput | DeliverabilityScheduleScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"DeliverabilitySchedule"> | number
+    uuid?: StringWithAggregatesFilter<"DeliverabilitySchedule"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"DeliverabilitySchedule"> | string
+    label?: StringNullableWithAggregatesFilter<"DeliverabilitySchedule"> | string | null
+    domain?: StringWithAggregatesFilter<"DeliverabilitySchedule"> | string
+    integration_account_uuid?: StringNullableWithAggregatesFilter<"DeliverabilitySchedule"> | string | null
+    integration_account_domain_uuid?: StringNullableWithAggregatesFilter<"DeliverabilitySchedule"> | string | null
+    from_provider?: EnumExternalIntegrationProviderNullableWithAggregatesFilter<"DeliverabilitySchedule"> | $Enums.ExternalIntegrationProvider | null
+    from_account?: StringNullableWithAggregatesFilter<"DeliverabilitySchedule"> | string | null
+    dkim_selector?: StringNullableWithAggregatesFilter<"DeliverabilitySchedule"> | string | null
+    frequency?: EnumDeliverabilityFrequencyWithAggregatesFilter<"DeliverabilitySchedule"> | $Enums.DeliverabilityFrequency
+    time_of_day?: StringWithAggregatesFilter<"DeliverabilitySchedule"> | string
+    weekday?: IntNullableWithAggregatesFilter<"DeliverabilitySchedule"> | number | null
+    day_of_month?: IntNullableWithAggregatesFilter<"DeliverabilitySchedule"> | number | null
+    interval_days?: IntNullableWithAggregatesFilter<"DeliverabilitySchedule"> | number | null
+    timezone?: StringWithAggregatesFilter<"DeliverabilitySchedule"> | string
+    checks?: StringNullableListFilter<"DeliverabilitySchedule">
+    action_mode?: EnumDeliverabilityActionModeWithAggregatesFilter<"DeliverabilitySchedule"> | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntWithAggregatesFilter<"DeliverabilitySchedule"> | number
+    critical_threshold?: IntWithAggregatesFilter<"DeliverabilitySchedule"> | number
+    is_active?: BoolWithAggregatesFilter<"DeliverabilitySchedule"> | boolean
+    last_run_at?: DateTimeNullableWithAggregatesFilter<"DeliverabilitySchedule"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"DeliverabilitySchedule"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"DeliverabilitySchedule"> | Date | string
+  }
+
+  export type DeliverabilityRunWhereInput = {
+    AND?: DeliverabilityRunWhereInput | DeliverabilityRunWhereInput[]
+    OR?: DeliverabilityRunWhereInput[]
+    NOT?: DeliverabilityRunWhereInput | DeliverabilityRunWhereInput[]
+    id?: IntFilter<"DeliverabilityRun"> | number
+    uuid?: StringFilter<"DeliverabilityRun"> | string
+    schedule_uuid?: StringFilter<"DeliverabilityRun"> | string
+    status?: EnumDeliverabilityRunStatusFilter<"DeliverabilityRun"> | $Enums.DeliverabilityRunStatus
+    score?: IntNullableFilter<"DeliverabilityRun"> | number | null
+    risk_level?: EnumDeliverabilityRiskLevelNullableFilter<"DeliverabilityRun"> | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    jev_confidence?: FloatNullableFilter<"DeliverabilityRun"> | number | null
+    summary?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    mxtoolbox_check_uuid?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    mail_tester_test_uuid?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    recommended_daily_cap?: IntNullableFilter<"DeliverabilityRun"> | number | null
+    action_taken?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    error_message?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    created_at?: DateTimeFilter<"DeliverabilityRun"> | Date | string
+    finished_at?: DateTimeNullableFilter<"DeliverabilityRun"> | Date | string | null
+    schedule?: XOR<DeliverabilityScheduleScalarRelationFilter, DeliverabilityScheduleWhereInput>
+  }
+
+  export type DeliverabilityRunOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    status?: SortOrder
+    score?: SortOrderInput | SortOrder
+    risk_level?: SortOrderInput | SortOrder
+    scored_by?: SortOrderInput | SortOrder
+    jev_confidence?: SortOrderInput | SortOrder
+    summary?: SortOrderInput | SortOrder
+    mxtoolbox_check_uuid?: SortOrderInput | SortOrder
+    mail_tester_test_uuid?: SortOrderInput | SortOrder
+    recommended_daily_cap?: SortOrderInput | SortOrder
+    action_taken?: SortOrderInput | SortOrder
+    error_message?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    finished_at?: SortOrderInput | SortOrder
+    schedule?: DeliverabilityScheduleOrderByWithRelationInput
+  }
+
+  export type DeliverabilityRunWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    AND?: DeliverabilityRunWhereInput | DeliverabilityRunWhereInput[]
+    OR?: DeliverabilityRunWhereInput[]
+    NOT?: DeliverabilityRunWhereInput | DeliverabilityRunWhereInput[]
+    schedule_uuid?: StringFilter<"DeliverabilityRun"> | string
+    status?: EnumDeliverabilityRunStatusFilter<"DeliverabilityRun"> | $Enums.DeliverabilityRunStatus
+    score?: IntNullableFilter<"DeliverabilityRun"> | number | null
+    risk_level?: EnumDeliverabilityRiskLevelNullableFilter<"DeliverabilityRun"> | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    jev_confidence?: FloatNullableFilter<"DeliverabilityRun"> | number | null
+    summary?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    mxtoolbox_check_uuid?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    mail_tester_test_uuid?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    recommended_daily_cap?: IntNullableFilter<"DeliverabilityRun"> | number | null
+    action_taken?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    error_message?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    created_at?: DateTimeFilter<"DeliverabilityRun"> | Date | string
+    finished_at?: DateTimeNullableFilter<"DeliverabilityRun"> | Date | string | null
+    schedule?: XOR<DeliverabilityScheduleScalarRelationFilter, DeliverabilityScheduleWhereInput>
+  }, "id" | "uuid">
+
+  export type DeliverabilityRunOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    status?: SortOrder
+    score?: SortOrderInput | SortOrder
+    risk_level?: SortOrderInput | SortOrder
+    scored_by?: SortOrderInput | SortOrder
+    jev_confidence?: SortOrderInput | SortOrder
+    summary?: SortOrderInput | SortOrder
+    mxtoolbox_check_uuid?: SortOrderInput | SortOrder
+    mail_tester_test_uuid?: SortOrderInput | SortOrder
+    recommended_daily_cap?: SortOrderInput | SortOrder
+    action_taken?: SortOrderInput | SortOrder
+    error_message?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    finished_at?: SortOrderInput | SortOrder
+    _count?: DeliverabilityRunCountOrderByAggregateInput
+    _avg?: DeliverabilityRunAvgOrderByAggregateInput
+    _max?: DeliverabilityRunMaxOrderByAggregateInput
+    _min?: DeliverabilityRunMinOrderByAggregateInput
+    _sum?: DeliverabilityRunSumOrderByAggregateInput
+  }
+
+  export type DeliverabilityRunScalarWhereWithAggregatesInput = {
+    AND?: DeliverabilityRunScalarWhereWithAggregatesInput | DeliverabilityRunScalarWhereWithAggregatesInput[]
+    OR?: DeliverabilityRunScalarWhereWithAggregatesInput[]
+    NOT?: DeliverabilityRunScalarWhereWithAggregatesInput | DeliverabilityRunScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"DeliverabilityRun"> | number
+    uuid?: StringWithAggregatesFilter<"DeliverabilityRun"> | string
+    schedule_uuid?: StringWithAggregatesFilter<"DeliverabilityRun"> | string
+    status?: EnumDeliverabilityRunStatusWithAggregatesFilter<"DeliverabilityRun"> | $Enums.DeliverabilityRunStatus
+    score?: IntNullableWithAggregatesFilter<"DeliverabilityRun"> | number | null
+    risk_level?: EnumDeliverabilityRiskLevelNullableWithAggregatesFilter<"DeliverabilityRun"> | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: StringNullableWithAggregatesFilter<"DeliverabilityRun"> | string | null
+    jev_confidence?: FloatNullableWithAggregatesFilter<"DeliverabilityRun"> | number | null
+    summary?: StringNullableWithAggregatesFilter<"DeliverabilityRun"> | string | null
+    mxtoolbox_check_uuid?: StringNullableWithAggregatesFilter<"DeliverabilityRun"> | string | null
+    mail_tester_test_uuid?: StringNullableWithAggregatesFilter<"DeliverabilityRun"> | string | null
+    recommended_daily_cap?: IntNullableWithAggregatesFilter<"DeliverabilityRun"> | number | null
+    action_taken?: StringNullableWithAggregatesFilter<"DeliverabilityRun"> | string | null
+    error_message?: StringNullableWithAggregatesFilter<"DeliverabilityRun"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"DeliverabilityRun"> | Date | string
+    finished_at?: DateTimeNullableWithAggregatesFilter<"DeliverabilityRun"> | Date | string | null
+  }
+
+  export type DomainSendingGuardWhereInput = {
+    AND?: DomainSendingGuardWhereInput | DomainSendingGuardWhereInput[]
+    OR?: DomainSendingGuardWhereInput[]
+    NOT?: DomainSendingGuardWhereInput | DomainSendingGuardWhereInput[]
+    id?: IntFilter<"DomainSendingGuard"> | number
+    uuid?: StringFilter<"DomainSendingGuard"> | string
+    schedule_uuid?: StringFilter<"DomainSendingGuard"> | string
+    organisation_uuid?: StringFilter<"DomainSendingGuard"> | string
+    integration_account_uuid?: StringFilter<"DomainSendingGuard"> | string
+    integration_account_domain_uuid?: StringNullableFilter<"DomainSendingGuard"> | string | null
+    daily_cap?: IntNullableFilter<"DomainSendingGuard"> | number | null
+    baseline_daily_volume?: IntNullableFilter<"DomainSendingGuard"> | number | null
+    paused?: BoolFilter<"DomainSendingGuard"> | boolean
+    source_run_uuid?: StringNullableFilter<"DomainSendingGuard"> | string | null
+    created_at?: DateTimeFilter<"DomainSendingGuard"> | Date | string
+    updated_at?: DateTimeFilter<"DomainSendingGuard"> | Date | string
+    schedule?: XOR<DeliverabilityScheduleScalarRelationFilter, DeliverabilityScheduleWhereInput>
+  }
+
+  export type DomainSendingGuardOrderByWithRelationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrderInput | SortOrder
+    daily_cap?: SortOrderInput | SortOrder
+    baseline_daily_volume?: SortOrderInput | SortOrder
+    paused?: SortOrder
+    source_run_uuid?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    schedule?: DeliverabilityScheduleOrderByWithRelationInput
+  }
+
+  export type DomainSendingGuardWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    uuid?: string
+    schedule_uuid?: string
+    AND?: DomainSendingGuardWhereInput | DomainSendingGuardWhereInput[]
+    OR?: DomainSendingGuardWhereInput[]
+    NOT?: DomainSendingGuardWhereInput | DomainSendingGuardWhereInput[]
+    organisation_uuid?: StringFilter<"DomainSendingGuard"> | string
+    integration_account_uuid?: StringFilter<"DomainSendingGuard"> | string
+    integration_account_domain_uuid?: StringNullableFilter<"DomainSendingGuard"> | string | null
+    daily_cap?: IntNullableFilter<"DomainSendingGuard"> | number | null
+    baseline_daily_volume?: IntNullableFilter<"DomainSendingGuard"> | number | null
+    paused?: BoolFilter<"DomainSendingGuard"> | boolean
+    source_run_uuid?: StringNullableFilter<"DomainSendingGuard"> | string | null
+    created_at?: DateTimeFilter<"DomainSendingGuard"> | Date | string
+    updated_at?: DateTimeFilter<"DomainSendingGuard"> | Date | string
+    schedule?: XOR<DeliverabilityScheduleScalarRelationFilter, DeliverabilityScheduleWhereInput>
+  }, "id" | "uuid" | "schedule_uuid">
+
+  export type DomainSendingGuardOrderByWithAggregationInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrderInput | SortOrder
+    daily_cap?: SortOrderInput | SortOrder
+    baseline_daily_volume?: SortOrderInput | SortOrder
+    paused?: SortOrder
+    source_run_uuid?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: DomainSendingGuardCountOrderByAggregateInput
+    _avg?: DomainSendingGuardAvgOrderByAggregateInput
+    _max?: DomainSendingGuardMaxOrderByAggregateInput
+    _min?: DomainSendingGuardMinOrderByAggregateInput
+    _sum?: DomainSendingGuardSumOrderByAggregateInput
+  }
+
+  export type DomainSendingGuardScalarWhereWithAggregatesInput = {
+    AND?: DomainSendingGuardScalarWhereWithAggregatesInput | DomainSendingGuardScalarWhereWithAggregatesInput[]
+    OR?: DomainSendingGuardScalarWhereWithAggregatesInput[]
+    NOT?: DomainSendingGuardScalarWhereWithAggregatesInput | DomainSendingGuardScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"DomainSendingGuard"> | number
+    uuid?: StringWithAggregatesFilter<"DomainSendingGuard"> | string
+    schedule_uuid?: StringWithAggregatesFilter<"DomainSendingGuard"> | string
+    organisation_uuid?: StringWithAggregatesFilter<"DomainSendingGuard"> | string
+    integration_account_uuid?: StringWithAggregatesFilter<"DomainSendingGuard"> | string
+    integration_account_domain_uuid?: StringNullableWithAggregatesFilter<"DomainSendingGuard"> | string | null
+    daily_cap?: IntNullableWithAggregatesFilter<"DomainSendingGuard"> | number | null
+    baseline_daily_volume?: IntNullableWithAggregatesFilter<"DomainSendingGuard"> | number | null
+    paused?: BoolWithAggregatesFilter<"DomainSendingGuard"> | boolean
+    source_run_uuid?: StringNullableWithAggregatesFilter<"DomainSendingGuard"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"DomainSendingGuard"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"DomainSendingGuard"> | Date | string
   }
 
   export type ReminderWhereInput = {
@@ -128762,6 +133519,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -128821,6 +133579,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -128879,6 +133638,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -128938,6 +133698,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -133660,6 +138421,429 @@ export namespace Prisma {
     results?: JsonNullValueInput | InputJsonValue
     ai_audit?: NullableJsonNullValueInput | InputJsonValue
     ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeliverabilityScheduleCreateInput = {
+    uuid?: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutDeliverability_schedulesInput
+    runs?: DeliverabilityRunCreateNestedManyWithoutScheduleInput
+    guard?: DomainSendingGuardCreateNestedOneWithoutScheduleInput
+  }
+
+  export type DeliverabilityScheduleUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    runs?: DeliverabilityRunUncheckedCreateNestedManyWithoutScheduleInput
+    guard?: DomainSendingGuardUncheckedCreateNestedOneWithoutScheduleInput
+  }
+
+  export type DeliverabilityScheduleUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutDeliverability_schedulesNestedInput
+    runs?: DeliverabilityRunUpdateManyWithoutScheduleNestedInput
+    guard?: DomainSendingGuardUpdateOneWithoutScheduleNestedInput
+  }
+
+  export type DeliverabilityScheduleUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    runs?: DeliverabilityRunUncheckedUpdateManyWithoutScheduleNestedInput
+    guard?: DomainSendingGuardUncheckedUpdateOneWithoutScheduleNestedInput
+  }
+
+  export type DeliverabilityScheduleCreateManyInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type DeliverabilityScheduleUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeliverabilityScheduleUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeliverabilityRunCreateInput = {
+    uuid?: string
+    status?: $Enums.DeliverabilityRunStatus
+    score?: number | null
+    risk_level?: $Enums.DeliverabilityRiskLevel | null
+    scored_by?: string | null
+    jev_confidence?: number | null
+    summary?: string | null
+    mxtoolbox_check_uuid?: string | null
+    mail_tester_test_uuid?: string | null
+    recommended_daily_cap?: number | null
+    action_taken?: string | null
+    error_message?: string | null
+    created_at?: Date | string
+    finished_at?: Date | string | null
+    schedule: DeliverabilityScheduleCreateNestedOneWithoutRunsInput
+  }
+
+  export type DeliverabilityRunUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    schedule_uuid: string
+    status?: $Enums.DeliverabilityRunStatus
+    score?: number | null
+    risk_level?: $Enums.DeliverabilityRiskLevel | null
+    scored_by?: string | null
+    jev_confidence?: number | null
+    summary?: string | null
+    mxtoolbox_check_uuid?: string | null
+    mail_tester_test_uuid?: string | null
+    recommended_daily_cap?: number | null
+    action_taken?: string | null
+    error_message?: string | null
+    created_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type DeliverabilityRunUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumDeliverabilityRunStatusFieldUpdateOperationsInput | $Enums.DeliverabilityRunStatus
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    risk_level?: NullableEnumDeliverabilityRiskLevelFieldUpdateOperationsInput | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: NullableStringFieldUpdateOperationsInput | string | null
+    jev_confidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    mxtoolbox_check_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    mail_tester_test_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    recommended_daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    action_taken?: NullableStringFieldUpdateOperationsInput | string | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    schedule?: DeliverabilityScheduleUpdateOneRequiredWithoutRunsNestedInput
+  }
+
+  export type DeliverabilityRunUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    schedule_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumDeliverabilityRunStatusFieldUpdateOperationsInput | $Enums.DeliverabilityRunStatus
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    risk_level?: NullableEnumDeliverabilityRiskLevelFieldUpdateOperationsInput | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: NullableStringFieldUpdateOperationsInput | string | null
+    jev_confidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    mxtoolbox_check_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    mail_tester_test_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    recommended_daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    action_taken?: NullableStringFieldUpdateOperationsInput | string | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DeliverabilityRunCreateManyInput = {
+    id?: number
+    uuid?: string
+    schedule_uuid: string
+    status?: $Enums.DeliverabilityRunStatus
+    score?: number | null
+    risk_level?: $Enums.DeliverabilityRiskLevel | null
+    scored_by?: string | null
+    jev_confidence?: number | null
+    summary?: string | null
+    mxtoolbox_check_uuid?: string | null
+    mail_tester_test_uuid?: string | null
+    recommended_daily_cap?: number | null
+    action_taken?: string | null
+    error_message?: string | null
+    created_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type DeliverabilityRunUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumDeliverabilityRunStatusFieldUpdateOperationsInput | $Enums.DeliverabilityRunStatus
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    risk_level?: NullableEnumDeliverabilityRiskLevelFieldUpdateOperationsInput | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: NullableStringFieldUpdateOperationsInput | string | null
+    jev_confidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    mxtoolbox_check_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    mail_tester_test_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    recommended_daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    action_taken?: NullableStringFieldUpdateOperationsInput | string | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DeliverabilityRunUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    schedule_uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumDeliverabilityRunStatusFieldUpdateOperationsInput | $Enums.DeliverabilityRunStatus
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    risk_level?: NullableEnumDeliverabilityRiskLevelFieldUpdateOperationsInput | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: NullableStringFieldUpdateOperationsInput | string | null
+    jev_confidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    mxtoolbox_check_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    mail_tester_test_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    recommended_daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    action_taken?: NullableStringFieldUpdateOperationsInput | string | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DomainSendingGuardCreateInput = {
+    uuid?: string
+    organisation_uuid: string
+    integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
+    daily_cap?: number | null
+    baseline_daily_volume?: number | null
+    paused?: boolean
+    source_run_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    schedule: DeliverabilityScheduleCreateNestedOneWithoutGuardInput
+  }
+
+  export type DomainSendingGuardUncheckedCreateInput = {
+    id?: number
+    uuid?: string
+    schedule_uuid: string
+    organisation_uuid: string
+    integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
+    daily_cap?: number | null
+    baseline_daily_volume?: number | null
+    paused?: boolean
+    source_run_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type DomainSendingGuardUpdateInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    baseline_daily_volume?: NullableIntFieldUpdateOperationsInput | number | null
+    paused?: BoolFieldUpdateOperationsInput | boolean
+    source_run_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    schedule?: DeliverabilityScheduleUpdateOneRequiredWithoutGuardNestedInput
+  }
+
+  export type DomainSendingGuardUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    schedule_uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    baseline_daily_volume?: NullableIntFieldUpdateOperationsInput | number | null
+    paused?: BoolFieldUpdateOperationsInput | boolean
+    source_run_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DomainSendingGuardCreateManyInput = {
+    id?: number
+    uuid?: string
+    schedule_uuid: string
+    organisation_uuid: string
+    integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
+    daily_cap?: number | null
+    baseline_daily_volume?: number | null
+    paused?: boolean
+    source_run_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type DomainSendingGuardUpdateManyMutationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    baseline_daily_volume?: NullableIntFieldUpdateOperationsInput | number | null
+    paused?: BoolFieldUpdateOperationsInput | boolean
+    source_run_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DomainSendingGuardUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    schedule_uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    baseline_daily_volume?: NullableIntFieldUpdateOperationsInput | number | null
+    paused?: BoolFieldUpdateOperationsInput | boolean
+    source_run_uuid?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -138662,6 +143846,12 @@ export namespace Prisma {
     none?: MxToolboxCheckWhereInput
   }
 
+  export type DeliverabilityScheduleListRelationFilter = {
+    every?: DeliverabilityScheduleWhereInput
+    some?: DeliverabilityScheduleWhereInput
+    none?: DeliverabilityScheduleWhereInput
+  }
+
   export type McpToolInvocationLogListRelationFilter = {
     every?: McpToolInvocationLogWhereInput
     some?: McpToolInvocationLogWhereInput
@@ -138766,6 +143956,10 @@ export namespace Prisma {
   }
 
   export type MxToolboxCheckOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DeliverabilityScheduleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -142414,6 +147608,319 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel>
     _max?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel>
+  }
+
+  export type EnumDeliverabilityFrequencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityFrequency | EnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityFrequency[] | ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityFrequency[] | ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityFrequencyFilter<$PrismaModel> | $Enums.DeliverabilityFrequency
+  }
+
+  export type EnumDeliverabilityActionModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityActionMode | EnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityActionMode[] | ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityActionMode[] | ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityActionModeFilter<$PrismaModel> | $Enums.DeliverabilityActionMode
+  }
+
+  export type DeliverabilityRunListRelationFilter = {
+    every?: DeliverabilityRunWhereInput
+    some?: DeliverabilityRunWhereInput
+    none?: DeliverabilityRunWhereInput
+  }
+
+  export type DomainSendingGuardNullableScalarRelationFilter = {
+    is?: DomainSendingGuardWhereInput | null
+    isNot?: DomainSendingGuardWhereInput | null
+  }
+
+  export type DeliverabilityRunOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DeliverabilityScheduleCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    domain?: SortOrder
+    integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
+    from_provider?: SortOrder
+    from_account?: SortOrder
+    dkim_selector?: SortOrder
+    frequency?: SortOrder
+    time_of_day?: SortOrder
+    weekday?: SortOrder
+    day_of_month?: SortOrder
+    interval_days?: SortOrder
+    timezone?: SortOrder
+    checks?: SortOrder
+    action_mode?: SortOrder
+    warn_threshold?: SortOrder
+    critical_threshold?: SortOrder
+    is_active?: SortOrder
+    last_run_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type DeliverabilityScheduleAvgOrderByAggregateInput = {
+    id?: SortOrder
+    weekday?: SortOrder
+    day_of_month?: SortOrder
+    interval_days?: SortOrder
+    warn_threshold?: SortOrder
+    critical_threshold?: SortOrder
+  }
+
+  export type DeliverabilityScheduleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    domain?: SortOrder
+    integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
+    from_provider?: SortOrder
+    from_account?: SortOrder
+    dkim_selector?: SortOrder
+    frequency?: SortOrder
+    time_of_day?: SortOrder
+    weekday?: SortOrder
+    day_of_month?: SortOrder
+    interval_days?: SortOrder
+    timezone?: SortOrder
+    action_mode?: SortOrder
+    warn_threshold?: SortOrder
+    critical_threshold?: SortOrder
+    is_active?: SortOrder
+    last_run_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type DeliverabilityScheduleMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    label?: SortOrder
+    domain?: SortOrder
+    integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
+    from_provider?: SortOrder
+    from_account?: SortOrder
+    dkim_selector?: SortOrder
+    frequency?: SortOrder
+    time_of_day?: SortOrder
+    weekday?: SortOrder
+    day_of_month?: SortOrder
+    interval_days?: SortOrder
+    timezone?: SortOrder
+    action_mode?: SortOrder
+    warn_threshold?: SortOrder
+    critical_threshold?: SortOrder
+    is_active?: SortOrder
+    last_run_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type DeliverabilityScheduleSumOrderByAggregateInput = {
+    id?: SortOrder
+    weekday?: SortOrder
+    day_of_month?: SortOrder
+    interval_days?: SortOrder
+    warn_threshold?: SortOrder
+    critical_threshold?: SortOrder
+  }
+
+  export type EnumDeliverabilityFrequencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityFrequency | EnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityFrequency[] | ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityFrequency[] | ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityFrequencyWithAggregatesFilter<$PrismaModel> | $Enums.DeliverabilityFrequency
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDeliverabilityFrequencyFilter<$PrismaModel>
+    _max?: NestedEnumDeliverabilityFrequencyFilter<$PrismaModel>
+  }
+
+  export type EnumDeliverabilityActionModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityActionMode | EnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityActionMode[] | ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityActionMode[] | ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityActionModeWithAggregatesFilter<$PrismaModel> | $Enums.DeliverabilityActionMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDeliverabilityActionModeFilter<$PrismaModel>
+    _max?: NestedEnumDeliverabilityActionModeFilter<$PrismaModel>
+  }
+
+  export type EnumDeliverabilityRunStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityRunStatus | EnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityRunStatus[] | ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityRunStatus[] | ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityRunStatusFilter<$PrismaModel> | $Enums.DeliverabilityRunStatus
+  }
+
+  export type EnumDeliverabilityRiskLevelNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityRiskLevel | EnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.DeliverabilityRiskLevel[] | ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.DeliverabilityRiskLevel[] | ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDeliverabilityRiskLevelNullableFilter<$PrismaModel> | $Enums.DeliverabilityRiskLevel | null
+  }
+
+  export type DeliverabilityScheduleScalarRelationFilter = {
+    is?: DeliverabilityScheduleWhereInput
+    isNot?: DeliverabilityScheduleWhereInput
+  }
+
+  export type DeliverabilityRunCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    status?: SortOrder
+    score?: SortOrder
+    risk_level?: SortOrder
+    scored_by?: SortOrder
+    jev_confidence?: SortOrder
+    summary?: SortOrder
+    mxtoolbox_check_uuid?: SortOrder
+    mail_tester_test_uuid?: SortOrder
+    recommended_daily_cap?: SortOrder
+    action_taken?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+    finished_at?: SortOrder
+  }
+
+  export type DeliverabilityRunAvgOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+    jev_confidence?: SortOrder
+    recommended_daily_cap?: SortOrder
+  }
+
+  export type DeliverabilityRunMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    status?: SortOrder
+    score?: SortOrder
+    risk_level?: SortOrder
+    scored_by?: SortOrder
+    jev_confidence?: SortOrder
+    summary?: SortOrder
+    mxtoolbox_check_uuid?: SortOrder
+    mail_tester_test_uuid?: SortOrder
+    recommended_daily_cap?: SortOrder
+    action_taken?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+    finished_at?: SortOrder
+  }
+
+  export type DeliverabilityRunMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    status?: SortOrder
+    score?: SortOrder
+    risk_level?: SortOrder
+    scored_by?: SortOrder
+    jev_confidence?: SortOrder
+    summary?: SortOrder
+    mxtoolbox_check_uuid?: SortOrder
+    mail_tester_test_uuid?: SortOrder
+    recommended_daily_cap?: SortOrder
+    action_taken?: SortOrder
+    error_message?: SortOrder
+    created_at?: SortOrder
+    finished_at?: SortOrder
+  }
+
+  export type DeliverabilityRunSumOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+    jev_confidence?: SortOrder
+    recommended_daily_cap?: SortOrder
+  }
+
+  export type EnumDeliverabilityRunStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityRunStatus | EnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityRunStatus[] | ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityRunStatus[] | ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityRunStatusWithAggregatesFilter<$PrismaModel> | $Enums.DeliverabilityRunStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDeliverabilityRunStatusFilter<$PrismaModel>
+    _max?: NestedEnumDeliverabilityRunStatusFilter<$PrismaModel>
+  }
+
+  export type EnumDeliverabilityRiskLevelNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityRiskLevel | EnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.DeliverabilityRiskLevel[] | ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.DeliverabilityRiskLevel[] | ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDeliverabilityRiskLevelNullableWithAggregatesFilter<$PrismaModel> | $Enums.DeliverabilityRiskLevel | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumDeliverabilityRiskLevelNullableFilter<$PrismaModel>
+    _max?: NestedEnumDeliverabilityRiskLevelNullableFilter<$PrismaModel>
+  }
+
+  export type DomainSendingGuardCountOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
+    daily_cap?: SortOrder
+    baseline_daily_volume?: SortOrder
+    paused?: SortOrder
+    source_run_uuid?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type DomainSendingGuardAvgOrderByAggregateInput = {
+    id?: SortOrder
+    daily_cap?: SortOrder
+    baseline_daily_volume?: SortOrder
+  }
+
+  export type DomainSendingGuardMaxOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
+    daily_cap?: SortOrder
+    baseline_daily_volume?: SortOrder
+    paused?: SortOrder
+    source_run_uuid?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type DomainSendingGuardMinOrderByAggregateInput = {
+    id?: SortOrder
+    uuid?: SortOrder
+    schedule_uuid?: SortOrder
+    organisation_uuid?: SortOrder
+    integration_account_uuid?: SortOrder
+    integration_account_domain_uuid?: SortOrder
+    daily_cap?: SortOrder
+    baseline_daily_volume?: SortOrder
+    paused?: SortOrder
+    source_run_uuid?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type DomainSendingGuardSumOrderByAggregateInput = {
+    id?: SortOrder
+    daily_cap?: SortOrder
+    baseline_daily_volume?: SortOrder
   }
 
   export type EnumReminderStatusFilter<$PrismaModel = never> = {
@@ -147086,6 +152593,13 @@ export namespace Prisma {
     connect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
   }
 
+  export type DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<DeliverabilityScheduleCreateWithoutOrganisationInput, DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput> | DeliverabilityScheduleCreateWithoutOrganisationInput[] | DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput | DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput[]
+    createMany?: DeliverabilityScheduleCreateManyOrganisationInputEnvelope
+    connect?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+  }
+
   export type ApiKeyCreateNestedManyWithoutOrganisationInput = {
     create?: XOR<ApiKeyCreateWithoutOrganisationInput, ApiKeyUncheckedCreateWithoutOrganisationInput> | ApiKeyCreateWithoutOrganisationInput[] | ApiKeyUncheckedCreateWithoutOrganisationInput[]
     connectOrCreate?: ApiKeyCreateOrConnectWithoutOrganisationInput | ApiKeyCreateOrConnectWithoutOrganisationInput[]
@@ -147412,6 +152926,13 @@ export namespace Prisma {
     connectOrCreate?: MxToolboxCheckCreateOrConnectWithoutOrganisationInput | MxToolboxCheckCreateOrConnectWithoutOrganisationInput[]
     createMany?: MxToolboxCheckCreateManyOrganisationInputEnvelope
     connect?: MxToolboxCheckWhereUniqueInput | MxToolboxCheckWhereUniqueInput[]
+  }
+
+  export type DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput = {
+    create?: XOR<DeliverabilityScheduleCreateWithoutOrganisationInput, DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput> | DeliverabilityScheduleCreateWithoutOrganisationInput[] | DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput | DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput[]
+    createMany?: DeliverabilityScheduleCreateManyOrganisationInputEnvelope
+    connect?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
   }
 
   export type ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput = {
@@ -147964,6 +153485,20 @@ export namespace Prisma {
     update?: MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput | MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput | MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: MxToolboxCheckScalarWhereInput | MxToolboxCheckScalarWhereInput[]
+  }
+
+  export type DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<DeliverabilityScheduleCreateWithoutOrganisationInput, DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput> | DeliverabilityScheduleCreateWithoutOrganisationInput[] | DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput | DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput[]
+    upsert?: DeliverabilityScheduleUpsertWithWhereUniqueWithoutOrganisationInput | DeliverabilityScheduleUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: DeliverabilityScheduleCreateManyOrganisationInputEnvelope
+    set?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+    disconnect?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+    delete?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+    connect?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+    update?: DeliverabilityScheduleUpdateWithWhereUniqueWithoutOrganisationInput | DeliverabilityScheduleUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: DeliverabilityScheduleUpdateManyWithWhereWithoutOrganisationInput | DeliverabilityScheduleUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: DeliverabilityScheduleScalarWhereInput | DeliverabilityScheduleScalarWhereInput[]
   }
 
   export type ApiKeyUpdateManyWithoutOrganisationNestedInput = {
@@ -148618,6 +154153,20 @@ export namespace Prisma {
     update?: MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput | MxToolboxCheckUpdateWithWhereUniqueWithoutOrganisationInput[]
     updateMany?: MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput | MxToolboxCheckUpdateManyWithWhereWithoutOrganisationInput[]
     deleteMany?: MxToolboxCheckScalarWhereInput | MxToolboxCheckScalarWhereInput[]
+  }
+
+  export type DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput = {
+    create?: XOR<DeliverabilityScheduleCreateWithoutOrganisationInput, DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput> | DeliverabilityScheduleCreateWithoutOrganisationInput[] | DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput[]
+    connectOrCreate?: DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput | DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput[]
+    upsert?: DeliverabilityScheduleUpsertWithWhereUniqueWithoutOrganisationInput | DeliverabilityScheduleUpsertWithWhereUniqueWithoutOrganisationInput[]
+    createMany?: DeliverabilityScheduleCreateManyOrganisationInputEnvelope
+    set?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+    disconnect?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+    delete?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+    connect?: DeliverabilityScheduleWhereUniqueInput | DeliverabilityScheduleWhereUniqueInput[]
+    update?: DeliverabilityScheduleUpdateWithWhereUniqueWithoutOrganisationInput | DeliverabilityScheduleUpdateWithWhereUniqueWithoutOrganisationInput[]
+    updateMany?: DeliverabilityScheduleUpdateManyWithWhereWithoutOrganisationInput | DeliverabilityScheduleUpdateManyWithWhereWithoutOrganisationInput[]
+    deleteMany?: DeliverabilityScheduleScalarWhereInput | DeliverabilityScheduleScalarWhereInput[]
   }
 
   export type ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput = {
@@ -152618,6 +158167,147 @@ export namespace Prisma {
     update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutMxtoolbox_checksInput, OrganisationUpdateWithoutMxtoolbox_checksInput>, OrganisationUncheckedUpdateWithoutMxtoolbox_checksInput>
   }
 
+  export type DeliverabilityScheduleCreatechecksInput = {
+    set: string[]
+  }
+
+  export type OrganisationCreateNestedOneWithoutDeliverability_schedulesInput = {
+    create?: XOR<OrganisationCreateWithoutDeliverability_schedulesInput, OrganisationUncheckedCreateWithoutDeliverability_schedulesInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutDeliverability_schedulesInput
+    connect?: OrganisationWhereUniqueInput
+  }
+
+  export type DeliverabilityRunCreateNestedManyWithoutScheduleInput = {
+    create?: XOR<DeliverabilityRunCreateWithoutScheduleInput, DeliverabilityRunUncheckedCreateWithoutScheduleInput> | DeliverabilityRunCreateWithoutScheduleInput[] | DeliverabilityRunUncheckedCreateWithoutScheduleInput[]
+    connectOrCreate?: DeliverabilityRunCreateOrConnectWithoutScheduleInput | DeliverabilityRunCreateOrConnectWithoutScheduleInput[]
+    createMany?: DeliverabilityRunCreateManyScheduleInputEnvelope
+    connect?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+  }
+
+  export type DomainSendingGuardCreateNestedOneWithoutScheduleInput = {
+    create?: XOR<DomainSendingGuardCreateWithoutScheduleInput, DomainSendingGuardUncheckedCreateWithoutScheduleInput>
+    connectOrCreate?: DomainSendingGuardCreateOrConnectWithoutScheduleInput
+    connect?: DomainSendingGuardWhereUniqueInput
+  }
+
+  export type DeliverabilityRunUncheckedCreateNestedManyWithoutScheduleInput = {
+    create?: XOR<DeliverabilityRunCreateWithoutScheduleInput, DeliverabilityRunUncheckedCreateWithoutScheduleInput> | DeliverabilityRunCreateWithoutScheduleInput[] | DeliverabilityRunUncheckedCreateWithoutScheduleInput[]
+    connectOrCreate?: DeliverabilityRunCreateOrConnectWithoutScheduleInput | DeliverabilityRunCreateOrConnectWithoutScheduleInput[]
+    createMany?: DeliverabilityRunCreateManyScheduleInputEnvelope
+    connect?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+  }
+
+  export type DomainSendingGuardUncheckedCreateNestedOneWithoutScheduleInput = {
+    create?: XOR<DomainSendingGuardCreateWithoutScheduleInput, DomainSendingGuardUncheckedCreateWithoutScheduleInput>
+    connectOrCreate?: DomainSendingGuardCreateOrConnectWithoutScheduleInput
+    connect?: DomainSendingGuardWhereUniqueInput
+  }
+
+  export type EnumDeliverabilityFrequencyFieldUpdateOperationsInput = {
+    set?: $Enums.DeliverabilityFrequency
+  }
+
+  export type DeliverabilityScheduleUpdatechecksInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type EnumDeliverabilityActionModeFieldUpdateOperationsInput = {
+    set?: $Enums.DeliverabilityActionMode
+  }
+
+  export type OrganisationUpdateOneRequiredWithoutDeliverability_schedulesNestedInput = {
+    create?: XOR<OrganisationCreateWithoutDeliverability_schedulesInput, OrganisationUncheckedCreateWithoutDeliverability_schedulesInput>
+    connectOrCreate?: OrganisationCreateOrConnectWithoutDeliverability_schedulesInput
+    upsert?: OrganisationUpsertWithoutDeliverability_schedulesInput
+    connect?: OrganisationWhereUniqueInput
+    update?: XOR<XOR<OrganisationUpdateToOneWithWhereWithoutDeliverability_schedulesInput, OrganisationUpdateWithoutDeliverability_schedulesInput>, OrganisationUncheckedUpdateWithoutDeliverability_schedulesInput>
+  }
+
+  export type DeliverabilityRunUpdateManyWithoutScheduleNestedInput = {
+    create?: XOR<DeliverabilityRunCreateWithoutScheduleInput, DeliverabilityRunUncheckedCreateWithoutScheduleInput> | DeliverabilityRunCreateWithoutScheduleInput[] | DeliverabilityRunUncheckedCreateWithoutScheduleInput[]
+    connectOrCreate?: DeliverabilityRunCreateOrConnectWithoutScheduleInput | DeliverabilityRunCreateOrConnectWithoutScheduleInput[]
+    upsert?: DeliverabilityRunUpsertWithWhereUniqueWithoutScheduleInput | DeliverabilityRunUpsertWithWhereUniqueWithoutScheduleInput[]
+    createMany?: DeliverabilityRunCreateManyScheduleInputEnvelope
+    set?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+    disconnect?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+    delete?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+    connect?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+    update?: DeliverabilityRunUpdateWithWhereUniqueWithoutScheduleInput | DeliverabilityRunUpdateWithWhereUniqueWithoutScheduleInput[]
+    updateMany?: DeliverabilityRunUpdateManyWithWhereWithoutScheduleInput | DeliverabilityRunUpdateManyWithWhereWithoutScheduleInput[]
+    deleteMany?: DeliverabilityRunScalarWhereInput | DeliverabilityRunScalarWhereInput[]
+  }
+
+  export type DomainSendingGuardUpdateOneWithoutScheduleNestedInput = {
+    create?: XOR<DomainSendingGuardCreateWithoutScheduleInput, DomainSendingGuardUncheckedCreateWithoutScheduleInput>
+    connectOrCreate?: DomainSendingGuardCreateOrConnectWithoutScheduleInput
+    upsert?: DomainSendingGuardUpsertWithoutScheduleInput
+    disconnect?: DomainSendingGuardWhereInput | boolean
+    delete?: DomainSendingGuardWhereInput | boolean
+    connect?: DomainSendingGuardWhereUniqueInput
+    update?: XOR<XOR<DomainSendingGuardUpdateToOneWithWhereWithoutScheduleInput, DomainSendingGuardUpdateWithoutScheduleInput>, DomainSendingGuardUncheckedUpdateWithoutScheduleInput>
+  }
+
+  export type DeliverabilityRunUncheckedUpdateManyWithoutScheduleNestedInput = {
+    create?: XOR<DeliverabilityRunCreateWithoutScheduleInput, DeliverabilityRunUncheckedCreateWithoutScheduleInput> | DeliverabilityRunCreateWithoutScheduleInput[] | DeliverabilityRunUncheckedCreateWithoutScheduleInput[]
+    connectOrCreate?: DeliverabilityRunCreateOrConnectWithoutScheduleInput | DeliverabilityRunCreateOrConnectWithoutScheduleInput[]
+    upsert?: DeliverabilityRunUpsertWithWhereUniqueWithoutScheduleInput | DeliverabilityRunUpsertWithWhereUniqueWithoutScheduleInput[]
+    createMany?: DeliverabilityRunCreateManyScheduleInputEnvelope
+    set?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+    disconnect?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+    delete?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+    connect?: DeliverabilityRunWhereUniqueInput | DeliverabilityRunWhereUniqueInput[]
+    update?: DeliverabilityRunUpdateWithWhereUniqueWithoutScheduleInput | DeliverabilityRunUpdateWithWhereUniqueWithoutScheduleInput[]
+    updateMany?: DeliverabilityRunUpdateManyWithWhereWithoutScheduleInput | DeliverabilityRunUpdateManyWithWhereWithoutScheduleInput[]
+    deleteMany?: DeliverabilityRunScalarWhereInput | DeliverabilityRunScalarWhereInput[]
+  }
+
+  export type DomainSendingGuardUncheckedUpdateOneWithoutScheduleNestedInput = {
+    create?: XOR<DomainSendingGuardCreateWithoutScheduleInput, DomainSendingGuardUncheckedCreateWithoutScheduleInput>
+    connectOrCreate?: DomainSendingGuardCreateOrConnectWithoutScheduleInput
+    upsert?: DomainSendingGuardUpsertWithoutScheduleInput
+    disconnect?: DomainSendingGuardWhereInput | boolean
+    delete?: DomainSendingGuardWhereInput | boolean
+    connect?: DomainSendingGuardWhereUniqueInput
+    update?: XOR<XOR<DomainSendingGuardUpdateToOneWithWhereWithoutScheduleInput, DomainSendingGuardUpdateWithoutScheduleInput>, DomainSendingGuardUncheckedUpdateWithoutScheduleInput>
+  }
+
+  export type DeliverabilityScheduleCreateNestedOneWithoutRunsInput = {
+    create?: XOR<DeliverabilityScheduleCreateWithoutRunsInput, DeliverabilityScheduleUncheckedCreateWithoutRunsInput>
+    connectOrCreate?: DeliverabilityScheduleCreateOrConnectWithoutRunsInput
+    connect?: DeliverabilityScheduleWhereUniqueInput
+  }
+
+  export type EnumDeliverabilityRunStatusFieldUpdateOperationsInput = {
+    set?: $Enums.DeliverabilityRunStatus
+  }
+
+  export type NullableEnumDeliverabilityRiskLevelFieldUpdateOperationsInput = {
+    set?: $Enums.DeliverabilityRiskLevel | null
+  }
+
+  export type DeliverabilityScheduleUpdateOneRequiredWithoutRunsNestedInput = {
+    create?: XOR<DeliverabilityScheduleCreateWithoutRunsInput, DeliverabilityScheduleUncheckedCreateWithoutRunsInput>
+    connectOrCreate?: DeliverabilityScheduleCreateOrConnectWithoutRunsInput
+    upsert?: DeliverabilityScheduleUpsertWithoutRunsInput
+    connect?: DeliverabilityScheduleWhereUniqueInput
+    update?: XOR<XOR<DeliverabilityScheduleUpdateToOneWithWhereWithoutRunsInput, DeliverabilityScheduleUpdateWithoutRunsInput>, DeliverabilityScheduleUncheckedUpdateWithoutRunsInput>
+  }
+
+  export type DeliverabilityScheduleCreateNestedOneWithoutGuardInput = {
+    create?: XOR<DeliverabilityScheduleCreateWithoutGuardInput, DeliverabilityScheduleUncheckedCreateWithoutGuardInput>
+    connectOrCreate?: DeliverabilityScheduleCreateOrConnectWithoutGuardInput
+    connect?: DeliverabilityScheduleWhereUniqueInput
+  }
+
+  export type DeliverabilityScheduleUpdateOneRequiredWithoutGuardNestedInput = {
+    create?: XOR<DeliverabilityScheduleCreateWithoutGuardInput, DeliverabilityScheduleUncheckedCreateWithoutGuardInput>
+    connectOrCreate?: DeliverabilityScheduleCreateOrConnectWithoutGuardInput
+    upsert?: DeliverabilityScheduleUpsertWithoutGuardInput
+    connect?: DeliverabilityScheduleWhereUniqueInput
+    update?: XOR<XOR<DeliverabilityScheduleUpdateToOneWithWhereWithoutGuardInput, DeliverabilityScheduleUpdateWithoutGuardInput>, DeliverabilityScheduleUncheckedUpdateWithoutGuardInput>
+  }
+
   export type OrganisationCreateNestedOneWithoutRemindersInput = {
     create?: XOR<OrganisationCreateWithoutRemindersInput, OrganisationUncheckedCreateWithoutRemindersInput>
     connectOrCreate?: OrganisationCreateOrConnectWithoutRemindersInput
@@ -156149,6 +161839,74 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel>
     _max?: NestedEnumMxToolboxCheckStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDeliverabilityFrequencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityFrequency | EnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityFrequency[] | ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityFrequency[] | ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityFrequencyFilter<$PrismaModel> | $Enums.DeliverabilityFrequency
+  }
+
+  export type NestedEnumDeliverabilityActionModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityActionMode | EnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityActionMode[] | ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityActionMode[] | ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityActionModeFilter<$PrismaModel> | $Enums.DeliverabilityActionMode
+  }
+
+  export type NestedEnumDeliverabilityFrequencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityFrequency | EnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityFrequency[] | ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityFrequency[] | ListEnumDeliverabilityFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityFrequencyWithAggregatesFilter<$PrismaModel> | $Enums.DeliverabilityFrequency
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDeliverabilityFrequencyFilter<$PrismaModel>
+    _max?: NestedEnumDeliverabilityFrequencyFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDeliverabilityActionModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityActionMode | EnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityActionMode[] | ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityActionMode[] | ListEnumDeliverabilityActionModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityActionModeWithAggregatesFilter<$PrismaModel> | $Enums.DeliverabilityActionMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDeliverabilityActionModeFilter<$PrismaModel>
+    _max?: NestedEnumDeliverabilityActionModeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDeliverabilityRunStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityRunStatus | EnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityRunStatus[] | ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityRunStatus[] | ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityRunStatusFilter<$PrismaModel> | $Enums.DeliverabilityRunStatus
+  }
+
+  export type NestedEnumDeliverabilityRiskLevelNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityRiskLevel | EnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.DeliverabilityRiskLevel[] | ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.DeliverabilityRiskLevel[] | ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDeliverabilityRiskLevelNullableFilter<$PrismaModel> | $Enums.DeliverabilityRiskLevel | null
+  }
+
+  export type NestedEnumDeliverabilityRunStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityRunStatus | EnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DeliverabilityRunStatus[] | ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DeliverabilityRunStatus[] | ListEnumDeliverabilityRunStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDeliverabilityRunStatusWithAggregatesFilter<$PrismaModel> | $Enums.DeliverabilityRunStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDeliverabilityRunStatusFilter<$PrismaModel>
+    _max?: NestedEnumDeliverabilityRunStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDeliverabilityRiskLevelNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DeliverabilityRiskLevel | EnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    in?: $Enums.DeliverabilityRiskLevel[] | ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.DeliverabilityRiskLevel[] | ListEnumDeliverabilityRiskLevelFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumDeliverabilityRiskLevelNullableWithAggregatesFilter<$PrismaModel> | $Enums.DeliverabilityRiskLevel | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumDeliverabilityRiskLevelNullableFilter<$PrismaModel>
+    _max?: NestedEnumDeliverabilityRiskLevelNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumReminderStatusFilter<$PrismaModel = never> = {
@@ -160728,6 +166486,71 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DeliverabilityScheduleCreateWithoutOrganisationInput = {
+    uuid?: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    runs?: DeliverabilityRunCreateNestedManyWithoutScheduleInput
+    guard?: DomainSendingGuardCreateNestedOneWithoutScheduleInput
+  }
+
+  export type DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput = {
+    id?: number
+    uuid?: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    runs?: DeliverabilityRunUncheckedCreateNestedManyWithoutScheduleInput
+    guard?: DomainSendingGuardUncheckedCreateNestedOneWithoutScheduleInput
+  }
+
+  export type DeliverabilityScheduleCreateOrConnectWithoutOrganisationInput = {
+    where: DeliverabilityScheduleWhereUniqueInput
+    create: XOR<DeliverabilityScheduleCreateWithoutOrganisationInput, DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type DeliverabilityScheduleCreateManyOrganisationInputEnvelope = {
+    data: DeliverabilityScheduleCreateManyOrganisationInput | DeliverabilityScheduleCreateManyOrganisationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ApiKeyCreateWithoutOrganisationInput = {
     uuid?: string
     name: string
@@ -162442,6 +168265,52 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"MxToolboxCheck"> | Date | string
   }
 
+  export type DeliverabilityScheduleUpsertWithWhereUniqueWithoutOrganisationInput = {
+    where: DeliverabilityScheduleWhereUniqueInput
+    update: XOR<DeliverabilityScheduleUpdateWithoutOrganisationInput, DeliverabilityScheduleUncheckedUpdateWithoutOrganisationInput>
+    create: XOR<DeliverabilityScheduleCreateWithoutOrganisationInput, DeliverabilityScheduleUncheckedCreateWithoutOrganisationInput>
+  }
+
+  export type DeliverabilityScheduleUpdateWithWhereUniqueWithoutOrganisationInput = {
+    where: DeliverabilityScheduleWhereUniqueInput
+    data: XOR<DeliverabilityScheduleUpdateWithoutOrganisationInput, DeliverabilityScheduleUncheckedUpdateWithoutOrganisationInput>
+  }
+
+  export type DeliverabilityScheduleUpdateManyWithWhereWithoutOrganisationInput = {
+    where: DeliverabilityScheduleScalarWhereInput
+    data: XOR<DeliverabilityScheduleUpdateManyMutationInput, DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationInput>
+  }
+
+  export type DeliverabilityScheduleScalarWhereInput = {
+    AND?: DeliverabilityScheduleScalarWhereInput | DeliverabilityScheduleScalarWhereInput[]
+    OR?: DeliverabilityScheduleScalarWhereInput[]
+    NOT?: DeliverabilityScheduleScalarWhereInput | DeliverabilityScheduleScalarWhereInput[]
+    id?: IntFilter<"DeliverabilitySchedule"> | number
+    uuid?: StringFilter<"DeliverabilitySchedule"> | string
+    organisation_uuid?: StringFilter<"DeliverabilitySchedule"> | string
+    label?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    domain?: StringFilter<"DeliverabilitySchedule"> | string
+    integration_account_uuid?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    integration_account_domain_uuid?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    from_provider?: EnumExternalIntegrationProviderNullableFilter<"DeliverabilitySchedule"> | $Enums.ExternalIntegrationProvider | null
+    from_account?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    dkim_selector?: StringNullableFilter<"DeliverabilitySchedule"> | string | null
+    frequency?: EnumDeliverabilityFrequencyFilter<"DeliverabilitySchedule"> | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFilter<"DeliverabilitySchedule"> | string
+    weekday?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    day_of_month?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    interval_days?: IntNullableFilter<"DeliverabilitySchedule"> | number | null
+    timezone?: StringFilter<"DeliverabilitySchedule"> | string
+    checks?: StringNullableListFilter<"DeliverabilitySchedule">
+    action_mode?: EnumDeliverabilityActionModeFilter<"DeliverabilitySchedule"> | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFilter<"DeliverabilitySchedule"> | number
+    critical_threshold?: IntFilter<"DeliverabilitySchedule"> | number
+    is_active?: BoolFilter<"DeliverabilitySchedule"> | boolean
+    last_run_at?: DateTimeNullableFilter<"DeliverabilitySchedule"> | Date | string | null
+    created_at?: DateTimeFilter<"DeliverabilitySchedule"> | Date | string
+    updated_at?: DateTimeFilter<"DeliverabilitySchedule"> | Date | string
+  }
+
   export type ApiKeyUpsertWithWhereUniqueWithoutOrganisationInput = {
     where: ApiKeyWhereUniqueInput
     update: XOR<ApiKeyUpdateWithoutOrganisationInput, ApiKeyUncheckedUpdateWithoutOrganisationInput>
@@ -162797,6 +168666,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -162855,6 +168725,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -163012,6 +168883,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -163070,6 +168942,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -163217,6 +169090,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -163275,6 +169149,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -163432,6 +169307,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -163490,6 +169366,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -163638,6 +169515,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
@@ -163696,6 +169574,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
@@ -163853,6 +169732,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
@@ -163911,6 +169791,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -164057,6 +169938,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -164115,6 +169997,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -164498,6 +170381,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -164556,6 +170440,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -164801,6 +170686,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -164859,6 +170745,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -164932,6 +170819,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -164990,6 +170878,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -165221,6 +171110,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -165279,6 +171169,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -165395,6 +171286,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -165453,6 +171345,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -166351,6 +172244,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -166409,6 +172303,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -167336,6 +173231,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -167394,6 +173290,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -169243,6 +175140,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -169301,6 +175199,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -169713,6 +175612,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -169771,6 +175671,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -170680,6 +176581,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -170738,6 +176640,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -171119,6 +177022,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -171177,6 +177081,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -171438,6 +177343,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -171496,6 +177402,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -172123,6 +178030,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -172181,6 +178089,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -172772,6 +178681,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -172830,6 +178740,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -173112,6 +179023,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -173170,6 +179082,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -173359,6 +179272,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -173417,6 +179331,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -173757,6 +179672,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -173815,6 +179731,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -175396,6 +181313,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -175454,6 +181372,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -175611,6 +181530,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -175669,6 +181589,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -175816,6 +181737,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -175874,6 +181796,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -175947,6 +181870,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -176005,6 +181929,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -176062,6 +181987,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -176120,6 +182046,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -176472,6 +182399,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -176530,6 +182458,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -176725,6 +182654,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -176783,6 +182713,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -177159,6 +183090,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -177217,6 +183149,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -177551,6 +183484,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -177609,6 +183543,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -178092,6 +184027,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -178150,6 +184086,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -178858,6 +184795,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -178916,6 +184854,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -179073,6 +185012,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -179131,6 +185071,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -179278,6 +185219,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -179336,6 +185278,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -179475,6 +185418,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -179533,6 +185477,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -180005,6 +185950,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -180063,6 +186009,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -180136,6 +186083,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -180194,6 +186142,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -180251,6 +186200,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -180309,6 +186259,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -180382,6 +186333,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -180440,6 +186392,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -180455,6 +186408,661 @@ export namespace Prisma {
     booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
     calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationCreateWithoutDeliverability_schedulesInput = {
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationCreateNestedManyWithoutOrganisationInput
+    filters?: FilterCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderCreateNestedManyWithoutOrganisationInput
+    forms?: FormCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
+    availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
+    booking_blocks?: BookingBlockCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockCreateNestedManyWithoutOrganisationInput
+    booking_pages?: BookingPageCreateNestedManyWithoutOrganisationInput
+    booking_links?: BookingLinkCreateNestedManyWithoutOrganisationInput
+    bookings?: BookingCreateNestedManyWithoutOrganisationInput
+    booking_invite_settings?: BookingInviteSettingsCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateCreateNestedManyWithoutOrganisationInput
+    booking_invitations?: BookingInvitationCreateNestedManyWithoutOrganisationInput
+    booking_events?: BookingEventCreateNestedManyWithoutOrganisationInput
+    calendar_connections?: CalendarConnectionCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationUncheckedCreateWithoutDeliverability_schedulesInput = {
+    id?: number
+    uuid?: string
+    name: string
+    slug: string
+    timezone?: string
+    reply_to_email?: string | null
+    reply_forward_email?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    members?: OrganisationMemberUncheckedCreateNestedManyWithoutOrganisationInput
+    invitations?: OrganisationInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    filters?: FilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contacts?: ContactUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_messages?: OutreachMessageUncheckedCreateNestedManyWithoutOrganisationInput
+    message_threads?: MessageThreadUncheckedCreateNestedManyWithoutOrganisationInput
+    outreach_sequences?: OutreachSequenceUncheckedCreateNestedManyWithoutOrganisationInput
+    interactions?: InteractionUncheckedCreateNestedManyWithoutOrganisationInput
+    sender_profiles?: SenderProfileUncheckedCreateNestedManyWithoutOrganisationInput
+    marketing_campaigns?: MarketingCampaignUncheckedCreateNestedManyWithoutOrganisationInput
+    scoring_instructions?: ScoringInstructionUncheckedCreateNestedManyWithoutOrganisationInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedCreateNestedManyWithoutOrganisationInput
+    integrations?: IntegrationUncheckedCreateNestedManyWithoutOrganisationInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutOrganisationInput
+    forms?: FormUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_lists?: ContactListUncheckedCreateNestedManyWithoutOrganisationInput
+    saved_contact_filters?: SavedContactFilterUncheckedCreateNestedManyWithoutOrganisationInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedCreateNestedManyWithoutOrganisationInput
+    ai_usage_logs?: AiUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    apify_usage_logs?: ApifyUsageLogUncheckedCreateNestedManyWithoutOrganisationInput
+    message_templates?: MessageTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    activity_logs?: ActivityLogUncheckedCreateNestedManyWithoutOrganisationInput
+    messaging_goals?: MessagingGoalUncheckedCreateNestedManyWithoutOrganisationInput
+    org_tags?: OrgTagUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_achievements?: GoalAchievementUncheckedCreateNestedManyWithoutOrganisationInput
+    goal_personal_bests?: GoalPersonalBestUncheckedCreateNestedManyWithoutOrganisationInput
+    bulk_jobs?: BulkJobUncheckedCreateNestedManyWithoutOrganisationInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedCreateNestedManyWithoutOrganisationInput
+    email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
+    sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
+    mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
+    oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
+    availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_blocks?: BookingBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_pages?: BookingPageUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_links?: BookingLinkUncheckedCreateNestedManyWithoutOrganisationInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_invite_settings?: BookingInviteSettingsUncheckedCreateNestedOneWithoutOrganisationInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_invitations?: BookingInvitationUncheckedCreateNestedManyWithoutOrganisationInput
+    booking_events?: BookingEventUncheckedCreateNestedManyWithoutOrganisationInput
+    calendar_connections?: CalendarConnectionUncheckedCreateNestedManyWithoutOrganisationInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutOrganisationInput
+  }
+
+  export type OrganisationCreateOrConnectWithoutDeliverability_schedulesInput = {
+    where: OrganisationWhereUniqueInput
+    create: XOR<OrganisationCreateWithoutDeliverability_schedulesInput, OrganisationUncheckedCreateWithoutDeliverability_schedulesInput>
+  }
+
+  export type DeliverabilityRunCreateWithoutScheduleInput = {
+    uuid?: string
+    status?: $Enums.DeliverabilityRunStatus
+    score?: number | null
+    risk_level?: $Enums.DeliverabilityRiskLevel | null
+    scored_by?: string | null
+    jev_confidence?: number | null
+    summary?: string | null
+    mxtoolbox_check_uuid?: string | null
+    mail_tester_test_uuid?: string | null
+    recommended_daily_cap?: number | null
+    action_taken?: string | null
+    error_message?: string | null
+    created_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type DeliverabilityRunUncheckedCreateWithoutScheduleInput = {
+    id?: number
+    uuid?: string
+    status?: $Enums.DeliverabilityRunStatus
+    score?: number | null
+    risk_level?: $Enums.DeliverabilityRiskLevel | null
+    scored_by?: string | null
+    jev_confidence?: number | null
+    summary?: string | null
+    mxtoolbox_check_uuid?: string | null
+    mail_tester_test_uuid?: string | null
+    recommended_daily_cap?: number | null
+    action_taken?: string | null
+    error_message?: string | null
+    created_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type DeliverabilityRunCreateOrConnectWithoutScheduleInput = {
+    where: DeliverabilityRunWhereUniqueInput
+    create: XOR<DeliverabilityRunCreateWithoutScheduleInput, DeliverabilityRunUncheckedCreateWithoutScheduleInput>
+  }
+
+  export type DeliverabilityRunCreateManyScheduleInputEnvelope = {
+    data: DeliverabilityRunCreateManyScheduleInput | DeliverabilityRunCreateManyScheduleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DomainSendingGuardCreateWithoutScheduleInput = {
+    uuid?: string
+    organisation_uuid: string
+    integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
+    daily_cap?: number | null
+    baseline_daily_volume?: number | null
+    paused?: boolean
+    source_run_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type DomainSendingGuardUncheckedCreateWithoutScheduleInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    integration_account_uuid: string
+    integration_account_domain_uuid?: string | null
+    daily_cap?: number | null
+    baseline_daily_volume?: number | null
+    paused?: boolean
+    source_run_uuid?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type DomainSendingGuardCreateOrConnectWithoutScheduleInput = {
+    where: DomainSendingGuardWhereUniqueInput
+    create: XOR<DomainSendingGuardCreateWithoutScheduleInput, DomainSendingGuardUncheckedCreateWithoutScheduleInput>
+  }
+
+  export type OrganisationUpsertWithoutDeliverability_schedulesInput = {
+    update: XOR<OrganisationUpdateWithoutDeliverability_schedulesInput, OrganisationUncheckedUpdateWithoutDeliverability_schedulesInput>
+    create: XOR<OrganisationCreateWithoutDeliverability_schedulesInput, OrganisationUncheckedCreateWithoutDeliverability_schedulesInput>
+    where?: OrganisationWhereInput
+  }
+
+  export type OrganisationUpdateToOneWithWhereWithoutDeliverability_schedulesInput = {
+    where?: OrganisationWhereInput
+    data: XOR<OrganisationUpdateWithoutDeliverability_schedulesInput, OrganisationUncheckedUpdateWithoutDeliverability_schedulesInput>
+  }
+
+  export type OrganisationUpdateWithoutDeliverability_schedulesInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
+    availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
+    booking_blocks?: BookingBlockUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUpdateManyWithoutOrganisationNestedInput
+    booking_pages?: BookingPageUpdateManyWithoutOrganisationNestedInput
+    booking_links?: BookingLinkUpdateManyWithoutOrganisationNestedInput
+    bookings?: BookingUpdateManyWithoutOrganisationNestedInput
+    booking_invite_settings?: BookingInviteSettingsUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUpdateManyWithoutOrganisationNestedInput
+    booking_invitations?: BookingInvitationUpdateManyWithoutOrganisationNestedInput
+    booking_events?: BookingEventUpdateManyWithoutOrganisationNestedInput
+    calendar_connections?: CalendarConnectionUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type OrganisationUncheckedUpdateWithoutDeliverability_schedulesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    reply_to_email?: NullableStringFieldUpdateOperationsInput | string | null
+    reply_forward_email?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: OrganisationMemberUncheckedUpdateManyWithoutOrganisationNestedInput
+    invitations?: OrganisationInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    filters?: FilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contacts?: ContactUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_messages?: OutreachMessageUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_threads?: MessageThreadUncheckedUpdateManyWithoutOrganisationNestedInput
+    outreach_sequences?: OutreachSequenceUncheckedUpdateManyWithoutOrganisationNestedInput
+    interactions?: InteractionUncheckedUpdateManyWithoutOrganisationNestedInput
+    sender_profiles?: SenderProfileUncheckedUpdateManyWithoutOrganisationNestedInput
+    marketing_campaigns?: MarketingCampaignUncheckedUpdateManyWithoutOrganisationNestedInput
+    scoring_instructions?: ScoringInstructionUncheckedUpdateManyWithoutOrganisationNestedInput
+    openai_batch_jobs?: OpenAiBatchJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    integrations?: IntegrationUncheckedUpdateManyWithoutOrganisationNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutOrganisationNestedInput
+    forms?: FormUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_lists?: ContactListUncheckedUpdateManyWithoutOrganisationNestedInput
+    saved_contact_filters?: SavedContactFilterUncheckedUpdateManyWithoutOrganisationNestedInput
+    contact_audience_analyses?: ContactAudienceAnalysisUncheckedUpdateManyWithoutOrganisationNestedInput
+    ai_usage_logs?: AiUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    apify_usage_logs?: ApifyUsageLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    message_templates?: MessageTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    activity_logs?: ActivityLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    messaging_goals?: MessagingGoalUncheckedUpdateManyWithoutOrganisationNestedInput
+    org_tags?: OrgTagUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_achievements?: GoalAchievementUncheckedUpdateManyWithoutOrganisationNestedInput
+    goal_personal_bests?: GoalPersonalBestUncheckedUpdateManyWithoutOrganisationNestedInput
+    bulk_jobs?: BulkJobUncheckedUpdateManyWithoutOrganisationNestedInput
+    website_scrape_requests?: WebsiteScrapeRequestUncheckedUpdateManyWithoutOrganisationNestedInput
+    email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
+    sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
+    mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
+    mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
+    oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
+    availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_blocks?: BookingBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_recurring_blocks?: BookingRecurringBlockUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_pages?: BookingPageUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_links?: BookingLinkUncheckedUpdateManyWithoutOrganisationNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_invite_settings?: BookingInviteSettingsUncheckedUpdateOneWithoutOrganisationNestedInput
+    booking_invite_templates?: BookingInviteTemplateUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_invitations?: BookingInvitationUncheckedUpdateManyWithoutOrganisationNestedInput
+    booking_events?: BookingEventUncheckedUpdateManyWithoutOrganisationNestedInput
+    calendar_connections?: CalendarConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutOrganisationNestedInput
+  }
+
+  export type DeliverabilityRunUpsertWithWhereUniqueWithoutScheduleInput = {
+    where: DeliverabilityRunWhereUniqueInput
+    update: XOR<DeliverabilityRunUpdateWithoutScheduleInput, DeliverabilityRunUncheckedUpdateWithoutScheduleInput>
+    create: XOR<DeliverabilityRunCreateWithoutScheduleInput, DeliverabilityRunUncheckedCreateWithoutScheduleInput>
+  }
+
+  export type DeliverabilityRunUpdateWithWhereUniqueWithoutScheduleInput = {
+    where: DeliverabilityRunWhereUniqueInput
+    data: XOR<DeliverabilityRunUpdateWithoutScheduleInput, DeliverabilityRunUncheckedUpdateWithoutScheduleInput>
+  }
+
+  export type DeliverabilityRunUpdateManyWithWhereWithoutScheduleInput = {
+    where: DeliverabilityRunScalarWhereInput
+    data: XOR<DeliverabilityRunUpdateManyMutationInput, DeliverabilityRunUncheckedUpdateManyWithoutScheduleInput>
+  }
+
+  export type DeliverabilityRunScalarWhereInput = {
+    AND?: DeliverabilityRunScalarWhereInput | DeliverabilityRunScalarWhereInput[]
+    OR?: DeliverabilityRunScalarWhereInput[]
+    NOT?: DeliverabilityRunScalarWhereInput | DeliverabilityRunScalarWhereInput[]
+    id?: IntFilter<"DeliverabilityRun"> | number
+    uuid?: StringFilter<"DeliverabilityRun"> | string
+    schedule_uuid?: StringFilter<"DeliverabilityRun"> | string
+    status?: EnumDeliverabilityRunStatusFilter<"DeliverabilityRun"> | $Enums.DeliverabilityRunStatus
+    score?: IntNullableFilter<"DeliverabilityRun"> | number | null
+    risk_level?: EnumDeliverabilityRiskLevelNullableFilter<"DeliverabilityRun"> | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    jev_confidence?: FloatNullableFilter<"DeliverabilityRun"> | number | null
+    summary?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    mxtoolbox_check_uuid?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    mail_tester_test_uuid?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    recommended_daily_cap?: IntNullableFilter<"DeliverabilityRun"> | number | null
+    action_taken?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    error_message?: StringNullableFilter<"DeliverabilityRun"> | string | null
+    created_at?: DateTimeFilter<"DeliverabilityRun"> | Date | string
+    finished_at?: DateTimeNullableFilter<"DeliverabilityRun"> | Date | string | null
+  }
+
+  export type DomainSendingGuardUpsertWithoutScheduleInput = {
+    update: XOR<DomainSendingGuardUpdateWithoutScheduleInput, DomainSendingGuardUncheckedUpdateWithoutScheduleInput>
+    create: XOR<DomainSendingGuardCreateWithoutScheduleInput, DomainSendingGuardUncheckedCreateWithoutScheduleInput>
+    where?: DomainSendingGuardWhereInput
+  }
+
+  export type DomainSendingGuardUpdateToOneWithWhereWithoutScheduleInput = {
+    where?: DomainSendingGuardWhereInput
+    data: XOR<DomainSendingGuardUpdateWithoutScheduleInput, DomainSendingGuardUncheckedUpdateWithoutScheduleInput>
+  }
+
+  export type DomainSendingGuardUpdateWithoutScheduleInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    baseline_daily_volume?: NullableIntFieldUpdateOperationsInput | number | null
+    paused?: BoolFieldUpdateOperationsInput | boolean
+    source_run_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DomainSendingGuardUncheckedUpdateWithoutScheduleInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: StringFieldUpdateOperationsInput | string
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    baseline_daily_volume?: NullableIntFieldUpdateOperationsInput | number | null
+    paused?: BoolFieldUpdateOperationsInput | boolean
+    source_run_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeliverabilityScheduleCreateWithoutRunsInput = {
+    uuid?: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutDeliverability_schedulesInput
+    guard?: DomainSendingGuardCreateNestedOneWithoutScheduleInput
+  }
+
+  export type DeliverabilityScheduleUncheckedCreateWithoutRunsInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    guard?: DomainSendingGuardUncheckedCreateNestedOneWithoutScheduleInput
+  }
+
+  export type DeliverabilityScheduleCreateOrConnectWithoutRunsInput = {
+    where: DeliverabilityScheduleWhereUniqueInput
+    create: XOR<DeliverabilityScheduleCreateWithoutRunsInput, DeliverabilityScheduleUncheckedCreateWithoutRunsInput>
+  }
+
+  export type DeliverabilityScheduleUpsertWithoutRunsInput = {
+    update: XOR<DeliverabilityScheduleUpdateWithoutRunsInput, DeliverabilityScheduleUncheckedUpdateWithoutRunsInput>
+    create: XOR<DeliverabilityScheduleCreateWithoutRunsInput, DeliverabilityScheduleUncheckedCreateWithoutRunsInput>
+    where?: DeliverabilityScheduleWhereInput
+  }
+
+  export type DeliverabilityScheduleUpdateToOneWithWhereWithoutRunsInput = {
+    where?: DeliverabilityScheduleWhereInput
+    data: XOR<DeliverabilityScheduleUpdateWithoutRunsInput, DeliverabilityScheduleUncheckedUpdateWithoutRunsInput>
+  }
+
+  export type DeliverabilityScheduleUpdateWithoutRunsInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutDeliverability_schedulesNestedInput
+    guard?: DomainSendingGuardUpdateOneWithoutScheduleNestedInput
+  }
+
+  export type DeliverabilityScheduleUncheckedUpdateWithoutRunsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    guard?: DomainSendingGuardUncheckedUpdateOneWithoutScheduleNestedInput
+  }
+
+  export type DeliverabilityScheduleCreateWithoutGuardInput = {
+    uuid?: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    organisation: OrganisationCreateNestedOneWithoutDeliverability_schedulesInput
+    runs?: DeliverabilityRunCreateNestedManyWithoutScheduleInput
+  }
+
+  export type DeliverabilityScheduleUncheckedCreateWithoutGuardInput = {
+    id?: number
+    uuid?: string
+    organisation_uuid: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    runs?: DeliverabilityRunUncheckedCreateNestedManyWithoutScheduleInput
+  }
+
+  export type DeliverabilityScheduleCreateOrConnectWithoutGuardInput = {
+    where: DeliverabilityScheduleWhereUniqueInput
+    create: XOR<DeliverabilityScheduleCreateWithoutGuardInput, DeliverabilityScheduleUncheckedCreateWithoutGuardInput>
+  }
+
+  export type DeliverabilityScheduleUpsertWithoutGuardInput = {
+    update: XOR<DeliverabilityScheduleUpdateWithoutGuardInput, DeliverabilityScheduleUncheckedUpdateWithoutGuardInput>
+    create: XOR<DeliverabilityScheduleCreateWithoutGuardInput, DeliverabilityScheduleUncheckedCreateWithoutGuardInput>
+    where?: DeliverabilityScheduleWhereInput
+  }
+
+  export type DeliverabilityScheduleUpdateToOneWithWhereWithoutGuardInput = {
+    where?: DeliverabilityScheduleWhereInput
+    data: XOR<DeliverabilityScheduleUpdateWithoutGuardInput, DeliverabilityScheduleUncheckedUpdateWithoutGuardInput>
+  }
+
+  export type DeliverabilityScheduleUpdateWithoutGuardInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    organisation?: OrganisationUpdateOneRequiredWithoutDeliverability_schedulesNestedInput
+    runs?: DeliverabilityRunUpdateManyWithoutScheduleNestedInput
+  }
+
+  export type DeliverabilityScheduleUncheckedUpdateWithoutGuardInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    organisation_uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    runs?: DeliverabilityRunUncheckedUpdateManyWithoutScheduleNestedInput
   }
 
   export type OrganisationCreateWithoutRemindersInput = {
@@ -180497,6 +187105,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -180555,6 +187164,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -181052,6 +187662,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -181110,6 +187721,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -181887,6 +188499,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -181945,6 +188558,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -182090,6 +188704,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -182148,6 +188763,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -183008,6 +189624,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -183066,6 +189683,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -183321,6 +189939,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -183379,6 +189998,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -183636,6 +190256,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -183694,6 +190315,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -183767,6 +190389,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -183825,6 +190448,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -183882,6 +190506,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -183940,6 +190565,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -184013,6 +190639,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -184071,6 +190698,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -184128,6 +190756,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -184186,6 +190815,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -184376,6 +191006,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -184434,6 +191065,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -184597,6 +191229,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -184655,6 +191288,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -184728,6 +191362,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -184786,6 +191421,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -184843,6 +191479,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -184901,6 +191538,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -185135,6 +191773,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -185193,6 +191832,7 @@ export namespace Prisma {
     email_send_limits?: EmailSendLimitUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -186113,6 +192753,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -186171,6 +192812,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -186358,6 +193000,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -186416,6 +193059,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -186599,6 +193243,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -186657,6 +193302,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -186814,6 +193460,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -186872,6 +193519,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -187019,6 +193667,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -187077,6 +193726,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -187234,6 +193884,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -187292,6 +193943,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -187440,6 +194092,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
@@ -187498,6 +194151,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
@@ -187655,6 +194309,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
@@ -187713,6 +194368,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -187860,6 +194516,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleCreateNestedManyWithoutOrganisationInput
@@ -187918,6 +194575,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     availability_schedules?: AvailabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
@@ -187991,6 +194649,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUpdateManyWithoutOrganisationNestedInput
@@ -188049,6 +194708,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     availability_schedules?: AvailabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -188105,6 +194765,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -188163,6 +194824,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -188261,6 +194923,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -188319,6 +194982,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -188459,6 +195123,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -188517,6 +195182,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -188703,6 +195369,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -188761,6 +195428,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -188996,6 +195664,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -189054,6 +195723,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -189295,6 +195965,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -189353,6 +196024,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -189590,6 +196262,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -189648,6 +196321,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -189889,6 +196563,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -189947,6 +196622,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -190184,6 +196860,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -190242,6 +196919,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -190754,6 +197432,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -190812,6 +197491,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -191535,6 +198215,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -191593,6 +198274,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -192181,6 +198863,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -192239,6 +198922,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -192808,6 +199492,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -192866,6 +199551,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -193619,6 +200305,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -193677,6 +200364,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -194444,6 +201132,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -194502,6 +201191,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -194759,6 +201449,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -194817,6 +201508,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -195070,6 +201762,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -195128,6 +201821,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -195201,6 +201895,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -195259,6 +201954,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -195316,6 +202012,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -195374,6 +202071,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -195493,6 +202191,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -195551,6 +202250,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -195660,6 +202360,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -195718,6 +202419,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -196089,6 +202791,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -196147,6 +202850,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -197114,6 +203818,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -197172,6 +203877,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -197434,6 +204140,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -197492,6 +204199,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -197655,6 +204363,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogCreateNestedManyWithoutOrganisationInput
@@ -197713,6 +204422,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedCreateNestedManyWithoutOrganisationInput
     mail_tester_tests?: MailTesterTestUncheckedCreateNestedManyWithoutOrganisationInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedCreateNestedManyWithoutOrganisationInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedCreateNestedManyWithoutOrganisationInput
     api_keys?: ApiKeyUncheckedCreateNestedManyWithoutOrganisationInput
     oauth_connections?: OAuthConnectionUncheckedCreateNestedManyWithoutOrganisationInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedCreateNestedManyWithoutOrganisationInput
@@ -197870,6 +204580,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUpdateManyWithoutOrganisationNestedInput
@@ -197928,6 +204639,7 @@ export namespace Prisma {
     sending_policies?: SendingPolicyUncheckedUpdateManyWithoutOrganisationNestedInput
     mail_tester_tests?: MailTesterTestUncheckedUpdateManyWithoutOrganisationNestedInput
     mxtoolbox_checks?: MxToolboxCheckUncheckedUpdateManyWithoutOrganisationNestedInput
+    deliverability_schedules?: DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationNestedInput
     api_keys?: ApiKeyUncheckedUpdateManyWithoutOrganisationNestedInput
     oauth_connections?: OAuthConnectionUncheckedUpdateManyWithoutOrganisationNestedInput
     mcp_tool_invocation_logs?: McpToolInvocationLogUncheckedUpdateManyWithoutOrganisationNestedInput
@@ -200782,6 +207494,32 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type DeliverabilityScheduleCreateManyOrganisationInput = {
+    id?: number
+    uuid?: string
+    label?: string | null
+    domain: string
+    integration_account_uuid?: string | null
+    integration_account_domain_uuid?: string | null
+    from_provider?: $Enums.ExternalIntegrationProvider | null
+    from_account?: string | null
+    dkim_selector?: string | null
+    frequency: $Enums.DeliverabilityFrequency
+    time_of_day: string
+    weekday?: number | null
+    day_of_month?: number | null
+    interval_days?: number | null
+    timezone?: string
+    checks?: DeliverabilityScheduleCreatechecksInput | string[]
+    action_mode?: $Enums.DeliverabilityActionMode
+    warn_threshold?: number
+    critical_threshold?: number
+    is_active?: boolean
+    last_run_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type ApiKeyCreateManyOrganisationInput = {
     id?: number
     uuid?: string
@@ -202831,6 +209569,87 @@ export namespace Prisma {
     results?: JsonNullValueInput | InputJsonValue
     ai_audit?: NullableJsonNullValueInput | InputJsonValue
     ai_audit_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeliverabilityScheduleUpdateWithoutOrganisationInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    runs?: DeliverabilityRunUpdateManyWithoutScheduleNestedInput
+    guard?: DomainSendingGuardUpdateOneWithoutScheduleNestedInput
+  }
+
+  export type DeliverabilityScheduleUncheckedUpdateWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    runs?: DeliverabilityRunUncheckedUpdateManyWithoutScheduleNestedInput
+    guard?: DomainSendingGuardUncheckedUpdateOneWithoutScheduleNestedInput
+  }
+
+  export type DeliverabilityScheduleUncheckedUpdateManyWithoutOrganisationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    label?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: StringFieldUpdateOperationsInput | string
+    integration_account_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    integration_account_domain_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    from_provider?: NullableEnumExternalIntegrationProviderFieldUpdateOperationsInput | $Enums.ExternalIntegrationProvider | null
+    from_account?: NullableStringFieldUpdateOperationsInput | string | null
+    dkim_selector?: NullableStringFieldUpdateOperationsInput | string | null
+    frequency?: EnumDeliverabilityFrequencyFieldUpdateOperationsInput | $Enums.DeliverabilityFrequency
+    time_of_day?: StringFieldUpdateOperationsInput | string
+    weekday?: NullableIntFieldUpdateOperationsInput | number | null
+    day_of_month?: NullableIntFieldUpdateOperationsInput | number | null
+    interval_days?: NullableIntFieldUpdateOperationsInput | number | null
+    timezone?: StringFieldUpdateOperationsInput | string
+    checks?: DeliverabilityScheduleUpdatechecksInput | string[]
+    action_mode?: EnumDeliverabilityActionModeFieldUpdateOperationsInput | $Enums.DeliverabilityActionMode
+    warn_threshold?: IntFieldUpdateOperationsInput | number
+    critical_threshold?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    last_run_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -207990,6 +214809,77 @@ export namespace Prisma {
     status?: EnumCampaignIntegrationStatusFieldUpdateOperationsInput | $Enums.CampaignIntegrationStatus
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeliverabilityRunCreateManyScheduleInput = {
+    id?: number
+    uuid?: string
+    status?: $Enums.DeliverabilityRunStatus
+    score?: number | null
+    risk_level?: $Enums.DeliverabilityRiskLevel | null
+    scored_by?: string | null
+    jev_confidence?: number | null
+    summary?: string | null
+    mxtoolbox_check_uuid?: string | null
+    mail_tester_test_uuid?: string | null
+    recommended_daily_cap?: number | null
+    action_taken?: string | null
+    error_message?: string | null
+    created_at?: Date | string
+    finished_at?: Date | string | null
+  }
+
+  export type DeliverabilityRunUpdateWithoutScheduleInput = {
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumDeliverabilityRunStatusFieldUpdateOperationsInput | $Enums.DeliverabilityRunStatus
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    risk_level?: NullableEnumDeliverabilityRiskLevelFieldUpdateOperationsInput | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: NullableStringFieldUpdateOperationsInput | string | null
+    jev_confidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    mxtoolbox_check_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    mail_tester_test_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    recommended_daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    action_taken?: NullableStringFieldUpdateOperationsInput | string | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DeliverabilityRunUncheckedUpdateWithoutScheduleInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumDeliverabilityRunStatusFieldUpdateOperationsInput | $Enums.DeliverabilityRunStatus
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    risk_level?: NullableEnumDeliverabilityRiskLevelFieldUpdateOperationsInput | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: NullableStringFieldUpdateOperationsInput | string | null
+    jev_confidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    mxtoolbox_check_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    mail_tester_test_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    recommended_daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    action_taken?: NullableStringFieldUpdateOperationsInput | string | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DeliverabilityRunUncheckedUpdateManyWithoutScheduleInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    uuid?: StringFieldUpdateOperationsInput | string
+    status?: EnumDeliverabilityRunStatusFieldUpdateOperationsInput | $Enums.DeliverabilityRunStatus
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    risk_level?: NullableEnumDeliverabilityRiskLevelFieldUpdateOperationsInput | $Enums.DeliverabilityRiskLevel | null
+    scored_by?: NullableStringFieldUpdateOperationsInput | string | null
+    jev_confidence?: NullableFloatFieldUpdateOperationsInput | number | null
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    mxtoolbox_check_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    mail_tester_test_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    recommended_daily_cap?: NullableIntFieldUpdateOperationsInput | number | null
+    action_taken?: NullableStringFieldUpdateOperationsInput | string | null
+    error_message?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    finished_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ReminderAssigneeCreateManyReminderInput = {

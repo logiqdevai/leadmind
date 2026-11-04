@@ -122,6 +122,7 @@ const navGroups: NavGroup[] = [
       { label: "Batch Jobs", icon: Layers, href: Routes.dashboard.batch_jobs, end: false },
       { label: "Deliverability", icon: Gauge, href: Routes.dashboard.mail_tester, end: false },
       { label: "Domain Health", icon: Shield, href: Routes.dashboard.mxtoolbox, end: false },
+      { label: "Deliverability Monitor", icon: Activity, href: Routes.dashboard.deliverability_monitor, end: false },
     ],
   },
   {

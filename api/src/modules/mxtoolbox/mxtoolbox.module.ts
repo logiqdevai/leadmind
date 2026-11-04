@@ -15,5 +15,6 @@ import { MxToolboxService } from './mxtoolbox.service';
   ],
   controllers: [MxToolboxController],
   providers: [MxToolboxService],
+  exports: [MxToolboxService],
 })
 export class MxToolboxModule {}

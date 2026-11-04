@@ -9,6 +9,7 @@ import {
     BOOKING_CALENDAR_SYNC_QUEUE,
     BOOKING_NOTIFICATION_QUEUE,
     BULL_BOARD_ADAPTER,
+    DELIVERABILITY_CHECK_QUEUE,
     FILTER_SCRAPE_QUEUE,
     MARKETING_CAMPAIGN_DISPATCH_QUEUE,
     MARKETING_MESSAGE_SEND_QUEUE,
@@ -28,6 +29,7 @@ import {
             { name: REMINDER_TRIGGER_QUEUE },
             { name: BOOKING_NOTIFICATION_QUEUE },
             { name: BOOKING_CALENDAR_SYNC_QUEUE },
+            { name: DELIVERABILITY_CHECK_QUEUE },
         ),
     ],
     providers: [
@@ -42,6 +44,7 @@ import {
                 getQueueToken(REMINDER_TRIGGER_QUEUE),
                 getQueueToken(BOOKING_NOTIFICATION_QUEUE),
                 getQueueToken(BOOKING_CALENDAR_SYNC_QUEUE),
+                getQueueToken(DELIVERABILITY_CHECK_QUEUE),
             ],
             useFactory: (
                 filterScrapeQueue: Queue,
@@ -52,6 +55,7 @@ import {
                 reminderTriggerQueue: Queue,
                 bookingNotificationQueue: Queue,
                 bookingCalendarSyncQueue: Queue,
+                deliverabilityCheckQueue: Queue,
             ) => {
                 const serverAdapter = new ExpressAdapter();
                 serverAdapter.setBasePath('/admin/queues');
@@ -66,6 +70,7 @@ import {
                         new BullMQAdapter(reminderTriggerQueue),
                         new BullMQAdapter(bookingNotificationQueue),
                         new BullMQAdapter(bookingCalendarSyncQueue),
+                        new BullMQAdapter(deliverabilityCheckQueue),
                     ],
                     serverAdapter,
                 });

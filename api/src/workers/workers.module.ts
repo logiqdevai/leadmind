@@ -21,10 +21,12 @@ import { RemindersModule } from '@/modules/reminders/reminders.module';
 import { NotificationsModule } from '@/modules/notifications/notifications.module';
 import { ContactListsModule } from '@/modules/contact-lists/contact-lists.module';
 import { BookingsModule } from '@/modules/bookings/bookings.module';
+import { DeliverabilityModule } from '@/modules/deliverability/deliverability.module';
 import {
   AI_PROCESS_QUEUE,
   BOOKING_CALENDAR_SYNC_QUEUE,
   BOOKING_NOTIFICATION_QUEUE,
+  DELIVERABILITY_CHECK_QUEUE,
   FILTER_SCRAPE_QUEUE,
   MARKETING_CAMPAIGN_DISPATCH_QUEUE,
   MARKETING_MESSAGE_SEND_QUEUE,
@@ -44,6 +46,7 @@ import { OrganisationDataCopyWorker } from './organisation-data-copy.worker';
 import { BulkJobWatchdogService } from './bulk-job-watchdog.service';
 import { BookingNotificationWorker } from './booking-notification.worker';
 import { BookingCalendarSyncWorker } from './booking-calendar-sync.worker';
+import { DeliverabilityCheckWorker } from './deliverability-check.worker';
 
 @Module({
   imports: [
@@ -68,6 +71,7 @@ import { BookingCalendarSyncWorker } from './booking-calendar-sync.worker';
     NotificationsModule,
     ContactListsModule,
     BookingsModule,
+    DeliverabilityModule,
     BullModule.registerQueue(
       { name: FILTER_SCRAPE_QUEUE },
       { name: AI_PROCESS_QUEUE },
@@ -79,6 +83,7 @@ import { BookingCalendarSyncWorker } from './booking-calendar-sync.worker';
       { name: ORGANISATION_DATA_COPY_QUEUE },
       { name: BOOKING_NOTIFICATION_QUEUE },
       { name: BOOKING_CALENDAR_SYNC_QUEUE },
+      { name: DELIVERABILITY_CHECK_QUEUE },
     ),
   ],
   providers: [
@@ -93,6 +98,7 @@ import { BookingCalendarSyncWorker } from './booking-calendar-sync.worker';
     BulkJobWatchdogService,
     BookingNotificationWorker,
     BookingCalendarSyncWorker,
+    DeliverabilityCheckWorker,
   ],
   exports: [
     FilterScrapeWorker,

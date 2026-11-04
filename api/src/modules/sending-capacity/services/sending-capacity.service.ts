@@ -21,8 +21,15 @@ interface ReservationCandidate {
   scope_uuid: string;
   period_key: string;
   limit: number;
-  reason: 'stage_limit' | 'account_limit' | 'provider_limit';
+  reason:
+    | 'stage_limit'
+    | 'account_limit'
+    | 'provider_limit'
+    | 'deliverability_limit';
 }
+
+/** How long a deliverability pause defers a sender before it is re-evaluated. */
+const DELIVERABILITY_PAUSE_RECHECK_MS = 15 * 60 * 1000;
 
 const CAMPAIGN_INTEGRATION_INCLUDE = {
   campaign: { select: { organisation_uuid: true } },
@@ -92,6 +99,18 @@ export class SendingCapacityService {
         eligible: false,
         next_eligible_at: windowOpen.opens_at,
         reason: 'window_closed',
+        stage_remaining: 0,
+      };
+    }
+
+    const guards = await this.loadGuards(ci);
+    if (guards.some((guard) => guard.paused)) {
+      return {
+        eligible: false,
+        next_eligible_at: new Date(
+          now.getTime() + DELIVERABILITY_PAUSE_RECHECK_MS,
+        ),
+        reason: 'deliverability_paused',
         stage_remaining: 0,
       };
     }
@@ -369,10 +388,21 @@ export class SendingCapacityService {
       provider_remaining = tightest?.remaining ?? null;
     }
 
+    const guards = await this.loadGuards(ci);
+    const guardCaps = guards
+      .map((guard) => guard.daily_cap)
+      .filter((cap): cap is number => cap != null);
+    const deliverability_limit = guardCaps.length
+      ? Math.min(...guardCaps)
+      : null;
+
+    // The guard cap is per day while other limits have their own periods, so it is reported
+    // separately and still counted as a ceiling here: the tightest number is the useful one.
     const effective_limit = [
       resolved?.stage.limit,
       account_limit,
       provider_limit,
+      deliverability_limit,
     ].filter((v): v is number => v != null);
 
     const eligibility = await this.checkEligibility(
@@ -398,6 +428,8 @@ export class SendingCapacityService {
       provider_limit,
       provider_used,
       provider_remaining,
+      deliverability_limit,
+      deliverability_paused: guards.some((guard) => guard.paused),
       effective_limit: effective_limit.length
         ? Math.min(...effective_limit)
         : null,
@@ -470,7 +502,54 @@ export class SendingCapacityService {
       });
     }
 
+    const guards = await this.loadGuards(ci);
+    if (guards.some((guard) => guard.paused)) {
+      throw new SendingCapacityDeniedError('deliverability_paused');
+    }
+    const guardWindow = getPeriodWindow(
+      SendingPeriodUnit.DAY,
+      orgTimezone,
+      now,
+    );
+    for (const guard of guards) {
+      if (guard.daily_cap == null) continue;
+      candidates.push({
+        scope_type: SendingUsageScopeType.DELIVERABILITY_GUARD,
+        scope_uuid: guard.uuid,
+        period_key: guardWindow.period_key,
+        limit: guard.daily_cap,
+        reason: 'deliverability_limit',
+      });
+    }
+
     return candidates;
+  }
+
+  /**
+   * Restrictions a deliverability schedule has placed on this sender. A guard on a specific
+   * domain only applies to campaign integrations using that domain; a guard without one covers
+   * the whole account (SMTP accounts, or Resend accounts tested as a whole).
+   */
+  private loadGuards(
+    ci: Awaited<ReturnType<SendingCapacityService['loadCampaignIntegration']>>,
+  ) {
+    return this.prisma.domainSendingGuard.findMany({
+      where: {
+        integration_account_uuid: ci.integration_account_uuid,
+        OR: [
+          { integration_account_domain_uuid: null },
+          ...(ci.integration_account_domain_uuid
+            ? [
+                {
+                  integration_account_domain_uuid:
+                    ci.integration_account_domain_uuid,
+                },
+              ]
+            : []),
+        ],
+      },
+      select: { uuid: true, daily_cap: true, paused: true },
+    });
   }
 
   /**

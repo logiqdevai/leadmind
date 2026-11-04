@@ -805,6 +805,67 @@ exports.Prisma.MxToolboxCheckScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.DeliverabilityScheduleScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  organisation_uuid: 'organisation_uuid',
+  label: 'label',
+  domain: 'domain',
+  integration_account_uuid: 'integration_account_uuid',
+  integration_account_domain_uuid: 'integration_account_domain_uuid',
+  from_provider: 'from_provider',
+  from_account: 'from_account',
+  dkim_selector: 'dkim_selector',
+  frequency: 'frequency',
+  time_of_day: 'time_of_day',
+  weekday: 'weekday',
+  day_of_month: 'day_of_month',
+  interval_days: 'interval_days',
+  timezone: 'timezone',
+  checks: 'checks',
+  action_mode: 'action_mode',
+  warn_threshold: 'warn_threshold',
+  critical_threshold: 'critical_threshold',
+  is_active: 'is_active',
+  last_run_at: 'last_run_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.DeliverabilityRunScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  schedule_uuid: 'schedule_uuid',
+  status: 'status',
+  score: 'score',
+  risk_level: 'risk_level',
+  scored_by: 'scored_by',
+  jev_confidence: 'jev_confidence',
+  summary: 'summary',
+  mxtoolbox_check_uuid: 'mxtoolbox_check_uuid',
+  mail_tester_test_uuid: 'mail_tester_test_uuid',
+  recommended_daily_cap: 'recommended_daily_cap',
+  action_taken: 'action_taken',
+  error_message: 'error_message',
+  created_at: 'created_at',
+  finished_at: 'finished_at'
+};
+
+exports.Prisma.DomainSendingGuardScalarFieldEnum = {
+  id: 'id',
+  uuid: 'uuid',
+  schedule_uuid: 'schedule_uuid',
+  organisation_uuid: 'organisation_uuid',
+  integration_account_uuid: 'integration_account_uuid',
+  integration_account_domain_uuid: 'integration_account_domain_uuid',
+  daily_cap: 'daily_cap',
+  baseline_daily_volume: 'baseline_daily_volume',
+  paused: 'paused',
+  source_run_uuid: 'source_run_uuid',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.ReminderScalarFieldEnum = {
   id: 'id',
   uuid: 'uuid',
@@ -1808,6 +1869,32 @@ exports.MxToolboxCheckStatus = exports.$Enums.MxToolboxCheckStatus = {
   FAILED: 'FAILED'
 };
 
+exports.DeliverabilityFrequency = exports.$Enums.DeliverabilityFrequency = {
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  EVERY_N_DAYS: 'EVERY_N_DAYS',
+  MONTHLY: 'MONTHLY'
+};
+
+exports.DeliverabilityActionMode = exports.$Enums.DeliverabilityActionMode = {
+  RECOMMEND: 'RECOMMEND',
+  THROTTLE: 'THROTTLE',
+  PAUSE: 'PAUSE'
+};
+
+exports.DeliverabilityRunStatus = exports.$Enums.DeliverabilityRunStatus = {
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+exports.DeliverabilityRiskLevel = exports.$Enums.DeliverabilityRiskLevel = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
 exports.ReminderStatus = exports.$Enums.ReminderStatus = {
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
@@ -1920,7 +2007,8 @@ exports.CampaignIntegrationStatus = exports.$Enums.CampaignIntegrationStatus = {
 exports.SendingUsageScopeType = exports.$Enums.SendingUsageScopeType = {
   PROVIDER: 'PROVIDER',
   INTEGRATION_ACCOUNT: 'INTEGRATION_ACCOUNT',
-  CAMPAIGN_INTEGRATION: 'CAMPAIGN_INTEGRATION'
+  CAMPAIGN_INTEGRATION: 'CAMPAIGN_INTEGRATION',
+  DELIVERABILITY_GUARD: 'DELIVERABILITY_GUARD'
 };
 
 exports.GoalAchievementType = exports.$Enums.GoalAchievementType = {
@@ -2101,6 +2189,9 @@ exports.Prisma.ModelName = {
   IntegrationAccountDomain: 'IntegrationAccountDomain',
   MailTesterTest: 'MailTesterTest',
   MxToolboxCheck: 'MxToolboxCheck',
+  DeliverabilitySchedule: 'DeliverabilitySchedule',
+  DeliverabilityRun: 'DeliverabilityRun',
+  DomainSendingGuard: 'DomainSendingGuard',
   Reminder: 'Reminder',
   ReminderAssignee: 'ReminderAssignee',
   Form: 'Form',

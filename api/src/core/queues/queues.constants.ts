@@ -39,5 +39,8 @@ export const REPLY_ANALYSIS_QUEUE = 'reply-analysis';
 /** Booking emails: immediate sends (with retries) and delayed reminders. */
 export const BOOKING_NOTIFICATION_QUEUE = 'booking-notification';
 
+/** Scheduled domain deliverability checks (one job scheduler per schedule) and Mail-Tester result polling. */
+export const DELIVERABILITY_CHECK_QUEUE = 'deliverability-check';
+
 /** Google Calendar create/update/delete for bookings, retried with backoff. */
 export const BOOKING_CALENDAR_SYNC_QUEUE = 'booking-calendar-sync';

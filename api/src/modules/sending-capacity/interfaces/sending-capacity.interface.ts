@@ -2,6 +2,8 @@ export type SendingCapacityDenialReason =
   | 'stage_limit'
   | 'account_limit'
   | 'provider_limit'
+  | 'deliverability_limit'
+  | 'deliverability_paused'
   | 'min_interval'
   | 'window_closed'
   | 'no_active_policy';
@@ -36,6 +38,10 @@ export interface CapacityObservability {
   provider_limit: number | null;
   provider_used: number | null;
   provider_remaining: number | null;
+  /** Daily cap from a deliverability schedule's sending guard, if one is restricting this sender. */
+  deliverability_limit: number | null;
+  /** True when a deliverability schedule has paused this sender. */
+  deliverability_paused: boolean;
   effective_limit: number | null;
   sending_window: {
     start_minute: number | null;

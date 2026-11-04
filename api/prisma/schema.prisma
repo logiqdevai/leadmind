@@ -103,6 +103,7 @@ model Organisation {
   sending_policies          SendingPolicy[]
   mail_tester_tests         MailTesterTest[]
   mxtoolbox_checks          MxToolboxCheck[]
+  deliverability_schedules  DeliverabilitySchedule[]
   api_keys                  ApiKey[]
   oauth_connections         OAuthConnection[]
   mcp_tool_invocation_logs  McpToolInvocationLog[]
@@ -1512,6 +1513,124 @@ model MxToolboxCheck {
   @@map("mxtoolbox_checks")
 }
 
+enum DeliverabilityFrequency {
+  DAILY
+  WEEKLY
+  EVERY_N_DAYS
+  MONTHLY
+}
+
+/// What a low score does to sending: RECOMMEND only suggests a cap, THROTTLE enforces it,
+/// PAUSE additionally blocks sending below the critical threshold.
+enum DeliverabilityActionMode {
+  RECOMMEND
+  THROTTLE
+  PAUSE
+}
+
+enum DeliverabilityRunStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum DeliverabilityRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+/// A recurring domain deliverability check. `checks` holds DeliverabilityCheckType values
+/// so new check types can be added without a migration.
+model DeliverabilitySchedule {
+  id                              Int                         @id @default(autoincrement())
+  uuid                            String                      @unique @default(uuid())
+  organisation_uuid               String
+  label                           String?
+  domain                          String
+  integration_account_uuid        String?
+  integration_account_domain_uuid String?
+  from_provider                   ExternalIntegrationProvider?
+  from_account                    String?
+  dkim_selector                   String?
+  frequency                       DeliverabilityFrequency
+  /// "HH:mm" in `timezone`.
+  time_of_day                     String
+  /// ISO weekday 1-7, WEEKLY only.
+  weekday                         Int?
+  /// 1-28, MONTHLY only.
+  day_of_month                    Int?
+  /// EVERY_N_DAYS only.
+  interval_days                   Int?
+  timezone                        String                      @default("UTC")
+  checks                          String[]
+  action_mode                     DeliverabilityActionMode    @default(RECOMMEND)
+  warn_threshold                  Int                         @default(70)
+  critical_threshold              Int                         @default(40)
+  is_active                       Boolean                     @default(true)
+  last_run_at                     DateTime?
+  created_at                      DateTime                    @default(now())
+  updated_at                      DateTime                    @updatedAt
+
+  organisation Organisation            @relation(fields: [organisation_uuid], references: [uuid], onDelete: Cascade)
+  runs         DeliverabilityRun[]
+  guard        DomainSendingGuard?
+
+  @@index([organisation_uuid])
+  @@map("deliverability_schedules")
+}
+
+model DeliverabilityRun {
+  id                    Int                      @id @default(autoincrement())
+  uuid                  String                   @unique @default(uuid())
+  schedule_uuid         String
+  status                DeliverabilityRunStatus  @default(RUNNING)
+  score                 Int?
+  risk_level            DeliverabilityRiskLevel?
+  /// "jev" when scored by Jev, "rules" for the deterministic fallback.
+  scored_by             String?
+  jev_confidence        Float?
+  summary               String?
+  mxtoolbox_check_uuid  String?
+  mail_tester_test_uuid String?
+  recommended_daily_cap Int?
+  action_taken          String?
+  error_message         String?
+  created_at            DateTime                 @default(now())
+  finished_at           DateTime?
+
+  schedule DeliverabilitySchedule @relation(fields: [schedule_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([schedule_uuid, created_at])
+  @@map("deliverability_runs")
+}
+
+/// Sending restriction derived from the latest deliverability run of one schedule. Kept apart
+/// from IntegrationAccount limits so the user's own limits are never overwritten.
+model DomainSendingGuard {
+  id                              Int      @id @default(autoincrement())
+  uuid                            String   @unique @default(uuid())
+  schedule_uuid                   String   @unique
+  organisation_uuid               String
+  integration_account_uuid        String
+  integration_account_domain_uuid String?
+  /// Max messages per day while throttled; null = no cap.
+  daily_cap                       Int?
+  /// Daily volume the cap was derived from. Frozen while throttled so the cap can't spiral down
+  /// as the throttled volume itself shrinks; cleared once the domain recovers.
+  baseline_daily_volume           Int?
+  paused                          Boolean  @default(false)
+  source_run_uuid                 String?
+  created_at                      DateTime @default(now())
+  updated_at                      DateTime @updatedAt
+
+  schedule DeliverabilitySchedule @relation(fields: [schedule_uuid], references: [uuid], onDelete: Cascade)
+
+  @@index([integration_account_uuid])
+  @@map("domain_sending_guards")
+}
+
 enum ReminderStatus {
   PENDING
   COMPLETED
@@ -1906,6 +2025,7 @@ enum SendingUsageScopeType {
   PROVIDER
   INTEGRATION_ACCOUNT
   CAMPAIGN_INTEGRATION
+  DELIVERABILITY_GUARD
 }
 
 /// A reusable ramp-up / pacing configuration: an ordered list of SendingPolicyStages

@@ -392,6 +392,15 @@ export const ApiRoutes = {
         refresh: (uuid: string) => `/mail-tester/tests/${uuid}/refresh`,
         ai_audit: (uuid: string) => `/mail-tester/tests/${uuid}/ai-audit`,
     },
+    deliverability: {
+        schedules: "/deliverability/schedules",
+        schedule: (uuid: string) => `/deliverability/schedules/${uuid}`,
+        run_now: (uuid: string) => `/deliverability/schedules/${uuid}/run`,
+        runs: (uuid: string) => `/deliverability/schedules/${uuid}/runs`,
+        restriction: (uuid: string) => `/deliverability/schedules/${uuid}/restriction`,
+        apply_recommendation: (runUuid: string) =>
+            `/deliverability/runs/${runUuid}/apply-recommendation`,
+    },
     mxtoolbox: {
         list: "/mxtoolbox/checks",
         create: "/mxtoolbox/checks",

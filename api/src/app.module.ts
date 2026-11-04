@@ -54,6 +54,7 @@ import { IntegrationSelectionModule } from './modules/integration-selection/inte
 import { CampaignIntegrationsModule } from './modules/campaign-integrations/campaign-integrations.module';
 import { MailTesterModule } from './modules/mail-tester/mail-tester.module';
 import { MxToolboxModule } from './modules/mxtoolbox/mxtoolbox.module';
+import { DeliverabilityModule } from './modules/deliverability/deliverability.module';
 import { OpenAiBatchJobsModule } from './modules/openai-batch-jobs/openai-batch-jobs.module';
 import { ThreadsModule } from './modules/threads/threads.module';
 import { SidebarFavoritesModule } from './modules/sidebar-favorites/sidebar-favorites.module';
@@ -126,6 +127,7 @@ import { BookingsModule } from './modules/bookings/bookings.module';
     CampaignIntegrationsModule,
     MailTesterModule,
     MxToolboxModule,
+    DeliverabilityModule,
     BookingLinksModule,
     BookingsModule,
     // Must stay last: its wildcard fallback route (OidcFallbackController)

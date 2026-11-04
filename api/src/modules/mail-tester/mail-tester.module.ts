@@ -19,5 +19,6 @@ import { MailTesterService } from './mail-tester.service';
   ],
   controllers: [MailTesterController],
   providers: [MailTesterService],
+  exports: [MailTesterService],
 })
 export class MailTesterModule {}
