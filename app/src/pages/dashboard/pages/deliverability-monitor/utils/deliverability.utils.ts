@@ -1,3 +1,4 @@
+import { TimezoneOptions } from "@/config/constants/dropdowns/timezone.options";
 import type {
     DeliverabilityActionMode,
     DeliverabilityActionTaken,
@@ -69,16 +70,16 @@ export const DAY_OF_MONTH_OPTIONS: Option[] = Array.from({ length: 28 }, (_, i) 
     label: String(i + 1),
 }));
 
-export function listTimezones(): Option[] {
-    const zones =
-        typeof Intl.supportedValuesOf === "function" ? Intl.supportedValuesOf("timeZone") : [];
-    const local = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const all = new Set<string>(["UTC", ...(local ? [local] : []), ...zones]);
-    return [...all].map((id) => ({ id, label: id }));
-}
+const BASE_TIMEZONE_OPTIONS: Option[] = TimezoneOptions.map((o) => ({
+    id: o.value,
+    label: o.label,
+}));
 
-export function localTimezone(): string {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+/** The shared timezone list, plus `current` when a saved schedule uses a zone outside it. */
+export function timezoneOptionsFor(current: string): Option[] {
+    return BASE_TIMEZONE_OPTIONS.some((o) => o.id === current)
+        ? BASE_TIMEZONE_OPTIONS
+        : [{ id: current, label: current }, ...BASE_TIMEZONE_OPTIONS];
 }
 
 const ordinal = (n: number): string => {

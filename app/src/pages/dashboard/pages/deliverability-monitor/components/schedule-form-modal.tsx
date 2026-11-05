@@ -1,6 +1,8 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Button, Checkbox, Input, Label, Modal } from "@heroui/react";
 import { ActionButtonWithPending } from "@/components/ui/action-button-with-pending";
+import { SearchSelect } from "@/components/ui/search-select";
+import { useCurrentOrganisation } from "@/features/organisations/hooks/use-organisations";
 import { OptionSelect, SwitchRow } from "@/components/bookings/booking-shared";
 import { EmailAccountCombobox } from "@/features/messaging/components/email-account-combobox";
 import type { EmailProviderTarget } from "@/features/integrations/interfaces/integrations.interface";
@@ -24,8 +26,7 @@ import {
     DEFAULT_CHECKS,
     FREQUENCY_OPTIONS,
     WEEKDAY_OPTIONS,
-    listTimezones,
-    localTimezone,
+    timezoneOptionsFor,
 } from "../utils/deliverability.utils";
 
 interface ScheduleFormModalProps {
@@ -73,7 +74,7 @@ export function ScheduleFormModal({
     const createSchedule = useCreateDeliverabilitySchedule();
     const updateSchedule = useUpdateDeliverabilitySchedule();
     const isPending = createSchedule.isPending || updateSchedule.isPending;
-    const timezones = useMemo(() => listTimezones(), []);
+    const { data: organisation } = useCurrentOrganisation();
 
     // Mounted fresh for every open (see the page), so state is initialised from props, not reset in an effect.
     const existingTarget = schedule ? scheduleTarget(schedule) : null;
@@ -90,7 +91,8 @@ export function ScheduleFormModal({
     const [weekday, setWeekday] = useState(String(schedule?.weekday ?? 1));
     const [dayOfMonth, setDayOfMonth] = useState(String(schedule?.day_of_month ?? 1));
     const [intervalDays, setIntervalDays] = useState(String(schedule?.interval_days ?? 3));
-    const [timezone, setTimezone] = useState(schedule?.timezone ?? localTimezone());
+    // New schedules default to the organisation's timezone.
+    const [timezone, setTimezone] = useState(schedule?.timezone ?? organisation?.timezone ?? "UTC");
     const [checks, setChecks] = useState<DeliverabilityCheckType[]>(schedule?.checks ?? DEFAULT_CHECKS);
     const [actionMode, setActionMode] = useState<DeliverabilityActionMode>(
         schedule?.action_mode ?? "RECOMMEND",
@@ -293,11 +295,13 @@ export function ScheduleFormModal({
                                         onChange={(e) => setIntervalDays(e.target.value)}
                                     />
                                 ) : null}
-                                <OptionSelect
+                                <SearchSelect
                                     aria-label="Timezone"
-                                    options={timezones}
+                                    searchPlaceholder="Search timezones…"
+                                    options={timezoneOptionsFor(timezone)}
                                     value={timezone}
                                     onChange={setTimezone}
+                                    fullWidth
                                     className={frequency === "DAILY" ? "sm:col-span-2" : undefined}
                                 />
                             </div>
