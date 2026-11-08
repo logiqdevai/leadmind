@@ -8,9 +8,11 @@ import { EmailAccountCombobox } from "@/features/messaging/components/email-acco
 import type { EmailProviderTarget } from "@/features/integrations/interfaces/integrations.interface";
 import type { SendableEmailAccount } from "@/features/integrations/utils/email-provider-utils";
 import {
-    useCreateDeliverabilitySchedule,
+    useCreateDeliverabilitySchedules,
     useUpdateDeliverabilitySchedule,
 } from "@/features/deliverability/hooks/use-deliverability";
+import { allocationKey } from "@/features/integrations/utils/email-provider-utils";
+import { X } from "lucide-react";
 import type {
     DeliverabilityActionMode,
     DeliverabilityCheckType,
@@ -71,9 +73,9 @@ export function ScheduleFormModal({
     schedule,
 }: ScheduleFormModalProps) {
     const isEditing = Boolean(schedule);
-    const createSchedule = useCreateDeliverabilitySchedule();
+    const createSchedules = useCreateDeliverabilitySchedules();
     const updateSchedule = useUpdateDeliverabilitySchedule();
-    const isPending = createSchedule.isPending || updateSchedule.isPending;
+    const isPending = createSchedules.isPending || updateSchedule.isPending;
     const { data: organisation } = useCurrentOrganisation();
 
     // Mounted fresh for every open (see the page), so state is initialised from props, not reset in an effect.
@@ -84,6 +86,8 @@ export function ScheduleFormModal({
         schedule ? existingTarget : defaultTarget,
     );
     const [customDomain, setCustomDomain] = useState(schedule && !existingTarget ? schedule.domain : "");
+    // Creating can pick several accounts: one schedule with identical settings is made for each.
+    const [targets, setTargets] = useState<EmailProviderTarget[]>(defaultTarget ? [defaultTarget] : []);
     const [targetTouched, setTargetTouched] = useState(false);
     const [dkimSelector, setDkimSelector] = useState(schedule?.dkim_selector ?? "");
     const [frequency, setFrequency] = useState<DeliverabilityFrequency>(schedule?.frequency ?? "DAILY");
@@ -124,7 +128,8 @@ export function ScheduleFormModal({
         const criticalNum = Number(critical);
         if (checks.length === 0) return setError("Select at least one check.");
         if (isCustom && !customDomain.trim()) return setError("Enter a domain to check.");
-        if (!isCustom && !target) return setError("Choose a sending account.");
+        if (!isCustom && !isEditing && targets.length === 0) return setError("Choose a sending account.");
+        if (!isCustom && isEditing && !target) return setError("Choose a sending account.");
         if (!Number.isInteger(warnNum) || !Number.isInteger(criticalNum) || criticalNum >= warnNum) {
             return setError("The critical score must be lower than the healthy score.");
         }
@@ -145,20 +150,34 @@ export function ScheduleFormModal({
             ...(frequency === "MONTHLY" ? { day_of_month: Number(dayOfMonth) } : {}),
             ...(frequency === "EVERY_N_DAYS" ? { interval_days: Number(intervalDays) } : {}),
         };
+        const close = { onSuccess: () => onOpenChange(false) };
+        if (!schedule) {
+            // One schedule per selected account, all sharing the settings above.
+            const payloads: DeliverabilitySchedulePayload[] = isCustom
+                ? [{ ...payload, custom_domain: customDomain.trim() }]
+                : targets.map((from) => ({ ...payload, from }));
+            createSchedules.mutate(payloads, close);
+            return;
+        }
+
         // Re-sending the target re-resolves it server-side and lifts any sending restriction,
         // so an edit only sends it when the user actually changed it.
-        if (!isEditing || targetTouched) {
+        if (targetTouched) {
             if (isCustom) payload.custom_domain = customDomain.trim();
             else payload.from = target!;
         }
-
-        const close = { onSuccess: () => onOpenChange(false) };
-        if (schedule) {
-            updateSchedule.mutate({ uuid: schedule.uuid, payload }, close);
-        } else {
-            createSchedule.mutate(payload, close);
-        }
+        updateSchedule.mutate({ uuid: schedule.uuid, payload }, close);
     };
+
+    const addTarget = (next: EmailProviderTarget) => {
+        setTargetTouched(true);
+        setTargets((current) =>
+            current.some((t) => allocationKey(t) === allocationKey(next)) ? current : [...current, next],
+        );
+    };
+
+    const removeTarget = (key: string) =>
+        setTargets((current) => current.filter((t) => allocationKey(t) !== key));
 
     return (
         <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -213,16 +232,65 @@ export function ScheduleFormModal({
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-1.5">
-                                    <Label>Send from</Label>
-                                    <EmailAccountCombobox
-                                        accounts={accounts}
-                                        value={target}
-                                        onChange={(next) => {
-                                            setTarget(next);
-                                            setTargetTouched(true);
-                                        }}
-                                        placeholder="Choose an account…"
-                                    />
+                                    <Label>{isEditing ? "Send from" : "Send from (one or more)"}</Label>
+                                    {isEditing ? (
+                                        <EmailAccountCombobox
+                                            accounts={accounts}
+                                            value={target}
+                                            onChange={(next) => {
+                                                setTarget(next);
+                                                setTargetTouched(true);
+                                            }}
+                                            placeholder="Choose an account…"
+                                        />
+                                    ) : (
+                                        <>
+                                            {/* Controlled to null so it acts as an "add" picker. */}
+                                            <EmailAccountCombobox
+                                                accounts={accounts}
+                                                value={null}
+                                                onChange={addTarget}
+                                                placeholder={
+                                                    targets.length ? "Add another account…" : "Choose an account…"
+                                                }
+                                            />
+                                            {targets.length > 0 ? (
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {targets.map((t) => {
+                                                        const key = allocationKey(t);
+                                                        const account = accounts.find(
+                                                            (row) => allocationKey(row) === key,
+                                                        );
+                                                        const text = account?.fromEmail
+                                                            ? `${account.title} — ${account.fromEmail}`
+                                                            : (account?.title ?? t.account);
+                                                        return (
+                                                            <span
+                                                                key={key}
+                                                                className="inline-flex max-w-full items-center gap-1 rounded-md border border-border bg-surface-secondary py-1 pl-2 pr-1 text-xs"
+                                                            >
+                                                                <span className="truncate">{text}</span>
+                                                                <button
+                                                                    type="button"
+                                                                    aria-label={`Remove ${text}`}
+                                                                    className="rounded p-0.5 text-muted hover:text-foreground"
+                                                                    onClick={() => removeTarget(key)}
+                                                                >
+                                                                    <X className="size-3" />
+                                                                </button>
+                                                            </span>
+                                                        );
+                                                    })}
+                                                </div>
+                                            ) : null}
+                                            {targets.length > 1 ? (
+                                                <p className="text-xs text-muted">
+                                                    {targets.length} separate checks will be created with these
+                                                    settings.
+                                                </p>
+                                            ) : null}
+                                        </>
+                                    )}
                                     {accounts.length === 0 ? (
                                         <p className="text-xs text-muted">
                                             No sendable Resend or SMTP account is configured yet.
@@ -403,7 +471,11 @@ export function ScheduleFormModal({
                             isDisabled={isPending}
                             onPress={handleSubmit}
                         >
-                            {isEditing ? "Save changes" : "Create schedule"}
+                            {isEditing
+                                ? "Save changes"
+                                : targets.length > 1 && !isCustom
+                                  ? `Create ${targets.length} schedules`
+                                  : "Create schedule"}
                         </ActionButtonWithPending>
                     </Modal.Footer>
                 </Modal.Dialog>

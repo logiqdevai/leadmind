@@ -71,6 +71,51 @@ export const useCreateDeliverabilitySchedule = () =>
         { success: "Schedule created", error: "Could not create schedule" },
     );
 
+/**
+ * Creates one schedule per payload (same settings, different sending target) and reports a single
+ * toast. Rejects only when every create failed, so the caller can keep the form open to retry.
+ */
+export function useCreateDeliverabilitySchedules() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: async (payloads: DeliverabilitySchedulePayload[]) => {
+            const results = await Promise.allSettled(
+                payloads.map((payload) => createDeliverabilitySchedule(payload)),
+            );
+            const failed = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
+            if (failed.length === results.length) {
+                throw failed[0].reason instanceof Error ? failed[0].reason : new Error("Request failed");
+            }
+            return { created: results.length - failed.length, failed: failed.length };
+        },
+        onSuccess: ({ created, failed }) => {
+            qc.invalidateQueries({ queryKey: deliverabilityQueryKeys.all });
+            if (failed > 0) {
+                toast({
+                    title: `${created} created, ${failed} failed`,
+                    description: "Some accounts could not be scheduled. Check the list and retry those.",
+                    variant: "error",
+                    duration: 4000,
+                });
+            } else {
+                toast({
+                    title: created === 1 ? "Schedule created" : `${created} schedules created`,
+                    duration: 1500,
+                });
+            }
+        },
+        onError: (error: Error) => {
+            qc.invalidateQueries({ queryKey: deliverabilityQueryKeys.all });
+            toast({
+                title: "Could not create schedule",
+                description: error.message,
+                variant: "error",
+                duration: 4000,
+            });
+        },
+    });
+}
+
 export const useUpdateDeliverabilitySchedule = () =>
     useDeliverabilityMutation(
         (vars: { uuid: string; payload: UpdateDeliverabilitySchedulePayload }) =>
