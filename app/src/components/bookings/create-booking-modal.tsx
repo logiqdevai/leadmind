@@ -342,6 +342,17 @@ export const CreateBookingModal: FC<CreateBookingModalProps> = ({
                                             </p>
                                         ) : null}
                                         <FormError message={errors.slot_start?.message} />
+                                        <SwitchRow
+                                            label="Ignore availability"
+                                            description="Book even outside working hours or over other bookings."
+                                            isSelected={false}
+                                            onChange={(on) => {
+                                                if (!on) return;
+                                                clearSlot();
+                                                setValue("ignore_availability", true);
+                                                setValue("time_mode", CreateBookingTimeModes.CUSTOM);
+                                            }}
+                                        />
                                     </>
                                 ) : (
                                     <>
